@@ -238,7 +238,7 @@ void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Reci
 	kDebug() << "Found source header" ;
 
 	text_it++;
-	while ( text_it != m_end_it ) {
+	while ( text_it != m_end_it && !text_it->trimmed().isEmpty() ) {
 		QRegExp rx_line_begin( "^\\s*-{0,2}\\s*" );
 
 		QRegExp rx_creation_date = QRegExp( "^\\s*-{0,2}\\s*Erfasst \\*RK\\*", Qt::CaseInsensitive );
