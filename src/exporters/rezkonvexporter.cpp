@@ -112,7 +112,6 @@ QString RezkonvExporter::createContent( const RecipeList& recipes )
 		writeHeader( content, *recipe_it );
 		content += "\n";
 		writeIngredients( content, *recipe_it );
-		content += "\n";
 		writeDirections( content, *recipe_it );
 		content += "\n";
 
@@ -209,6 +208,8 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 		authorLines += "                   -- ";
 		authorLines += (*author_it).name + "\n";
 	}
+	if ( !authorLines.isEmpty() )
+		authorLines += "\n";
 	content += authorLines;
 }
 
