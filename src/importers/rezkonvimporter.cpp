@@ -225,7 +225,7 @@ void RezkonvImporter::loadInstructions( QStringList::const_iterator &text_it, Re
 			if ( line.isEmpty() && ( (text_it+1) != m_end_it ) )
 				instr += "\n\n";
 
-			instr += line;
+			instr += line.trimmed();
 		}
 
 		text_it++;
