@@ -222,7 +222,7 @@ void RezkonvImporter::loadInstructions( QStringList::const_iterator &text_it, Re
 			kDebug() << "Found long title: " << recipe.title ;
 		}
 		else {
-			if ( line.isEmpty() && ( (text_it+1) != m_end_it ) )
+			if ( line.trimmed().isEmpty() && ( (text_it+1) != m_end_it ) )
 				instr += "\n\n";
 
 			instr += line.trimmed();
