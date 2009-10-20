@@ -44,7 +44,7 @@ main(int argc, char *argv[])
 	recipe.categoryList.append( Element("Snacks") );
 	recipe.categoryList.append( Element("Cookies & Squares") );
 	recipe.instructions = 
-		"\n\nDrop by spoonful on greased cookie sheet.  Bake in moderate oven.";
+		"Drop by spoonful on greased cookie sheet.  Bake in moderate oven.";
 
 	recipe.authorList.append( Element("Mona Beamer") );
 	recipe.authorList.append( Element("Colleen Beamer") );
