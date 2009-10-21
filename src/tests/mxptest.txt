@@ -1,4 +1,4 @@
-    ----- Exported by Krecipes vSVN_PRE-0.9 [Master Cook Export Format] -----
+* Exported from MasterCook *
 
                          Cookies Test
 
