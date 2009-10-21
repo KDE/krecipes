@@ -266,7 +266,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 	//columns 21-70
 	QString ing_name( ing.name );
 	if ( ing.prepMethodList.count() > 0 )
-		ing_name += "; " + ing.prepMethodList.join(", ");
+		ing_name += ", " + ing.prepMethodList.join(", ");
 
 	if ( is_sub )
 		ing_name += ", or"; //FIXME: what's 'or' in German?
