@@ -151,6 +151,44 @@ main(int argc, char *argv[])
 	QStringList files2; files2 << "test.txt";
 	importer2.parseFiles(files2);
 	QFile::remove("test.txt");
+
+
+	//We need to change some strings from english to german because rezkonv
+	//export format is suposed to provide unit names in german.
+	recipe.ingList.clear();
+	ing9.substitutes.clear();
+
+	ing9.units.name = "Tassen";
+	ing9_1.units.plural = "Tasse";
+	ing9_2.units.plural = "Tasse";
+	ing9.substitutes.append(ing9_1);
+	ing9.substitutes.append(ing9_2);
+	recipe.ingList.append( ing9 );
+	
+	ing.units.name = "Tassen";
+	recipe.ingList.append( ing );
+
+	ing2.units.name = "Tassen";
+	recipe.ingList.append( ing2 );
+
+	ing3.units.plural = "Tasse";
+	recipe.ingList.append( ing3 );
+
+	ing4.units.name = "Teel.";
+	recipe.ingList.append( ing4 );
+
+	ing8.units.name = "Tassen";
+	recipe.ingList.append( ing8 );
+
+	ing6.units.name = "Tassen";
+	recipe.ingList.append( ing6 );
+
+	recipe.ingList.append( ing5 );
+	
+	ing7.units.name = "Teel.";
+	recipe.ingList.append( ing7 );
+
+
 	check( importer2, recipe );
 	printf("Recipe export successful.\n");
 
