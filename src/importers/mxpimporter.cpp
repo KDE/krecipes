@@ -35,14 +35,17 @@ void MXPImporter::parseFile( const QString &file )
 		while ( !stream.atEnd() ) {
 			line = stream.readLine().trimmed();
 
-			if ( line.simplified().contains( "Exported from MasterCook" ) ) {
-				importMXP( stream );
-			}
-			else if ( line == "{ Exported from MasterCook Mac }" ) {
+			if ( line == "{ Exported from MasterCook Mac }" ) {
+				kDebug() << "detected Mac file";
 				importMac( stream );
 			}
 			else if ( line == "@@@@@" ) {
+				kDebug() << "detected generic file";
 				importGeneric( stream );
+			}
+			else if ( line.simplified().contains( "Exported from MasterCook" ) ) {
+				kDebug() << "detected MasterCook normal file";
+				importMXP( stream );
 			}
 
 			stream.skipWhiteSpace();
