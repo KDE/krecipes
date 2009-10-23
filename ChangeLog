@@ -1,5 +1,7 @@
 Changes from 2.0-alpha3 to svn:
   * Updated user manual. (work in progress)
+  * Keep the export action enabled when we are at select recipe dialog or
+    ingredient matcher dialog even while we have no recipes selected.
   * Fixes for bugs:
     + In the Ingredient Matcher from previous versions when selecting various
       ingredients and clicking on the right arrow, some ingredients might be

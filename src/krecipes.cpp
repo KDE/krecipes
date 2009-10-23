@@ -149,10 +149,12 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 			break;
 		}
 	case RecipeEdit: {
+			exportAction->setEnabled( false );
 			showRecipeAction->setEnabled( show );
 			break;
 		}
 	case SelectP: {
+			exportAction->setEnabled( show );
 			if (show)
 				m_view->selectPanel->haveSelectedItems();
 			else
@@ -160,6 +162,7 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 			break;
 		}
 	case MatcherP: {
+			exportAction->setEnabled( show );
 			if (show) 
 				m_view->ingredientMatcherPanel->haveSelectedItems();
 			else
@@ -174,7 +177,6 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 void Krecipes::recipeSelected( bool selected )
 {
 	copyToClipboardAction->setEnabled( selected );
-	exportAction->setEnabled( selected );
 	showRecipeAction->setEnabled( selected );
 	editAction->setEnabled( selected );
 }
@@ -406,6 +408,7 @@ void Krecipes::setupActions()
 
 	updateActions( SelectP, true );
 	updateActions( RecipeView, false );
+	exportAction->setEnabled( true );
 
 	createGUI();
 }
