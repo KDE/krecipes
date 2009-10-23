@@ -66,11 +66,11 @@
 <CatT>Snacks</CatT>
 <CatT>Cookies &amp; Squares</CatT>
 </CatS>
-<IngR name="granulated sugar" unit="c." qty="1" code="I">
+<IngR name="granulated sugar" unit="c." qty="0.75 1" code="I">
 <INtI></INtI>
 <IPrp></IPrp>
 </IngR>
-<IngR name="brown sugar" unit="c." qty="1" code="I">
+<IngR name="brown sugar" unit="c." qty="3/4 1" code="I">
 <INtI></INtI>
 <IPrp></IPrp>
 </IngR>
