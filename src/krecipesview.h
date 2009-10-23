@@ -206,6 +206,7 @@ public slots:
 	void cut();
 	void paste();
 	void pasteAsSubcategory();
+	void enableSaveOptionSlot( bool enabled );
 
 private slots:
 	void actionRecipe( int recipeID, int action );

@@ -271,7 +271,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 
 	// Retransmit signal to parent to Enable/Disable the Save Button
-	connect ( inputPanel, SIGNAL( enableSaveOption( bool ) ), this, SIGNAL( enableSaveOption( bool ) ) );
+	connect ( inputPanel, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveOptionSlot( bool ) ) );
 
 	// Create a new button when a recipe is unsaved
 	connect ( inputPanel, SIGNAL( createButton( QWidget*, const QString & ) ), this, SLOT( addRecipeButton( QWidget*, const QString & ) ) );
@@ -520,6 +520,18 @@ void KrecipesView::showCurrentRecipes()
 bool KrecipesView::save( void )
 {
 	return inputPanel->save();
+}
+
+void KrecipesView::enableSaveOptionSlot( bool enabled )
+{
+	recipeButton->setEnabled( enabled );
+
+	if ( enabled )
+		recipeButton->show();
+	else 
+		recipeButton->hide();
+
+	emit enableSaveOption( enabled );
 }
 
 /*!
@@ -959,8 +971,6 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 {
 	recipeWidget = w;
-	recipeButton->setEnabled( true );
-	recipeButton->show();
 
 	QString short_title = title.left( 20 );
 	if ( title.length() > 20 )
@@ -982,8 +992,6 @@ void KrecipesView::switchToRecipe( void )
 
 void KrecipesView::closeRecipe( void )
 {
-	recipeButton->setEnabled( false );
-	recipeButton->hide();
 	slotSetPanel( m_previousActivePanel, true );
 }
 
