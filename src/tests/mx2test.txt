@@ -1,0 +1,115 @@
+<?xml version="1.0" standalone="yes" encoding="ISO-8859-1"?>
+<!DOCTYPE mx2 SYSTEM "mx2.dtd">
+
+<mx2 source="my mind" date="Oct 22, 2009">
+
+<Summ><Nam>Summary name</Nam></Summ> <!-- NOT SUPPORTED -->
+
+<RcpE name="Cookies Test" author="Colleen Beamer">
+<Serv qty="2"/><PrpT elapsed="0:30"/>
+
+<CatS>
+<CatT>Snacks</CatT>
+<CatT>Cookies &amp; Squares</CatT>
+</CatS>
+<IngR name="granulated sugar" unit="c." qty="0.75 1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="brown sugar" unit="c." qty="3/4 1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="all-purpose flour" unit="c." qty="2" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="baking soda" unit="tsp." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="shortening" unit="c." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="peanut butter" unit="c." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="eggs" unit="" qty="2" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="vanilla extract" unit="tsp." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+
+<DirS>
+<DirT>Drop by spoonful on greased cookie sheet.</DirT>
+<DirT>Bake in moderate oven.</DirT>
+</DirS>
+
+<!-- NOT SUPPORTED -->
+<Desc>Short description, I guess</Desc>
+<Srce>krecipes.sourceforge.nte</Srce>
+<AltS label="Internet address" source="http://krecipes.sourceforge.net/"/>
+<Yield unit="kilogram" qty="1"/>
+
+</RcpE>
+
+
+<RcpE name="Cookies Test" author="Colleen Beamer">
+<Serv qty="2"/><PrpT elapsed="0:30"/>
+
+<CatS>
+<CatT>Snacks</CatT>
+<CatT>Cookies &amp; Squares</CatT>
+</CatS>
+<IngR name="granulated sugar" unit="c." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="brown sugar" unit="c." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="all-purpose flour" unit="c." qty="2" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="baking soda" unit="tsp." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="shortening" unit="c." qty="1" code="I">
+<INtI></INtI>
+<IPrp>softened, at room temperature</IPrp>
+</IngR>
+<IngR name="peanut butter" unit="c." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="eggs" unit="" qty="2" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+<IngR name="vanilla extract" unit="tsp." qty="1" code="I">
+<INtI></INtI>
+<IPrp></IPrp>
+</IngR>
+
+<DirS>
+<DirT>Drop by spoonful on greased cookie sheet.</DirT>
+<DirT>Bake in moderate oven.</DirT>
+</DirS>
+
+<!-- NOT SUPPORTED -->
+<Desc>Short description, I guess</Desc>
+<Srce>krecipes.sourceforge.nte</Srce>
+<AltS label="Internet address" source="http://krecipes.sourceforge.net/"/>
+<Yield unit="kilogram" qty="1"/> 
+
+</RcpE>
+
+</mx2>
