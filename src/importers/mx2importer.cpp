@@ -135,8 +135,11 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 				QDomNodeList iChilds = el.childNodes();
 				for ( int j = 0; j < iChilds.count(); j++ ) {
 					QDomElement iChild = iChilds.item( j ).toElement();
-					if ( iChild.tagName() == "IPrp" )
-						new_ing.prepMethodList.append( Element(iChild.text().trimmed()) );
+					if ( iChild.tagName() == "IPrp" ) {
+						QString prepMethodStr = iChild.text().trimmed();
+						if ( !prepMethodStr.isEmpty() )
+							new_ing.prepMethodList.append( Element( prepMethodStr ) );
+					}
 					else if ( iChild.tagName() == "INtI" )
 						; // TODO: What does it mean?... ingredient nutrient info?
 				}
