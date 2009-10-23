@@ -2,7 +2,7 @@ Changes from 2.0-alpha3 to svn:
   * Updated user manual. (work in progress)
   * Fixes for bugs:
     + In the Ingredient Matcher from previous versions when selecting various
-      ingredients and clicking on the right arrow some ingredients might be
+      ingredients and clicking on the right arrow, some ingredients might be
       missing in the list of the right side of the window.
     + No more crashes when dragging categories. Fixes sourceforge #2853112.
     + Ingredient list is cleared properly when clearing the contents for a recipe.
@@ -12,6 +12,8 @@ Changes from 2.0-alpha3 to svn:
       exits with success and the mmf importer appears to work.
     + Fixed various bugs in the rezkonv importer and exporter as well as in
       rezkonvtest; now rezkonvtest exits succesfully.
+    + Added tests for mxp and mx2 importers, fixed several bugs in these
+      importers.
 
 Changes from 2.0-alpha2 to 2.0-alpha3:
   * krecipes --convert-sqlite3 now gives messages to the user about the success
