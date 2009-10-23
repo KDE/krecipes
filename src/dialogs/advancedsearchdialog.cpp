@@ -511,12 +511,13 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	addCriteriaButton->setObjectName( "addCriteriaButton" );
 	addCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
 	layout12->addWidget( addCriteriaButton );
-#if 0
-	removeCriteriaButton = new QPushButton( criterionFrame, "removeCriteriaButton" );
-	removeCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, removeCriteriaButton->sizePolicy().hasHeightForWidth() ) );
+
+	removeCriteriaButton = new KPushButton( criterionFrame );
+	removeCriteriaButton->setObjectName( "removeCriteriaButton" );
+	//removeCriteriaButton->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, removeCriteriaButton->sizePolicy().hasHeightForWidth() ) );
 	removeCriteriaButton->setMaximumSize( QSize( 30, 30 ) );
 	layout12->addWidget( removeCriteriaButton );
-#endif
+
 	criterionFrameLayout->addLayout( layout12 );
 	
 	criteriaListView = new K3ListView( criterionFrame );
@@ -626,6 +627,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( criterionRadioButton, SIGNAL( clicked() ), this, SLOT( activateRatingOptionCriterion() ) );
 
 	connect( addCriteriaButton, SIGNAL( clicked() ), this, SLOT( slotAddRatingCriteria() ) );
+	connect( removeCriteriaButton, SIGNAL( clicked() ), this, SLOT( slotRemoveRatingCriteria() ) );
 
 	titleFrame->setVisible(false);
 	ingredientFrame->setVisible(false);
@@ -643,9 +645,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( database, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
 
 	clear();
-
-	KMenu *kpop = new KMenu( criteriaListView );
-	kpop->insertItem( i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Qt::Key_Delete );
 }
 
 AdvancedSearchDialog::~AdvancedSearchDialog()
@@ -687,7 +686,7 @@ void AdvancedSearchDialog::languageChange()
 	avgStarsLabel->setText( i18n( "stars" ) );
 	criterionRadioButton->setText( i18n( "By criteria:" ) );
 	addCriteriaButton->setIcon( KIcon( "list-add" ) );
-	//removeCriteriaButton->setText( i18n( "-" ) );
+	removeCriteriaButton->setIcon( KIcon( "list-remove" ) );
 	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
 	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
 	ratingsButton->setText( QString("%1 >>").arg(i18n("Ratings")) );
