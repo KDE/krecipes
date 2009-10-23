@@ -1257,9 +1257,8 @@ void RecipeInputDialog::closeOptions( void )
 	unsavedChanges = false;
 
 	// Now close really
+	enableChangedSignal( false );
 	emit closeRecipe();
-
-
 }
 
 void RecipeInputDialog::showRecipe( void )

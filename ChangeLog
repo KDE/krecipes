@@ -14,6 +14,9 @@ Changes from 2.0-alpha3 to svn:
       rezkonvtest; now rezkonvtest exits succesfully.
     + Added tests for mxp and mx2 importers, fixed several bugs in these
       importers.
+    + The button in the left panel for unsaved recipes is suposed to be hidden
+      when necessary. In previous releases I have been seeing it raised when it
+      should be hidden, for instance after saving or deleting a recipe.
 
 Changes from 2.0-alpha2 to 2.0-alpha3:
   * krecipes --convert-sqlite3 now gives messages to the user about the success
