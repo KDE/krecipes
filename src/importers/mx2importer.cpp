@@ -99,7 +99,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 			recipe->yield.type = i18n("servings");
 		}
 		else if ( tagName == "PrpT" )
-			recipe->prepTime = QTime::fromString( el.attribute( "elapsed" ) );
+			recipe->prepTime = QTime::fromString( el.attribute( "elapsed" ), "h:mm" );
 		else if ( tagName == "CatS" ) {
 			QDomNodeList categories = el.childNodes();
 			for ( int j = 0; j < categories.count(); j++ ) {
