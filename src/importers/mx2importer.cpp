@@ -25,6 +25,7 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>
 #include <QStringList>
 #include <QTextStream>
 
+#include "datablocks/mixednumber.h"
 #include "datablocks/recipe.h"
 
 
@@ -113,9 +114,23 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 			}
 		}
 		else if ( tagName == "IngR" ) {
+			double quantity1=0, quantity2=0, offset=0;
+			bool ok;
+			QStringList qtyStrList = el.attribute( "qty" ).split( " " );
+			if ( !qtyStrList.isEmpty() ) {
+				quantity1 = MixedNumber::fromString( qtyStrList.first(), &ok, false ).toDouble();
+				if ( !ok )
+					quantity1 = 0;
+				if ( qtyStrList.constBegin() != qtyStrList.constEnd() )
+					quantity2 = MixedNumber::fromString( qtyStrList.last(), &ok, false ).toDouble();
+						if ( !ok )
+							quantity2 = 0;
+			}
+			offset = quantity2 - quantity1;
 			Ingredient new_ing( el.attribute( "name" ),
-			                    el.attribute( "qty" ).toDouble(),
-			                    Unit( el.attribute( "unit" ), el.attribute( "qty" ).toDouble() ) );
+			                    quantity1,
+			                    Unit( el.attribute( "unit" ), quantity1 ) );
+			new_ing.amount_offset = offset;
 			if ( el.hasChildNodes() ) {
 				QDomNodeList iChilds = el.childNodes();
 				for ( int j = 0; j < iChilds.count(); j++ ) {
