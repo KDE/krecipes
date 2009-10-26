@@ -1,5 +1,6 @@
-Changes from 2.0-alpha3 to svn:
-  * Updated user manual. (work in progress)
+Changes from 2.0-alpha3 to 2.0-alpha4:
+  * Fixed issues reported by Krazy in the user manual. Note that the user
+    manual is a work in progress and it's not finished yet.
   * Keep the export action enabled when we are at select recipe dialog or
     ingredient matcher dialog even while we have no recipes selected.
   * Restored the button to remove criteria in the advanced search dialog.

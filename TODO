@@ -24,8 +24,6 @@ Planned for the 2.1 branch:
  * Remove Q3 support stuff (a huge work).
 
  [Brainstorming]
- * Provide a progress graphical interface instead of call processEvents() when
-   importing recipes.
  * Allow the user to select the encoding for mmf importer/exporter, note that
    usually mmf export files use iso8859-1, but may use another encoding.
  * Preferences dialog allow the removal of gradients in the left panel.

@@ -3,7 +3,7 @@ krazy2 Analysis
 
 Checkers Run = 46
 Files Processed = 295
-Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
+Total Issues = 561 ...as of October 26 2009 12:59:32 CET
 
 ==>For File Type c++<==
 1. Check for TRUE and FALSE macros [captruefalse]... Ok!
@@ -40,21 +40,18 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	CMake HAVE_foo macros. We want to check for features discovered
 	during CMake time rather than for a specific O/S.
 
-5. Check for code that should be considered crashy. [crashy]... 2 issues found
-	./src/backends/PostgreSQL/psqlrecipedb.cpp: line#309 (1)
-	./src/backends/MySQL/mysqlrecipedb.cpp: line#389 (1)
-	Looks for not using QPointers when showing modal dialogs via
-	exec(), as discussed in <http://www.kdedevelopers.org/node/3919>
+5. Check for code that should be considered crashy. [crashy]... Ok!
 
 6. Check single-char QString operations for efficiency [doublequote_chars]... 194 issues found
 	./src/krecipesview.cpp: line#329,351 (2)
 	./src/importers/mmfimporter.cpp: line#152,176 (2)
 	./src/importers/rezkonvimporter.cpp: line#148 (1)
-	./src/importers/rezkonvimporter.cpp: section issues line#250,253,256 (3)
+	./src/importers/rezkonvimporter.cpp: section issues line#252,255,258 (3)
 	./src/importers/nycgenericimporter.cpp: line#112 (1)
-	./src/importers/mxpimporter.cpp: line#262,322,373 (3)
+	./src/importers/mxpimporter.cpp: line#265,325,376 (3)
+	./src/importers/mx2importer.cpp: split issues line#119 (1)
 	./src/importers/recipemlimporter.cpp: line#217 (1)
-	./src/tests/mmftest.cpp: line#50,55,60 (3)
+	./src/tests/mmftest.cpp: line#51,56,61 (3)
 	./src/tests/kretest.cpp: line#120,125,130 (3)
 	./src/tests/rezkonvtest.cpp: line#53,58,63 (3)
 	./src/tests/recipemltest.cpp: line#119,124,129 (3)
@@ -67,8 +64,8 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	./src/widgets/krelistview.cpp: line#54 (1)
 	./src/widgets/thumbbar.cpp: line#552 (1)
 	./src/widgets/ingredientinputwidget.cpp: split issues line#263 (1)
-	./src/backends/qsqlrecipedb.cpp: line#195,785,799,1473,1477,1485,1512,1516,1805,2306 (10)
-	./src/backends/qsqlrecipedb.cpp: replace issues line#1846,1847 (2)
+	./src/backends/qsqlrecipedb.cpp: line#196,786,800,1474,1478,1486,1513,1517,1806,2308 (10)
+	./src/backends/qsqlrecipedb.cpp: replace issues line#1847,1848 (2)
 	./src/backends/recipedb.cpp: line#591,677,684,693,700,709,716,724,731,738,745,774,775,780,781,784,790,791,796,797,800,806,807,812,813,816,821,825 (28)
 	./src/backends/recipedb.cpp: starts/endsWith issues line#595 (1)
 	./src/backends/recipedb.cpp: split issues line#865 (1)
@@ -78,11 +75,11 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	./src/dialogs/editpropertiesdialog.cpp: split issues line#519 (1)
 	./src/dialogs/dependanciesdialog.cpp: line#86 (1)
 	./src/dialogs/ingredientmatcherdialog.cpp: line#185 (1)
-	./src/dialogs/advancedsearchdialog.cpp: line#1042 (1)
-	./src/dialogs/advancedsearchdialog.cpp: replace issues line#1022,1023,1025,1026 (4)
+	./src/dialogs/advancedsearchdialog.cpp: line#1041 (1)
+	./src/dialogs/advancedsearchdialog.cpp: replace issues line#1021,1022,1024,1025 (4)
 	./src/dialogs/selectpropertydialog.cpp: line#144 (1)
-	./src/dialogs/recipeinputdialog.cpp: line#1199,1227,1667,1671,1675,1679 (6)
-	./src/dialogs/recipeinputdialog.cpp: split issues line#1049,1696 (2)
+	./src/dialogs/recipeinputdialog.cpp: line#1199,1227,1666,1670,1674,1678 (6)
+	./src/dialogs/recipeinputdialog.cpp: split issues line#1049,1695 (2)
 	./src/dialogs/ingredientparserdialog.cpp: split issues line#237 (1)
 	./src/dialogs/selectunitdialog.cpp: line#73 (1)
 	./src/dialogs/conversiondialog.cpp: line#135,139 (2)
@@ -96,9 +93,9 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	./src/exporters/mmfexporter.cpp: split issues line#198 (1)
 	./src/exporters/htmlbookexporter.cpp: line#91 (1)
 	./src/exporters/baseexporter.cpp: line#37 (1)
-	./src/exporters/rezkonvexporter.cpp: line#113,115,117,137,150,152,188,206,210,213,227,235,242,257,276,288,291,304 (18)
-	./src/exporters/rezkonvexporter.cpp: replace issues line#320 (1)
-	./src/exporters/rezkonvexporter.cpp: split issues line#300 (1)
+	./src/exporters/rezkonvexporter.cpp: line#113,116,136,149,151,187,205,209,212,226,234,241,256,275,287,290,303 (17)
+	./src/exporters/rezkonvexporter.cpp: replace issues line#319 (1)
+	./src/exporters/rezkonvexporter.cpp: split issues line#299 (1)
 	./src/exporters/plaintextexporter.cpp: line#42,48,54,80,86,92,98,101,117,127,132,145,148,157,161,164,166,170 (18)
 	Adding single characters to a QString is faster if the characters
 	are QChars and not QStrings.  For example: QString path = oldpath +
@@ -154,8 +151,8 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	./src/krepagelayout.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#120
 	./src/pref.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#151,175,266,290
 	./src/pref.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#553,666,676
-	./src/krecipes.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#564
-	./src/krecipes.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#188,341
+	./src/krecipes.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#567
+	./src/krecipes.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#190,343
 	./src/setupassistant.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#153,186,301,416,763,789
 	./src/setupassistant.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#220,335,436,514
 	./src/convert_sqlite3.cpp: wrong argument count, have 0 need 1 line#83,91,100,131,137,141
@@ -171,7 +168,7 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	./src/widgets/krelistview.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#54
 	./src/widgets/thumbbar.cpp: wrong argument count, have 0 need 2 line#649
 	./src/widgets/thumbbar.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#634
-	./src/backends/qsqlrecipedb.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#1998
+	./src/backends/qsqlrecipedb.cpp: unclosed <br>, close in place: <br/>; better yet, use proper paragraphs <p>...</p> instead line#1999
 	./src/backends/PostgreSQL/psqlrecipedb.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#390
 	./src/backends/MySQL/mysqlrecipedb.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#471
 	./src/backends/SQLite/literecipedb.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#750
@@ -187,14 +184,14 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	./src/dialogs/createunitdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#70
 	./src/dialogs/createunitdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#42,54,68
 	./src/dialogs/shoppinglistdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#139
-	./src/dialogs/advancedsearchdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#579,656,685
-	./src/dialogs/advancedsearchdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#411,683
+	./src/dialogs/advancedsearchdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#580,655,684
+	./src/dialogs/advancedsearchdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#411,682
 	./src/dialogs/refineshoppinglistdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#45
-	./src/dialogs/recipeinputdialog.cpp: use of QString::number() on an argument line#1536,1581,1590,1594
-	./src/dialogs/recipeinputdialog.cpp: wrong argument count, have 0 need 3 line#1596,1599
+	./src/dialogs/recipeinputdialog.cpp: use of QString::number() on an argument line#1535,1580,1589,1593
+	./src/dialogs/recipeinputdialog.cpp: wrong argument count, have 0 need 3 line#1595,1598
 	./src/dialogs/recipeinputdialog.cpp: wrong argument count, have 0 need 1 line#743
 	./src/dialogs/recipeinputdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#379
-	./src/dialogs/recipeinputdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#1615,1626
+	./src/dialogs/recipeinputdialog.cpp: single adjective as message, probably ambiguous; use context call to explain what it refers to line#1614,1625
 	./src/dialogs/similarcategoriesdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#184
 	./src/dialogs/similarcategoriesdialog.cpp: malformed markup (unmatched tags, etc.) line#186
 	./src/dialogs/borderdialog.cpp: reported ambiguous message by translators; use context call to explain what it refers to line#133,206
@@ -224,23 +221,21 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	and redistributed.  For details regarding KDE's licensing policy
 	please visit <http://techbase.kde.org/Policies/Licensing_Policy>.
 
-18. Check for assignments to QString::null [nullstrassign]... 166 issues found
+18. Check for assignments to QString::null [nullstrassign]... 164 issues found
 	./src/klomanager.h: line#44 (1)
 	./src/krepagelayout.cpp: line#64,65,66,70,71,72,73 (7)
 	./src/propertycalculator.cpp: line#103 (1)
 	./src/krecipesview.h: line#154 (1)
 	./src/convert_sqlite3.h: line#26 (1)
-	./src/krecipes.cpp: line#643,662,704 (3)
+	./src/krecipes.cpp: line#646,665,707 (3)
 	./src/setupassistant.cpp: line#613 (1)
-	./src/krecipesview.cpp: line#840,912 (2)
+	./src/krecipesview.cpp: line#852,924 (2)
 	./src/importers/mmfimporter.cpp: line#336,337,339 (3)
 	./src/importers/rezkonvimporter.cpp: line#134 (1)
 	./src/importers/recipemlimporter.h: line#38 (1)
 	./src/importers/kredbimporter.h: line#24 (1)
 	./src/importers/kreimporter.h: line#45 (1)
 	./src/importers/baseimporter.cpp: line#99,122 (2)
-	./src/tests/mxptest.cpp: line#57 (1)
-	./src/tests/mx2test.cpp: line#57 (1)
 	./src/actionshandlers/recipeactionshandler.cpp: line#396,413,415,417,419,423,426 (7)
 	./src/datablocks/recipe.h: line#25 (1)
 	./src/datablocks/recipe.cpp: line#28,30,31 (3)
@@ -263,7 +258,7 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 	./src/widgets/ingredientcombobox.h: line#28 (1)
 	./src/widgets/ingredientinputwidget.cpp: line#236 (1)
 	./src/backends/recipedb.h: line#105,197,269 (3)
-	./src/backends/qsqlrecipedb.cpp: line#538,589,1497,1885,1895,1905,1916,2000,2361,2483,2604,2625,2751,2759,2769 (15)
+	./src/backends/qsqlrecipedb.cpp: line#539,590,1498,1886,1896,1906,1917,2001,2363,2485,2606,2627,2753,2761,2771 (15)
 	./src/backends/qsqlrecipedb.h: line#38,68,161 (3)
 	./src/backends/usda_ingredient_data.cpp: line#47 (1)
 	./src/backends/recipedb.cpp: line#99,317,489,590,593,597 (6)
@@ -348,7 +343,7 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 28. Check for signals: and slots: [sigsandslots]... Ok!
 
 29. Check for spelling errors [spelling]... 3 issues found
-	./src/importers/mxpimporter.cpp: line#243[internet],244[internet],245[internet] (3)
+	./src/importers/mxpimporter.cpp: line#246[internet],247[internet],248[internet] (3)
 	Spelling errors in comments and strings should be fixed as they may
 	show up later in API documentation, handbooks, etc.  Misspelled
 	strings make the translator's job harder. Please use US English.
@@ -356,9 +351,9 @@ Total Issues = 565 ...as of October 08 2009 00:03:29 CEST
 30. Check for strings used improperly or should be i18n. [strings]... 24 issues found
 	./src/importers/mmfimporter.cpp: QLatin1String issues line#48,56,60,113,119,179,242,260 (8)
 	./src/importers/nycgenericimporter.cpp: QLatin1String issues line#38,89,90,95,98,105,108,111 (8)
-	./src/importers/mx2importer.cpp: QLatin1String issues line#45 (1)
+	./src/importers/mx2importer.cpp: QLatin1String issues line#46 (1)
 	./src/backends/recipedb.cpp: QLatin1String issues line#463,592,595 (3)
-	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1688,1694 (2)
+	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1687,1693 (2)
 	./src/dialogs/pagesetupdialog.cpp: QLatin1String issues line#196 (1)
 	./src/exporters/xsltexporter.cpp: QLatin1String issues line#74 (1)
 	Some QString methods (like startsWith() and endsWith()) are more
