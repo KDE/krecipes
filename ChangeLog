@@ -1,6 +1,9 @@
 Changes from 2.0-alpha4 to svn:
   * Fixes for bugs:
     + Don't crash when closing the "Page Setup" and "Print Setup" dialogs.
+    + Uncategorized recipes are displayed when using MySQL 4, this fixes
+      sourceforge #2878934. Thanks to Mike Ferguson for his help and feedback
+      about this bug.
 
 Changes from 2.0-alpha3 to 2.0-alpha4:
   * Fixed issues reported by Krazy in the user manual. Note that the user
