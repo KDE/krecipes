@@ -4,6 +4,9 @@ Changes from 2.0-alpha4 to svn:
     + Uncategorized recipes are displayed when using MySQL 4, this fixes
       sourceforge #2878934. Thanks to Mike Ferguson for his help and feedback
       about this bug.
+    + When removing a category a recipe is moved to the "Uncategorized" folder
+      (we're talking only about the UI) only if the recipe is not included in
+      other categories.
 
 Changes from 2.0-alpha3 to 2.0-alpha4:
   * Fixed issues reported by Krazy in the user manual. Note that the user

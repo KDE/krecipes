@@ -426,20 +426,24 @@ void RecipeListView::removeCategory( int id )
 void RecipeListView::moveChildrenToRoot( Q3ListViewItem *item )
 {
 	Q3ListViewItem * next_sibling;
+	Recipe recipe;
 	for ( Q3ListViewItem * it = item->firstChild(); it; it = next_sibling ) {
 		next_sibling = it->nextSibling();
 		if ( it->rtti() == 1000 ) {
 			RecipeListItem *recipe_it = (RecipeListItem*) it;
-			Recipe r;
-			r.title = recipe_it->title(); r.recipeID = recipe_it->recipeID();
-
-			//the item is now uncategorized
 			removeElement(it,false);
-			it->parent() ->takeItem( it );
-			if ( !m_uncat_item && curr_offset == 0 )
-				m_uncat_item = new UncategorizedItem(this);
-			if ( m_uncat_item )
-				new RecipeListItem(m_uncat_item,r);
+
+			//the item is now uncategorized if it's not part of other categories
+			database->loadRecipe( &recipe,
+				RecipeDB::Title|RecipeDB::Categories, recipe_it->recipeID() );
+
+			if ( recipe.categoryList.isEmpty() ) {
+				it->parent() ->takeItem( it );
+				if ( !m_uncat_item && curr_offset == 0 )
+					m_uncat_item = new UncategorizedItem(this);
+				if ( m_uncat_item )
+					new RecipeListItem(m_uncat_item,recipe);
+			}
 		}
 		moveChildrenToRoot( it );
 		delete it;
