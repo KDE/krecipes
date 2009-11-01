@@ -355,7 +355,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientList->setRenameable( 2, true ); //units
 	ingredientList->setRenameable( 3, true ); //prep method
 	ingredientList->setDefaultRenameAction( Q3ListView::Reject );
-	ingredientsLayout->addWidget( ingredientList, 3, 1, 7, 3, 0 );
+	ingredientsLayout->addWidget( ingredientList, 3, 1, 7, 4, 0 );
 
 	QHBoxLayout *propertyStatusLayout = new QHBoxLayout( ingredientsTab );
 	propertyStatusLayout->setMargin( 0 );
