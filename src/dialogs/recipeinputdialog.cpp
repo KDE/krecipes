@@ -1532,7 +1532,11 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 	database->loadProperties( &ingPropertyList, ing.ingredientID );
 
 	if ( ingPropertyList.count() == 0 ) {
-		propertyStatusMapRed.insert(ing.ingredientID, QString(i18n("<b>%1:</b> No nutrient information available.  <a href=\"ingredient#%2\">Provide nutrient information.</a>", ing.name, QString::number(ing.ingredientID))));
+		propertyStatusMapRed.insert(ing.ingredientID, QString(
+			i18n("<b>%1:</b> No nutrient information available. "
+			"<a href=\"ingredient#%2\">Provide nutrient information.</a>",
+			ing.name,
+			QString::number(ing.ingredientID))));
 	}
 
 	QMap<int,bool> ratioCache; //unit->conversion possible
@@ -1549,7 +1553,8 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 			case RecipeDB::Success: break;
 			case RecipeDB::MissingUnitConversion: {
 				if ( ing.units.type != Unit::Other && ing.units.type == (*prop_it).perUnit.type ) {
-					propertyStatusMapRed.insert(ing.ingredientID,i18n("<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
+					propertyStatusMapRed.insert(ing.ingredientID,
+						i18n("<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
 						,(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
 						,((*prop_it).perUnit.name)
 						,ing.name));
@@ -1577,25 +1582,48 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 
 						missingConversions << conversionPath( ingUnit, toUnit, fromUnit, propUnit);
 					}
-					propertyStatusMapRed.insert(ing.ingredientID,i18n("<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate ingredient weight entry</a>, or provide conversion information to perform one of the following conversions: %2",
-					  ing.name
-					  ,("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>")
-					  ,QString::number(ing.ingredientID))
+					propertyStatusMapRed.insert(ing.ingredientID,
+						i18n("<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate "
+						"ingredient weight entry</a>, or provide conversion information to "
+						"perform one of the following conversions: %2",
+					  	ing.name,
+						("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>"),
+						QString::number(ing.ingredientID))
 					);
 				}
 				break;
 			}
 			case RecipeDB::MissingIngredientWeight:
-				propertyStatusMapRed.insert(ing.ingredientID, QString(i18n("<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide ingredient weight.</a>", ing.name, QString::number(ing.ingredientID))));
+				propertyStatusMapRed.insert(ing.ingredientID, QString(
+					i18n("<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide "
+					"ingredient weight.</a>",
+					ing.name, QString::number(ing.ingredientID))));
 				break;
 			case RecipeDB::MismatchedPrepMethod:
 				if ( ing.prepMethodList.count() == 0 )
-					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when no preparation method is specified. <a href=\"ingredient#%2\">Provide ingredient weight.</a>", ing.name, QString::number(ing.ingredientID))));
+					propertyStatusMapRed.insert(ing.ingredientID,QString(
+						i18n("<b>%1:</b> There is no ingredient weight entry for when no "
+						"preparation method is specified. <a href=\"ingredient#%2\">Provide "
+						"ingredient weight.</a>",
+						ing.name, QString::number(ing.ingredientID))));
 				else
-					propertyStatusMapRed.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners: %2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>").arg(QString::number(ing.ingredientID)));
+					propertyStatusMapRed.insert(ing.ingredientID,QString(
+						i18n("<b>%1:</b> There is no ""ingredient weight entry for when prepared "
+						"in any of the following manners: %2<a href=\"ingredient#%3\">Provide "
+						"ingredient weight.</a>"))
+						.arg(ing.name)
+						.arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>")
+						.arg(QString::number(ing.ingredientID)));
 				break;
 			case RecipeDB::MismatchedPrepMethodUsingApprox:
-				propertyStatusMapYellow.insert(ing.ingredientID,QString(i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of the following manners (defaulting to a weight entry without a preparation method specified): %2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")).arg(ing.name).arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>").arg(QString::number(ing.ingredientID)));
+				propertyStatusMapYellow.insert(ing.ingredientID,QString(
+					i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of "
+					"the following manners (defaulting to a weight entry without a preparation "
+					"method specified): "
+					"%2<a href=\"ingredient#%3\">Provide ingredient weight.</a>"))
+					.arg(ing.name)
+					.arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>")
+					.arg(QString::number(ing.ingredientID)));
 				break;
 			default: kDebug()<<"Code error: Unhandled conversion status code "<<status; break;
 			}
