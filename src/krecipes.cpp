@@ -570,7 +570,7 @@ void Krecipes::import()
 			//FIXME: This dialog should allow cancel the import.
 			QPointer<KDialog> showWarningsDlg = new KDialog( this );
 			showWarningsDlg->setCaption( i18n("Import Warnings") );
-			showWarningsDlg->setButtons( KDialog::Ok | KDialog::Default ) ;
+			showWarningsDlg->setButtons( KDialog::Ok );
 
 			showWarningsDlg->setMainWidget( warningEdit ); //KDialog will delete warningEdit for us
 			showWarningsDlg->resize( QSize( 550, 250 ) );
