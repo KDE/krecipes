@@ -127,7 +127,7 @@ MenuId KreMenu::createSubMenu( const QString &title, const QString &icon )
 	KreMenuButton *newSubMenuButton = new KreMenuButton( this );
 	newSubMenuButton->menuId = id;
 	newSubMenuButton->subMenuId = mainMenuId;
-	newSubMenuButton->setTitle( i18n( "Up..." ) );
+	newSubMenuButton->setTitle( i18nc("@action:button Up to top menu",  "Up..." ) );
 	newSubMenuButton->setIconSet( KIcon( "arrow-up" ) );
 
 	connect( newMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );

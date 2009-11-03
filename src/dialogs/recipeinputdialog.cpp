@@ -376,7 +376,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusLayout->addItem( propertySpacerRight );
 
 	KGuiItem updateGuiItem;
-	updateGuiItem.setText( i18n("Update") );
+	updateGuiItem.setText( i18nc("@action:inmenu Updates the loaded information", "Update") );
 	updateGuiItem.setIcon( KIcon( "view-refresh" ) );
 
 	propertyStatusDialog = new KDialog( this );
@@ -740,7 +740,7 @@ void RecipeInputDialog::savePhotoAs( void )
         }
 
 	if ( !loadedRecipe->photo.save( filename, "JPEG" ) )
-		KMessageBox::error(this, i18n("The photo cannot be saved in %1").arg(filename) );
+		KMessageBox::error(this, i18n("The photo cannot be saved in %1", filename) );
 }
 
 void RecipeInputDialog::clearPhoto( void )

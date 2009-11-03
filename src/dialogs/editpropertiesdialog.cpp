@@ -129,7 +129,7 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	usdaListView = new KreListView( page, QString::null, page, 0 );
 	usdaListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 	usdaListView->listView()->addColumn( i18n( "USDA Ingredient" ) );
-	usdaListView->listView()->addColumn( i18n( "Id" ) );
+	usdaListView->listView()->addColumn( "Id" );
 	usdaListView->listView()->setAllColumnsShowFocus( true );
 	loadDataFromFile();
 
@@ -174,7 +174,7 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	propertyListView->addColumn( i18n( "Unit" ) );
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	propertyListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	propertyListView->addColumn( "Id" , show_id ? -1 : 0 );
 	layout7->addWidget( propertyListView );
 
 	layout3_2 = new QHBoxLayout();
@@ -238,8 +238,8 @@ void EditPropertiesDialog::languageChange()
 	setCaption( i18n( "Property Information" ) );
 	infoLabel->setText( i18n( "Property Information for <b>%1</b>" , ingredientName) );
 	usdaListView->listView()->header()->setLabel( 0, i18n( "USDA Ingredient" ) );
-	usdaListView->listView()->header()->setLabel( 1, i18n( "Id" ) );
-	loadButton->setText( i18n( "Load ->" ) );
+	usdaListView->listView()->header()->setLabel( 1,  "Id" );
+	loadButton->setText( i18nc( "@action:button Load USDA property", "Load ->" ) );
 	propertyLabel->setText( i18n( "Properties" ) );
 	propertyAddButton->setText( i18n( "Add" ) );
 	propertyRemoveButton->setText( i18n( "Remove" ) );

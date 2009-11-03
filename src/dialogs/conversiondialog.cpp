@@ -95,7 +95,7 @@ ConversionDialog::~ConversionDialog()
 void ConversionDialog::languageChange()
 {
 	convertLabel->setText( i18n( "Convert" ) );
-	toLabel->setText( i18n( "To" ) );
+	toLabel->setText( i18nc( "Convert to", "To" ) );
 	resultLabel->setText( i18n( "<b>Result:</b>" ) );
 	resultText->setText( QString::null );
 }

@@ -1,4 +1,6 @@
 Changes from 2.0-alpha4 to svn:
+  * Fixed issues in i18n strings, most of them reported by Krazy. Thanks to Mike
+    Ferguson who did most of this work.
   * Fixes for bugs:
     + Don't crash when closing the "Page Setup" and "Print Setup" dialogs.
     + Uncategorized recipes are displayed when using MySQL 4, this fixes

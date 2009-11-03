@@ -64,7 +64,7 @@ void RecipeImportDialog::languageChange()
 
 void RecipeImportDialog::loadListView()
 {
-	CustomCheckListItem * head_item = new CustomCheckListItem( kListView, i18n( "All (%1)", list_copy.count() ), Q3CheckListItem::CheckBox );
+	CustomCheckListItem * head_item = new CustomCheckListItem( kListView, i18nc( "@item:inlistbox All items", "All (%1)", list_copy.count() ), Q3CheckListItem::CheckBox );
 	head_item->setOpen( true );
 
 	//get all categories

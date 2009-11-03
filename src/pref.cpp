@@ -148,7 +148,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 	QSpacerItem* spacerRow1 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerRow1, 2, 1 );
 
-	QLabel* usernameText = new QLabel( i18n( "Username:" ), this );
+	QLabel* usernameText = new QLabel( i18nc( "@label:textbox Database Username", "Username:" ), this );
 	layout->addWidget( usernameText, 3, 1 );
 
 	usernameEdit = new KLineEdit( this );
@@ -172,7 +172,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 
 	portEdit = new KIntNumInput( this );
 	portEdit->setMinimum(0);
-	portEdit->setSpecialValueText( i18n("Default") );
+	portEdit->setSpecialValueText( i18nc("Default Port", "Default") );
 	layout->addWidget( portEdit, 7, 2 );
 
 	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -263,7 +263,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	QSpacerItem* spacerRow1 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacerRow1, 2, 1 );
 
-	QLabel* usernameText = new QLabel( i18n( "Username:" ), this );
+	QLabel* usernameText = new QLabel( i18nc("@label:textbox Database Username", "Username:" ), this );
 	layout->addWidget( usernameText, 3, 1 );
 
 	usernameEdit = new KLineEdit( this );
@@ -287,7 +287,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 
 	portEdit = new KIntNumInput( this );
 	portEdit->setMinimum(0);
-	portEdit->setSpecialValueText( i18n("Default") );
+	portEdit->setSpecialValueText( i18nc("Default Port", "Default") );
 	layout->addWidget( portEdit, 7, 2 );
 
 	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -549,8 +549,8 @@ void NumbersPrefs::saveOptions()
 void NumbersPrefs::languageChange()
 {
 	numberButtonGroup->setTitle( i18n( "Number Format" ) );
-	fractionRadioButton->setText( i18n( "Fraction" ) );
-	decimalRadioButton->setText( i18n( "Decimal" ) );
+	fractionRadioButton->setText( i18nc("@option:radio Display fraction", "Fraction" ) );
+	decimalRadioButton->setText( i18nc("@option:radio Display decimal", "Decimal" ) );
 }
 
 //=============Import/Export Preferences Dialog================//
@@ -663,7 +663,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	catLimitInput->setLabel( i18n( "Number of categories to display at once:" ) );
 	catLimitInput->setRange(0,5000,20);
 	catLimitInput->setSliderEnabled( true );
-	catLimitInput->setSpecialValueText( i18n("Unlimited") );
+	catLimitInput->setSpecialValueText( i18nc("Unlimited categories", "Unlimited") );
 
 	if ( cat_limit > 0 )
 		catLimitInput->setValue( cat_limit );
@@ -673,7 +673,7 @@ PerformancePrefs::PerformancePrefs( QWidget *parent )
 	limitInput->setLabel( i18n( "Number of elements to display at once:" ) );
 	limitInput->setRange(0,100000,1000);
 	limitInput->setSliderEnabled( true );
-	limitInput->setSpecialValueText( i18n("Unlimited") );
+	limitInput->setSpecialValueText( i18nc("Unlimited elements", "Unlimited") );
 
 	if ( limit > 0 )
 		limitInput->setValue( limit );

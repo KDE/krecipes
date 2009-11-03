@@ -24,7 +24,7 @@
 CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& categories )
 	 : KDialog( parent)
 {
-	setCaption(i18n("New Category" ));
+	setCaption(i18nc("@title:window", "New Category" ));
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
@@ -36,13 +36,13 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 	QVBoxLayout *boxLayout = new QVBoxLayout;
 	box->setLayout( boxLayout );
 	boxLayout->setAlignment( Qt::AlignTop );
-	box->setTitle( i18n( "New Category" ) );
+	box->setTitle( i18nc("@title:group", "New Category" ) );
 
 	elementEdit = new KLineEdit( box );
 	boxLayout->addWidget( elementEdit );
 
 	KHBox *subcatHBox = new KHBox( box );
-	( void ) new QLabel( i18n( "Subcategory of:" ), subcatHBox );
+	( void ) new QLabel( i18nc("@label:textbox", "Subcategory of:" ), subcatHBox );
 	categoryComboBox = new KComboBox( subcatHBox );
 	boxLayout->addWidget( subcatHBox );
 	loadCategories( categories );
@@ -60,7 +60,7 @@ CreateCategoryDialog::~CreateCategoryDialog()
 
 void CreateCategoryDialog::loadCategories( const ElementList& categories )
 {
-	categoryComboBox->insertItem( categoryComboBox->count(), i18n( "**NONE**" ) );
+	categoryComboBox->insertItem( categoryComboBox->count(), i18nc("@item:inlistbox No category", "**NONE**" ) );
 	for ( ElementList::const_iterator it = categories.begin(); it != categories.end(); ++it ) {
 		categoryComboBox->insertItem( categoryComboBox->count(), ( *it ).name );
 		idMap.insert( ( *it ).name, ( *it ).id );

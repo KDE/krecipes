@@ -64,7 +64,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 	KConfigGroup config( KGlobal::config(), "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	authorListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	authorListView->addColumn( "Id" , show_id ? -1 : 0 );
 	authorListView->addColumn( i18n( "Author" ) );
 	authorListView->setAllColumnsShowFocus( true );
 

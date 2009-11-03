@@ -95,7 +95,7 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 		{
 			htmlCode += QString( "<td><div class=\"day\">" );
 			htmlCode += QString( "<div class=\"dayheader\"><center>" );
-			htmlCode += i18n( "Day %1",QString::number( day + 1 ));
+			htmlCode += i18n( "Day %1", day + 1 );
 			htmlCode += QString( "</center></div>" );
 			for ( int meal = 0;meal < mealNumber;meal++ )  // Meals in each cell
 			{

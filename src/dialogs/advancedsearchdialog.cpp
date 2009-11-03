@@ -408,7 +408,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataFrameLayout->setMargin( 5 );
 	metaDataFrameLayout->setSpacing( 3 );
 
-	QLabel *createdLabel = new QLabel( i18n("Created:"), metaDataFrame );
+	QLabel *createdLabel = new QLabel( i18nc("@label Recipe created date", "Created:"), metaDataFrame );
 	metaDataFrameLayout->addWidget( createdLabel );
 
 	KHBox *createdHBox = new KHBox(metaDataFrame);
@@ -419,7 +419,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	createdEndDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	metaDataFrameLayout->addWidget( createdHBox );
 
-	QLabel *modifiedLabel = new QLabel( i18n("Modified:"), metaDataFrame );
+	QLabel *modifiedLabel = new QLabel( i18nc("@label Recipe modified date", "Modified:"), metaDataFrame );
 	metaDataFrameLayout->addWidget( modifiedLabel );
 
 	KHBox *modifiedHBox = new KHBox(metaDataFrame);
@@ -430,7 +430,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	modifiedEndDateEdit->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	metaDataFrameLayout->addWidget( modifiedHBox );
 
-	QLabel *accessedLabel = new QLabel( i18n("Last Accessed:"), metaDataFrame );
+	QLabel *accessedLabel = new QLabel( i18nc("@label Recipe last accessed date", "Last Accessed:"), metaDataFrame );
 	metaDataFrameLayout->addWidget( accessedLabel );
 
 	KHBox *accessedHBox = new KHBox(metaDataFrame);
@@ -577,8 +577,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
 	
-	resultsListView->addColumn( i18n( "Title" ) );
-	resultsListView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	resultsListView->addColumn( i18nc("@title:column Recipe title", "Title" ) );
+	resultsListView->addColumn( "Id" , show_id ? -1 : 0 );
 
 	actionHandler = new RecipeActionsHandler( resultsListView, database );
 
@@ -652,7 +652,7 @@ AdvancedSearchDialog::~AdvancedSearchDialog()
 
 void AdvancedSearchDialog::languageChange()
 {
-	titleButton->setText( QString("%1 >>").arg(i18n("Title")) );
+	titleButton->setText( QString("%1 >>").arg(i18nc("@action:button Recipe title", "Title")) );
 	textLabel1_4->setText( i18n( "Search using the following criteria:" ) );
 	ingredientButton->setText( QString("%1 >>").arg(i18n("Ingredients")) );
 	textLabel1_2->setText( i18n( "Uses any of:" ) );
@@ -679,9 +679,9 @@ void AdvancedSearchDialog::languageChange()
 	prepTimeComboBox->insertItem( prepTimeComboBox->count(), i18n( "Ready in about:" ) );
 	instructionsButton->setText( QString("%1 >>").arg(i18n("Instructions")) );
 	metaDataButton->setText( QString("%1 >>").arg(i18n("Meta Data")) );
-	clearButton->setText( i18n( "C&lear" ) );
+	clearButton->setText( i18nc( "action:button Clear search criteria", "C&lear" ) );
 	clearButton->setShortcut( QKeySequence( i18n( "Alt+L" ) ) );
-	findButton->setText( i18n( "&Search" ) );
+	findButton->setText( i18nc( "@action:button Search recipes", "&Search" ) );
 	ratingAvgRadioButton->setText( i18n( "By average:" ) );
 	avgStarsLabel->setText( i18n( "stars" ) );
 	criterionRadioButton->setText( i18n( "By criteria:" ) );

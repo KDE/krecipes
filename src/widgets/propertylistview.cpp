@@ -121,7 +121,7 @@ StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool ed
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( i18n( "Id" ), show_id ? -1 : 2 );
+	addColumn( "Id" , show_id ? -1 : 2 );
 
 	setSorting( 0 );
 

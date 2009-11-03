@@ -468,7 +468,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 	if ( qRound(version*100) < 87 ) {
 		//Load this default data so the user knows what rating criteria is
-		database->exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18n("Overall")) );
+		database->exec( QString("INSERT INTO rating_criteria VALUES (1,'%1')").arg(i18nc("Overall rating", "Overall")) );
 		database->exec( QString("INSERT INTO rating_criteria VALUES (2,'%1')").arg(i18n("Taste") ) );
 		database->exec( QString("INSERT INTO rating_criteria VALUES (3,'%1')").arg(i18n("Appearance") ) );
 		database->exec( QString("INSERT INTO rating_criteria VALUES (4,'%1')").arg(i18n("Originality") ) );

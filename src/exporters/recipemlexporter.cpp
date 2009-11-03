@@ -138,7 +138,7 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 		if ( !( *recipe_it ).prepTime.isNull() ) {
 			QDomElement preptime_tag = doc.createElement( "preptime" );
 			head_tag.appendChild( preptime_tag );
-			preptime_tag.setAttribute( "type", i18n( "Total" ) );
+			preptime_tag.setAttribute( "type", i18nc( "Total preparation time", "Total" ) );
 
 			QDomElement preptime_time_tag = doc.createElement( "time" );
 			preptime_tag.appendChild( preptime_time_tag );

@@ -51,7 +51,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		filterBox->setMargin( 2 );
 
 		filterLabel = new QLabel( filterBox );
-		filterLabel->setText( " " + i18n( "Search:" ) );
+		filterLabel->setText( " " + i18nc( "@label:textbox Search recipes", "Search:" ) );
 		filterEdit = new KLineEdit( filterBox );
 		filterEdit->setClearButtonShown( true );
 		connect( filterEdit, SIGNAL( clearButtonClicked() ), filterEdit, SLOT( clear() ) );

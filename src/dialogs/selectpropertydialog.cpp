@@ -51,7 +51,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 
 	KConfigGroup config( KGlobal::config(),  "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	propertyChooseView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	propertyChooseView->addColumn( "Id" , show_id ? -1 : 0 );
 
 	propertyChooseView->addColumn( i18n( "Property" ) );
 	propertyChooseView->setSorting(1);

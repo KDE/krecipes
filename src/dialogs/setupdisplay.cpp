@@ -114,8 +114,8 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 	loadHTMLView();
 	show();
 
-	createItem( "background", i18n("Background"), Font | BackgroundColor | TextColor );
-	createItem( "title", i18n("Title"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
+	createItem( "background", i18nc("Background color", "Background"), Font | BackgroundColor | TextColor );
+	createItem( "title", i18nc("Recipe title", "Title"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 	createItem( "instructions", i18n("Instructions"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 	createItem( "prep_time", i18n("Preparation Time"), Font | BackgroundColor | TextColor | Visibility | Alignment | Border );
 	createItem( "photo", i18n("Photo"), Visibility | Border );
@@ -448,11 +448,11 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 
 		QActionGroup *alignment_actions = new QActionGroup( this );
 
-		QAction *c_action = new QAction( i18n( "Center" ), this );
+		QAction *c_action = new QAction( i18nc( "Align center", "Center" ), this );
                 alignment_actions->addAction( c_action );
-		QAction *l_action = new QAction( i18n( "Left" ),this );
+		QAction *l_action = new QAction( i18nc( "Align left", "Left" ),this );
                 alignment_actions->addAction( l_action );
-		QAction *r_action = new QAction( i18n( "Right" ), this );
+		QAction *r_action = new QAction( i18nc( "Align right", "Right" ), this );
                 alignment_actions->addAction( r_action );
 
 		int align = item->alignment;
@@ -581,11 +581,11 @@ void SetupDisplay::setAlignment( QAction *action )
 	if ( item->alignment & Qt::AlignLeft )
 		item->alignment ^= Qt::AlignLeft;
 
-	if ( action->text() == i18n( "Center" ) )
+	if ( action->text() == i18nc( "Align center", "Center" ) )
 		item->alignment |= Qt::AlignHCenter;
-	else if ( action->text() == i18n( "Left" ) )
+	else if ( action->text() == i18nc( "Align left", "Left" ) )
 		item->alignment |= Qt::AlignLeft;
-	else if ( action->text() == i18n( "Right" ) )
+	else if ( action->text() == i18nc( "Align right", "Right" ) )
 		item->alignment |= Qt::AlignRight;
 
 	m_currentItem = item;

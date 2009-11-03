@@ -103,9 +103,9 @@ protected:
 private:
 	void updateType( Unit::Type t ) {
 		switch ( t ) {
-		case Unit::Other: m_type = i18n("Other"); break;
-		case Unit::Mass: m_type = i18n("Mass"); break;
-		case Unit::Volume: m_type = i18n("Volume"); break;
+		case Unit::Other: m_type = i18nc("Unit type other", "Other"); break;
+		case Unit::Mass: m_type = i18nc("Unit type mass", "Mass"); break;
+		case Unit::Volume: m_type = i18nc("Unit type volume", "Volume"); break;
 		default: break;
 		}
 	}

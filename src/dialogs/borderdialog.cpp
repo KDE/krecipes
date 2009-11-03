@@ -129,9 +129,9 @@ BorderDialog::~BorderDialog()
 void BorderDialog::languageChange()
 {
 	borderGroupBox->setTitle( i18n( "Requested Border" ) );
-	styleLabel->setText( i18n( "Style:" ) );
-	colorLabel->setText( i18n( "Color:" ) );
-	widthLabel->setText( i18n( "Width:" ) );
+	styleLabel->setText( i18nc( "@label Border style", "Style:" ) );
+	colorLabel->setText( i18nc( "@label Border color", "Color:" ) );
+	widthLabel->setText( i18nc( "@label Border width", "Width:" ) );
 }
 
 KreBorder BorderDialog::border() const
@@ -203,7 +203,7 @@ void BorderDialog::loadBorder( const KreBorder &border )
 
 void BorderDialog::initListBoxs()
 {
-	styleListBox->insertItem( i18n( "None" ) );
+	styleListBox->insertItem( i18nc( "Border type none", "None" ) );
 	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Dotted" ) );
 	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Dashed" ) );
 	styleListBox->insertItem( i18nc( "See http://krecipes.sourceforge.net/bordertypes.png for an example", "Solid" ) );

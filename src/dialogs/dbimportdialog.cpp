@@ -182,11 +182,11 @@ void DBImportDialog::languageChange()
 	mysqlRadioButton->setText( "MySQL" );
 	psqlRadioButton->setText( "PostgreSQL" );
 	hostLabel->setText( i18n( "Server:" ) );
-	userLabel->setText( i18n( "Username:" ) );
+	userLabel->setText( i18nc( "Database username", "Username:" ) );
 	passwordLabel->setText( i18n( "Password:" ) );
 	nameLabel->setText( i18n( "Database name:" ) );
 	portLabel->setText( i18n( "Port:" ) );
-	portEdit->setSpecialValueText( i18n("Default") );
+	portEdit->setSpecialValueText( i18nc("Default port", "Default") );
 
 	//set defaults
 	hostEdit->setText( "localhost" );

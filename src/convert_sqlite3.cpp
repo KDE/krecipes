@@ -82,23 +82,23 @@ void ConvertSQLite3::convert()
 		if ( m_process1Error && !m_process1Finished ) {
 			if ( KMessageBox::questionYesNo( 0, i18n( "Unable to find or run the program '%1'.  "
 			"Either it is not installed on your system or it is not in $PATH. "
-			"Do you want to configure other path for this command?"
-			).arg( cmd1.first() ) ) == KMessageBox::Yes )
+			"Do you want to configure other path for this command?",
+			cmd1.first() ) ) == KMessageBox::Yes )
 				retry = true;
 			else
 				return;
 		} else if ( m_process2Error && !m_process2Finished ) {
 			if ( KMessageBox::questionYesNo( 0, i18n( "Unable to find or run the program '%1'.  "
 			"Either it is not installed on your system or it is not in $PATH. " 
-			"Do you want to configure other path for this command?"
-			).arg( cmd2.first() ) ) == KMessageBox::Yes ) 
+			"Do you want to configure other path for this command?",
+			cmd2.first() ) ) == KMessageBox::Yes ) 
 				retry = true;
 			else
 				return;
 		} else if ((m_exitCode1 != 0) || (m_exitStatus1 != QProcess::NormalExit) ||
 			(m_exitCode2 != 0) || (m_exitStatus2 != QProcess::NormalExit)) {
 			KMessageBox::error( 0, i18n("Conversion process failed. "
-				"Probably the file %1 is not an SQLite 2 database.").arg(file) );
+				"Probably the file %1 is not an SQLite 2 database.", file) );
 			return;
 		}
 		
@@ -129,17 +129,17 @@ void ConvertSQLite3::convert()
 
 	if ( !copyFile( file, backup_file ) ) {
 		KMessageBox::error( 0, i18n("Unable to backup SQLite 2 database, aborting. "
-		"A successfully converted SQLite 3 file is available at %1.new.").arg(file) );
+		"A successfully converted SQLite 3 file is available at %1.new.", file) );
 	}
 	else {
 		kDebug()<<"SQLite 2 database backed up to "<<backup_file;
 		if ( !copyFile( file+".new", file ) ) {
 			KMessageBox::error( 0, i18n("Unable to copy the new SQLite 3 database to %1."
-			"You may manually move %1.new to %1").arg(file) );
+			"You may manually move %1.new to %1", file) );
 		}
 		else {
 			KMessageBox::information( 0, i18n("Conversion successful! "
-				"SQLite 2 database backed up to %1").arg(backup_file) );
+				"SQLite 2 database backed up to %1", backup_file) );
 			QFile::remove(file+".new");
 		}
 	}

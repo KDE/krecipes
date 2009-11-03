@@ -114,7 +114,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	KConfigGroup config( KGlobal::config(), "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	shopRecipeListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	shopRecipeListView->listView() ->addColumn( "Id" , show_id ? -1 : 0 );
 
 	shopRecipeListView->listView() ->setSorting( -1 );
 	shopRecipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
@@ -136,7 +136,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	clearButton = new KPushButton( buttonBar );
 	clearButton->setObjectName( "clearButton" );
-	clearButton->setText( i18n( "Clear" ) );
+	clearButton->setText( i18nc( "@action:button Clear list", "Clear" ) );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
 
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'

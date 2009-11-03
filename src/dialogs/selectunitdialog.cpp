@@ -36,7 +36,7 @@ SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, O
 
 	KConfigGroup config( KGlobal::config(), "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	unitChooseView->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	unitChooseView->addColumn( "Id" , show_id ? -1 : 0 );
 
 	unitChooseView->addColumn( i18n( "Unit" ) );
 	unitChooseView->setSorting(1);

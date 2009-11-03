@@ -57,7 +57,7 @@ StdPrepMethodListView::StdPrepMethodListView( QWidget *parent, RecipeDB *db, boo
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	addColumn( "Id" , show_id ? -1 : 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );

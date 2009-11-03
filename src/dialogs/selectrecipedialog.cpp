@@ -71,8 +71,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 
 	searchLabel = new QLabel( searchBar );
-	searchLabel->setText( i18n( "Search:" ) );
-	searchLabel->setFixedWidth( searchLabel->fontMetrics().width( i18n( "Search:" ) ) + 5 );
+	searchLabel->setText( i18nc( "Search recipes", "Search:" ) );
+	searchLabel->setFixedWidth( searchLabel->fontMetrics().width( i18nc( "Search recipes", "Search:" ) ) + 5 );
 	searchBox = new KLineEdit( searchBar );
 	searchBox->setClearButtonShown( true );
 	connect( searchBox, SIGNAL(clearButtonClicked() ),this,SLOT( clearSearch() ) );
@@ -110,10 +110,10 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	removeButton->setMaximumWidth( 100 );
 	removeButton->setIcon( KIcon("edit-delete-shred" ) );
 
-	tabWidget->insertTab( -1, basicSearchTab, i18n( "Basic" ) );
+	tabWidget->insertTab( -1, basicSearchTab, i18nc( "Basic search", "Basic" ) );
 
 	advancedSearch = new AdvancedSearchDialog( this, database );
-	tabWidget->insertTab( -1, advancedSearch, i18n( "Advanced" ) );
+	tabWidget->insertTab( -1, advancedSearch, i18nc( "Advanced search", "Advanced" ) );
 
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
 	actionHandler = new RecipeActionsHandler( recipeListView, database );

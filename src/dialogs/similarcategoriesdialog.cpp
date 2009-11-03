@@ -181,18 +181,20 @@ void SimilarCategoriesDialog::languageChange()
 	setWindowTitle( i18n( "Similar Categories" ) );
 	thresholdLabel->setText( i18n( "Threshold:" ) );
 	categoryLabel->setText( i18n( "Category:" ) );
-	searchButton->setText( i18n( "Search" ) );
+	searchButton->setText( i18nc(
+		"@action:button Search a recipe category in database",
+		"Search" ) );
 	allLabel->setText( i18n( "Similar Categories:" ) );
-	removeButton->setText( i18n( "<<" ) );
-	addButton->setText( i18n( ">>" ) );
+	removeButton->setIcon( KIcon( "arrow-left" ) );
+	addButton->setIcon( KIcon( "arrow-right" ) );
 	toMergeLabel->setText( i18n( "Categories to Merge:" ) );
 	mergeButton->setText( i18n( "Merge" ) );
 	cancelButton->setText( i18n( "Cancel" ) );
 
 	allListView->addColumn( i18n( "Category" ) );
-	//allListView->addColumn( i18n( "Id" ) );
+	//allListView->addColumn( "Id" );
 	toMergeListView->addColumn( i18n( "Category" ) );
-	//toMergeListView->addColumn( i18n( "Id" ) );
+	//toMergeListView->addColumn( "Id" );
 }
 
 /*****************************************************/

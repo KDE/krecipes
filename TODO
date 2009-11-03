@@ -6,7 +6,6 @@ Planned for the next release in 2.0 branch:
  * The database version stored in db_info.ver should be in the future a string
    instead of a float, make sure that krecipes will be able to read both data
    types when retrieving the database version.
- * Use some i18nc for some strings, fixing krazy issues about this.
  * Using a QSplitter on the ingredient matcher dialog.
  * Fix bugs.
  * Update user manual.

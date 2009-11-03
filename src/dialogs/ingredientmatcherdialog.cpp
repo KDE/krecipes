@@ -97,17 +97,17 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	missingNumberLabel->setText( i18n( "Missing ingredients allowed:" ) );
 	missingNumberSpinBox = new KIntSpinBox( missingBox );
 	missingNumberSpinBox->setMinimum( -1 );
-	missingNumberSpinBox->setSpecialValueText( i18n( "Any" ) );
+	missingNumberSpinBox->setSpecialValueText( i18nc( "Any amount of ingredients missing", "Any" ) );
 
 	// Found recipe list
 	recipeListView = new KreListView( this, i18n( "Matching Recipes" ), false, 1, missingBox );
 	recipeListView->listView() ->setAllColumnsShowFocus( true );
 
-	recipeListView->listView() ->addColumn( i18n( "Title" ) );
+	recipeListView->listView() ->addColumn( i18nc( "@title:column Recipe Title", "Title" ) );
 
 	KConfigGroup config( KGlobal::config(), "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	recipeListView->listView() ->addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	recipeListView->listView() ->addColumn( "Id" , show_id ? -1 : 0 );
 
 	recipeListView->listView() ->addColumn( i18n( "Missing Ingredients" ) );
 
@@ -126,7 +126,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	clearButton = new KPushButton( buttonBox );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
-	clearButton->setText( i18n( "Clear" ) );
+	clearButton->setText( i18nc( "@action:button Clear search criteria", "Clear" ) );
 	dialogLayout->addWidget(buttonBox);
 
 	// Connect signals & slots

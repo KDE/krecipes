@@ -107,7 +107,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 
 	KPushButton *clearButton = new KPushButton( bottom_layout );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
-	clearButton->setText( i18n( "Clear" ) );
+	clearButton->setText( i18nc( "@action:button Clear Diet","Clear" ) );
 
 	// Create Tabs
 	//don't use newTab, it'll load data and we don't want it to do that at startup
@@ -412,7 +412,8 @@ void MealInput::changeDishNumber( int dn )
 {
 	if ( dn > dishNumber ) {
 		while ( dishNumber != dn ) {
-			DishInput * newDish = new DishInput( this, database, i18n( "Dish %1" ,QString::number( dishNumber + 1 ) ));
+			DishInput * newDish = new DishInput( this, database,
+				i18nc("Dish number %1", "Dish %1", dishNumber + 1 ) );
 			newDish->reload();
 			dishStack->addWidget( newDish );
 			dishInputList.append( newDish );

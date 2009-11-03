@@ -63,15 +63,15 @@ void UnitListView::checkCreateUnit( const Unit &el )
 
 StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable ) : UnitListView( parent, db )
 {
-	addColumn( i18n( "Unit" ) );
-	addColumn( i18n( "Abbreviation" ) );
-	addColumn( i18n( "Plural" ) );
-	addColumn( i18n( "Abbreviation" ) );
-	addColumn( i18n( "Type" ) );
+	addColumn( i18nc( "@title:column Unit name", "Unit" ) );
+	addColumn( i18nc( "@title:column Unit abbreviation", "Abbreviation" ) );
+	addColumn( i18nc( "@title:column Unit plural", "Plural" ) );
+	addColumn( i18nc( "@title:column unit plural abbreviation", "Abbreviation" ) );
+	addColumn( i18nc( "@title:column Unit type", "Type" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	addColumn( "Id", show_id ? -1 : 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );
@@ -81,9 +81,9 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 		setRenameable( 4, true );
 
 		typeComboBox = new KComboBox( viewport() );
-		typeComboBox->insertItem( typeComboBox->count(), i18n("Other"));
-		typeComboBox->insertItem( typeComboBox->count(), i18n("Mass"));
-		typeComboBox->insertItem( typeComboBox->count(), i18n("Volume"));
+		typeComboBox->insertItem( typeComboBox->count(), i18nc("@item:inlistbox Unit type other", "Other"));
+		typeComboBox->insertItem( typeComboBox->count(), i18nc("@item:inlistbox Unit type mass", "Mass"));
+		typeComboBox->insertItem( typeComboBox->count(), i18nc("@item:inlistbox Unit type volume", "Volume"));
 		addChild( typeComboBox );
 		typeComboBox->hide();
 

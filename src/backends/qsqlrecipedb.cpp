@@ -1996,7 +1996,16 @@ bool QSqlRecipeDB::checkIntegrity( void )
 	kDebug() << "version found... " << version << " \n";
 	kDebug() << "latest version... " << latestDBVersion() ;
 	if ( int( qRound( databaseVersion() * 1e5 ) ) < int( qRound( latestDBVersion() * 1e5 ) ) ) { //correct for float's imprecision
-		switch ( KMessageBox::questionYesNo( 0, i18n( "<!doc>The database was created with a previous version of Krecipes.  Would you like Krecipes to update this database to work with this version of Krecipes?  Depending on the number of recipes and amount of data, this could take some time.<br><br><b>Warning: After updating, this database will no longer be compatible with previous versions of Krecipes.<br><br>Cancelling this operation may result in corrupting the database.</b>" ) ) ) {
+		switch ( KMessageBox::questionYesNo( 0,
+		i18nc("@info", "<p>The database was created with a previous version of Krecipes. "
+		"Would you like Krecipes to update this database to work with this version of "
+		"Krecipes?  Depending on the number of recipes and amount of data, this could "
+		"take some time.</p>"
+		"<warning>"
+		"<p>After updating, this database will no longer be compatible with "
+		"previous versions of Krecipes.</p>"
+		"<p>Cancelling this operation may result in corrupting the database.</p>"
+		"</warning>" ) ) ) {
 		case KMessageBox::Yes:
 			emit progressBegin(0,QString::null,i18n("Porting database structure..."),50);
 			portOldDatabases( version );

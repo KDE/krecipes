@@ -316,7 +316,7 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	addColumn( "Id" , show_id ? -1 : 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );
@@ -380,7 +380,7 @@ CategoryListView( parent, db ), exclusive(_exclusive)
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( i18n( "Id" ), show_id ? -1 : 0 );
+	addColumn( "Id" , show_id ? -1 : 0 );
 
 	for ( ElementList::const_iterator it = init_items_checked.begin(); it != init_items_checked.end(); ++it )
 		m_selections.append(*it);

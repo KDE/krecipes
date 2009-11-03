@@ -187,7 +187,7 @@ void Krecipes::setupActions()
 	printAction =  KStandardAction::print( this, SLOT( filePrint() ), actionCollection() );
 
 	reloadAction = new KAction( this );
-	reloadAction->setText( i18n( "Reloa&d" ) );
+	reloadAction->setText( i18nc("@action:inmenu Reload Recipe", "Reloa&d" ) );
 	reloadAction->setIcon( KIcon( "view-refresh" ) );
 	reloadAction->setShortcut( Qt::Key_F5 );
 	actionCollection()->addAction( "reload_action" , reloadAction );
@@ -340,7 +340,7 @@ void Krecipes::setupActions()
 	
 	//Note that createAction is intended to create anything except a new recipe.
 	createAction = new KAction( this );
-	createAction->setText( i18n( "Create New" ) );
+	createAction->setText( i18nc("@action:button Create new data item", "Create New" ) );
 	createAction->setIcon( KIcon( "document-new" ) );
 	createAction->setShortcut( Qt::CTRL + Qt::ALT + Qt::Key_N );
 	actionCollection()->addAction( "create_new_action", createAction );
@@ -564,7 +564,7 @@ void Krecipes::import()
 
 		if ( !importer->getMessages().isEmpty() ) {
 			KTextEdit * warningEdit = new KTextEdit( this );
-			warningEdit->setText( i18n( "NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occurred.<br><br>" ) + importer->getMessages() );
+			warningEdit->setText( i18n("<p>NOTE: We recommend that all recipes generating warnings be checked to ensure that they were properly imported, and no loss of recipe data has occurred.</p>" ) + importer->getMessages() );
 			warningEdit->setReadOnly( true );
 
 			//FIXME: This dialog should allow cancel the import.

@@ -613,8 +613,7 @@ ThumbBarToolTip::ThumbBarToolTip(ThumbBarView* parent)
 
 void ThumbBarToolTip::maybeTip(const QPoint& /*pos*/)
 {
-#if 0
-    if ( !parentWidget() || !m_view)
+    /*if ( !parentWidget() || !m_view)
         return;
 
     ThumbBarItem* item = m_view->findItem( m_view->viewportToContents(pos) );
@@ -653,8 +652,7 @@ void ThumbBarToolTip::maybeTip(const QPoint& /*pos*/)
 
     tipText += QString::fromLatin1("</table>");
 
-    tip(r, tipText);
-#endif
+    tip(r, tipText);*/
 }
 
 #include "thumbbar.moc"

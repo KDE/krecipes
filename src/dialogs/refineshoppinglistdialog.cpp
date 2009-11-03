@@ -42,7 +42,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	KVBox *page = new KVBox( this );
 	setMainWidget( page );
 
-	setButtonText( KDialog::Ok, i18n( "&Done" ) );
+	setButtonText( KDialog::Ok, i18nc( "action:button Finished refining shopping list", "&Done" ) );
 
 
 	helpLabel = new QLabel( page );

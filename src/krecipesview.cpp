@@ -342,7 +342,7 @@ bool KrecipesView::questionRerunWizard( const QString &message, const QString &e
 			ConvertSQLite3 converter;
 			converter.convert();
 		} else {
-			kError() << errormsg << ". " << i18n( "Exiting" ) ;
+			kError() << errormsg << ". " << i18nc("Exiting Krecipes", "Exiting" ) ;
 			kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
 			return false;
 		}
@@ -357,7 +357,7 @@ bool KrecipesView::questionRerunWizard( const QString &message, const QString &e
 		if ( answer == KMessageBox::Yes )
 			wizard( true );
 		else {
-			kError() << errormsg << ". " << i18n( "Exiting" ) ;
+			kError() << errormsg << ". " << i18nc("Exiting Krecipes", "Exiting" ) ;
 			kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
 			return false;
 		}
