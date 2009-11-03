@@ -314,9 +314,12 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 {
 	addColumn( i18n( "Category" ) );
 
-	KConfigGroup config = KGlobal::config()->group( "Advanced" );
-	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id" , show_id ? -1 : 0 );
+	//FIXME: for some reason when I have "ShowID=true" this code results in
+        //krecipes eating 100% of my cpu time.
+	//KConfigGroup config = KGlobal::config()->group( "Advanced" );
+	//bool show_id = config.readEntry( "ShowID", false );
+	//addColumn( "Id" , show_id ? -1 : 0 );
+	addColumn( "Id" , 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );
