@@ -59,9 +59,7 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	buttonGroupLayout->addWidget( yieldRadioButton );
 
 	yieldFrame = new QFrame( buttonGroup );
-	yieldFrame->setFrameShape( QFrame::Box );
-	yieldFrame->setFrameShadow( QFrame::Sunken );
-	yieldFrame->setLineWidth( 1 );
+	yieldFrame->setFrameStyle( QFrame::StyledPanel|QFrame::Raised );
 	yieldFrameLayout = new QGridLayout( yieldFrame );
 	yieldFrameLayout->cellRect( 1, 1 );
 	yieldFrameLayout->setMargin( 11 );
@@ -90,10 +88,7 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	buttonGroupLayout->addWidget( factorRadioButton );
 
 	factorFrame = new QFrame( buttonGroup );
-	factorFrame->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 1, 0, factorFrame->sizePolicy().hasHeightForWidth() ) );
-	factorFrame->setFrameShape( QFrame::Box );
-	factorFrame->setFrameShadow( QFrame::Sunken );
-	factorFrame->setLineWidth( 1 );
+	factorFrame->setFrameStyle( QFrame::StyledPanel|QFrame::Raised );
 	factorFrameLayout = new QHBoxLayout( factorFrame );
 	factorFrameLayout->setMargin( 11 );
 	factorFrameLayout->setSpacing( 6 );
