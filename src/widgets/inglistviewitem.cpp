@@ -122,8 +122,10 @@ void IngListViewItem::setText( int column, const QString &text )
 		break;
 	}
 	case 1: {
-		Ingredient i; i.setAmount(text);
-		setAmount( i.amount, i.amount_offset );
+		bool ok;
+		Ingredient i; i.setAmount(text, &ok);
+		if (ok && !text.trimmed().isEmpty())
+			setAmount( i.amount, i.amount_offset );
 		break;
 	}
 	case 2:
