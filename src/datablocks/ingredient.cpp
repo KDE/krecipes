@@ -12,6 +12,8 @@
 #include "datablocks/ingredient.h"
 
 #include <QStringList>
+#include <KGlobal>
+#include <KLocale>
 
 #include "mixednumber.h"
 
@@ -70,16 +72,34 @@ void Ingredient::setAmount( const QString &range, bool *ok )
 			if ( ok ) *ok = false;
 			return;
 	}
+	amount_max = amount_max.trimmed();
 
-	MixedNumber nm_min = MixedNumber::fromString( amount_min, ok );
-	if ( ok && *ok == false ) return;
+	KLocale * locale = KGlobal::locale();
+	double min, max=0;
 
-	MixedNumber nm_max = MixedNumber::fromString( amount_max, ok );
-	if ( ok && *ok == false ) return;
+	if ( MixedNumber::isFraction( amount_min ) ) {
+		MixedNumber mixed_min = MixedNumber::fromString( amount_min, ok );
+		if ( ok && *ok == false ) return;
+		min = mixed_min.toDouble();
+	} else {
+		min = locale->readNumber( amount_min, ok );
+		if ( ok && *ok == false ) return;
+	}
 
-	amount = nm_min.toDouble();
-	if ( nm_max > 0 )
-		amount_offset = nm_max.toDouble() - amount;
+	if ( !amount_max.isEmpty() ) {
+		if ( MixedNumber::isFraction( amount_max ) ) {
+			MixedNumber mixed_max = MixedNumber::fromString( amount_max, ok );
+			if ( ok && *ok == false ) return;
+			max = mixed_max.toDouble();
+		} else {
+			max = locale->readNumber( amount_max, ok );
+			if ( ok && *ok == false ) return;
+		}
+	}
+
+	amount = min;
+	if ( max > 0 )
+		amount_offset = max - min;
 }
 
 //compare also using the group id because there may be the same ingredient in a list multiple times, but each in a different group

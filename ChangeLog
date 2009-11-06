@@ -9,6 +9,16 @@ Changes from 2.0-alpha4 to svn:
     + When removing a category a recipe is moved to the "Uncategorized" folder
       (we're talking only about the UI) only if the recipe is not included in
       other categories.
+    + Correct imprecision when typing float numbers for ingredient amounts in
+      the recipe editor. The problem was that the program was converting numbers
+      from float to mixed and from mixed to float again and again. For instance,
+      if you type 2/3 in a previous release you will get it converted to 0.75
+      instead of the expected 0.666666... or so. Also the changes for fixing
+      this bug cause that you will not see fractions in the ingredients tab, no
+      matter what you choosed in "Settings -> Configure -> Formatting -> Number
+      format", however, this is not a problem; if you want to see the numbers as
+      fractions just choose "Fraction" as number format, select your recipe and
+      click on "Show recipe".
 
 Changes from 2.0-alpha3 to 2.0-alpha4:
   * Fixed issues reported by Krazy in the user manual. Note that the user

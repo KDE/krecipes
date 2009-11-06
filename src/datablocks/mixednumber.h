@@ -88,6 +88,8 @@ public:
 	  */
 	static MixedNumber fromString( const QString &input, bool *ok = 0, bool locale_aware = true );
 
+	static bool isFraction( const QString &input );
+
 private:
 	static int getNumerator( const QString &input, int space_index, int slash_index, bool *ok );
 	static int getDenominator( const QString &input, int slash_index, bool *ok );

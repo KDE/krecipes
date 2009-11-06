@@ -215,6 +215,11 @@ MixedNumber MixedNumber::fromString( const QString &str, bool *ok, bool locale_a
 	return MixedNumber( whole, numerator, denominator );
 }
 
+bool MixedNumber::isFraction( const QString &input )
+{
+	return input.contains("/");
+}
+
 QString MixedNumber::toString( Format format, bool locale_aware ) const
 {
 	if ( format == DecimalFormat ) {

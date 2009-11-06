@@ -87,12 +87,11 @@ void IngListViewItem::setAmount( double amount, double amount_offset )
 
 	if ( amount+amount_offset > 0 ) {
 		KConfigGroup config = KGlobal::config()->group( "Formatting" );
-	
-		MixedNumber::Format number_format = ( config.readEntry( "Fraction" ).isEmpty() ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
 
-		amount_str = MixedNumber( amount ).toString(number_format);
+		KLocale * locale = KGlobal::locale();
+		amount_str = beautify( locale->formatNumber( amount, 6 ) );
 		if ( amount_offset > 0 )
-			amount_str += "-" + MixedNumber(amount+amount_offset).toString(number_format);
+			amount_str += "-" + beautify( locale->formatNumber( amount+amount_offset, 6 ) );
 	}
 
 	m_ing.amount = amount;
