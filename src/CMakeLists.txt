@@ -209,6 +209,20 @@ set(datablocks_SRCS
    datablocks/rating.cpp
    datablocks/weight.cpp)
 
+############### common library ################
+# The reason to have this static library is to compile some files
+# once for *all* executables in this project.
+# (i.e. I want to save CPU time when compiling with test programs)
+
+kde4_add_library(libkrecipescommon STATIC
+   ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
+   ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
+   ${datablocks_SRCS} klomanager.cpp propertycalculator.cpp)
+
+target_link_libraries(libkrecipescommon
+   ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
+   ${QT_QTSQL_LIBRARY} ${NEPOMUK_LIBRARIES} 
+   ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}) 
 
 ############### tests ################
 
@@ -218,14 +232,12 @@ set(TESTS kretest mmftest mx2test mxptest nyctest recipemltest rezkonvtest)
 
 foreach(TEST ${TESTS})
 
-set(TEST_SRCS tests/${TEST}.cpp klomanager.cpp propertycalculator.cpp)
+set(TEST_SRCS tests/${TEST}.cpp)
 
-kde4_add_executable(${TEST} ${TEST_SRCS} 
-   ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
-   ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
-   ${datablocks_SRCS})
+kde4_add_executable(${TEST} ${TEST_SRCS})
 
-target_link_libraries(${TEST} ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
+target_link_libraries(${TEST} libkrecipescommon
+   ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
    ${QT_QTSQL_LIBRARY} ${NEPOMUK_LIBRARIES} 
    ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}) 
 
@@ -264,13 +276,14 @@ set(krecipes_SRCS
    krecipes.cpp 
    krecipesview.cpp 
    pref.cpp 
-   propertycalculator.cpp 
+   #propertycalculator.cpp 
    setupassistant.cpp 
    shoppingcalculator.cpp 
    kstartuplogo.cpp 
    recipefilter.cpp 
    convert_sqlite3.cpp 
-   klomanager.cpp )
+   #klomanager.cpp
+)
 
 
 kde4_add_ui_files(krecipes_SRCS widgets/ratingdisplaywidget.ui)
@@ -278,12 +291,13 @@ kde4_add_ui_files(krecipes_SRCS widgets/ratingdisplaywidget.ui)
 qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
 
 
-kde4_add_executable(krecipes ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS}
-   ${krecipes_SRCS} ${krecipesdbs_SRCS} ${krecipesimporters_SRCS}
-   ${krecipeswidgets_SRCS} ${krecipesexporters_SRCS} ${datablocks_SRCS}
-   ${krecipesdialogs_SRCS} ${krecipesactionshandlers_SRCS})
+kde4_add_executable(krecipes
+   ${krecipes_SRCS}
+   ${krecipeswidgets_SRCS}
+   ${krecipesdialogs_SRCS}
+   ${krecipesactionshandlers_SRCS})
 
-target_link_libraries(krecipes  ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${NEPOMUK_LIBRARIES})
+target_link_libraries(krecipes libkrecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${NEPOMUK_LIBRARIES})
 
 if ( SQLITE_FOUND )
    target_link_libraries(krecipes ${SQLITE_LIBRARIES})
