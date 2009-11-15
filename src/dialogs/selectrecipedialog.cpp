@@ -71,8 +71,8 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 
 	searchLabel = new QLabel( searchBar );
-	searchLabel->setText( i18nc( "Search recipes", "Search:" ) );
-	searchLabel->setFixedWidth( searchLabel->fontMetrics().width( i18nc( "Search recipes", "Search:" ) ) + 5 );
+	searchLabel->setText( i18nc( "@label:textbox Search recipes", "Search:" ) );
+	searchLabel->setFixedWidth( searchLabel->fontMetrics().width( i18nc( "@label:textbox Search recipes", "Search:" ) ) + 5 );
 	searchBox = new KLineEdit( searchBar );
 	searchBox->setClearButtonShown( true );
 	connect( searchBox, SIGNAL(clearButtonClicked() ),this,SLOT( clearSearch() ) );
@@ -97,23 +97,23 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	layout->addWidget( buttonBar, 4, 1, 1, 3, 0 );
 
 	openButton = new KPushButton( buttonBar );
-	openButton->setText( i18n( "Show Recipe(s)" ) );
+	openButton->setText( i18nc( "@action:button", "Show Recipe(s)" ) );
 	openButton->setDisabled( true );
 	openButton->setIcon( KIcon( "system-search" ) );
 	editButton = new KPushButton( buttonBar );
-	editButton->setText( i18n( "Edit Recipe" ) );
+	editButton->setText( i18nc( "@action:button", "Edit Recipe" ) );
 	editButton->setDisabled( true );
 	editButton->setIcon( KIcon( "document-edit" ) );
 	removeButton = new KPushButton( buttonBar );
-	removeButton->setText( i18n( "Delete" ) );
+	removeButton->setText( i18nc( "@action:button", "Delete" ) );
 	removeButton->setDisabled( true );
 	removeButton->setMaximumWidth( 100 );
 	removeButton->setIcon( KIcon("edit-delete-shred" ) );
 
-	tabWidget->insertTab( -1, basicSearchTab, i18nc( "Basic search", "Basic" ) );
+	tabWidget->insertTab( -1, basicSearchTab, i18nc( "@title:tab Basic search", "Basic" ) );
 
 	advancedSearch = new AdvancedSearchDialog( this, database );
-	tabWidget->insertTab( -1, advancedSearch, i18nc( "Advanced search", "Advanced" ) );
+	tabWidget->insertTab( -1, advancedSearch, i18nc( "@title:tab Advanced search", "Advanced" ) );
 
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
 	actionHandler = new RecipeActionsHandler( recipeListView, database );

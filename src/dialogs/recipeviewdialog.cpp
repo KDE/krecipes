@@ -59,8 +59,8 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 	closeButton = new QToolButton;
 	closeButton->setIcon( KIcon( "window-close" ) );
 
-	closeButton->setText( i18n( "Close" ) );
-	closeButton->setToolTip( i18n( "Close" ) );
+	closeButton->setText( i18nc( "@action:button", "Close" ) );
+	closeButton->setToolTip( i18nc( "@info:tooltip", "Close" ) );
 	closeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 
 	functionsLayout->layout()->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
@@ -109,7 +109,7 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 
 	if ( ids.count() > 1 )  //we don't want a progress bar coming up when there is only one recipe... it may show up during the splash screen
 	{
-		progress_dialog = new KProgressDialog( this, QString::null, i18n( "Opening recipes, please wait..." ) );
+		progress_dialog = new KProgressDialog( this, QString::null, i18nc( "@title:window", "Opening recipes, please wait..." ) );
 		progress_dialog->setObjectName( "open_progress_dialog" );
 		progress_dialog->setModal( true );
 		progress_dialog->resize( 240, 80 );

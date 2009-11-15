@@ -39,7 +39,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	this->setModal( true );
 	this->setButtons( KDialog::Ok | KDialog::Cancel );
 	this->setDefaultButton( KDialog::Ok  );
-	this->setCaption( i18n( "Database Import" ) );
+	this->setCaption( i18nc( "@title:window", "Database Import" ) );
 
 	setButtonsOrientation( Qt::Vertical );
 
@@ -77,7 +77,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	serverPageLayout_2->setSpacing( 6 );
 	serverPageLayout_2->setObjectName( "serverPageLayout_2" );
 
-	QLabel *sqliteLabel = new QLabel( i18n( "Database file:" ), sqlitePage );
+	QLabel *sqliteLabel = new QLabel( i18nc( "@label:textbox", "Database file:" ), sqlitePage );
 	serverPageLayout_2->addWidget( sqliteLabel );
 	sqliteDBRequester = new KUrlRequester( sqlitePage );
 	sqliteDBRequester->setObjectName( "sqliteDBRequester" );
@@ -177,16 +177,16 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 void DBImportDialog::languageChange()
 {
-	dbButtonGroup->setTitle( i18n( "Database" ) );
-	liteRadioButton->setText( "SQLite" );
-	mysqlRadioButton->setText( "MySQL" );
-	psqlRadioButton->setText( "PostgreSQL" );
-	hostLabel->setText( i18n( "Server:" ) );
-	userLabel->setText( i18nc( "Database username", "Username:" ) );
-	passwordLabel->setText( i18n( "Password:" ) );
-	nameLabel->setText( i18n( "Database name:" ) );
-	portLabel->setText( i18n( "Port:" ) );
-	portEdit->setSpecialValueText( i18nc("Default port", "Default") );
+	dbButtonGroup->setTitle( i18nc( "@title:group", "Database" ) );
+	liteRadioButton->setText( "SQLite" ) ;
+	mysqlRadioButton->setText( "MySQL" ) ;
+	psqlRadioButton->setText( "PostgreSQL" ) ;
+	hostLabel->setText( i18nc( "@label:textbox", "Server:" ) );
+	userLabel->setText( i18nc( "@label:textbox Database username", "Username:" ) );
+	passwordLabel->setText( i18nc( "@label:textbox", "Password:" ) );
+	nameLabel->setText( i18nc( "@label:textbox", "Database name:" ) );
+	portLabel->setText( i18nc( "@label:textbox", "Port:" ) );
+	portEdit->setSpecialValueText( i18nc("@label:textbox Default port", "Default") );
 
 	//set defaults
 	hostEdit->setText( "localhost" );

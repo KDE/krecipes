@@ -19,7 +19,7 @@
 CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 		: KDialog( parent )
 {
-	setCaption( i18n( "New Property" ) );
+	setCaption( i18nc( "@title:window", "New Property" ) );
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton( KDialog::Ok);
 	setModal( true );
@@ -35,15 +35,15 @@ CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 	box->layout() ->setMargin( 11 );
 	QGridLayout *gridLayout = new QGridLayout( box->layout() );
 	gridLayout->setAlignment( Qt::AlignTop );
-	box->setTitle( i18n( "New Property" ) );
+	box->setTitle( i18nc( "@title:group", "New Property" ) );
 
-	nameEditText = new QLabel( i18n( "Property name:" ), box );
+	nameEditText = new QLabel( i18nc( "@label:textbox", "Property name:" ), box );
 	propertyNameEdit = new KLineEdit( box );
 	propertyNameEdit->setMinimumWidth( 150 );
 	gridLayout->addWidget( nameEditText, 0, 0 );
 	gridLayout->addWidget( propertyNameEdit, 0, 1 );
 
-	unitsText = new QLabel( i18n( "Units:" ), box );
+	unitsText = new QLabel( i18nc( "@label:textbox", "Units:" ), box );
 	propertyUnits = new KLineEdit( box );
 	propertyUnits->setMinimumWidth( 150 );
 	gridLayout->addWidget( unitsText, 1, 0 );

@@ -30,7 +30,7 @@
 CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, RecipeDB *db )
 	: KDialog( parent )
 {
-	setCaption( i18n( "Add Ingredient Weight" ) );
+	setCaption( i18nc( "@title:window", "Add Ingredient Weight" ) );
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
@@ -72,7 +72,7 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 
 	groupBox1Layout->addWidget( perAmountUnitBox, 1, 2 );
 
-	prepMethodBox = new PrepMethodComboBox( false, groupBox1, db, i18n("-No Preparation-") );
+	prepMethodBox = new PrepMethodComboBox( false, groupBox1, db, i18nc("@item", "-No Preparation-") );
 	prepMethodBox->reload();
 	groupBox1Layout->addWidget( prepMethodBox, 1, 3 );
 
@@ -92,23 +92,23 @@ CreateIngredientWeightDialog::~CreateIngredientWeightDialog()
 
 void CreateIngredientWeightDialog::languageChange()
 {
-	groupBox1->setTitle( i18n( "New Ingredient Weight" ) );
-	perAmountLabel->setText( i18n( "Per Amount:" ) );
-	weightLabel->setText( i18n( "Weight:" ) );
+	groupBox1->setTitle( i18nc( "@title:group", "New Ingredient Weight" ) );
+	perAmountLabel->setText( i18nc( "@label:textbox", "Per Amount:" ) );
+	weightLabel->setText( i18nc( "@label:textbox", "Weight:" ) );
 }
 
 void CreateIngredientWeightDialog::slotOk()
 {
 	if ( !perAmountEdit->isInputValid() ) {
-		KMessageBox::error( this, i18n( "Amount field contains invalid input." ),
-			                i18n( "Invalid input" ) );
+		KMessageBox::error( this, i18nc( "@info", "Amount field contains invalid input." ),
+			                i18nc( "@title:window", "Invalid input" ) );
 		perAmountEdit->setFocus();
 		perAmountEdit->selectAll();
 		return;
 	}
 	else if ( !weightEdit->isInputValid() ) {
-		KMessageBox::error( this, i18n( "Amount field contains invalid input." ),
-			                i18n( "Invalid input" ) );
+		KMessageBox::error( this, i18nc( "@info", "Amount field contains invalid input." ),
+			                i18nc( "@title:window", "Invalid input" ) );
 		weightEdit->setFocus();
 		weightEdit->selectAll();
 		return;

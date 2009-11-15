@@ -168,15 +168,15 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	changePhotoButton = new KPushButton( photoButtonsBox );
 	changePhotoButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored ) );
 	changePhotoButton->setText( "..." );
-	changePhotoButton->setToolTip( i18n( "Select photo" ) );
+	changePhotoButton->setToolTip( i18nc( "@info:tooltip", "Select photo" ) );
 
 	KPushButton *savePhotoAsButton = new KPushButton( photoButtonsBox );
 	savePhotoAsButton->setIcon( KIcon( "document-save" ) );
-	savePhotoAsButton->setToolTip( i18n( "Save photo as..." ) );
+	savePhotoAsButton->setToolTip( i18nc( "action:button", "Save photo as..." ) );
 
 	KPushButton *clearPhotoButton = new KPushButton( photoButtonsBox );
 	clearPhotoButton->setIcon( KIcon( "edit-clear" ) );
-	clearPhotoButton->setToolTip( i18n( "Clear photo" ) );
+	clearPhotoButton->setToolTip( i18nc( "@info:tooltip", "Clear photo" ) );
 
 	recipeLayout->addWidget( photoButtonsBox, 3, 2, 5, 1, 0 );
 
@@ -189,7 +189,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// Title
 	KVBox *titleBox = new KVBox( recipeTab );
 	titleBox->setSpacing( 5 );
-	titleLabel = new QLabel( i18n( "Recipe Name" ), titleBox );
+	titleLabel = new QLabel( i18nc( "@label", "Recipe Name" ), titleBox );
 	titleEdit = new KLineEdit( titleBox );
 	titleEdit->setMinimumSize( QSize( 360, 30 ) );
 	titleEdit->setMaximumSize( QSize( 10000, 30 ) );
@@ -205,7 +205,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	KVBox *authorBox = new KVBox( recipeTab ); // contains label and authorInput (input widgets)
 	authorBox->setSpacing( 5 );
 	recipeLayout->addWidget( authorBox, 3, 4 );
-	authorLabel = new QLabel( i18n( "Authors" ), authorBox );
+	authorLabel = new QLabel( i18nc( "@label", "Authors" ), authorBox );
 	KHBox *authorInput = new KHBox( authorBox ); // Contains input + button
 
 
@@ -223,7 +223,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	KVBox *categoryBox = new KVBox( recipeTab ); // Contains the label and categoryInput (input widgets)
 	categoryBox->setSpacing( 5 );
-	categoryLabel = new QLabel( i18n( "Categories" ), categoryBox );
+	categoryLabel = new QLabel( i18nc( "@label", "Categories" ), categoryBox );
 	KHBox *categoryInput = new KHBox( categoryBox ); // Contains the input widgets
 
 	categoryShow = new KLineEdit( categoryInput );
@@ -243,11 +243,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// Backup options
 	QGroupBox *yieldGBox = new QGroupBox( serv_prep_box );
-	yieldGBox->setTitle( i18n( "Yield" ) );
+	yieldGBox->setTitle( i18nc( "@label", "Yield" ) );
 	QGridLayout *yieldGBoxLayout = new QGridLayout;
 	yieldGBox->setLayout( yieldGBoxLayout );
 
-	yieldLabel = new QLabel( i18n( "Amount" ) );
+	yieldLabel = new QLabel( i18nc( "@label", "Amount" ) );
 	yieldGBoxLayout->addWidget( yieldLabel, 0, 0 );
 	QLabel *yieldTypeLabel = new QLabel( i18n( "Type" ) );
 	yieldGBoxLayout->addWidget( yieldTypeLabel, 0, 1 );
@@ -261,7 +261,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	prepTimeBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 	prepTimeBox->setSpacing( 5 );
 
-	( void ) new QLabel( i18n( "Preparation Time" ), prepTimeBox );
+	( void ) new QLabel( i18nc( "@label", "Preparation Time" ), prepTimeBox );
 	prepTimeEdit = new QDateTimeEdit( prepTimeBox );
 	prepTimeEdit->setMinimumTime( QTime( 0, 0 ) );
 	prepTimeEdit->setDisplayFormat( "hh:mm");
@@ -334,19 +334,19 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingParserButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( ingParserButton, 8, 5 );
 
-		addButton->setToolTip( i18n( "Add ingredient" ) );
-		upButton->setToolTip( i18n( "Move ingredient up" ) );
-		downButton->setToolTip( i18n( "Move ingredient down" ) );
-		removeButton->setToolTip( i18n( "Remove ingredient" ) );
-		ingParserButton->setToolTip( i18n( "Paste Ingredients" ) );
+		addButton->setToolTip( i18nc( "@info:tooltip", "Add ingredient" ) );
+		upButton->setToolTip( i18nc(  "@info:tooltip", "Move ingredient up" ) );
+		downButton->setToolTip( i18nc(  "@info:tooltip", "Move ingredient down" ) );
+		removeButton->setToolTip( i18nc(  "@info:tooltip", "Remove ingredient" ) );
+		ingParserButton->setToolTip( i18nc(  "@info:tooltip", "Paste Ingredients" ) );
 
 	// Ingredient List
 	ingredientList = new K3ListView( ingredientsTab );
-	ingredientList->addColumn( i18n( "Ingredient" ) );
-	ingredientList->addColumn( i18n( "Amount" ) );
+	ingredientList->addColumn( i18nc( "@title:column", "Ingredient" ) );
+	ingredientList->addColumn( i18nc( "@title:column", "Amount" ) );
 	ingredientList->setColumnAlignment( 1, Qt::AlignHCenter );
-	ingredientList->addColumn( i18n( "Units" ) );
-	ingredientList->addColumn( i18n( "Preparation Method" ) );
+	ingredientList->addColumn( i18nc( "@title:column", "Units" ) );
+	ingredientList->addColumn( i18nc( "@title:column", "Preparation Method" ) );
 	ingredientList->setSorting( -1 ); // Do not sort
 	ingredientList->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::MinimumExpanding ) );
 	ingredientList->setItemsRenameable( true );
@@ -361,11 +361,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusLayout->setMargin( 0 );
 	propertyStatusLayout->setSpacing( 5 );
 
-	QLabel *propertyLabel = new QLabel( i18n("Property Status:"), ingredientsTab );
+	QLabel *propertyLabel = new QLabel( i18nc( "@label", "Property Status:"), ingredientsTab );
 	propertyStatusLabel = new QLabel( ingredientsTab );
 	propertyStatusLed = new ClickableLed( ingredientsTab );
 	propertyStatusLed->setFixedSize( QSize(16,16) );
-	propertyStatusButton = new KPushButton( i18n("Details..."), ingredientsTab );
+	propertyStatusButton = new KPushButton( i18nc( "@action:button", "Details..."), ingredientsTab );
 	//QPushButton *propertyUpdateButton = new QPushButton( i18n("Update"), ingredientsTab );
 	propertyStatusLayout->addWidget( propertyLabel );
 	propertyStatusLayout->addWidget( propertyStatusLabel );
@@ -383,7 +383,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	propertyStatusDialog->setObjectName( "propertyStatusDialog" );
 	propertyStatusDialog->setModal( false );
 	propertyStatusDialog->showButtonSeparator( false );
-	propertyStatusDialog->setCaption( i18n("Property details") );
+	propertyStatusDialog->setCaption( i18nc( "@title:window ", "Property details") );
 	propertyStatusDialog->setButtons( KDialog::Close | KDialog::User1 | KDialog::Help );
 	propertyStatusDialog->setDefaultButton( KDialog::Close );
 	propertyStatusDialog->setButtonGuiItem( KDialog::User1, updateGuiItem );
@@ -417,7 +417,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	KVBox *ratingsTab = new KVBox( this );
 	ratingListDisplayWidget = new KWidgetListbox(ratingsTab);
-	KPushButton *addRatingButton = new KPushButton(i18n("Add Rating..."),ratingsTab);
+	KPushButton *addRatingButton = new KPushButton(i18nc( "@action:button", "Add Rating..." ),ratingsTab);
 	addRatingButton->setIcon( KIcon( "list-add" ) );
 
 	connect( addRatingButton, SIGNAL(clicked()), this, SLOT(slotAddRating()) );
@@ -425,10 +425,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// ------- END OF Recipe Ratings Tab -----------
 
 
-	tabWidget->insertTab( -1, recipeTab, i18n( "Recipe" ) );
-	tabWidget->insertTab( -1, ingredientsTab, i18n( "Ingredients" ) );
-	tabWidget->insertTab( -1, instructionsTab, i18n( "Instructions" ) );
-	tabWidget->insertTab( -1, ratingsTab, i18n( "Ratings" ) );
+	tabWidget->insertTab( -1, recipeTab, i18nc( "@title:tab", "Recipe" ) );
+	tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
+	tabWidget->insertTab( -1, instructionsTab, i18nc( "@title:tab", "Instructions" ) );
+	tabWidget->insertTab( -1, ratingsTab, i18nc( "@title:tab", "Ratings" ) );
 
 
 	// Functions Box
@@ -448,17 +448,17 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	resizeButton = new QToolButton;
 	resizeButton->setIcon( KIcon( "arrow-up-double" ) ); //TODO: give me an icon :)
 
-	saveButton->setText( i18n( "Save recipe" ) );
-	saveButton->setToolTip( i18n( "Save recipe" ) );
+	saveButton->setText( i18nc( "@action:buton", "Save recipe" ) );
+	saveButton->setToolTip( i18nc( "@info:tooltip", "Save recipe" ) );
 	saveButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-	showButton->setText( i18n( "Show recipe" ) );
-	showButton->setToolTip( i18n( "Show recipe" ) );
+	showButton->setText( i18nc( "@action:buton", "Show recipe" ) );
+	showButton->setToolTip( i18nc( "@info:tooltip", "Show recipe" ) );
 	showButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-	closeButton->setText( i18n( "Close" ) );
-	closeButton->setToolTip( i18n( "Close" ) );
+	closeButton->setText( i18nc( "@action:buton", "Close" ) );
+	closeButton->setToolTip( i18nc( "@info:tooltip", "Close" ) );
 	closeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-	resizeButton->setText( i18n( "Resize recipe" ) );
-	resizeButton->setToolTip( i18n( "Resize recipe" ) );
+	resizeButton->setText( i18nc( "@action:buton", "Resize recipe" ) );
+	resizeButton->setToolTip( i18nc( "@info:tooltip", "Resize recipe" ) );
 	resizeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 
 	functionsLayout->layout()->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
@@ -725,7 +725,7 @@ void RecipeInputDialog::savePhotoAs( void )
 	KUrl url = KFileDialog::getSaveUrl( KUrl(),
 		QString( "*.jpg *.jpeg |%1 (*.jpg *.jpeg)" ).arg( i18n( "Images" ) ),
 		this,
-		i18n("Save photo as..."));
+		i18nc("@title:window", "Save photo as..."));
 
 	if ( url.isEmpty() )
 		return;
@@ -733,14 +733,14 @@ void RecipeInputDialog::savePhotoAs( void )
        	QFile outputFile (filename);
         if (outputFile.exists()) {
                	int r = KMessageBox::warningYesNo(this,
-       	                i18n("The file already exists, do you want to overwrite it?")
+       	                i18nc("@info", "The file already exists, do you want to overwrite it?")
                 );
                	if (r == KMessageBox::No)
        	                return;
         }
 
 	if ( !loadedRecipe->photo.save( filename, "JPEG" ) )
-		KMessageBox::error(this, i18n("The photo cannot be saved in %1", filename) );
+		KMessageBox::error(this, i18nc("@info", "The photo cannot be saved in %1", filename) );
 }
 
 void RecipeInputDialog::clearPhoto( void )
@@ -1012,7 +1012,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 
 			if ( new_text.length() > int(database->maxUnitNameLength()) )
 			{
-				KMessageBox::error( this, i18np( "Unit name cannot be longer than 1 character.", "Unit name cannot be longer than %1 characters.", database->maxUnitNameLength() ) );
+				KMessageBox::error( this, i18ncp( "@info", "Unit name cannot be longer than 1 character.", "Unit name cannot be longer than %1 characters.", database->maxUnitNameLength() ) );
 				ing_item->setUnit( old_unit );
 				break;
 			}
@@ -1051,7 +1051,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			for ( QStringList::const_iterator it = prepMethodList.constBegin(); it != prepMethodList.constEnd(); ++it ) {
 				if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
 				{
-					KMessageBox::error( this, i18np( "Preparation method cannot be longer than 1 character.", "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
+					KMessageBox::error( this, i18ncp( "@info", "Preparation method cannot be longer than 1 character.", "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
 					ing_item->setPrepMethod( old_text );
 					break;
 				}
@@ -1101,7 +1101,7 @@ bool RecipeInputDialog::save ( void )
 {
 	//check bounds first
 	if ( titleEdit->text().length() > int(database->maxRecipeTitleLength()) ) {
-		KMessageBox::error( this, i18np( "Recipe title cannot be longer than 1 character.", "Recipe title cannot be longer than %1 characters." , database->maxRecipeTitleLength() ), i18n( "Unable to save recipe" ) );
+		KMessageBox::error( this, i18ncp( "@info", "Recipe title cannot be longer than 1 character.", "Recipe title cannot be longer than %1 characters." , database->maxRecipeTitleLength() ), i18n( "Unable to save recipe" ) );
 		return false;
 	}
 
@@ -1138,9 +1138,9 @@ void RecipeInputDialog::newRecipe( void )
 	photoLabel->setPixmap( image );
 	sourcePhoto = QPixmap();
 
-	instructionsEdit->setText( i18n( "Write the recipe instructions here" ) );
+	instructionsEdit->setText( i18nc( "@label:textbox", "Write the recipe instructions here" ) );
 	instructionsEdit->clearCompletionItems();
-	titleEdit->setText( i18n( "Write the recipe title here" ) );
+	titleEdit->setText( i18nc( "@label:textbox", "Write the recipe title here" ) );
 	ingredientList->clear();
 	authorShow->clear();
 	categoryShow->clear();
@@ -1196,7 +1196,7 @@ void RecipeInputDialog::showCategories( void )
 	QString categories;
 	for ( ElementList::const_iterator cat_it = loadedRecipe->categoryList.begin(); cat_it != loadedRecipe->categoryList.end(); ++cat_it ) {
 		if ( !categories.isEmpty() )
-			categories += ",";
+			categories += ',';
 		categories += ( *cat_it ).name;
 	}
 	categoryShow->setText( categories );
@@ -1224,7 +1224,7 @@ void RecipeInputDialog::showAuthors( void )
 	QString authors;
 	for ( ElementList::const_iterator author_it = loadedRecipe->authorList.begin(); author_it != loadedRecipe->authorList.end(); ++author_it ) {
 		if ( !authors.isEmpty() )
-			authors += ",";
+			authors += ',';
 		authors += ( *author_it ).name;
 	}
 	authorShow->setText( authors );
@@ -1241,7 +1241,7 @@ void RecipeInputDialog::closeOptions( void )
 	// First check if there's anything unsaved in the recipe
 	if ( unsavedChanges ) {
 
-		switch ( KMessageBox::questionYesNoCancel( this, i18n( "This recipe contains unsaved changes.\n" "Would you like to save it before closing?" ), i18n( "Unsaved changes" ) ) ) {
+		switch ( KMessageBox::questionYesNoCancel( this, i18nc( "@info", "This recipe contains unsaved changes.\n" "Would you like to save it before closing?" ), i18nc( "@title:window", "Unsaved changes" ) ) ) {
 		case KMessageBox::Yes:
 			save();
 			break;
@@ -1266,7 +1266,7 @@ void RecipeInputDialog::showRecipe( void )
 	// First check if there's anything unsaved in the recipe
 
 	if ( loadedRecipe->recipeID == -1 ) {
-		switch ( KMessageBox::questionYesNo( this, i18n( "You need to save the recipe before displaying it. Would you like to save it now?" ), i18n( "Unsaved changes" ) ) ) {
+		switch ( KMessageBox::questionYesNo( this, i18nc( "@info", "You need to save the recipe before displaying it. Would you like to save it now?" ), i18nc( "@title:window", "Unsaved changes" ) ) ) {
 		case KMessageBox::Yes:
 			save();
 			break;
@@ -1276,7 +1276,7 @@ void RecipeInputDialog::showRecipe( void )
 	}
 	else if ( unsavedChanges ) {
 
-		switch ( KMessageBox::questionYesNoCancel( this, i18n( "This recipe has changes that will not be displayed unless the recipe is saved. Would you like to save it now?" ), i18n( "Unsaved changes" ) ) ) {
+		switch ( KMessageBox::questionYesNoCancel( this, i18nc( "@info", "This recipe has changes that will not be displayed unless the recipe is saved. Would you like to save it now?" ), i18nc( "@title:window", "Unsaved changes" ) ) ) {
 		case KMessageBox::Yes:
 			save();
 			break;
@@ -1533,7 +1533,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 
 	if ( ingPropertyList.count() == 0 ) {
 		propertyStatusMapRed.insert(ing.ingredientID, QString(
-			i18n("<b>%1:</b> No nutrient information available. "
+			i18nc("@info", "<b>%1:</b> No nutrient information available. "
 			"<a href=\"ingredient#%2\">Provide nutrient information.</a>",
 			ing.name,
 			QString::number(ing.ingredientID))));
@@ -1554,7 +1554,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 			case RecipeDB::MissingUnitConversion: {
 				if ( ing.units.type != Unit::Other && ing.units.type == (*prop_it).perUnit.type ) {
 					propertyStatusMapRed.insert(ing.ingredientID,
-						i18n("<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
+						i18nc( "@info", "<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
 						,(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
 						,((*prop_it).perUnit.name)
 						,ing.name));
@@ -1569,21 +1569,21 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 							continue;
 
 						QString toUnit = database->unitName((*weight_it).perAmountUnitID).name;
-						if ( toUnit.isEmpty() ) toUnit = i18n("-No unit-");
+						if ( toUnit.isEmpty() ) toUnit = i18nc( "@info", "-No unit-");
 
 						QString fromUnit = database->unitName((*weight_it).weightUnitID).name;
-						if ( fromUnit.isEmpty() ) fromUnit = i18n("-No unit-");
+						if ( fromUnit.isEmpty() ) fromUnit = i18nc( "@info", "-No unit-");
 
 						QString ingUnit = ing.units.name;
-						if ( ingUnit.isEmpty() ) ingUnit = i18n("-No unit-");
+						if ( ingUnit.isEmpty() ) ingUnit = i18nc( "@info", "-No unit-");
 
 						QString propUnit = (*prop_it).perUnit.name;
-						if ( propUnit.isEmpty() ) propUnit = i18n("-No unit-");
+						if ( propUnit.isEmpty() ) propUnit = i18nc( "@info", "-No unit-");
 
 						missingConversions << conversionPath( ingUnit, toUnit, fromUnit, propUnit);
 					}
 					propertyStatusMapRed.insert(ing.ingredientID,
-						i18n("<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate "
+						i18nc("@info", "<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate "
 						"ingredient weight entry</a>, or provide conversion information to "
 						"perform one of the following conversions: %2",
 					  	ing.name,
@@ -1595,20 +1595,20 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 			}
 			case RecipeDB::MissingIngredientWeight:
 				propertyStatusMapRed.insert(ing.ingredientID, QString(
-					i18n("<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide "
+					i18nc("@info", "<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide "
 					"ingredient weight.</a>",
 					ing.name, QString::number(ing.ingredientID))));
 				break;
 			case RecipeDB::MismatchedPrepMethod:
 				if ( ing.prepMethodList.count() == 0 )
 					propertyStatusMapRed.insert(ing.ingredientID,QString(
-						i18n("<b>%1:</b> There is no ingredient weight entry for when no "
+						i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when no "
 						"preparation method is specified. <a href=\"ingredient#%2\">Provide "
 						"ingredient weight.</a>",
 						ing.name, QString::number(ing.ingredientID))));
 				else
 					propertyStatusMapRed.insert(ing.ingredientID,QString(
-						i18n("<b>%1:</b> There is no ""ingredient weight entry for when prepared "
+						i18nc("@info", "<b>%1:</b> There is no ""ingredient weight entry for when prepared "
 						"in any of the following manners: %2<a href=\"ingredient#%3\">Provide "
 						"ingredient weight.</a>"))
 						.arg(ing.name)
@@ -1617,7 +1617,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 				break;
 			case RecipeDB::MismatchedPrepMethodUsingApprox:
 				propertyStatusMapYellow.insert(ing.ingredientID,QString(
-					i18n("<b>%1:</b> There is no ingredient weight entry for when prepared in any of "
+					i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when prepared in any of "
 					"the following manners (defaulting to a weight entry without a preparation "
 					"method specified): "
 					"%2<a href=\"ingredient#%3\">Provide ingredient weight.</a>"))
@@ -1639,18 +1639,18 @@ void RecipeInputDialog::showStatusIndicator()
 	if ( propertyStatusMapRed.count() == 0 ) {
 		if ( propertyStatusMapYellow.count() == 0 ) {
 			propertyStatusLed->setColor( Qt::green );
-			propertyStatusLabel->setText( i18n("Complete") );
+			propertyStatusLabel->setText( i18nc("@info", "Complete") );
 			propertyStatusButton->setEnabled(false);
 		}
 		else {
 			propertyStatusLed->setColor( Qt::yellow );
-			propertyStatusLabel->setText( i18n("Complete, but approximations made") );
+			propertyStatusLabel->setText( i18nc("@info", "Complete, but approximations made") );
 			propertyStatusButton->setEnabled(true);
 		}
 	}
 	else {
 		propertyStatusLed->setColor( Qt::red );
-		propertyStatusLabel->setText( i18n("Incomplete") );
+		propertyStatusLabel->setText( i18nc("@info", "Incomplete") );
 		propertyStatusButton->setEnabled(true);
 	}
 
@@ -1665,7 +1665,7 @@ QString RecipeInputDialog::statusMessage() const
 	QString statusMessage;
 
 	if ( propertyStatusMapRed.count() > 0 ) {
-		statusMessage.append( i18n("The nutrient information for this recipe is incomplete because the following information is missing:") );
+		statusMessage.append( i18nc("@info", "The nutrient information for this recipe is incomplete because the following information is missing:") );
 		statusMessage.append("<ul>");
 		for ( QMap<int,QString>::const_iterator it = propertyStatusMapRed.begin(); it != propertyStatusMapRed.end(); ++it ) {
 			statusMessage.append("<li>");
@@ -1676,7 +1676,7 @@ QString RecipeInputDialog::statusMessage() const
 	}
 
 	if ( propertyStatusMapYellow.count() > 0 ) {
-		statusMessage.append( i18n("The following approximations will be made when determining nutrient information:") );
+		statusMessage.append( i18nc("@info", "The following approximations will be made when determining nutrient information:") );
 		statusMessage.append("<ul>");
 		for ( QMap<int,QString>::const_iterator it = propertyStatusMapYellow.begin(); it != propertyStatusMapYellow.end(); ++it ) {
 			statusMessage.append("<li>");

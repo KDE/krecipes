@@ -178,22 +178,22 @@ SimilarCategoriesDialog::~SimilarCategoriesDialog()
  */
 void SimilarCategoriesDialog::languageChange()
 {
-	setWindowTitle( i18n( "Similar Categories" ) );
-	thresholdLabel->setText( i18n( "Threshold:" ) );
-	categoryLabel->setText( i18n( "Category:" ) );
+	setWindowTitle( i18nc( "@title:window", "Similar Categories" ) );
+	thresholdLabel->setText( i18nc( "@label:textbox", "Threshold:" ) );
+	categoryLabel->setText( i18nc( "@label:textbox", "Category:" ) );
 	searchButton->setText( i18nc(
 		"@action:button Search a recipe category in database",
 		"Search" ) );
-	allLabel->setText( i18n( "Similar Categories:" ) );
+	allLabel->setText( i18nc( "@label:textbox", "Similar Categories:" ) );
 	removeButton->setIcon( KIcon( "arrow-left" ) );
 	addButton->setIcon( KIcon( "arrow-right" ) );
-	toMergeLabel->setText( i18n( "Categories to Merge:" ) );
-	mergeButton->setText( i18n( "Merge" ) );
-	cancelButton->setText( i18n( "Cancel" ) );
+	toMergeLabel->setText( i18nc( "@label:textbox", "Categories to Merge:" ) );
+	mergeButton->setText( i18nc( "@action:button", "Merge" ) );
+	cancelButton->setText( i18nc( "@action:button", "Cancel" ) );
 
-	allListView->addColumn( i18n( "Category" ) );
+	allListView->addColumn( i18nc( "@title:column", "Category" ) );
 	//allListView->addColumn( "Id" );
-	toMergeListView->addColumn( i18n( "Category" ) );
+	toMergeListView->addColumn( i18nc( "@title:column", "Category" ) );
 	//toMergeListView->addColumn( "Id" );
 }
 
@@ -319,7 +319,7 @@ void RecipeActionsHandler::mergeSimilar()
 {
 	QList<Q3ListViewItem> items = parentListView->selectedItems();
 	if ( items.count() > 1 )
-		KMessageBox::sorry( kapp->mainWidget(), i18n("Please select only one category."), QString::null );
+		KMessageBox::sorry( kapp->mainWidget(), i18nc("@info", "Please select only one category."), QString::null );
 	else if ( items.count() == 1 && items.at(0)->rtti() == 1001 ) {
 		CategoryListItem * cat_it = ( CategoryListItem* ) items.at(0);
 		QString name = cat_it->categoryName();
@@ -348,7 +348,7 @@ void RecipeActionsHandler::mergeSimilar()
 
 	}
 	else //either nothing was selected or a recipe was selected
-		KMessageBox::sorry( kapp->mainWidget(), i18n("No recipes selected."), i18n("Edit Recipe") );
+		KMessageBox::sorry( kapp->mainWidget(), i18nc("@info", "No recipes selected."), i18nc("@title", "Edit Recipe") );
 }
 #endif
 
@@ -379,7 +379,7 @@ void SimilarCategoriesDialog::findMatches()
 void SimilarCategoriesDialog::mergeMatches()
 {
 	if ( !toMergeListView->firstChild() ) {
-		KMessageBox::sorry( this, i18n("No categories selected to merge."), QString::null );
+		KMessageBox::sorry( this, i18nc("@info", "No categories selected to merge."), QString::null );
 		return;
 	}
 

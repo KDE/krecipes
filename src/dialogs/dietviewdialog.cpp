@@ -21,7 +21,7 @@
 DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
 		: KDialog( parent )
 {
-	setCaption( i18n( "View Diet" ) );
+	setCaption( i18nc( "@window:title", "View Diet" ) );
 	setButtons(KDialog::User2 | KDialog::Close | KDialog::User1);
 	setDefaultButton(KDialog::User2);
 	setModal( false );
@@ -30,7 +30,7 @@ DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, i
 	setButtonText( KDialog::User1, KStandardGuiItem::print().text() );
 	setButtonIcon( KDialog::User1, KIcon( "document-print" ) );
 
-	setButtonText( KDialog::User2, i18n( "Create &Shopping List" ) );
+	setButtonText( KDialog::User2, i18nc( "@action:button", "Create &Shopping List" ) );
 	setButtonIcon( KDialog::User2, KIcon( "view-pim-tasks" ) );
 
 	// The html part

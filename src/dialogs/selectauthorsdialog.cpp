@@ -29,7 +29,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 		: KDialog(parent ),
 		database(db)
 {
-	setCaption(i18n("Authors" ));
+	setCaption(i18nc("@title:window", "Authors" ));
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
@@ -65,7 +65,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	KConfigGroup config( KGlobal::config(), "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
 	authorListView->addColumn( "Id" , show_id ? -1 : 0 );
-	authorListView->addColumn( i18n( "Author" ) );
+	authorListView->addColumn( i18nc( "@title:column", "Author" ) );
 	authorListView->setAllColumnsShowFocus( true );
 
 	// Load the list
@@ -115,7 +115,7 @@ void SelectAuthorsDialog::addAuthor( void )
 {
 	//check bounds first
 	if ( authorsCombo->currentText().length() > int(database->maxAuthorNameLength()) ) {
-		KMessageBox::error( this, i18np( "Author name cannot be longer than 1 character.", "Author name cannot be longer than %1 characters." , database->maxAuthorNameLength() ) );
+		KMessageBox::error( this, i18ncp( "@info", "Author name cannot be longer than 1 character.", "Author name cannot be longer than %1 characters." , database->maxAuthorNameLength() ) );
 		authorsCombo->lineEdit() ->selectAll();
 		return ;
 	}

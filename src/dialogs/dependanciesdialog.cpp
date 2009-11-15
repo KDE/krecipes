@@ -45,7 +45,7 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 	setDefaultButton(KDialog::Cancel);
 	setButtons(KDialog::Ok | KDialog::Cancel);
 
-	setCaption( i18n( "Element with Dependencies" ) );
+	setCaption( i18nc( "@title:window", "Element with Dependencies" ) );
 
 	KVBox *page = new KVBox( this );
 	setMainWidget( page );
@@ -57,10 +57,10 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 	instructionsLabel->setAlignment( Qt::AlignVCenter );
 	instructionsLabel->setWordWrap(true);
 	if ( m_depsAreDeleted ) {
-		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following will have to be removed also, since currently they use the element you have chosen to be removed." ) );
+		instructionsLabel->setText( i18nc( "@info", "<warning>The following will have to be removed also, since currently they use the element you have chosen to be removed.</warning>" ) );
 	}
 	else {
-		instructionsLabel->setText( i18n( "<b>WARNING:</b> The following currently use the element you have chosen to be removed." ) );
+		instructionsLabel->setText( i18nc( "@info", "<warning>The following currently use the element you have chosen to be removed.</warning>" ) );
 	}
 
 	for ( Q3ValueList<ListInfo>::const_iterator list_it = lists.begin(); list_it != lists.end(); ++list_it ) {
@@ -92,7 +92,7 @@ void DependanciesDialog::accept()
 {
 	if ( !m_msg.isEmpty() ) {
 		switch ( KMessageBox::warningYesNo(this,
-			QString("<b>%1</b><br><br>%2").arg(m_msg).arg(i18n("Are you sure you wish to proceed?")),
+			QString("<b>%1</b><br><br>%2").arg(m_msg).arg(i18nc("@info", "Are you sure you wish to proceed?")),
 			QString::null,KStandardGuiItem::yes(),KStandardGuiItem::no(),"doubleCheckDelete") )
 		{
 		case KMessageBox::Yes: KDialog::accept(); break;

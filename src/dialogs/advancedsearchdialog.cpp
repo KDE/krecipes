@@ -108,11 +108,11 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	titleFrameLayout ->setMargin( 5 );
 	titleFrameLayout ->setSpacing( 3 );
 
-	requireAllTitle = new QCheckBox( i18n("Require All Words"), titleFrame );
+	requireAllTitle = new QCheckBox( i18nc("@option:check", "Require All Words"), titleFrame );
 	titleFrameLayout->addWidget( requireAllTitle );
 
 	KHBox *titleHBox = new KHBox( titleFrame );
-	/*QLabel *titleInfoLabel = */new QLabel(i18n("Keywords:"),titleHBox);
+	/*QLabel *titleInfoLabel = */new QLabel(i18nc("@label:textbox", "Keywords:"),titleHBox);
 	titleEdit = new KLineEdit( titleHBox );
 	titleEdit->setObjectName( "titleEdit" );
 	titleFrameLayout->addWidget( titleHBox );
@@ -137,7 +137,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientFrameLayout->setSpacing( 3 );
 	ingredientFrameLayout->setObjectName( "ingredientFrameLayout" );
 
-	QLabel *ingredientInfoLabel = new QLabel(i18n("Enter ingredients: (e.g. chicken pasta \"white wine\")"),ingredientFrame);
+	QLabel *ingredientInfoLabel = new QLabel(i18nc("@info", "Enter ingredients: (e.g. chicken pasta \"white wine\")"),ingredientFrame);
 	ingredientInfoLabel->setWordWrap( true );
 	//ingredientInfoLabel->setTextFormat( Qt::RichText );
 	ingredientFrameLayout->addWidget( ingredientInfoLabel, 0, 0, 1, 2, 0 );
@@ -192,7 +192,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	categoryFrameLayout->setObjectName( "ingredientFrameLayout" );
 	
 
-	QLabel *categoryInfoLabel = new QLabel(i18n("Enter categories: (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
+	QLabel *categoryInfoLabel = new QLabel(i18nc("@info", "Enter categories: (e.g. Desserts Pastas \"Main Dishes\")"),categoryFrame);
 	categoryInfoLabel->setWordWrap( true );
 	categoryInfoLabel->setTextFormat( Qt::RichText );
 	categoryFrameLayout->addWidget( categoryInfoLabel, 0, 0, 1, 2, 0 );
@@ -246,7 +246,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsFrameLayout->setSpacing( 3 );
 	authorsFrameLayout->setObjectName( "ingredientFrameLayout" );
 
-	QLabel *authorsInfoLabel = new QLabel(i18n("Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
+	QLabel *authorsInfoLabel = new QLabel(i18nc("@info", "Enter author name (e.g. Smith or \"Jane Doe\")"),authorsFrame);
 	authorsInfoLabel->setWordWrap( true );
 	authorsInfoLabel->setTextFormat( Qt::RichText );
 	authorsFrameLayout->addWidget( authorsInfoLabel, 0, 0, 1, 2, 0 );
@@ -379,11 +379,11 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	instructionsFrameLayout->setMargin( 5 );
 	instructionsFrameLayout->setSpacing( 3 );
 
-	requireAllInstructions = new QCheckBox( i18n("Require All Words"), instructionsFrame );
+	requireAllInstructions = new QCheckBox( i18nc("@option:check", "Require All Words"), instructionsFrame );
 	instructionsFrameLayout->addWidget( requireAllInstructions );
 
 	KHBox *instructionsHBox = new KHBox(instructionsFrame);
-	/*QLabel *instructionsInfoLabel = */new QLabel(i18n("Keywords:"),instructionsHBox);
+	/*QLabel *instructionsInfoLabel = */new QLabel(i18nc("@label:textbox", "Keywords:"),instructionsHBox);
 
 	instructionsEdit = new KLineEdit( instructionsHBox );
 	instructionsEdit->setObjectName( "instructionsEdit" );
@@ -523,8 +523,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	criteriaListView = new K3ListView( criterionFrame );
 	criteriaListView->setObjectName( "criteriaListView" );
 	criteriaListView->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
-	criteriaListView->addColumn( i18n( "Criterion" ) );
-	criteriaListView->addColumn( i18n( "Stars" ) );
+	criteriaListView->addColumn( i18nc( "@title:column", "Criterion" ) );
+	criteriaListView->addColumn( i18nc( "@title:column", "Stars" ) );
 	criterionFrameLayout->addWidget( criteriaListView );
 	ratingButtonGroupLayout->addWidget( criterionFrame );
 
@@ -653,43 +653,43 @@ AdvancedSearchDialog::~AdvancedSearchDialog()
 void AdvancedSearchDialog::languageChange()
 {
 	titleButton->setText( QString("%1 >>").arg(i18nc("@action:button Recipe title", "Title")) );
-	textLabel1_4->setText( i18n( "Search using the following criteria:" ) );
-	ingredientButton->setText( QString("%1 >>").arg(i18n("Ingredients")) );
-	textLabel1_2->setText( i18n( "Uses any of:" ) );
-	textLabel1->setText( i18n( "Uses all:" ) );
-	textLabel1_3->setText( i18n( "Without:" ) );
-	categoriesButton->setText( i18n( "Categories >>" ) );
-	textLabel1_5->setText( i18n( "In all:" ) );
-	textLabel1_3_3->setText( i18n( "Not in:" ) );
-	textLabel1_2_3->setText( i18n( "In any of:" ) );
-	authorsButton->setText( QString("%1 >>").arg(i18n("Authors")) );
-	textLabel1_2_4->setText( i18n( "By any of:" ) );
-	textLabel1_6->setText( i18n( "By all:" ) );
-	textLabel1_3_4->setText( i18n( "Not by:" ) );
-	servingsButton->setText( QString("%1 >>").arg(i18n("Yield")) );
-	enableServingsCheckBox->setText( i18n( "Enabled" ) );
+	textLabel1_4->setText( i18nc( "@label", "Search using the following criteria:" ) );
+	ingredientButton->setText( QString("%1 >>").arg(i18nc("@action:button", "Ingredients")) );
+	textLabel1_2->setText( i18nc( "@label:textbox", "Uses any of:" ) );
+	textLabel1->setText( i18nc( "@label:textbox", "Uses all:" ) );
+	textLabel1_3->setText( i18nc( "@label:textbox", "Without:" ) );
+	categoriesButton->setText( i18nc( "@action:button", "Categories >>" ) );
+	textLabel1_5->setText( i18nc(  "@label:textbox","In all:" ) );
+	textLabel1_3_3->setText( i18nc(  "@label:textbox","Not in:" ) );
+	textLabel1_2_3->setText( i18nc(  "@label:textbox","In any of:" ) );
+	authorsButton->setText( QString("%1 >>").arg(i18nc("@action:button", "Authors")) );
+	textLabel1_2_4->setText( i18nc( "@label:textbox", "By any of:" ) );
+	textLabel1_6->setText( i18nc( "@label:textbox", "By all:" ) );
+	textLabel1_3_4->setText( i18nc( "@label:textbox", "Not by:" ) );
+	servingsButton->setText( QString("%1 >>").arg(i18nc("@action:button", "Yield")) );
+	enableServingsCheckBox->setText( i18nc( "@option:check", "Enabled" ) );
 	servingsComboBox->clear();
-	servingsComboBox->insertItem( servingsComboBox->count(), i18n( "Yields at least:" ) );
-	servingsComboBox->insertItem( servingsComboBox->count(), i18n( "Yields at most:" ) );
-	servingsComboBox->insertItem( servingsComboBox->count(), i18n( "Yields about:" ) );
-	prepTimeButton->setText( QString("%1 >>").arg(i18n("Preparation Time")) );
-	enablePrepTimeCheckBox->setText( i18n( "Enabled" ) );
+	servingsComboBox->insertItem( servingsComboBox->count(), i18nc( "@item:inlistbox", "Yields at least:" ) );
+	servingsComboBox->insertItem( servingsComboBox->count(), i18nc( "@item:inlistbox", "Yields at most:" ) );
+	servingsComboBox->insertItem( servingsComboBox->count(), i18nc( "@item:inlistbox", "Yields about:" ) );
+	prepTimeButton->setText( QString("%1 >>").arg(i18nc( "@action:button", "Preparation Time")) );
+	enablePrepTimeCheckBox->setText( i18nc( "@option:check", "Enabled" ) );
 	prepTimeComboBox->clear();
-	prepTimeComboBox->insertItem( prepTimeComboBox->count(), i18n( "Ready in at most:" ) );
-	prepTimeComboBox->insertItem( prepTimeComboBox->count(), i18n( "Ready in about:" ) );
-	instructionsButton->setText( QString("%1 >>").arg(i18n("Instructions")) );
-	metaDataButton->setText( QString("%1 >>").arg(i18n("Meta Data")) );
-	clearButton->setText( i18nc( "action:button Clear search criteria", "C&lear" ) );
+	prepTimeComboBox->insertItem( prepTimeComboBox->count(), i18nc( "@item:inlistbox", "Ready in at most:" ) );
+	prepTimeComboBox->insertItem( prepTimeComboBox->count(), i18nc( "@item:inlistbox", "Ready in about:" ) );
+	instructionsButton->setText( QString("%1 >>").arg(i18nc( "@action:button", "Instructions")) );
+	metaDataButton->setText( QString("%1 >>").arg(i18nc( "@label", "Meta Data")) );
+	clearButton->setText( i18nc( "@action:button Clear search criteria", "C&lear" ) );
 	clearButton->setShortcut( QKeySequence( i18n( "Alt+L" ) ) );
 	findButton->setText( i18nc( "@action:button Search recipes", "&Search" ) );
-	ratingAvgRadioButton->setText( i18n( "By average:" ) );
-	avgStarsLabel->setText( i18n( "stars" ) );
-	criterionRadioButton->setText( i18n( "By criteria:" ) );
+	ratingAvgRadioButton->setText( i18nc("@option:radio",  "By average:" ) );
+	avgStarsLabel->setText( i18nc( "@label", "stars" ) );
+	criterionRadioButton->setText( i18nc( "@option:radio", "By criteria:" ) );
 	addCriteriaButton->setIcon( KIcon( "list-add" ) );
 	removeCriteriaButton->setIcon( KIcon( "list-remove" ) );
-	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
-	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
-	ratingsButton->setText( QString("%1 >>").arg(i18n("Ratings")) );
+	criteriaListView->header()->setLabel( 0, i18nc( "@title:column", "Criteria" ) );
+	criteriaListView->header()->setLabel( 1, i18nc( "@title:column", "Stars" ) );
+	ratingsButton->setText( QString("%1 >>").arg(i18nc("@action:button", "Ratings")) );
 }
 
 void AdvancedSearchDialog::addAction( KAction * action )
@@ -990,7 +990,7 @@ void AdvancedSearchDialog::search()
 	}
 
 	if ( !resultsListView->firstChild() ) {
-		( void ) new Q3ListViewItem( resultsListView, "--- "+i18n("No matching recipes found")+" ---");
+		( void ) new Q3ListViewItem( resultsListView, "--- "+i18nc("@info", "No matching recipes found")+" ---");
 	}
 
 	KApplication::restoreOverrideCursor();

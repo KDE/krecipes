@@ -28,7 +28,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	setObjectName( name );
 	QHBoxLayout* layout = new QHBoxLayout;
 
-	headerListView = new KreListView ( this, i18n( "Header list" ), true, 0 );
+	headerListView = new KreListView ( this, i18nc( "@title", "Header list" ), true, 0 );
 	StdHeaderListView *list_view = new StdHeaderListView( headerListView, database, true );
 	headerActionsHandler = new HeaderActionsHandler( list_view, database );
 	headerListView->setListView( list_view );

@@ -31,11 +31,11 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 		m_database(db)
 {
 	 setObjectName( name );
-	 setCaption(i18n( "Measurement Converter" ));
+	 setCaption(i18nc( "@window:title", "Measurement Converter" ));
 	 setButtons(KDialog::Close | KDialog::User1 | KDialog::Help);
 	 setDefaultButton(KDialog::Close);
 	 setHelp("measure-converter");
-	 setButtonText( KDialog::User1, i18n("Convert") );
+	 setButtonText( KDialog::User1, i18nc("@action:button", "Convert") );
 
 	 setModal( false );
 
@@ -56,10 +56,10 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 
 	KHBox *fromBottomBox = new KHBox(vbox);
 
-	ingredientBox = new IngredientComboBox( false, fromBottomBox, db, i18n( "--Ingredient (optional)--" ) );
+	ingredientBox = new IngredientComboBox( false, fromBottomBox, db, i18nc( "@item:inlistbox", "--Ingredient (optional)--" ) );
 	ingredientBox->reload();
 
-	prepMethodBox = new PrepMethodComboBox( false, fromBottomBox, db, i18n( "-No Preparation-" ) );
+	prepMethodBox = new PrepMethodComboBox( false, fromBottomBox, db, i18nc( "@item:inlistbox", "-No Preparation-" ) );
 	prepMethodBox->reload();
 	fromBottomBox->setSpacing(3);
 
@@ -94,9 +94,9 @@ ConversionDialog::~ConversionDialog()
 
 void ConversionDialog::languageChange()
 {
-	convertLabel->setText( i18n( "Convert" ) );
-	toLabel->setText( i18nc( "Convert to", "To" ) );
-	resultLabel->setText( i18n( "<b>Result:</b>" ) );
+	convertLabel->setText( i18nc( "@label", "Convert" ) );
+	toLabel->setText( i18nc( "@label Convert to", "To" ) );
+	resultLabel->setText( i18nc( "@label", "<b>Result:</b>" ) );
 	resultText->setText( QString::null );
 }
 
@@ -131,32 +131,32 @@ void ConversionDialog::convert()
 
 	switch ( m_database->convertIngredientUnits( ing, unit, result ) ) {
 	case RecipeDB::Success:
-		resultLabel->setText( i18n( "<b>Result:</b>" ) );
+		resultLabel->setText( i18nc( "@label:textbox", "<b>Result:</b>" ) );
 		resultText->setText(QString::number(result.amount)+" "+((result.amount>1)?result.units.plural:result.units.name));
 		break;
 	case RecipeDB::MismatchedPrepMethodUsingApprox:
-		resultLabel->setText( i18n( "<b>Approximated result:</b>" ) );
+		resultLabel->setText( i18nc( "@label:textbox",  "<b>Approximated result:</b>" ) );
 		resultText->setText(QString::number(result.amount)+" "+((result.amount>1)?result.units.plural:result.units.name));
 		break;
 	case RecipeDB::MissingUnitConversion:
-		resultLabel->setText( i18n( "<b>Error:</b>" ) );
-		resultText->setText( i18n("Missing unit conversion") );
+		resultLabel->setText( i18nc( "@label:textbox", "<b>Error:</b>" ) );
+		resultText->setText( i18nc( "@info", "Missing unit conversion" ) );
 		break;
 	case RecipeDB::MissingIngredientWeight:
-		resultLabel->setText( i18n( "<b>Error:</b>" ) );
-		resultText->setText( i18n("No ingredient weight available") );
+		resultLabel->setText( i18nc( "@label:textbox", "<b>Error:</b>" ) );
+		resultText->setText( i18nc( "@info", "No ingredient weight available" ) );
 		break;
 	case RecipeDB::MismatchedPrepMethod:
-		resultLabel->setText( i18n( "<b>Error:</b>" ) );
-		resultText->setText( i18n("No ingredient weight available for this method of preparation") );
+		resultLabel->setText( i18nc( "@label:textbox", "<b>Error:</b>" ) );
+		resultText->setText( i18nc( "@info", "No ingredient weight available for this method of preparation" ) );
 		break;
 	case RecipeDB::MissingIngredient:
-		resultLabel->setText( i18n( "<b>Error:</b>" ) );
-		resultText->setText( i18n("Ingredient required for conversion") );
+		resultLabel->setText( i18nc( "@label:textbox", "<b>Error:</b>" ) );
+		resultText->setText( i18nc( "@info", "Ingredient required for conversion" ) );
 		break;
 	case RecipeDB::InvalidTypes:
-		resultLabel->setText( i18n( "<b>Error:</b>" ) );
-		resultText->setText( i18n("Impossible unit conversion based on unit types") );
+		resultLabel->setText( i18nc( "@label:textbox", "<b>Error:</b>" ) );
+		resultText->setText( i18nc( "@info", "Impossible unit conversion based on unit types" ) );
 		break;
 	}
 }

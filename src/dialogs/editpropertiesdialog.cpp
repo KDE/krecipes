@@ -128,7 +128,7 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 
 	usdaListView = new KreListView( page, QString::null, page, 0 );
 	usdaListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
-	usdaListView->listView()->addColumn( i18n( "USDA Ingredient" ) );
+	usdaListView->listView()->addColumn( i18nc( "@title:column", "USDA Ingredient" ) );
 	usdaListView->listView()->addColumn( "Id" );
 	usdaListView->listView()->setAllColumnsShowFocus( true );
 	loadDataFromFile();
@@ -169,9 +169,9 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	propertyListView->setObjectName( "propertyListView" );
 	propertyListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	propertyListView->setAllColumnsShowFocus( true );
-	propertyListView->addColumn( i18n( "Property" ) );
-	propertyListView->addColumn( i18n( "Amount" ) );
-	propertyListView->addColumn( i18n( "Unit" ) );
+	propertyListView->addColumn( i18nc( "@title:column", "Property" ) );
+	propertyListView->addColumn( i18nc( "@title:column", "Amount" ) );
+	propertyListView->addColumn( i18nc( "@title:column", "Unit" ) );
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
 	propertyListView->addColumn( "Id" , show_id ? -1 : 0 );
@@ -199,8 +199,8 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 
 	weightListView = new K3ListView( page );
 	weightListView->setObjectName( "weightListView" );
-	weightListView->addColumn( i18n( "Weight" ) );
-	weightListView->addColumn( i18n( "Per Amount" ) );
+	weightListView->addColumn( i18nc( "@title:column", "Weight" ) );
+	weightListView->addColumn( i18nc( "@title:column", "Per Amount" ) );
 	layout7->addWidget( weightListView );
 	layout9->addLayout( layout7 );
 	EditPropertiesDialogLayout->addLayout( layout9 );
@@ -235,22 +235,22 @@ EditPropertiesDialog::~EditPropertiesDialog()
 
 void EditPropertiesDialog::languageChange()
 {
-	setCaption( i18n( "Property Information" ) );
-	infoLabel->setText( i18n( "Property Information for <b>%1</b>" , ingredientName) );
-	usdaListView->listView()->header()->setLabel( 0, i18n( "USDA Ingredient" ) );
+	setCaption( i18nc( "@title:window", "Property Information" ) );
+	infoLabel->setText( i18nc( "@label", "Property Information for <b>%1</b>" , ingredientName) );
+	usdaListView->listView()->header()->setLabel( 0, i18nc( "@title:column", "USDA Ingredient" ) );
 	usdaListView->listView()->header()->setLabel( 1,  "Id" );
 	loadButton->setText( i18nc( "@action:button Load USDA property", "Load ->" ) );
-	propertyLabel->setText( i18n( "Properties" ) );
-	propertyAddButton->setText( i18n( "Add" ) );
-	propertyRemoveButton->setText( i18n( "Remove" ) );
-	propertyListView->header()->setLabel( 0, i18n( "Property" ) );
-	propertyListView->header()->setLabel( 1, i18n( "Amount" ) );
-	propertyListView->header()->setLabel( 2, i18n( "Unit" ) );
-	weightLabel->setText( i18n( "Weights" ) );
-	weightAddButton->setText( i18n( "Add" ) );
-	weightRemoveButton->setText( i18n( "Remove" ) );
-	weightListView->header()->setLabel( 0, i18n( "Weight" ) );
-	weightListView->header()->setLabel( 1, i18n( "Per Amount" ) );
+	propertyLabel->setText( i18nc( "@label", "Properties" ) );
+	propertyAddButton->setText( i18nc( "@action:button", "Add" ) );
+	propertyRemoveButton->setText( i18nc( "@action:button", "Remove" ) );
+	propertyListView->header()->setLabel( 0, i18nc( "@title:column", "Property" ) );
+	propertyListView->header()->setLabel( 1, i18nc( "@title:column", "Amount" ) );
+	propertyListView->header()->setLabel( 2, i18nc( "@title:column", "Unit" ) );
+	weightLabel->setText( i18nc( "@label", "Weights" ) );
+	weightAddButton->setText( i18nc( "@action:button", "Add" ) );
+	weightRemoveButton->setText( i18nc( "@action:button", "Remove" ) );
+	weightListView->header()->setLabel( 0, i18nc( "@title:column", "Weight" ) );
+	weightListView->header()->setLabel( 1, i18nc( "@title:column", "Per Amount" ) );
 }
 
 void EditPropertiesDialog::addWeight()
@@ -276,7 +276,7 @@ void EditPropertiesDialog::removeWeight()
 {
 	Q3ListViewItem *it = weightListView->selectedItem();
 	if ( it ) {
-		     switch ( KMessageBox::warningContinueCancel(this, i18n("Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "DeleteIngredientWeight") ) {
+		     switch ( KMessageBox::warningContinueCancel(this, i18nc("@info", "Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "DeleteIngredientWeight") ) {
 		case KMessageBox::Continue:
 			db->removeIngredientWeight( ((WeightListItem*)it)->weight().id );
 			delete it;
@@ -295,11 +295,11 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		QPointer<KDialog> amountEditDialog = new KDialog( this );
 		amountEditDialog->setObjectName( "WeightAmountEdit" );
 		amountEditDialog->setModal( false );
-		amountEditDialog->setCaption( i18n("Enter amount") );
+		amountEditDialog->setCaption( i18nc("@title:window", "Enter amount") );
 		amountEditDialog->setButtons( KDialog::Cancel | KDialog::Ok );
 		amountEditDialog->setDefaultButton( KDialog::Ok );
 
-		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), amountEditDialog );
+		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18nc("@title:group", "Amount"), amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, db, Unit::Mass, MixedNumber::DecimalFormat );
 
 		WeightListItem *it = (WeightListItem*)item;
@@ -326,11 +326,11 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		QPointer<KDialog> amountEditDialog = new KDialog( this );
 		amountEditDialog->setObjectName( "PerAmountEdit" );
 		amountEditDialog->setModal( false );
-		amountEditDialog->setCaption( i18n("Enter amount") );
+		amountEditDialog->setCaption( i18nc("@title:window", "Enter amount") );
 		amountEditDialog->setButtons( KDialog::Cancel | KDialog::Ok );
 		amountEditDialog->setDefaultButton( KDialog::Ok );
 
-		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), amountEditDialog );
+		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18nc("@title:group", "Amount"), amountEditDialog );
 		WeightInput *amountEdit = new WeightInput( box, db, Unit::All, MixedNumber::DecimalFormat );
 
 		WeightListItem *it = (WeightListItem*)item;
@@ -417,7 +417,7 @@ void EditPropertiesDialog::addPropertyToIngredient( void )
 				db->addPropertyToIngredient( ingredientID, propertyID, 0, perUnitsID ); // Add result chosen property to ingredient in database, with amount 0 by default
 		}
 		else {
-			KMessageBox::information( this, i18n( "Property Exists" ), i18n( "The property you tried to add already exists in the ingredient with the same per units." ) );
+			KMessageBox::information( this, i18nc( "@title:window" , "Property Exists" ), i18nc( "@info", "The property you tried to add already exists in the ingredient with the same per units." ) );
 		}
 		reloadPropertyList(); // Reload the list from database
 	}

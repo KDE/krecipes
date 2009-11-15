@@ -31,7 +31,7 @@ RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent 
 {
 	this->setObjectName( "RecipeImportDialog" );
 	this->setModal( true );
-	this->setCaption( i18n( "Import Recipes" ) );
+	this->setCaption( i18nc( "@title:window", "Import Recipes" ) );
 	this->setButtons( KDialog::Ok | KDialog::Cancel );
 	this->setDefaultButton( KDialog::Ok );
 	setButtonsOrientation( Qt::Vertical );
@@ -41,7 +41,7 @@ RecipeImportDialog::RecipeImportDialog( const RecipeList &list, QWidget *parent 
 
 
 	kListView = new K3ListView( page );
-	kListView->addColumn( i18n( "Recipes" ) );
+	kListView->addColumn( i18nc( "@title:column", "Recipes" ) );
 	kListView->setProperty( "selectionMode", "NoSelection" );
 	kListView->setRootIsDecorated( true );
 	kListView->setAllColumnsShowFocus( true );
@@ -99,8 +99,8 @@ void RecipeImportDialog::loadListView()
 		if ( ( *recipe_it ).categoryList.count() == 0 ) {
 			if ( !category_item )  //don't create this until there are recipes to put in it
 			{
-				category_item = new CustomCheckListItem( head_item, i18n( "Uncategorized" ), Q3CheckListItem::CheckBox );
-				all_categories.insert( i18n( "Uncategorized" ), category_item );
+				category_item = new CustomCheckListItem( head_item, i18nc( "@item", "Uncategorized" ), Q3CheckListItem::CheckBox );
+				all_categories.insert( i18nc( "@item", "Uncategorized" ), category_item );
 			}
 			CustomCheckListItem *item = new CustomCheckListItem( category_item, ( *recipe_it ).title, Q3CheckListItem::CheckBox );
 			recipe_items->insert( item, recipe_it );

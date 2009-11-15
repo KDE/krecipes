@@ -31,7 +31,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	setModal( true );
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton( KDialog::Ok);
-	setCaption(i18n( "Choose Property" ));
+	setCaption(i18nc( "@title:window", "Choose Property" ));
 
 	// Initialize internal variables
 	unitListBack = new UnitList;
@@ -40,7 +40,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	KVBox *page = new KVBox( this );
 	setMainWidget( page );
 	box = new Q3GroupBox( page );
-	box->setTitle( i18n( "Choose Property" ) );
+	box->setTitle( i18nc( "@title:group", "Choose Property" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
 	box->layout() ->setSpacing( 6 );
 	box->layout() ->setMargin( 11 );
@@ -53,7 +53,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	bool show_id = config.readEntry( "ShowID", false );
 	propertyChooseView->addColumn( "Id" , show_id ? -1 : 0 );
 
-	propertyChooseView->addColumn( i18n( "Property" ) );
+	propertyChooseView->addColumn( i18nc( "@title:column", "Property" ) );
 	propertyChooseView->setSorting(1);
 	propertyChooseView->setAllColumnsShowFocus( true );
 	boxLayout->addWidget( propertyChooseView );
@@ -62,7 +62,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 
 	perUnitsLabel = new QLabel( box );
 	perUnitsLabel->setGeometry( QRect( 5, 285, 100, 30 ) );
-	perUnitsLabel->setText( i18n( "Per units:" ) );
+	perUnitsLabel->setText( i18nc( "@label:textbox", "Per units:" ) );
 	layout2->addWidget( perUnitsLabel );
 
 	perUnitsBox = new KComboBox( true, box );
@@ -141,7 +141,7 @@ void SelectPropertyDialog::loadUnits( UnitList *unitList )
 		QString unitName = ( *unit_it ).name;
 		if ( unitName.isEmpty() ) {
 			if ( m_showEmpty == ShowEmptyUnit )
-				unitName = " "+i18n("-No unit-");
+				unitName = " "+i18nc("@item", "-No unit-");
 			else
 				continue;
 		}

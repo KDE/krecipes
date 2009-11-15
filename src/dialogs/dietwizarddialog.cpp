@@ -56,7 +56,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	optionsBox = new KHBox( this );
 
 	daysSliderBox = new QGroupBox( optionsBox );
-	daysSliderBox->setTitle( i18n( "Number of Days" ) );
+	daysSliderBox->setTitle( i18nc( "@label:slider", "Number of Days" ) );
 	QVBoxLayout *daysSliderBoxLayout = new QVBoxLayout;
 	daysSliderBox->setLayout( daysSliderBoxLayout );
 	dayNumberLabel = new QLabel;
@@ -75,7 +75,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	dayNumberSelector->setFixedWidth( 100 );
 
 	mealsSliderBox = new QGroupBox( optionsBox );
-	mealsSliderBox->setTitle( i18n( "Meals per Day" ) );
+	mealsSliderBox->setTitle( i18nc( "@label:slider", "Meals per Day" ) );
 	QVBoxLayout *mealsSliderBoxLayout = new QVBoxLayout;
 	mealsSliderBox->setLayout( mealsSliderBoxLayout );
 	mealNumberLabel = new QLabel;
@@ -103,7 +103,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 
 	okButton = new KPushButton( bottom_layout );
 	okButton->setIcon( KIcon( "dialog-ok" ) );
-	okButton->setText( i18n( "Create the diet" ) );
+	okButton->setText( i18nc( "@action:button", "Create the diet" ) );
 
 	KPushButton *clearButton = new KPushButton( bottom_layout );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
@@ -112,7 +112,7 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	// Create Tabs
 	//don't use newTab, it'll load data and we don't want it to do that at startup
 	mealTab = new MealInput( mealTabs, database );
-	mealTabs->addTab( mealTab,i18n( "Meal 1" ) );
+	mealTabs->addTab( mealTab,i18nc( "@title:tab", "Meal 1" ) );
 	mealTabs->setCurrentIndex( mealTabs->indexOf( mealTab ) );
 
 	// Signals & Slots
@@ -166,7 +166,7 @@ void DietWizardDialog::changeMealNumber( int mn )
 
 		while ( mealNumber != mn ) {
 			mealNumber++;
-			newTab( i18n( "Meal %1" , mealNumber ) );
+			newTab( i18nc( "@title:tab", "Meal %1" , mealNumber ) );
 
 		}
 	}
@@ -243,7 +243,7 @@ void DietWizardDialog::createDiet( void )
 
 	if ( alert ) {
 		KApplication::restoreOverrideCursor();
-		KMessageBox::sorry( this, i18n( "Given the constraints, a full diet list could not be constructed. Either the recipe list is too short or the constraints are too demanding. " ) );
+		KMessageBox::sorry( this, i18nc( "@info", "Given the constraints, a full diet list could not be constructed. Either the recipe list is too short or the constraints are too demanding. " ) );
 	}
 
 	else // show the resulting diet
@@ -338,7 +338,7 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	// Number of dishes input
 	dishNumberBox = new KHBox( mealOptions );
 	dishNumberBox->setSpacing( 10 );
-	dishNumberLabel = new QLabel( i18n( "No. of dishes: " ), dishNumberBox );
+	dishNumberLabel = new QLabel( i18nc( "@label:spinbox", "No. of dishes: " ), dishNumberBox );
 	dishNumberInput = new QSpinBox( dishNumberBox );
 	dishNumberInput->setMinimum( 1 );
 	dishNumberInput->setMaximum( 10 );
@@ -355,12 +355,12 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	buttonPrev = new QToolButton;
 	toolBarLayout->addWidget( buttonPrev );
 	buttonPrev->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-	buttonPrev->setText( i18n( "Previous Dish" ) );
+	buttonPrev->setText( i18nc( "@action:button", "Previous Dish" ) );
 	buttonPrev->setIcon( KIcon( "go-previous" ) );
 	buttonNext = new QToolButton;
 	toolBarLayout->addWidget( buttonNext );
 	buttonNext->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-	buttonNext->setText( i18n( "Next Dish" ) );
+	buttonNext->setText( i18nc( "@action:button", "Next Dish" ) );
 	buttonNext->setIcon( KIcon( "go-next" ) );
 
 	buttonPrev->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
@@ -486,7 +486,7 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 	//Horizontal Box to hold the K3ListView's
 	listBox = new QGroupBox;
 	QHBoxLayout *listBoxLayout = new QHBoxLayout;
-	listBox->setTitle( i18n( "Dish Characteristics" ) );
+	listBox->setTitle( i18nc( "@label:listbox", "Dish Characteristics" ) );
 	listBox->setLayout( listBoxLayout );
 	layout->addWidget( listBox );
 
@@ -498,7 +498,7 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 	//Categories list
 	categoriesBox = new KVBox;
 	categoriesEnabledBox = new QCheckBox( categoriesBox );
-	categoriesEnabledBox->setText( i18n( "Enable Category Filtering" ) );
+	categoriesEnabledBox->setText( i18nc( "@option:check", "Enable Category Filtering" ) );
 
 	categoriesView = new CategoryCheckListView( categoriesBox, database, false );
 	categoriesView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );

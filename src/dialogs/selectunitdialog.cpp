@@ -22,13 +22,13 @@ SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, O
 {
 	setButtons(  KDialog::Ok | KDialog::Cancel );
 	setDefaultButton( KDialog::Ok );
-	setCaption(i18n( "Choose Unit" ) );
+	setCaption(i18nc( "@title:window", "Choose Unit" ) );
 	setModal( true );
 	KVBox *page = new KVBox(this );
 	setMainWidget( page );
 
 	box = new Q3GroupBox( page );
-	box->setTitle( i18n( "Choose Unit" ) );
+	box->setTitle( i18nc( "@title:group", "Choose Unit" ) );
 	box->setColumnLayout( 0, Qt::Vertical );
 	QVBoxLayout *boxLayout = new QVBoxLayout( box->layout() );
 
@@ -38,7 +38,7 @@ SelectUnitDialog::SelectUnitDialog( QWidget* parent, const UnitList &unitList, O
 	bool show_id = config.readEntry( "ShowID", false );
 	unitChooseView->addColumn( "Id" , show_id ? -1 : 0 );
 
-	unitChooseView->addColumn( i18n( "Unit" ) );
+	unitChooseView->addColumn( i18nc( "@title:column", "Unit" ) );
 	unitChooseView->setSorting(1);
 	unitChooseView->setGeometry( QRect( 5, 30, 180, 250 ) );
 	unitChooseView->setAllColumnsShowFocus( true );
@@ -70,7 +70,7 @@ void SelectUnitDialog::loadUnits( const UnitList &unitList )
 		QString unitName = ( *unit_it ).name;
 		if ( unitName.isEmpty() ) {
 			if ( m_showEmpty == ShowEmptyUnit )
-				unitName = " "+i18n("-No unit-");
+				unitName = " "+i18nc("@item", "-No unit-");
 			else
 				continue;
 		}

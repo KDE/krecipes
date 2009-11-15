@@ -29,7 +29,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementLi
 		: KDialog( parent ),
 		database(db)
 {
-	setCaption(i18n("Categories" ));
+	setCaption(i18nc("@title:window", "Categories" ));
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
@@ -43,7 +43,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementLi
 
 	//New category button
 	KPushButton *newCatButton = new KPushButton( page );
-	newCatButton->setText( i18n( "&New Category..." ) );
+	newCatButton->setText( i18nc( "@action:button", "&New Category..." ) );
 	newCatButton->setIcon( KIcon( "list-add" ) );
 
 	// Load the list
@@ -86,7 +86,7 @@ void SelectCategoriesDialog::createNewCategory( void )
 
 		//check bounds first
 		if ( result.length() > int(database->maxCategoryNameLength()) ) {
-			KMessageBox::error( this, i18np( "Category name cannot be longer than 1 character.", "Category name cannot be longer than %1 characters.", database->maxCategoryNameLength() ) );
+			KMessageBox::error( this, i18ncp( "@info", "Category name cannot be longer than 1 character.", "Category name cannot be longer than %1 characters.", database->maxCategoryNameLength() ) );
 			return ;
 		}
 

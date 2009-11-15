@@ -39,7 +39,7 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 		: KDialog( parent ),
 		m_recipe( recipe )
 {
-	setCaption(i18n("Resize Recipe" ));
+	setCaption(i18nc("@title:window", "Resize Recipe" ));
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
@@ -124,11 +124,11 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 void ResizeRecipeDialog::languageChange()
 {
 	buttonGroup->setTitle( QString::null );
-	yieldRadioButton->setText( i18n( "Scale by yield" ) );
-	newYieldLabel->setText( i18n( "New yield:" ) );
-	currentYieldLabel->setText( i18n( "Current yield:" ) );
-	factorRadioButton->setText( i18n( "Scale by factor" ) );
-	factorLabel->setText( i18n( "Factor (i.e. 1/2 to half, 3 to triple):" ) );
+	yieldRadioButton->setText( i18nc( "@option:radio", "Scale by yield" ) );
+	newYieldLabel->setText( i18nc( "@label:text", "New yield:" ) );
+	currentYieldLabel->setText( i18nc( "@label:text", "Current yield:" ) );
+	factorRadioButton->setText( i18nc( "@option:radio", "Scale by factor" ) );
+	factorLabel->setText( i18nc( "@label:text", "Factor (i.e. 1/2 to half, 3 to triple):" ) );
 }
 
 void ResizeRecipeDialog::activateCurrentOption( int button_id )
@@ -150,7 +150,7 @@ void ResizeRecipeDialog::activateCurrentOption( int button_id )
 void ResizeRecipeDialog::accept()
 {
 	if ( currentYieldInput->text().toInt() == 0 )
-		KMessageBox::error( this, i18n( "Unable to scale a recipe with zero yield" ) );
+		KMessageBox::error( this, i18nc( "@info", "Unable to scale a recipe with zero yield" ) );
 	else if ( buttonGroup->selected() == yieldRadioButton ) {
 		if ( newYieldInput->isInputValid() ) {
 			double new_yield = newYieldInput->value().toDouble();
@@ -159,7 +159,7 @@ void ResizeRecipeDialog::accept()
 			resizeRecipe( new_yield / current_yield );
 		}
 		else {
-			KMessageBox::error( this, i18n( "Invalid input" ) );
+			KMessageBox::error( this, i18nc( "@info", "Invalid input" ) );
 			newYieldInput->selectAll();
 			return;
 		}
@@ -168,7 +168,7 @@ void ResizeRecipeDialog::accept()
 		if ( factorInput->isInputValid() && factorInput->value() > 0 )
 			resizeRecipe( factorInput->value().toDouble() );
 		else {
-			KMessageBox::error( this, i18n( "Invalid input" ) );
+			KMessageBox::error( this, i18nc( "@info", "Invalid input" ) );
 			factorInput->selectAll();
 			return ;
 		}

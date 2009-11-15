@@ -3,6 +3,8 @@ Changes from 2.0-alpha4 to svn:
     Ferguson who did most of this work.
   * Created static library libkrecipescommon. This makes the project to compile
     very much faster when compiling the test programs.
+  * Added KUIT and context stuff to a huge number of i18n strings. Thanks to
+    Mike Ferguson who did most of this work.
   * Fixes for bugs:
     + Don't crash when closing the "Page Setup" and "Print Setup" dialogs.
     + Uncategorized recipes are displayed when using MySQL 4, this fixes

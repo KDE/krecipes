@@ -44,12 +44,12 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 	vboxl->setSpacing( KDialog::spacingHint() );
 
 	newAuthorButton = new KPushButton( this );
-	newAuthorButton->setText( i18n( "Create ..." ) );
+	newAuthorButton->setText( i18nc( "@action:button", "Create ..." ) );
 	newAuthorButton->setIcon( KIcon( "list-add") );
 	vboxl->addWidget( newAuthorButton );
 
 	removeAuthorButton = new KPushButton( this );
-	removeAuthorButton->setText( i18n( "Delete" ) );
+	removeAuthorButton->setText( i18nc( "@action:button", "Delete" ) );
 	removeAuthorButton->setIcon( KIcon( "list-remove") );
 	vboxl->addWidget( removeAuthorButton );
 	vboxl->addStretch();

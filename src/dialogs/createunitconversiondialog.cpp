@@ -72,8 +72,8 @@ CreateUnitConversionDialog::~CreateUnitConversionDialog()
 
 void CreateUnitConversionDialog::languageChange()
 {
-	setCaption( i18n( "Unit Conversion" ) );
-	buttonGroup1->setTitle( i18n( "New Unit Conversion" ) );
+	setCaption( i18nc( "@title:window", "Unit Conversion" ) );
+	buttonGroup1->setTitle( i18nc( "@title:group", "New Unit Conversion" ) );
 	fromUnitLabel->setText( QString::null );
 	textLabel4->setText( "=" );
 }

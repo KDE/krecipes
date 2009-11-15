@@ -58,7 +58,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( spacer_top, 0, 1 );
 
-	ingredientListView = new KreListView ( ingredientTab, i18n( "Ingredient list" ), true, 0 );
+	ingredientListView = new KreListView ( ingredientTab, i18nc( "@title", "Ingredient list" ), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	ingredientActionsHandler = new IngredientActionsHandler( list_view, database );
 	ingredientListView->setListView( list_view );
@@ -89,14 +89,14 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	
 	layout->addItem( buttonLayout, 1, 3 );
 
-	QPushButton *propertyButton = new KPushButton( i18n("Property Information"), ingredientTab );
+	QPushButton *propertyButton = new KPushButton( i18nc("@action:button", "Property Information"), ingredientTab );
 	propertyButton->setIcon( KIcon( "document-properties") );
 	layout->addWidget( propertyButton, 6, 1 );
 
-	tabWidget->insertTab( -1, ingredientTab, i18n( "Ingredients" ) );
+	tabWidget->insertTab( -1, ingredientTab, i18nc( "@title:tab", "Ingredients" ) );
 
 	groupsDialog = new IngredientGroupsDialog(database,tabWidget,"groupsDialog");
-	tabWidget->insertTab( -1, groupsDialog, i18n( "Headers" ) );
+	tabWidget->insertTab( -1, groupsDialog, i18nc( "@title:tab", "Headers" ) );
 
 	page_layout->addWidget( tabWidget );
 
@@ -147,7 +147,7 @@ void IngredientsDialog::showPropertyEdit()
 		delete d;
 	}
 	else
-		KMessageBox::information( this, i18n( "No ingredient selected." ), QString::null );
+		KMessageBox::information( this, i18nc( "@info", "No ingredient selected." ), QString::null );
 }
 
 #include "ingredientsdialog.moc"

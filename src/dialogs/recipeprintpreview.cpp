@@ -22,16 +22,16 @@
 RecipePrintPreview::RecipePrintPreview( QWidget *parent, RecipeDB *db, const QList<int> &ids )
 	: KDialog( parent )
 {
-	setCaption( i18n("Print Preview") );
+	setCaption( i18nc("@title:window", "Print Preview") );
 	setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::Help);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
 	KVBox *page = new KVBox( this );
 	setMainWidget( page );
 	setHelp("print-recipe");
-	setButtonText( KDialog::User1, i18n("Print Setup") );
+	setButtonText( KDialog::User1, i18nc("@action:button", "Print Setup") );
 	setButtonIcon( KDialog::User1, KIcon( "configure" ) );
-	setButtonText( KDialog::Ok, i18n("&Print") );
+	setButtonText( KDialog::Ok, i18nc("@action:button", "&Print") );
 
 	setSizeGripEnabled( true );
 
@@ -58,7 +58,7 @@ void RecipePrintPreview::slotOk()
 void RecipePrintPreview::slotUser1( void )
 {
 	QPointer<PageSetupDialog> pageSetup = new PageSetupDialog( this, Recipe(), "Print" );
-	pageSetup->setCaption( i18n("Print Setup") );
+	pageSetup->setCaption( i18nc("@title:window", "Print Setup") );
 	if ( pageSetup->exec() == QDialog::Accepted )
 		reload();
 	delete pageSetup;

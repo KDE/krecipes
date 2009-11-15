@@ -69,7 +69,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	layout->setMargin( KDialog::marginHint() );
 	layout->setSpacing( KDialog::spacingHint() );
 
-	recipeListView = new KreListView ( this, i18n( "Full recipe list" ), true, 1 );
+	recipeListView = new KreListView ( this, i18nc( "@title", "Full recipe list" ), true, 1 );
 	layout->addWidget( recipeListView, 0, 0 );
 	listview = new RecipeListView( recipeListView, database );
 	listview->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
@@ -99,7 +99,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	layout->addItem( vboxl, 0, 1 );
 
-	shopRecipeListView = new KreListView ( this, i18n("Shopping List") );
+	shopRecipeListView = new KreListView ( this, i18nc("@title", "Shopping List") );
 	ShoppingListView *slistview = new ShoppingListView( shopRecipeListView );
 	slistview->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 	slistview->setDragEnabled( true );
@@ -110,7 +110,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	shopRecipeListView->setListView( slistview );
 	layout->addWidget( shopRecipeListView, 0, 2 );
 
-	shopRecipeListView->listView() ->addColumn( i18n( "Recipe Title" ) );
+	shopRecipeListView->listView() ->addColumn( i18nc( "@title:column", "Recipe Title" ) );
 
 	KConfigGroup config( KGlobal::config(), "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
@@ -129,7 +129,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	okButton = new KPushButton( buttonBar );
 	okButton->setObjectName( "okButton" );
-	okButton->setText( i18n( "&OK" ) );
+	okButton->setText( i18nc( "@action:button", "&OK" ) );
 	okButton->setIcon( KIcon( "dialog-ok" ) );
 
 	//buttonBar->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );

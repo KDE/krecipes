@@ -56,24 +56,24 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	vboxl->setSpacing( KDialog::spacingHint() );
 
 	newUnitButton = new KPushButton( unitTab );
-	newUnitButton->setText( i18n( "Create ..." ) );
+	newUnitButton->setText( i18nc( "@action:button", "Create ..." ) );
 	newUnitButton->setIcon( KIcon ( "list-add" ) );
 	vboxl->addWidget( newUnitButton );
 
 	removeUnitButton = new KPushButton( unitTab );
-	removeUnitButton->setText( i18n( "Delete" ) );
+	removeUnitButton->setText( i18nc( "@action:button", "Delete" ) );
 	removeUnitButton->setIcon( KIcon ( "list-remove" ) );
 	vboxl->addWidget( removeUnitButton );
 	vboxl->addStretch();
 	layout->addLayout( vboxl );
 
-	tabWidget->insertTab( -1, unitTab, i18n( "Units" ) );
+	tabWidget->insertTab( -1, unitTab, i18nc( "@title:tab", "Units" ) );
 
 	massConversionTable = new ConversionTable( tabWidget, 1, 1 );
-	tabWidget->insertTab( -1, massConversionTable, i18n( "Mass Conversions" ) );
+	tabWidget->insertTab( -1, massConversionTable, i18nc( "@title:tab", "Mass Conversions" ) );
 
 	volumeConversionTable = new ConversionTable( tabWidget, 1, 1 );
-	tabWidget->insertTab( -1, volumeConversionTable, i18n( "Volume Conversions" ) );
+	tabWidget->insertTab( -1, volumeConversionTable, i18nc( "@title:tab", "Volume Conversions" ) );
 
 	page_layout->addWidget( tabWidget );
 
@@ -194,7 +194,7 @@ void UnitsDialog::saveAllRatios( UnitRatioList &/*ratioList*/ )
 #if 0
 	ConversionTable *conversionTable = massConversionTable;
 
-	KProgressDialog progress_dialog( this, "progress_dialog", i18n( "Finding Unit Ratios" ), QString::null, true );
+	KProgressDialog progress_dialog( this, "progress_dialog", i18nc( "@title:window", "Finding Unit Ratios" ), QString::null, true );
 	progress_dialog.progressBar() ->setTotalSteps( ratioList.count() * ratioList.count() );
 
 	for ( UnitRatioList::const_iterator current_it = ratioList.begin(); current_it != ratioList.end(); ++current_it ) {

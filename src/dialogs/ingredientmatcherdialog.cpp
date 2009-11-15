@@ -86,21 +86,24 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	layout2->addLayout( layout1 );
 
 	ingListView = new KreListView( this, QString::null, true );
-	ingListView->listView() ->addColumn( i18n( "Ingredient (required?)" ) );
-	ingListView->listView() ->addColumn( i18n( "Amount Available" ) );
+	ingListView->listView() ->addColumn( i18nc( "@title:column", "Ingredient (required?)" ) );
+	ingListView->listView() ->addColumn( i18nc( "@title:column", "Amount Available" ) );
 	layout2->addWidget( ingListView );
 	dialogLayout->addLayout( layout2 );
 
 	// Box to select allowed number of missing ingredients
 	missingBox = new KHBox( this );
 	missingNumberLabel = new QLabel( missingBox );
-	missingNumberLabel->setText( i18n( "Missing ingredients allowed:" ) );
+	missingNumberLabel->setText( i18nc(
+		"@label:spinbox Number of missing ingredients allowed when doing a search by ingredients",
+		"Missing ingredients allowed:" ) );
 	missingNumberSpinBox = new KIntSpinBox( missingBox );
 	missingNumberSpinBox->setMinimum( -1 );
-	missingNumberSpinBox->setSpecialValueText( i18nc( "Any amount of ingredients missing", "Any" ) );
+	missingNumberSpinBox->setSpecialValueText( i18nc(
+		"@item Any amount of ingredients missing when doing a search by ingredients", "Any" ) );
 
 	// Found recipe list
-	recipeListView = new KreListView( this, i18n( "Matching Recipes" ), false, 1, missingBox );
+	recipeListView = new KreListView( this, i18nc( "@title", "Matching Recipes" ), false, 1, missingBox );
 	recipeListView->listView() ->setAllColumnsShowFocus( true );
 
 	recipeListView->listView() ->addColumn( i18nc( "@title:column Recipe Title", "Title" ) );
@@ -109,7 +112,8 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	bool show_id = config.readEntry( "ShowID", false );
 	recipeListView->listView() ->addColumn( "Id" , show_id ? -1 : 0 );
 
-	recipeListView->listView() ->addColumn( i18n( "Missing Ingredients" ) );
+	recipeListView->listView()->addColumn( i18nc( "@title:column Missing ingredients in a search result",
+		"Missing Ingredients" ) );
 
 	recipeListView->listView() ->setSorting( -1 );
 	dialogLayout->addWidget(recipeListView);
@@ -120,7 +124,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 
 	okButton = new KPushButton( buttonBox );
 	okButton->setIcon( KIcon( "dialog-ok" ) );
-	okButton->setText( i18n( "Find matching recipes" ) );
+	okButton->setText( i18nc( "@action:button", "Find matching recipes" ) );
 
 	//buttonBox->layout()->addItem( new QSpacerItem( 10,10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
@@ -148,11 +152,11 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 {
 	if ( col == 1 ) {
 		QPointer<KDialog> amountEditDialog = new KDialog(this);
-		amountEditDialog->setCaption(i18n("Enter amount"));
+		amountEditDialog->setCaption(i18nc("@title:window", "Enter amount"));
 		amountEditDialog->setButtons(KDialog::Cancel | KDialog::Ok);
 		amountEditDialog->setDefaultButton(KDialog::Ok);
 		amountEditDialog->setModal( false );	
-		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18n("Amount"), amountEditDialog );
+		Q3GroupBox *box = new Q3GroupBox( 1, Qt::Horizontal, i18nc("@title:group", "Amount"), amountEditDialog );
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
 		// Set the values from the item
 		if ( !item->text(1).isEmpty() ) {
@@ -329,7 +333,7 @@ void IngredientMatcherDialog::findRecipes( void )
 
 			if ( ( *nit ) == missingNo ) {
 				if ( !titleShownYet ) {
-					new SectionItem( recipeListView->listView(), i18np( "You are missing 1 ingredient for:", "You are missing %1 ingredients for:", missingNo ) );
+					new SectionItem( recipeListView->listView(), i18ncp( "@label:textbox", "You are missing 1 ingredient for:", "You are missing %1 ingredients for:", missingNo ) );
 					titleShownYet = true;
 				}
 				new CustomRecipeListItem( recipeListView->listView(), *it, *ilit );

@@ -34,7 +34,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 		: KDialog( parent),
 		database( db )
 {
-	setCaption( i18n( "Refine Shopping List" ) );
+	setCaption( i18nc( "@title:window", "Refine Shopping List" ) );
 	setButtons(KDialog::Ok);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
@@ -42,7 +42,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	KVBox *page = new KVBox( this );
 	setMainWidget( page );
 
-	setButtonText( KDialog::Ok, i18nc( "action:button Finished refining shopping list", "&Done" ) );
+	setButtonText( KDialog::Ok, i18nc( "@action:button Finished refining shopping list", "&Done" ) );
 
 
 	helpLabel = new QLabel( page );
@@ -84,9 +84,9 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	layout2->addLayout( layout1 );
 
 	ingListView = new KreListView( layout2Widget, QString::null, true );
-	ingListView->listView() ->addColumn( i18n( "Ingredients in Shopping List" ) );
-	ingListView->listView() ->addColumn( i18n( "Amount" ) );
-	ingListView->listView() ->addColumn( i18n( "Unit" ) );
+	ingListView->listView() ->addColumn( i18nc( "@title:column", "Ingredients in Shopping List" ) );
+	ingListView->listView() ->addColumn( i18nc( "@title:column", "Amount" ) );
+	ingListView->listView() ->addColumn( i18nc( "@title:column", "Unit" ) );
 	ingListView->listView() ->setItemsRenameable( true );
 	ingListView->listView() ->setRenameable( 0, false );
 	ingListView->listView() ->setRenameable( 1, true );
@@ -113,11 +113,11 @@ RefineShoppingListDialog::~RefineShoppingListDialog()
 
 void RefineShoppingListDialog::languageChange()
 {
-	helpLabel->setText( i18n( "On the right are the ingredients needed for the recipes you selected.  You may now add additional ingredients, remove ingredients you do not need, or modify the amounts of existing ingredients." ) );
-	allIngListView->listView() ->header() ->setLabel( 0, i18n( "Ingredients" ) );
-	ingListView->listView() ->header() ->setLabel( 0, i18n( "Ingredients in Shopping List" ) );
-	ingListView->listView() ->header() ->setLabel( 1, i18n( "Amount" ) );
-	ingListView->listView() ->header() ->setLabel( 2, i18n( "Unit" ) );
+	helpLabel->setText( i18nc( "@info", "On the right are the ingredients needed for the recipes you selected.  You may now add additional ingredients, remove ingredients you do not need, or modify the amounts of existing ingredients." ) );
+	allIngListView->listView() ->header() ->setLabel( 0, i18nc( "@title:column", "Ingredients" ) );
+	ingListView->listView() ->header() ->setLabel( 0, i18nc( "@title:column", "Ingredients in Shopping List" ) );
+	ingListView->listView() ->header() ->setLabel( 1, i18nc( "@title:column", "Amount" ) );
+	ingListView->listView() ->header() ->setLabel( 2, i18nc( "@title:column", "Unit" ) );
 }
 
 void RefineShoppingListDialog::accept()

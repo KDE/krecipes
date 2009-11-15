@@ -54,7 +54,7 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, const Ratin
 		: KDialog( parent )
 {
 	setObjectName( name );
-	setCaption( i18n( "Rating" ) );
+	setCaption( i18nc( "@title:window", "Rating" ) );
 	init(criteriaList);
 	loadRating(rating);
 }
@@ -67,7 +67,7 @@ EditRatingDialog::EditRatingDialog( const ElementList &criteriaList, QWidget* pa
 		: KDialog( parent )
 {
 	setObjectName( name );
-	setCaption( i18n( "Rating" ) );
+	setCaption( i18nc( "@title:window", "Rating" ) );
 	init(criteriaList);
 }
 
@@ -115,8 +115,8 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	removeButton->setIcon( KIcon( "list-remove" ) );
 
 	criteriaListView = new RatingCriteriaListView( page, "criteriaListView" );
-	criteriaListView->addColumn( i18n( "Criteria" ) );
-	criteriaListView->addColumn( i18n( "Stars" ) );
+	criteriaListView->addColumn( i18nc( "@title:column", "Criteria" ) );
+	criteriaListView->addColumn( i18nc( "@title:column", "Stars" ) );
 	criteriaListView->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)7, (QSizePolicy::SizeType)7, 0, 0, criteriaListView->sizePolicy().hasHeightForWidth() ) );
 	criteriaListView->setSorting(-1);
 	criteriaListView->setItemsRenameable( true );
@@ -138,7 +138,7 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 
 	KIconLoader *il = KIconLoader::global();
 	KMenu *kpop = new KMenu( criteriaListView );
-	kpop->addAction( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18n( "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Qt::Key_Delete );
+	kpop->addAction( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18nc( "@action:button", "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Qt::Key_Delete );
 
 	for ( ElementList::const_iterator criteria_it = criteriaList.begin(); criteria_it != criteriaList.end(); ++criteria_it ) {
 		criteriaComboBox->insertItem( criteriaComboBox->count(), ( *criteria_it ).name );
@@ -162,14 +162,14 @@ EditRatingDialog::~EditRatingDialog()
  */
 void EditRatingDialog::languageChange()
 {
-	criteriaLabel->setText( i18n( "Criteria:" ) );
-	starsLabel->setText( i18n( "Stars:" ) );
-	addButton->setText( i18n( "Add" ) );
-	removeButton->setText( i18n( "&Delete" ) );
-	criteriaListView->header()->setLabel( 0, i18n( "Criteria" ) );
-	criteriaListView->header()->setLabel( 1, i18n( "Stars" ) );
-	commentsLabel->setText( i18n( "Comments:" ) );
-	raterLabel->setText( i18n( "Rater:" ) );
+	criteriaLabel->setText( i18nc( "@label:textbox", "Criteria:" ) );
+	starsLabel->setText( i18nc( "@label:textbox", "Stars:" ) );
+	addButton->setText( i18nc( "@action:button", "Add" ) );
+	removeButton->setText( i18nc( "@action:button", "&Delete" ) );
+	criteriaListView->header()->setLabel( 0, i18nc( "@title:column", "Criteria" ) );
+	criteriaListView->header()->setLabel( 1, i18nc( "@title:column", "Stars" ) );
+	commentsLabel->setText( i18nc( "@label:textbox", "Comments:" ) );
+	raterLabel->setText( i18nc( "@label:textbox", "Rater:" ) );
 }
 
 void EditRatingDialog::itemRenamed(Q3ListViewItem* it, const QString &, int c)

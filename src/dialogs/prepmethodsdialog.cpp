@@ -43,12 +43,12 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	vboxl->setSpacing ( KDialog::spacingHint() );
 
 	newPrepMethodButton = new KPushButton( this );
-	newPrepMethodButton->setText( i18n( "Create ..." ) );
+	newPrepMethodButton->setText( i18nc( "@action:button", "Create ..." ) );
 	newPrepMethodButton->setIcon( KIcon( "list-add" ) );
 	vboxl->addWidget( newPrepMethodButton );
 
 	removePrepMethodButton = new KPushButton( this );
-	removePrepMethodButton->setText( i18n( "Delete" ) );
+	removePrepMethodButton->setText( i18nc( "@action:button", "Delete" ) );
 	removePrepMethodButton->setIcon( KIcon( "list-remove" ) );
 	vboxl->addWidget( removePrepMethodButton );
 	vboxl->addStretch();
