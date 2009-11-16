@@ -126,16 +126,29 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 		}
 		else {
 			// Handle the error (passively)
-			dbErr = i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down." , DBuser , qsqlDriverPlugin() );
+			if ( DBuser.isNull() ) {
+				dbErr = i18n( "Krecipes could not open the \"%1\" database.", DBname );
+			}
+			else {
+				dbErr = i18n( "Krecipes could not open the database using the "
+				"driver '%2' (with username: \"%1\"). You may not have the necessary "
+				"permissions, or the server may be down." , DBuser , qsqlDriverPlugin() );
+			}
 		}
 
 		//Now Reopen the Database and signal & exit if it fails
 		if ( !database->open() ) {
 			QString error = i18n( "Database message: %1" , database->lastError().databaseText() );
 			kDebug() << i18n( "Failing to open database. Exiting\n" ).toLatin1();
-
 			// Handle the error (passively)
-			dbErr = i18n( "Krecipes could not open the database using the driver '%2' (with username: \"%1\"). You may not have the necessary permissions, or the server may be down.", DBuser , qsqlDriverPlugin() );
+			if ( DBuser.isNull() ) {
+				dbErr = i18n( "Krecipes could not open the \"%1\" database.", DBname );
+			}
+			else {
+				dbErr = i18n( "Krecipes could not open the database using the "
+				"driver '%2' (with username: \"%1\"). You may not have the necessary "
+				"permissions, or the server may be down." , DBuser , qsqlDriverPlugin() );
+			}
 			return RefusedByServer;
 		}
 	}
