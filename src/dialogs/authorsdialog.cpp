@@ -44,7 +44,7 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 	vboxl->setSpacing( KDialog::spacingHint() );
 
 	newAuthorButton = new KPushButton( this );
-	newAuthorButton->setText( i18nc( "@action:button", "Create ..." ) );
+	newAuthorButton->setText( i18nc( "@action:button", "Create..." ) );
 	newAuthorButton->setIcon( KIcon( "list-add") );
 	vboxl->addWidget( newAuthorButton );
 

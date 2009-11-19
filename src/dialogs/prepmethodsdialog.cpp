@@ -43,7 +43,7 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	vboxl->setSpacing ( KDialog::spacingHint() );
 
 	newPrepMethodButton = new KPushButton( this );
-	newPrepMethodButton->setText( i18nc( "@action:button", "Create ..." ) );
+	newPrepMethodButton->setText( i18nc( "@action:button", "Create..." ) );
 	newPrepMethodButton->setIcon( KIcon( "list-add" ) );
 	vboxl->addWidget( newPrepMethodButton );
 

@@ -56,7 +56,7 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	vboxl->setSpacing( KDialog::spacingHint() );
 
 	newUnitButton = new KPushButton( unitTab );
-	newUnitButton->setText( i18nc( "@action:button", "Create ..." ) );
+	newUnitButton->setText( i18nc( "@action:button", "Create..." ) );
 	newUnitButton->setIcon( KIcon ( "list-add" ) );
 	vboxl->addWidget( newUnitButton );
 
