@@ -585,9 +585,9 @@ void QSqlRecipeDB::loadRecipeMetadata( Recipe *recipe )
 
 	QSqlQuery query( command, *database);
 	if ( query.isActive() && query.first() ) {
-		recipe->ctime = query.value(0).toDateTime();
-		recipe->mtime = query.value(1).toDateTime();
-		recipe->atime = query.value(2).toDateTime();
+		recipe->ctime = QDateTime::fromString(query.value(0).toString(),Qt::ISODate);
+		recipe->mtime = QDateTime::fromString(query.value(1).toString(),Qt::ISODate);
+		recipe->atime = QDateTime::fromString(query.value(2).toString(),Qt::ISODate);
 	}
 }
 

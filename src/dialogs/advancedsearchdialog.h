@@ -58,6 +58,8 @@ public:
 	void addAction( KAction * action );
 
 protected:
+	virtual void showEvent( QShowEvent * event );
+
 	QLabel* textLabel1_4;
 	QScrollArea* scrollArea1;
 	QFrame* parametersFrame;

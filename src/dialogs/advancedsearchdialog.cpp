@@ -697,6 +697,11 @@ void AdvancedSearchDialog::addAction( KAction * action )
 	actionHandler->addRecipeAction( action );
 }
 
+void AdvancedSearchDialog::showEvent( QShowEvent * event )
+{
+	actionHandler->selectionChangedSlot();
+}
+
 void AdvancedSearchDialog::removeRecipe( int id )
 {
 	Q3ListViewItemIterator iterator( resultsListView );

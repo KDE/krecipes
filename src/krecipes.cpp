@@ -88,6 +88,8 @@ Krecipes::Krecipes(): KXmlGuiWindow( 0 )
 
 	// and a status bar
 	statusBar() ->show();
+	statusLabel = new QLabel;
+	statusBar()->addPermanentWidget( statusLabel );
 
 	// apply the saved mainwindow settings, if any, and ask the mainwindow
 	// to automatically save settings if changed: window size, toolbar
@@ -842,7 +844,7 @@ void Krecipes::optionsPreferences()
 void Krecipes::changeStatusbar( const QString& text )
 {
 	// display the text on the statusbar
-	statusBar()->showMessage( text );
+	statusLabel->setText( text );
 }
 
 void Krecipes::changeCaption( const QString& text )

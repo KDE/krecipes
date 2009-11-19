@@ -434,6 +434,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Shopping List" ), "view-pim-tasks" );
 		rightPanel->raise( shoppingListPanel );
 		shoppingListPanel->reload( Load );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case DietP:
 		if ( highlightLeftButton )
@@ -441,6 +442,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Diet Helper" ), "diet" );
 		rightPanel->raise( dietPanel );
 		dietPanel->reload( Load );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case MatcherP:
 		if ( highlightLeftButton )
@@ -448,6 +450,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Ingredient Matcher" ), "view-filter" );
 		rightPanel->raise( ingredientMatcherPanel );
 		ingredientMatcherPanel->reload( Load );
+		emit signalChangeStatusbar( QString("") );
 		break;
 
 	case IngredientsP:
@@ -456,6 +459,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Ingredients" ), "ingredients" );
 		rightPanel->raise( ingredientsPanel );
 		ingredientsPanel->reload( Load );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case PropertiesP:
 		if ( highlightLeftButton )
@@ -463,6 +467,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Properties" ), "properties" );
 		rightPanel->raise( propertiesPanel );
 		//propertiesPanel->reload();
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case UnitsP:
 		if ( highlightLeftButton )
@@ -470,6 +475,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Units" ), "units" );
 		rightPanel->raise( unitsPanel );
 		unitsPanel->reload( Load );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case PrepMethodsP:
 		if ( highlightLeftButton )
@@ -477,6 +483,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Preparation Methods" ), "methods" );
 		rightPanel->raise( prepMethodsPanel );
 		prepMethodsPanel->reload( Load );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case CategoriesP:
 		if ( highlightLeftButton )
@@ -484,6 +491,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Categories" ), "folder-yellow" );
 		rightPanel->raise( categoriesPanel );
 		categoriesPanel->reload( Load );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case AuthorsP:
 		if ( highlightLeftButton )
@@ -491,14 +499,17 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 		rightPanel->setHeader( i18n( "Authors" ), "authors" );
 		rightPanel->raise( authorsPanel );
 		authorsPanel->reload( Load );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case RecipeEdit:
 		rightPanel->setHeader( i18n( "Edit Recipe" ), "document-edit" );
 		rightPanel->raise( inputPanel );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	case RecipeView:
 		rightPanel->setHeader( i18n( "View Recipe" ), "system-search" );
 		rightPanel->raise( viewPanel );
+		emit signalChangeStatusbar( QString("") );
 		break;
 	}
 }
@@ -730,6 +741,7 @@ void KrecipesView::setPasteAsSubcategoryAction( KAction * action )
 
 void KrecipesView::actionRecipe( int recipeID, int action )
 {
+	//FIXME: Don't use magic numbers, use enums instead
 	switch ( action ) {
 	case 0:  //Show
 		{
@@ -770,11 +782,34 @@ void KrecipesView::actionRecipe( int recipeID, int action )
 			case KMessageBox::No:
 				break;
 			}
+			QWidget * vis_panel = rightPanel->visiblePanel();
+			if ( vis_panel == selectPanel )
+				selectPanel->getActionsHandler()->selectionChangedSlot();
 			break;
 		}
 	case 3:  //Add to shopping list
 		{
 			shoppingListPanel->addRecipeToShoppingList( recipeID );
+			break;
+		}
+	case 4: //Show text in status bar
+		{
+			Recipe r;
+ 			database->loadRecipe(&r,RecipeDB::Meta|RecipeDB::Noatime,recipeID );
+
+			KLocale *locale = KGlobal::locale();
+
+			QString statusText = QString("<b>%1</b> %2 <b>%3</b> %4 <b>%5</b> %6")
+			.arg(i18nc("Recipe created", "Created:")).arg(locale->formatDateTime(r.ctime))
+			.arg(i18nc("Recipe modified", "Modified:")).arg(locale->formatDateTime(r.mtime))
+			.arg(i18nc("Recipe last accessed", "Last Accessed:")).arg(locale->formatDateTime(r.atime));
+
+			emit signalChangeStatusbar( statusText );
+			break;
+		}
+	case 5: //Clear text in status bar
+		{
+			emit signalChangeStatusbar( QString("") );
 			break;
 		}
 	}

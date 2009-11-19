@@ -96,6 +96,8 @@ public slots:
 	
 	QList<int> recipeIDs() const;
 
+	void selectionChangedSlot();
+
 private:
 	KMenu *kpop;
 	KMenu *catPop;

@@ -25,6 +25,7 @@ class KrecipesView;
 class KToggleAction;
 class KDialog;
 class ConversionDialog;
+class QLabel;
 
 /**
  * This class serves as the main window for Krecipes.  It handles the
@@ -139,6 +140,8 @@ private:
 	KAction *cutAction;
 	KAction *pasteAction;
 	KAction *pasteAsSubcategoryAction;
+
+	QLabel * statusLabel;
 	
 	KDialog *parsing_file_dlg;
 	ConversionDialog *convertDialog;

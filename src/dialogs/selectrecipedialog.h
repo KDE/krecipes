@@ -35,6 +35,7 @@ class QFrame;
 class KPushButton;
 class KTabWidget;
 class KAction;
+class QShowEvent;
 
 class RecipeDB;
 class Recipe;
@@ -42,6 +43,23 @@ class AdvancedSearchDialog;
 class RecipeFilter;
 class RecipeListView;
 class CategoryComboBox;
+class RecipeActionsHandler;
+
+
+class BasicSearchTab : public QFrame
+{
+	Q_OBJECT
+public:
+	BasicSearchTab( QWidget * parent );
+	~BasicSearchTab(){};
+
+	void setActionsHandler( RecipeActionsHandler * actionHandler );
+protected:
+	virtual void showEvent( QShowEvent * event );
+private:
+	RecipeActionsHandler * actionHandler;
+};
+
 
 /**
 @author Unai Garro
@@ -69,7 +87,7 @@ private:
 	// Widgets
 	QGridLayout *layout;
 	KTabWidget *tabWidget;
-	QFrame *basicSearchTab;
+	BasicSearchTab *basicSearchTab;
 	KHBox *searchBar;
 	RecipeListView* recipeListView;
 	KHBox *buttonBar;

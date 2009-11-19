@@ -61,6 +61,8 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 		SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ),
 		SLOT( open() )
 	);
+	connect( parentListView,
+		SIGNAL( selectionChanged() ), SLOT( selectionChangedSlot() ) );
 }
 
 void RecipeActionsHandler::addRecipeAction( KAction * action )
@@ -485,6 +487,18 @@ QList<int> RecipeActionsHandler::recipeIDs() const
 	const QList<Q3ListViewItem*> items = parentListView->selectedItems();
 	QList<int> ids = recipeIDs(items);
 	return ids;
+}
+
+void RecipeActionsHandler::selectionChangedSlot()
+{
+	const QList<Q3ListViewItem*> items = parentListView->selectedItems();
+	if ( (items.count() == 1) && (items.first()->rtti() == 1000) ) {
+		// We have a single recipe as our selection
+		RecipeListItem * recipe_it = ( RecipeListItem* ) items.first();
+		emit recipeSelected( recipe_it->recipeID(), 4 );
+	}
+	else
+		emit recipeSelected( 0, 5 ); //id doesn't matter here
 }
 
 #include "recipeactionshandler.moc"

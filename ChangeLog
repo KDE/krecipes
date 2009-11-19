@@ -27,6 +27,10 @@ Changes from 2.0-alpha4 to svn:
       amounts. In previous releases when you type an invalid number/interval
       you get a blank field in the list. Now, when you type some invalid thing
       as ingredient amount like "3/" the program will keep the old value.
+    + In 1.0 series the program was displaying in a tooltip the date when a
+      recipe was created, modified and last accessed; however this doesn't work
+      for the previous 2.0 releases. In this release, when you select a single
+      recipe you can see the dates mentioned above in the status bar.
 
 Changes from 2.0-alpha3 to 2.0-alpha4:
   * Fixed issues reported by Sanitizer in the user manual. Note that the user

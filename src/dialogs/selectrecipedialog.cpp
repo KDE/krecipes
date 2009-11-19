@@ -36,6 +36,22 @@
 #include "widgets/categorylistview.h"
 #include "widgets/categorycombobox.h"
 
+BasicSearchTab::BasicSearchTab( QWidget * parent )
+	: QFrame(parent), actionHandler(0)
+{
+}
+
+void BasicSearchTab::setActionsHandler( RecipeActionsHandler * actionHandler )
+{
+	this->actionHandler = actionHandler;
+}
+
+void BasicSearchTab::showEvent( QShowEvent * /*event*/ )
+{
+	if ( actionHandler )
+		actionHandler->selectionChangedSlot();
+}
+
 SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 		: QWidget( parent )
 {
@@ -47,7 +63,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	tabWidget->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	tabLayout->addWidget( tabWidget );
 
-	basicSearchTab = new QFrame( this );
+	basicSearchTab = new BasicSearchTab( this );
 	basicSearchTab->setFrameStyle( QFrame::NoFrame );
 	//basicSearchTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 
@@ -117,6 +133,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	//Takes care of all recipe actions and provides a popup menu to 'recipeListView'
 	actionHandler = new RecipeActionsHandler( recipeListView, database );
+	basicSearchTab->setActionsHandler( actionHandler );
 
 	recipeFilter = new RecipeFilter( recipeListView );
 
