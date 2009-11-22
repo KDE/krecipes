@@ -558,11 +558,9 @@ void EditPropertiesDialog::loadUSDAData()
 		Q3ValueList<USDA::PropertyData> property_data_list = USDA::loadProperties();
 		USDA::PrepDataList prep_data_list =  USDA::loadPrepMethods();
 		USDA::UnitDataList unit_data_list =  USDA::loadUnits();
-
-		         //PORT to KDE4
-		         /*
+		 
 		Q3ValueList<USDA::PropertyData>::const_iterator propertyIt = property_data_list.begin();
-		for ( QList<QString>::const_iterator it = data[ 2 ]; propertyIt != property_data_list.end(); ++it, ++propertyIt ) {
+		for ( QStringList::const_iterator it = data.begin()+2; propertyIt != property_data_list.end(); ++it, ++propertyIt ) {
 			int property_id = property_list.findByName( (*propertyIt).name );
 			if ( property_id == -1 ) {
 				db->addProperty( (*propertyIt).name, (*propertyIt).unit );
@@ -576,7 +574,7 @@ void EditPropertiesDialog::loadUSDAData()
 			else
 				db->addPropertyToIngredient( ingredientID, property_id, amount, grams_id );
 		}
-		         */
+
 		int i = 2 + property_data_list.count();
 
 		int i_initial = i;
