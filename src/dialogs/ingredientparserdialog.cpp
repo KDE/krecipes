@@ -105,7 +105,10 @@ IngredientParserDialog::~IngredientParserDialog()
 
 void IngredientParserDialog::languageChange()
 {
-	textLabel1->setText( i18nc( "@info", "<p>To use: Paste a list of ingredient below, click \"Parse Text\", and then you may correct any incorrectly parsed ingredients.</p><p><warning>Fields will be truncated if longer than the database allows</warning></p>" ) );
+	textLabel1->setText( i18nc( "@info", "<para>To use: Paste a list of ingredient below, "
+		"click <interface>Parse Text</interface>, and then you may correct any incorrectly "
+		"parsed ingredients.</para><para><warning>Fields will be truncated if longer than "
+		"the database allows</warning></para>" ) );
 	previewLabel->setText( i18nc("@title", "Ingredients as understood by Krecipes:") );
 		 textLabel1->setWordWrap(true);
 	parseButton->setText( i18nc( "@action:button", "Parse Text" ) );

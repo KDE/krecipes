@@ -125,10 +125,10 @@ void ResizeRecipeDialog::languageChange()
 {
 	buttonGroup->setTitle( QString::null );
 	yieldRadioButton->setText( i18nc( "@option:radio", "Scale by yield" ) );
-	newYieldLabel->setText( i18nc( "@label:text", "New yield:" ) );
-	currentYieldLabel->setText( i18nc( "@label:text", "Current yield:" ) );
+	newYieldLabel->setText( i18nc( "@label:textbox", "New yield:" ) );
+	currentYieldLabel->setText( i18nc( "@label:textbox", "Current yield:" ) );
 	factorRadioButton->setText( i18nc( "@option:radio", "Scale by factor" ) );
-	factorLabel->setText( i18nc( "@label:text", "Factor (e.g. 1/2 to half, 3 to triple):" ) );
+	factorLabel->setText( i18nc( "@label:textbox", "Factor (e.g. 1/2 to half, 3 to triple):" ) );
 }
 
 void ResizeRecipeDialog::activateCurrentOption( int button_id )

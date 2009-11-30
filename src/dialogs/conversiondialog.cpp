@@ -31,7 +31,7 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 		m_database(db)
 {
 	 setObjectName( name );
-	 setCaption(i18nc( "@window:title", "Measurement Converter" ));
+	 setCaption(i18nc( "@title:window", "Measurement Converter" ));
 	 setButtons(KDialog::Close | KDialog::User1 | KDialog::Help);
 	 setDefaultButton(KDialog::Close);
 	 setHelp("measure-converter");
@@ -96,7 +96,8 @@ void ConversionDialog::languageChange()
 {
 	convertLabel->setText( i18nc( "@label", "Convert" ) );
 	toLabel->setText( i18nc( "@label Convert to", "To" ) );
-	resultLabel->setText( i18nc( "@label", "<b>Result:</b>" ) );
+	resultLabel->setText( i18nc( "@label Result of an unit conversion",
+		"<b>Result:</b>" ) );
 	resultText->setText( QString::null );
 }
 

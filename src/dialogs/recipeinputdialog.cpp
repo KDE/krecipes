@@ -448,16 +448,16 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	resizeButton = new QToolButton;
 	resizeButton->setIcon( KIcon( "arrow-up-double" ) ); //TODO: give me an icon :)
 
-	saveButton->setText( i18nc( "@action:buton", "Save recipe" ) );
+	saveButton->setText( i18nc( "@action:button", "Save recipe" ) );
 	saveButton->setToolTip( i18nc( "@info:tooltip", "Save recipe" ) );
 	saveButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-	showButton->setText( i18nc( "@action:buton", "Show recipe" ) );
+	showButton->setText( i18nc( "@action:button", "Show recipe" ) );
 	showButton->setToolTip( i18nc( "@info:tooltip", "Show recipe" ) );
 	showButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-	closeButton->setText( i18nc( "@action:buton", "Close" ) );
+	closeButton->setText( i18nc( "@action:button", "Close" ) );
 	closeButton->setToolTip( i18nc( "@info:tooltip", "Close" ) );
 	closeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
-	resizeButton->setText( i18nc( "@action:buton", "Resize recipe" ) );
+	resizeButton->setText( i18nc( "@action:button", "Resize recipe" ) );
 	resizeButton->setToolTip( i18nc( "@info:tooltip", "Resize recipe" ) );
 	resizeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 
@@ -1610,20 +1610,20 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 					propertyStatusMapRed.insert(ing.ingredientID,QString(
 						i18nc("@info", "<b>%1:</b> There is no ""ingredient weight entry for when prepared "
 						"in any of the following manners: %2<a href=\"ingredient#%3\">Provide "
-						"ingredient weight.</a>"))
-						.arg(ing.name)
-						.arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>")
-						.arg(QString::number(ing.ingredientID)));
+						"ingredient weight.</a>",
+						ing.name,
+						"<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>",
+						QString::number(ing.ingredientID))));
 				break;
 			case RecipeDB::MismatchedPrepMethodUsingApprox:
 				propertyStatusMapYellow.insert(ing.ingredientID,QString(
 					i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when prepared in any of "
 					"the following manners (defaulting to a weight entry without a preparation "
 					"method specified): "
-					"%2<a href=\"ingredient#%3\">Provide ingredient weight.</a>"))
-					.arg(ing.name)
-					.arg("<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>")
-					.arg(QString::number(ing.ingredientID)));
+					"%2<a href=\"ingredient#%3\">Provide ingredient weight.</a>",
+					ing.name,
+					"<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>",
+					QString::number(ing.ingredientID))));
 				break;
 			default: kDebug()<<"Code error: Unhandled conversion status code "<<status; break;
 			}
@@ -1639,18 +1639,24 @@ void RecipeInputDialog::showStatusIndicator()
 	if ( propertyStatusMapRed.count() == 0 ) {
 		if ( propertyStatusMapYellow.count() == 0 ) {
 			propertyStatusLed->setColor( Qt::green );
-			propertyStatusLabel->setText( i18nc("@info", "Complete") );
+			propertyStatusLabel->setText( i18nc(
+				"@info Property information for a recipe is complete",
+				"Complete") );
 			propertyStatusButton->setEnabled(false);
 		}
 		else {
 			propertyStatusLed->setColor( Qt::yellow );
-			propertyStatusLabel->setText( i18nc("@info", "Complete, but approximations made") );
+			propertyStatusLabel->setText( i18nc(
+				"@info Property information for a recipe is complete, but...",
+				"Complete, but approximations made") );
 			propertyStatusButton->setEnabled(true);
 		}
 	}
 	else {
 		propertyStatusLed->setColor( Qt::red );
-		propertyStatusLabel->setText( i18nc("@info", "Incomplete") );
+		propertyStatusLabel->setText( i18nc(
+			"@info Property information for a recipe is incomplete",
+			"Incomplete") );
 		propertyStatusButton->setEnabled(true);
 	}
 
