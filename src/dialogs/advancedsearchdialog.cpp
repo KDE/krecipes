@@ -751,6 +751,8 @@ void AdvancedSearchDialog::clear()
 	avgStarsEdit->clear();
 	criteriaListView->clear();
 	starsWidget->clear();
+
+	actionHandler->selectionChangedSlot();
 }
 
 void AdvancedSearchDialog::activateRatingOptionAvg()
