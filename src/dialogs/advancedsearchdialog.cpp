@@ -992,6 +992,7 @@ void AdvancedSearchDialog::search()
 
 	//now display the recipes left
 	resultsListView->clear();
+	actionHandler->selectionChangedSlot();
 	for ( RecipeList::const_iterator it = allRecipes.constBegin(); it != allRecipes.constEnd(); ++it ) {
 		( void ) new RecipeListItem( resultsListView, *it );
 	}
