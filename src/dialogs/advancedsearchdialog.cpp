@@ -997,7 +997,7 @@ void AdvancedSearchDialog::search()
 	}
 
 	if ( !resultsListView->firstChild() ) {
-		( void ) new Q3ListViewItem( resultsListView, "--- "+i18nc("@info", "No matching recipes found")+" ---");
+		( void ) new Q3ListViewItem( resultsListView, "--- "+i18nc("@item:inlistbox", "No matching recipes found")+" ---");
 	}
 
 	KApplication::restoreOverrideCursor();
