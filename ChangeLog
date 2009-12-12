@@ -34,6 +34,12 @@ Changes from 2.0-alpha4 to svn:
     + The dialog to edit the weights and properties for a given ingredient
       loads also the property information from USDA database when clicking on
       "Load" button, not just the weights. Fixes sourceforge #2897458.
+    + Advanced search is performed properly; when you search by some field(s)
+      providing its value(s) you will not get the recipes whose field(s)
+      contains the given value(s) as a substring, you will get the recipes whose
+      fields match exactly with the given value(s). Note that if you want to
+      search a substring in a field, you can do it passing *mysubstring* because
+      wildcards are supported.
 
 Changes from 2.0-alpha3 to 2.0-alpha4:
   * Fixed issues reported by Sanitizer in the user manual. Note that the user

@@ -117,11 +117,11 @@ Ingredient IngredientList::findByName( const QRegExp &rx ) const
 {
 	IngredientList::const_iterator it_end = end();
 	for ( IngredientList::const_iterator it = begin(); it != it_end; ++it ) {
-		if ( ( *it ).name.indexOf(rx) != -1 )
+		if ( rx.exactMatch( it->name ) ) 
 			return *it;
 
 		for ( Q3ValueList<IngredientData>::const_iterator sub_it = ( *it ).substitutes.begin(); sub_it != ( *it ).substitutes.end(); ++sub_it ) {
-			if ( ( *sub_it ).name.indexOf(rx) != -1 )
+			if ( rx.exactMatch( sub_it->name ) )
 				return *sub_it;
 		}
 	}

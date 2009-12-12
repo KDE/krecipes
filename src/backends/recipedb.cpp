@@ -667,6 +667,7 @@ void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
 
 QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 {
+	//FIXME: Move this method to QSqlRecipeDB
     kDebug();
 	QStringList queryList, conditionList, tableList;
 
@@ -676,7 +677,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = p.ingsOr.begin(); it != p.ingsOr.end();) {
-			condition += "i.name LIKE '%"+escapeAndEncode(*it)+"%' ";
+			condition += "i.name LIKE '"+escapeAndEncode(*it)+"' ";
 			if ( ++it != p.ingsOr.end() ) {
 				condition += "OR ";
 			}
@@ -692,7 +693,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = p.catsOr.begin(); it != p.catsOr.end();) {
-			condition += "c.name LIKE '%"+escapeAndEncode(*it)+"%' ";
+			condition += "c.name LIKE '"+escapeAndEncode(*it)+"' ";
 			if ( ++it != p.catsOr.end() ) {
 				condition += "OR ";
 			}
@@ -708,7 +709,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = p.authorsOr.begin(); it != p.authorsOr.end();) {
-			condition += "a.name LIKE '%"+escapeAndEncode(*it)+"%'";
+			condition += "a.name LIKE '"+escapeAndEncode(*it)+"'";
 			if ( ++it != p.authorsOr.end() ) {
 				condition += "OR ";
 			}
@@ -723,7 +724,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = p.titleKeywords.begin(); it != p.titleKeywords.end();) {
-			condition += "r.title LIKE '%"+escapeAndEncode(*it)+"%' ";
+			condition += "r.title LIKE '"+escapeAndEncode(*it)+"' ";
 			if ( ++it != p.titleKeywords.end() ) {
 				condition += op;
 			}
@@ -737,7 +738,7 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 
 		QString condition = "(";
 		for ( QStringList::const_iterator it = p.instructionsKeywords.begin(); it != p.instructionsKeywords.end();) {
-			condition += "r.instructions LIKE '%"+escapeAndEncode(*it)+"%' ";
+			condition += "r.instructions LIKE '% "+escapeAndEncode(*it)+" %' ";
 			if ( ++it != p.instructionsKeywords.end() ) {
 				condition += op;
 			}

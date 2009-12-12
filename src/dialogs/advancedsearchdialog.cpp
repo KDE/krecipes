@@ -843,7 +843,7 @@ void AdvancedSearchDialog::search()
 	QStringList items = split(authorsAllEdit->text());
 	for ( QStringList::const_iterator author_it = items.constBegin(); author_it != items.constEnd(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id == -1 ) {
+			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).id == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -852,7 +852,7 @@ void AdvancedSearchDialog::search()
 	items = split(authorsWithoutEdit->text());
 	for ( QStringList::const_iterator author_it = items.constBegin(); author_it != items.constEnd(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id != -1 ) {
+			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).id != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -863,7 +863,7 @@ void AdvancedSearchDialog::search()
 	items = split(categoriesAllEdit->text());
 	for ( QStringList::const_iterator cat_it = items.constBegin(); cat_it != items.constEnd(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id == -1 ) {
+			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).id == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -872,7 +872,7 @@ void AdvancedSearchDialog::search()
 	items = split(categoriesNotEdit->text());
 	for ( QStringList::const_iterator cat_it = items.constBegin(); cat_it != items.constEnd(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::RegExp) ).id != -1 ) {
+			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).id != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -883,7 +883,7 @@ void AdvancedSearchDialog::search()
 	items = split(ingredientsAllEdit->text());
 	for ( QStringList::const_iterator ing_it = items.constBegin(); ing_it != items.constEnd(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::RegExp) ).ingredientID == -1 ) {
+			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).ingredientID == -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
@@ -892,7 +892,7 @@ void AdvancedSearchDialog::search()
 	items = split(ingredientsWithoutEdit->text());
 	for ( QStringList::const_iterator ing_it = items.constBegin(); ing_it != items.constEnd(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
-			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::RegExp) ).ingredientID != -1 ) {
+			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).ingredientID != -1 ) {
 				it = allRecipes.remove( it );
 				it--;
 			}
