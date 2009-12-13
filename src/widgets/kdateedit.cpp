@@ -294,6 +294,7 @@ void KDateEdit::keyPressEvent(QKeyEvent* e)
           }
         }
       }
+      QComboBox::keyPressEvent( e );
 }
 
 bool KDateEdit::eventFilter( QObject *object, QEvent *event )

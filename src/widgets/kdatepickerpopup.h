@@ -21,9 +21,11 @@
 #ifndef KDEPIM_KDATEPICKERPOPUP_H
 #define KDEPIM_KDATEPICKERPOPUP_H
 
+//#include "kdepim_export.h"
 
+#include <QDateTime>
 #include <QMenu>
-#include <QDate>
+
 class KDatePicker;
 
 //namespace KPIM {
