@@ -30,7 +30,7 @@ class QLabel;
 class QCheckBox;
 class KComboBox;
 class QSpinBox;
-class Q3TimeEdit;
+class QDateTimeEdit;
 class KPushButton;
 class K3ListView;
 class QRadioButton;
@@ -99,7 +99,7 @@ protected:
 	QFrame* prepTimeFrame;
 	QCheckBox* enablePrepTimeCheckBox;
 	KComboBox* prepTimeComboBox;
-	Q3TimeEdit* prepTimeEdit;
+	QDateTimeEdit* prepTimeEdit;
 	KLineEdit* instructionsEdit;
 	KPushButton* instructionsButton;
 	QFrame* instructionsFrame;

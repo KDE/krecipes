@@ -17,7 +17,7 @@
 #include <q3header.h>
 #include <q3listview.h>
 #include <qspinbox.h>
-#include <q3datetimeedit.h>
+#include <QDateTimeEdit>
 #include <QScrollArea>
 #include <QSplitter>
 //Added by qt3to4:
@@ -355,9 +355,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	prepTimeComboBox->setEnabled( false );
 	layout6->addWidget( prepTimeComboBox );
 	
-	prepTimeEdit = new Q3TimeEdit( prepTimeFrame, "prepTimeEdit" );
+	prepTimeEdit = new QDateTimeEdit( prepTimeFrame );
+	prepTimeEdit->setObjectName( "prepTimeEdit" );
 	prepTimeEdit->setEnabled( false );
-	prepTimeEdit->setDisplay( int( Q3TimeEdit::Minutes | Q3TimeEdit::Hours ) );
+	prepTimeEdit->setDisplayFormat( "hh:mm" );
 	layout6->addWidget( prepTimeEdit );
 	prepTimeFrameLayout->addLayout( layout6 );
 	parametersFrameLayout->addWidget( prepTimeFrame );
