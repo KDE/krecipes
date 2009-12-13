@@ -750,11 +750,11 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 	if ( !p.prep_time.isNull() ) {
 		QString op;
 		switch ( p.prep_param ) {
-			case 0: op = "<= "+p.prep_time.toString( "'hh:mm:ss'" ); break;
+			case 0: op = "<= "+p.prep_time.toString( "''hh:mm:ss''" ); break;
 			case 1: //TODO: have a configurable 'about'.  It tests within 15 minutes for now.
 				QTime lower = p.prep_time; lower.addSecs( 60*15 );
 				QTime upper = p.prep_time; upper.addSecs( 60*-15 );
-				op = "BETWEEN "+lower.toString( "'hh:mm:ss'" )+" AND "+upper.toString( "'hh:mm:ss'" );
+				op = "BETWEEN "+lower.toString( "''hh:mm:ss''" )+" AND "+upper.toString( "''hh:mm:ss''" );
 				break;
 		}
 		conditionList << "r.prep_time "+op;
