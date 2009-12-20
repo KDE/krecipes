@@ -21,6 +21,8 @@
 #include <q3whatsthis.h>
 #include <KMessageBox>
 #include <QFile>
+#include <QSplitter>
+#include <QGroupBox>
 
 #include <k3listview.h>
 #include <klocale.h>
@@ -116,29 +118,27 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	infoLabel->setObjectName( "infoLabel" );
 	EditPropertiesDialogLayout->addWidget( infoLabel );
 
-	layout9 = new QHBoxLayout( );
-	layout9->setObjectName( "layout9" );
-	layout9->setMargin( 0 );
-	layout9->setSpacing( 6 );
+	splitter = new QSplitter( Qt::Vertical, page );
+	EditPropertiesDialogLayout->addWidget( splitter );
 
-	layout8 = new QVBoxLayout( );
-	layout8->setObjectName( "layout8" );
-	layout8->setMargin( 0 );
-	layout8->setSpacing( 6 );
+	KVBox* higherBox = new KVBox;
 
-	usdaListView = new KreListView( page, QString::null, page, 0 );
+	usdaListView = new KreListView( higherBox, QString::null, higherBox, 0 );
 	usdaListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 	usdaListView->listView()->addColumn( i18nc( "@title:column", "USDA Ingredient" ) );
 	usdaListView->listView()->addColumn( "Id" );
 	usdaListView->listView()->setAllColumnsShowFocus( true );
 	loadDataFromFile();
 
-	layout8->addWidget( usdaListView );
-	layout9->addLayout( layout8 );
-
-	loadButton = new QPushButton( page );
+	loadButton = new QPushButton( higherBox );
 	loadButton->setObjectName( "loadButton" );
-	layout9->addWidget( loadButton );
+	loadButton->setIcon( KIcon( "arrow-down" ) );
+
+	splitter->addWidget( higherBox );
+
+	KHBox* lowerBox = new KHBox;
+
+	propertiesBox = new QGroupBox( lowerBox );
 
 	layout7 = new QVBoxLayout();
 	layout7->setObjectName( "layout7" );
@@ -149,10 +149,6 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	layout3->setObjectName( "layout3" );
 	layout3->setMargin( 0 );
 	layout3->setSpacing( 6 );
-
-	propertyLabel = new QLabel( page );
-	propertyLabel->setObjectName( "propertyLabel" );
-	layout3->addWidget( propertyLabel );
 
 	propertyAddButton = new QPushButton( page );
 	propertyAddButton->setObjectName( "propertyAddButton" );
@@ -177,14 +173,19 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	propertyListView->addColumn( "Id" , show_id ? -1 : 0 );
 	layout7->addWidget( propertyListView );
 
+	propertiesBox->setLayout( layout7 );
+
+	weightsBox = new QGroupBox( lowerBox );
+
+	layout8 = new QVBoxLayout;
+	layout8->setObjectName( "layout8" );
+	layout8->setMargin( 0 );
+	layout8->setSpacing( 6 );
+
 	layout3_2 = new QHBoxLayout();
 	layout3_2->setObjectName( "layout3_2" );
 	layout3_2->setMargin( 0 );
 	layout3_2->setSpacing( 6 );
-
-	weightLabel = new QLabel( page );
-	weightLabel->setObjectName( "weightLabel" );
-	layout3_2->addWidget( weightLabel );
 
 	weightAddButton = new QPushButton( page );
 	weightAddButton->setObjectName( "weightAddButton" );
@@ -195,15 +196,17 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	weightRemoveButton->setObjectName( "weightRemoveButton" );
 	weightRemoveButton->setIcon( KIcon( "list-remove" ) );
 	layout3_2->addWidget( weightRemoveButton );
-	layout7->addLayout( layout3_2 );
+	layout8->addLayout( layout3_2 );
 
 	weightListView = new K3ListView( page );
 	weightListView->setObjectName( "weightListView" );
 	weightListView->addColumn( i18nc( "@title:column", "Weight" ) );
 	weightListView->addColumn( i18nc( "@title:column", "Per Amount" ) );
-	layout7->addWidget( weightListView );
-	layout9->addLayout( layout7 );
-	EditPropertiesDialogLayout->addLayout( layout9 );
+	layout8->addWidget( weightListView );
+
+	weightsBox->setLayout( layout8 );
+	
+	splitter->addWidget( lowerBox );
 	languageChange();
 	//adjustSize();
 	//KDE4 port
@@ -239,14 +242,14 @@ void EditPropertiesDialog::languageChange()
 	infoLabel->setText( i18nc( "@label", "Property Information for <b>%1</b>" , ingredientName) );
 	usdaListView->listView()->header()->setLabel( 0, i18nc( "@title:column", "USDA Ingredient" ) );
 	usdaListView->listView()->header()->setLabel( 1,  "Id" );
-	loadButton->setText( i18nc( "@action:button Load USDA property", "Load ->" ) );
-	propertyLabel->setText( i18nc( "@label", "Properties" ) );
+	loadButton->setText( i18nc( "@action:button Load USDA data", "Load" ) );
+	propertiesBox->setTitle( i18nc( "@title:group", "Properties" ) );
 	propertyAddButton->setText( i18nc( "@action:button", "Add" ) );
 	propertyRemoveButton->setText( i18nc( "@action:button", "Remove" ) );
 	propertyListView->header()->setLabel( 0, i18nc( "@title:column", "Property" ) );
 	propertyListView->header()->setLabel( 1, i18nc( "@title:column", "Amount" ) );
 	propertyListView->header()->setLabel( 2, i18nc( "@title:column", "Unit" ) );
-	weightLabel->setText( i18nc( "@label", "Weights" ) );
+	weightsBox->setTitle( i18nc( "@title:group", "Weights" ) );
 	weightAddButton->setText( i18nc( "@action:button", "Add" ) );
 	weightRemoveButton->setText( i18nc( "@action:button", "Remove" ) );
 	weightListView->header()->setLabel( 0, i18nc( "@title:column", "Weight" ) );

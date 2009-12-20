@@ -27,6 +27,8 @@ class QLabel;
 class K3ListView;
 class Q3ListViewItem;
 class QPushButton;
+class QSplitter;
+class QGroupBox;
 
 class RecipeDB;
 class KDoubleNumInput;
@@ -44,22 +46,22 @@ public:
 	QLabel* infoLabel;
 	KreListView* usdaListView;
 	QPushButton* loadButton;
-	QLabel* propertyLabel;
 	QPushButton* propertyAddButton;
 	QPushButton* propertyRemoveButton;
 	K3ListView* propertyListView;
-	QLabel* weightLabel;
 	QPushButton* weightAddButton;
 	QPushButton* weightRemoveButton;
 	K3ListView* weightListView;
 
 protected:
+	QSplitter* splitter;
 	QVBoxLayout* EditPropertiesDialogLayout;
-	QHBoxLayout* layout9;
 	QVBoxLayout* layout8;
 	QVBoxLayout* layout7;
 	QHBoxLayout* layout3;
 	QHBoxLayout* layout3_2;
+	QGroupBox* propertiesBox;
+	QGroupBox* weightsBox;
 
 protected slots:
 	virtual void languageChange();
