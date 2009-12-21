@@ -57,8 +57,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2009-10-26</date>
-<releaseinfo>2.0.alpha4</releaseinfo>
+<date>2009-12-22</date>
+<releaseinfo>2.0.alpha4+svn</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -126,8 +126,8 @@ components &mdash;
 
 <itemizedlist>
 <listitem><para>A menubar containing selections for <guimenu>File</guimenu>,
-<guimenu>Edit</guimenu>, <guimenu>Tools</guimenu>, <guimenu>Settings</guimenu>,
-and <guimenu>Help</guimenu></para></listitem>
+<guimenu>Edit</guimenu>, <guimenu>View</guimenu>, <guimenu>Tools</guimenu>,
+<guimenu>Settings</guimenu> and <guimenu>Help</guimenu></para></listitem>
 <listitem><para>A toolbar with icons for <guiicon>New</guiicon>,
 <guiicon>Save</guiicon>, and <guiicon>Print</guiicon></para></listitem>
 <listitem><para>A left-hand pane containing icons depicting
@@ -188,9 +188,8 @@ in the recipe view would show only those recipes that contain the text
 string and would be filtered more finely as each subsequent letter is
 typed.</para></note></listitem>
 <listitem><para>A list of all recipe categories</para></listitem>
-<listitem><para>Buttons for <guibutton>Open</guibutton>,
-<guibutton>Edit</guibutton> and <guibutton>Delete</guibutton> for performing
-the corresponding action on a recipe</para></listitem>
+<listitem><para>Buttons for show, edit and delete the selected recipes.</para>
+</listitem>
 </itemizedlist>
 
 <tip><para>You will notice the
@@ -206,10 +205,10 @@ on the <guibutton>+</guibutton> button beside the category name.  The category
 will automatically expand to show your recipes and/or subcategories, if there
 are any.  From this list, you may select a recipe to open, edit or delete (see
 the section <link linkend="edit-recipe">Editing Saved Recipes</link> for more
-information).  Additionally, if you <action>hover the mouse pointer</action>
-over any recipe title, a <interface>dialog box</interface> will appear showing
-the recipe title and the date that it was <emphasis>created</emphasis>,
-<emphasis>modified</emphasis> and <emphasis>last accessed</emphasis>.</para>
+information).  Additionally, if you <action>select just one recipe</action>, the
+<interface>status bar</interface> will show the date that it was <emphasis>
+created</emphasis>, <emphasis>modified</emphasis> and <emphasis>last accessed
+</emphasis>.</para>
 
 <para>Conversely, clicking the <guibutton>-</guibutton> button beside the
 category name will collapse the category.</para>
@@ -225,21 +224,12 @@ on a recipe in the Basic search pane will bring up a menu from which the
 following actions can be selected &mdash;</para>
 
 <itemizedlist>
-<listitem><para>Open &ndash; Opens the selected recipe.</para></listitem>
-<listitem><para>Edit &ndash; Opens the selected recipe for
+<listitem><para>Show recipe(s) &ndash; Shows the selected recipes.</para></listitem>
+<listitem><para>Edit recipe &ndash; Opens the selected recipe for
 editing.</para></listitem>
-<listitem><para>Export &ndash; Exports the selected recipe.  See the section
+<listitem><para>Export... &ndash; Exports the selected recipe.  See the section
 <link linkend="export-recipe">Exporting Recipes to Other Formats</link>
 for a complete description of this function.</para></listitem>
-<listitem><para>Remove From Category &ndash; Removes the recipe
-from its current category. If the recipe is not included in any
-other category, places it in the <emphasis>Uncategorized</emphasis>
-group.	From the <emphasis>Uncategorized</emphasis> group, the recipe
-can be selected for editing to re-categorize it.  See the section
-<link linkend="edit-recipe">Editing Saved Recipes</link> for more
-information.</para></listitem>
-<listitem><para>Delete &ndash; Deletes the recipe from the
-database.</para></listitem>
 <listitem><para>Add to Shopping List &ndash; Adds the selected recipe to
 your shopping list.  See the section <link linkend="shopping-list">The
 Shopping List</link> for information regarding the use of the Shopping
@@ -250,17 +240,24 @@ application for example, an email.  The format of the copy is dependent
 on what is selected as a preference.  For a complete description of the
 <quote>Copy to Clipboard</quote> functionality, see the section <link
 linkend="copy-clipboard">Copying to the Clipboard</link>.</para></listitem>
-<listitem><para>Categorize &ndash; Allows you to select one or more recipes
-that appear in the <emphasis>Uncategorized</emphasis> group and place them
-in the appropriate category by selecting the it from a pop-up instead of
-having to edit the recipe(s).</para>
-<note><para>This option applies only when there are recipes listed as
-<emphasis>Uncategorized</emphasis>.  If multiple recipes are selected for
-categorizing, they must be of the same category.  To select non-adjacent
-recipes for categorizing, hold the &Ctrl; key and select the desired recipes
-by clicking on them.</para></note></listitem>
+<listitem><para>Categorize &ndash; This option applies only when there are
+recipes listed as <emphasis>Uncategorized</emphasis>. Allows you to select one
+or more recipes that appear in the <emphasis>Uncategorized</emphasis> group and
+place them in the appropriate category by selecting the it from a pop-up
+instead of having to edit the recipe(s).</para> </listitem>
+<listitem><para>Remove From Category &ndash; Removes the recipe
+from its current category. If the recipe is not included in any
+other category, places it in the <emphasis>Uncategorized</emphasis>
+group.	From the <emphasis>Uncategorized</emphasis> group, the recipe
+can be selected for editing to re-categorize it.  See the section
+<link linkend="edit-recipe">Editing Saved Recipes</link> for more
+information.</para></listitem>
+<listitem><para>Delete &ndash; Deletes the selected recipes from the
+database.</para></listitem>
 </itemizedlist>
-
+<note><para> Some of the actions explained above may be applied to multiple
+recipes. You can select various recipes thusly: hold the &Ctrl; key and select
+the desired recipes by clicking on them.</para></note>
 </sect2>
 
 <sect2 id="advanced-tab">
@@ -305,7 +302,7 @@ Advanced Search tab.</screeninfo>
 	    <phrase>Screenshot</phrase>
 	  </textobject>
 	  <caption><para>The <emphasis>&krecipes;</emphasis> Advanced Search
-	  Components</para></caption>
+	  Component</para></caption>
 	</mediaobject>
 </screenshot>
 </para>
@@ -427,7 +424,7 @@ NOT</emphasis> be from the categories listed.</para></listitem>
 search is most useful when combined with other search parameters.</para>
 
 <para>In the following screenshot, it is being specified that recipes should
-be searched for in the <emphasis>Chicken</emphasis> and <emphasis>Main
+be searched for in the <emphasis>Desserts</emphasis> and <emphasis>Main
 Dishes</emphasis> categories.</para>
 
 <para>
@@ -447,9 +444,9 @@ a category only.</screeninfo>
 </screenshot>
 </para>
 
-<para>In this screenshot, recipes are still being searched for in the
-<emphasis>Chicken</emphasis> and <emphasis>Main Dishes</emphasis> categories.
-However, recipes that contain some form of the word <quote>tomato</quote>
+<para>In the next screenshot, recipes are still being searched for in the
+<emphasis>Desserts</emphasis> and <emphasis>Main Dishes</emphasis> categories.
+However, recipes that contain some form of the word <quote>apple</quote>
 (note the use of the wildcard) are being excluded.</para>
 
 <para>
@@ -585,7 +582,6 @@ the time needed to prepare the recipe.	The recipe(s) that are returned
 in the search can be ready in <emphasis>SLIGHTLY MORE</emphasis>,
 <emphasis>EXACTLY</emphasis>, or <emphasis>SLIGHTLY LESS</emphasis> than
 the time specified for preparation.</para></listitem>
-
 </itemizedlist>
 
 <para>After defining the type of search that is desired, the spinbox
@@ -649,11 +645,11 @@ date may be entered as an exact date if this is known or desired, or as
 a <quote>date range</quote>.  Dates are interpreted in the format that has
 been set within the &kde; environment.	For example, if the date format has
 been set to display as DD-MM-YYYY, you may enter the date directly into the
-text box in the format of "DD-MM-YY".  When entering the date, the two initial
-digits of the year may be entered, but are not absolutely necessary.  However,
-it is imperative that you use the exact separator <abbrev>i.e.</abbrev>
-the dash (&ndash;), in the example, as set in the date format in &kde;.
-You may also use the drop-down arrow beside the box in which you want to
+text box in the format of "DD-MM-YYYY".  When entering the date, the two
+initial digits of the year may be entered, but are not absolutely necessary.
+However, it is imperative that you use the exact separator <abbrev>i.e.
+</abbrev> the dash (&ndash;), in the example, as set in the date format in
+&kde;. You may also use the drop-down arrow beside the box in which you want to
 enter the date to reveal a calendar.</para>
 
 <caution><para>If you choose to enter the date directly into the text box
@@ -688,17 +684,17 @@ or select another date from the week and the date will be transferred to the
 <para>Below the text box that is displaying the date at the beginning of the
 chosen week of the year (or the current week if no choice has been made),
 there is a list of additional choices for date selection.  Specifically, these
-are: &ndash; <emphasis>Today</emphasis>, <emphasis>Yesterday</emphasis>,
-<emphasis>Last Week</emphasis>, and <emphasis>Last Month</emphasis>.
+are: &ndash; <emphasis>Today</emphasis>, <emphasis>Tomorrow</emphasis>,
+<emphasis>Next Week</emphasis>, and <emphasis>Next Month</emphasis>.
 Clicking on one of these selections, will result in this date being shown in
 the <emphasis>Meta Data</emphasis> text box being used. It should be noted
 here that each of the choices is relevant to today's date.  For instance,
 if today's date is the 15th, clicking the <guibutton>Today</guibutton> would
 place today's date in the <emphasis>Meta Data</emphasis> text box being used.
-Clicking <guibutton>Yesterday</guibutton> would, of course, place yesterday's
-date in the box.  <guibutton>Last Week</guibutton> would place the date
-that is one week ago today in the box.	<guibutton>Last Month</guibutton>
-would place last month's date that corresponds to today's date in the box,
+Clicking <guibutton>Tomorrow</guibutton> would, of course, place tomorrow's
+date in the box.  <guibutton>Next Week</guibutton> would place the date
+that is one week forward today in the box. <guibutton>Next Month</guibutton>
+would place next month's date that corresponds to today's date in the box,
 in the example from above, the 15th of the previous month.</para>
 
 <para>Additionally, the calendar itself can be utilized to navigate to
@@ -798,14 +794,20 @@ that have an assigned star rating in a range of &#177;&#189; of the value
 entered, 3&#189; to 4&#189; stars in the example.</para>
 
 <para>Once you have chosen the parameters by which you want to search,
-click the <guibutton>+</guibutton> beside the text box in which you
-entered the number of stars to have the criteria added to the list.
-More than one criteria may be utilized in the search.	 Once you have
-entered your search parameters, click the <guibutton>Search</guibutton>
-button and the recipes that meet the search criteria will display under
-the <emphasis><guilabel>Title</guilabel></emphasis> label on the right.
-Should no recipes meet the criteria, <emphasis>--- No matching recipes found
----</emphasis> will display.</para>
+click the <guiicon><inlinemediaobject><imageobject><imagedata
+fileref="list-add.png" format="PNG"/></imageobject></inlinemediaobject>
+</guiicon> beside the text box in which you entered the number of stars to have
+the criteria added to the list. More than one criteria may be utilized in the
+search. Once you have entered your search parameters, click the <guibutton>
+Search</guibutton> button and the recipes that meet the search criteria will
+display under the <emphasis><guilabel>Title</guilabel></emphasis> label on the
+right. Should no recipes meet the criteria, <emphasis>--- No matching recipes
+found ---</emphasis> will display.</para>
+
+<note><para>For english language, the decimal separator is <quote>.</quote>
+(period), however if you have configured &kde; for other language, the decimal
+separator may be different. Note that if you are typing an invalid number the
+text becomes red to warn you.</para></note>
 </sect4>
 
 </sect3>
@@ -909,13 +911,15 @@ prompt <quote>Write the recipe title here</quote>.</para>
 <sect3 id="recipe-author">
 <title>Adding the Recipe Author/Contributor</title>
 
-<para>To enter an author for the recipe, click on the <guibutton>+</guibutton>
-that appears to the right of the <quote>Authors</quote> box.</para>
+<para>To enter an author for the recipe, click on the <guiicon>
+<inlinemediaobject><imageobject><imagedata fileref="list-add.png"
+format="PNG"/></imageobject></inlinemediaobject></guiicon> that appears to
+the right of the <quote>Authors</quote> box.</para>
 
 <para>A window will appear where the author or contributor of the
 recipe can be selected from the drop-down menu.  Once selected,
 transfer the name to the list box below by clicking on the
-<guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png"
+<guiicon><inlinemediaobject><imageobject><imagedata fileref="list-add.png"
 format="PNG"/></imageobject></inlinemediaobject></guiicon> button that
 appears to the right of the drop-down menu.</para>
 
@@ -927,7 +931,7 @@ to transfer the author's name to the list box, as described above.</para>
 
 <para>However, in the situation where the author does not exist in
 your list, no choices will be listed as you type and when you click the
-<guiicon><inlinemediaobject><imageobject><imagedata fileref="go-down.png"
+<guiicon><inlinemediaobject><imageobject><imagedata fileref="list-add.png"
 format="PNG"/></imageobject></inlinemediaobject></guiicon> button to transfer
 the author to the listbox, the author will automatically be added to your
 list of authors as well.  Also see <link linkend="authors-component">The
@@ -936,7 +940,7 @@ list.</para></listitem>
 
 <listitem><para>An author may also be removed from the list by
 clicking the <guiicon><inlinemediaobject><imageobject><imagedata
-fileref="up.png" format="PNG"/></imageobject></inlinemediaobject></guiicon>
+fileref="list-remove.png" format="PNG"/></imageobject></inlinemediaobject></guiicon>
 button.</para></listitem>
 </itemizedlist>
 </tip>
@@ -953,7 +957,9 @@ close and the name of the selected author will appear under the heading.</para>
 <title>Selecting the Recipe Category</title>
 
 <para>Next, the recipe category is selected by clicking on the
-<guibutton>+</guibutton> beside the category box.</para>
+<guiicon><inlinemediaobject><imageobject><imagedata fileref="list-add.png"
+format="PNG"/></imageobject></inlinemediaobject></guiicon> beside the category
+box.</para>
 
 <para>To select a category, click on the check box beside the category name
 and click the <guibutton>OK</guibutton> button to accept the selection or,
@@ -1230,11 +1236,13 @@ format="PNG"/></imageobject></inlinemediaobject></para>
 or <emphasis>nutrient</emphasis> information being incomplete: &mdash;</para>
 
 <para><orderedlist>
-<listitem><para>An ingredient weight has not been provided.</para>
-<para>Ingredient weights are set in the <emphasis>Ingredients</emphasis>
-component.  See <link linkend="ingredients-component">The Ingredients
-Component</link> for instructions on all aspects of setting ingredient
-details.</para>
+<listitem><para>An ingredient weight or nutrient information has not been
+provided.</para>
+<para>Ingredient weights and nutrient information are set in the <emphasis>
+Ingredients</emphasis> component. Note that you can also click the links to show
+a dialog to input the property information for the corresponding ingredient. See
+<link linkend="ingredients-component">The Ingredients Component</link> for
+instructions on all aspects of setting ingredient details.</para>
 
 <para>or,</para></listitem>
 
