@@ -207,6 +207,8 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	weightsBox->setLayout( layout8 );
 	
 	splitter->addWidget( lowerBox );
+	splitter->setCollapsible( 1, false );
+
 	languageChange();
 	//adjustSize();
 	//KDE4 port

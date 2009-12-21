@@ -562,6 +562,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	resultsListView->setObjectName( "resultsListView" );
 	resultsListView->setSelectionMode( Q3ListView::Extended );
 	splitter->addWidget( resultsListView );
+	splitter->setChildrenCollapsible( false );
 	AdvancedSearchDialogLayout->addWidget( splitter );
 	languageChange();
 	//KDE4 port
