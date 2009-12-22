@@ -247,6 +247,8 @@ void IngredientMatcherDialog::unselectIngredients()
 	ingListView->listView()->clear();
 	for ( Q3ListViewItem *it = allIngListView->listView()->firstChild(); it; it = it->nextSibling() )
 		allIngListView->listView()->setSelected(it,false);
+	m_ingredientList.clear();
+	m_item_ing_map.clear();
 }
 
 void IngredientMatcherDialog::findRecipes( void )
