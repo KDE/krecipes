@@ -112,7 +112,8 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	// Create Tabs
 	//don't use newTab, it'll load data and we don't want it to do that at startup
 	mealTab = new MealInput( mealTabs, database );
-	mealTabs->addTab( mealTab,i18nc( "@title:tab", "Meal 1" ) );
+	// keep this string the same as when creating the other tabs to ease translation
+	mealTabs->addTab( mealTab, i18ncp( "@title:tab" , "Meal 1" , "Meal %1" , 1 ) );
 	mealTabs->setCurrentIndex( mealTabs->indexOf( mealTab ) );
 
 	// Signals & Slots
@@ -166,7 +167,7 @@ void DietWizardDialog::changeMealNumber( int mn )
 
 		while ( mealNumber != mn ) {
 			mealNumber++;
-			newTab( i18nc( "@title:tab", "Meal %1" , mealNumber ) );
+			newTab( i18ncp( "@title:tab" , "Meal 1" , "Meal %1" , mealNumber ) );
 
 		}
 	}
