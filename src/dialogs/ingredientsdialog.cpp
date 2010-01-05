@@ -71,20 +71,16 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	QVBoxLayout *buttonLayout = new QVBoxLayout();
 
 	addIngredientButton = new KPushButton( ingredientTab );
+	addIngredientButton->setText( i18nc( "@action:button", "Create..." ) );
 	addIngredientButton->setIcon( KIcon( "list-add") );
-	addIngredientButton->setMinimumSize( QSize( 30, 30 ) );
-	addIngredientButton->setMaximumSize( QSize( 30, 30 ) );
-	addIngredientButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	buttonLayout->addWidget( addIngredientButton );
 
 	QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Maximum );
 	buttonLayout->addItem( spacer_Ing_Buttons );
 
 	removeIngredientButton = new KPushButton( ingredientTab );
+	removeIngredientButton->setText( i18nc( "@action:button", "Delete" ) );
 	removeIngredientButton->setIcon( KIcon( "list-remove" ) );
-	removeIngredientButton->setMinimumSize( QSize( 30, 30 ) );
-	removeIngredientButton->setMaximumSize( QSize( 30, 30 ) );
-	removeIngredientButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	buttonLayout->addWidget( removeIngredientButton );
 	
 	layout->addItem( buttonLayout, 1, 3 );
