@@ -1167,6 +1167,11 @@ void RecipeInputDialog::newRecipe( void )
 	propertyStatusMapRed.clear();
 	propertyStatusMapYellow.clear();
 	showStatusIndicator();
+
+	// Enable Save Button
+	emit enableSaveOption( true );
+	emit createButton( this, titleEdit->text() );
+	unsavedChanges = true;
 }
 
 bool RecipeInputDialog::everythingSaved()

@@ -60,6 +60,7 @@ Changes from 2.0-alpha4 to svn:
       database; this message is not true because what the program will do is
       deleting the header in the recipe, i.e. recipes will be modified but not
       deleted.
+    + The save button is always enabled when you create a new recipe.
 
 Changes from 2.0-alpha3 to 2.0-alpha4:
   * Fixed issues reported by Sanitizer in the user manual. Note that the user
