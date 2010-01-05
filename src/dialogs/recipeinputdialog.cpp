@@ -105,8 +105,8 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 			sourcePhoto = pm_scaled; // to save scaled later on
 		}
 		else {
-			setPixmap( QPixmap::fromImage( image ) );
 			sourcePhoto = QPixmap::fromImage( image );
+			setPixmap( sourcePhoto );
 		}
 
 		emit changed();
