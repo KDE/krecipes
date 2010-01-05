@@ -266,8 +266,6 @@ void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 	if ( parent_id == -1 ) {
 		if ( !m_uncat_item && curr_offset == 0 ) {
 			m_uncat_item = new UncategorizedItem(this);
-			if ( childCount() == 1 ) 		//only call createElement if this is the only item in the list
-				createElement(m_uncat_item);	//otherwise, this item won't stay at the top
 		}
 
 		if ( m_uncat_item )
