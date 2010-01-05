@@ -50,8 +50,6 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	//Design the dialog
 
 	QVBoxLayout *dialogLayout = new QVBoxLayout( this );
-	dialogLayout->setMargin( 11 );
-	dialogLayout->setSpacing( 6 );
 
 	// Ingredient list
 	QHBoxLayout *layout2 = new QHBoxLayout();

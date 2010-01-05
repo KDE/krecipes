@@ -28,7 +28,7 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	setObjectName( name );
 	QHBoxLayout* layout = new QHBoxLayout;
 
-	headerListView = new KreListView ( this, i18nc( "@title", "Header list" ), true, 0 );
+	headerListView = new KreListView ( this, QString::null, true, 0 );
 	StdHeaderListView *list_view = new StdHeaderListView( headerListView, database, true );
 	headerActionsHandler = new HeaderActionsHandler( list_view, database );
 	headerListView->setListView( list_view );
@@ -41,16 +41,12 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	addHeaderButton->setIcon( KIcon( "list-add" ) );
 	buttonLayout->addWidget(addHeaderButton);
 
-	QSpacerItem* spacer_buttons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Fixed );
-	buttonLayout->addItem( spacer_buttons );
-
 	KPushButton *removeHeaderButton = new KPushButton( this );
 	removeHeaderButton->setText( i18nc( "@action:button", "Delete" ) );
 	removeHeaderButton->setIcon( KIcon ( "list-remove" ) );
 	buttonLayout->addWidget(removeHeaderButton);
 
-	QSpacerItem* spacer_below_buttons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding );
-	buttonLayout->addItem( spacer_below_buttons );
+	buttonLayout->addStretch();
 
 	layout->addLayout(buttonLayout);
 	setLayout( layout );

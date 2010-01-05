@@ -66,8 +66,6 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	// Design dialog
 	layout = new QGridLayout( this );
 	layout->cellRect( 2, 2 );
-	layout->setMargin( KDialog::marginHint() );
-	layout->setSpacing( KDialog::spacingHint() );
 
 	recipeListView = new KreListView ( this, i18nc( "@title", "Full recipe list" ), true, 1 );
 	layout->addWidget( recipeListView, 0, 0 );

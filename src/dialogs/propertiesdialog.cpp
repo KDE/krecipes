@@ -34,8 +34,6 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 	// Design dialog
 
 	QHBoxLayout* layout = new QHBoxLayout( this );
-	layout->setMargin( KDialog::marginHint() );
-	layout->setSpacing( KDialog::spacingHint() );
 
 	propertyListView = new CheckPropertyListView( this, database, true );
 	propertyActionsHandler = new PropertyActionsHandler( propertyListView, database );

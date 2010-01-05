@@ -31,8 +31,6 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	database = db;
 
 	QHBoxLayout* layout = new QHBoxLayout( this );
-	layout->setMargin( KDialog::marginHint() );
-	layout->setSpacing( KDialog::spacingHint() );
 
 	//Category List
 	categoryListView = new StdCategoryListView( this, database, true );

@@ -16,8 +16,6 @@
 #include <qwidget.h>
 #include <QLabel>
 #include <q3intdict.h>
-//Added by qt3to4:
-#include <QGridLayout>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -36,6 +34,7 @@ class KPushButton;
 class KTabWidget;
 class KAction;
 class QShowEvent;
+class QVBoxLayout;
 
 class RecipeDB;
 class Recipe;
@@ -85,7 +84,7 @@ public:
 private:
 
 	// Widgets
-	QGridLayout *layout;
+	QVBoxLayout *layout;
 	KTabWidget *tabWidget;
 	BasicSearchTab *basicSearchTab;
 	KHBox *searchBar;

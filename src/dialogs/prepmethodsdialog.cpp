@@ -30,8 +30,6 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	database = db;
 
 	QHBoxLayout* layout = new QHBoxLayout( this );
-	layout->setSpacing( KDialog::spacingHint() );
-	layout->setMargin( KDialog::marginHint() );
 
 	//PrepMethod List
 	prepMethodListView = new StdPrepMethodListView( this, database, true );

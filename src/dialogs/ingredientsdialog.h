@@ -13,7 +13,6 @@
 #define INGREDIENTSDIALOG_H
 
 #include <qwidget.h>
-#include <QGridLayout>
 #include <kvbox.h>
 
 #include "widgets/krelistview.h"
@@ -26,6 +25,8 @@ class ActionsHandlerBase;
 class IngredientActionsHandler;
 class KTabWidget;
 class KAction;
+class QHBoxLayout;
+class QVBoxLayout;
 
 class IngredientsDialog: public QWidget
 {
@@ -43,7 +44,8 @@ private slots:
 
 private:
 	// Widgets
-	QGridLayout* layout;
+	QHBoxLayout* layout;
+	QVBoxLayout* listLayout;
 	KPushButton* addIngredientButton;
 	KPushButton* removeIngredientButton;
 	KreListView* ingredientListView;

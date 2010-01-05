@@ -69,48 +69,31 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 	//Design dialog
 
-	layout = new QGridLayout;
+	layout = new QVBoxLayout;
 	basicSearchTab->setLayout( layout );
-	layout->cellRect( 1, 1 );
-	layout->setMargin( 0 );
-	layout->setSpacing( 0 );
-
-	// Border Spacers
-	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_left, 1, 0, 4, 0, 0 );
-	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_top, 0, 1, 1, 4, 0 );
 
 	searchBar = new KHBox( basicSearchTab );
-	searchBar->setSpacing( 7 );
-	layout->addWidget( searchBar, 1, 1 );
+	layout->addWidget( searchBar );
 
 
 	searchLabel = new QLabel( searchBar );
 	searchLabel->setText( i18nc( "@label:textbox Search recipes", "Search:" ) );
-	searchLabel->setFixedWidth( searchLabel->fontMetrics().width( i18nc( "@label:textbox Search recipes", "Search:" ) ) + 5 );
 	searchBox = new KLineEdit( searchBar );
 	searchBox->setClearButtonShown( true );
 	connect( searchBox, SIGNAL(clearButtonClicked() ),this,SLOT( clearSearch() ) );
 
-	QSpacerItem* searchSpacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( searchSpacer, 1, 2 );
-
 	#ifdef ENABLE_SLOW
 	categoryBox = new CategoryComboBox( basicSearchTab, database );
-	layout->addWidget( categoryBox, 1, 3 );
+	layout->addWidget( categoryBox );
 	#endif
-
-	QSpacerItem* spacerFromSearchBar = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerFromSearchBar, 2, 1 );
 
 	recipeListView = new RecipeListView( basicSearchTab, database );
 	recipeListView->reload();
 	recipeListView->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding );
-	layout->addWidget( recipeListView, 3, 1, 1, 3, 0 );
+	layout->addWidget( recipeListView );
 
 	buttonBar = new KHBox( basicSearchTab );
-	layout->addWidget( buttonBar, 4, 1, 1, 3, 0 );
+	layout->addWidget( buttonBar );
 
 	openButton = new KPushButton( buttonBar );
 	openButton->setText( i18nc( "@action:button", "Show Recipe(s)" ) );

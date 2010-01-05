@@ -48,7 +48,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	if ( filter ) {
 		filterBox = new KHBox( header );
 		//filterBox->setFrameShape( QFrame::Box );
-		filterBox->setMargin( 2 );
+		//filterBox->setMargin( 2 );
 
 		filterLabel = new QLabel( filterBox );
 		filterLabel->setText( " " + i18nc( "@label:textbox Search recipes", "Search:" ) );
@@ -60,7 +60,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	list = new K3ListView( this );
 	list->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
-	setSpacing( 10 );
+	//setSpacing( 10 );
 
 	// If the user provides a widget, embed it into the header
 	if ( embeddedWidget ){

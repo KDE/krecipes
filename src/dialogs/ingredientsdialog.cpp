@@ -42,31 +42,21 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	// Design dialog
 
 	QHBoxLayout* page_layout = new QHBoxLayout( this );
-	page_layout->setMargin( KDialog::marginHint() );
-	page_layout->setSpacing( KDialog::spacingHint() );
 
 	tabWidget = new KTabWidget( this );
 
 	ingredientTab = new QWidget( tabWidget );
 
-	layout = new QGridLayout( ingredientTab );
-	layout->cellRect( 1, 1 );
-	layout->setSpacing( 0 );
+	layout = new QHBoxLayout( ingredientTab );
 
-	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_left, 1, 0 );
-	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacer_top, 0, 1 );
+	listLayout = new QVBoxLayout;
 
-	ingredientListView = new KreListView ( ingredientTab, i18nc( "@title", "Ingredient list" ), true, 0 );
+	ingredientListView = new KreListView ( ingredientTab, QString::null, true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	ingredientActionsHandler = new IngredientActionsHandler( list_view, database );
 	ingredientListView->setListView( list_view );
-	layout->addWidget ( ingredientListView, 1, 1, 5, 1, 0 );
+	listLayout->addWidget( ingredientListView );
 	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-
-	QSpacerItem* spacer_rightIngredients = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacer_rightIngredients, 1, 2 );
 
 	QVBoxLayout *buttonLayout = new QVBoxLayout();
 
@@ -75,19 +65,19 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	addIngredientButton->setIcon( KIcon( "list-add") );
 	buttonLayout->addWidget( addIngredientButton );
 
-	QSpacerItem* spacer_Ing_Buttons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Maximum );
-	buttonLayout->addItem( spacer_Ing_Buttons );
-
 	removeIngredientButton = new KPushButton( ingredientTab );
 	removeIngredientButton->setText( i18nc( "@action:button", "Delete" ) );
 	removeIngredientButton->setIcon( KIcon( "list-remove" ) );
 	buttonLayout->addWidget( removeIngredientButton );
-	
-	layout->addItem( buttonLayout, 1, 3 );
 
+	buttonLayout->addStretch();
+	
 	QPushButton *propertyButton = new KPushButton( i18nc("@action:button", "Property Information"), ingredientTab );
 	propertyButton->setIcon( KIcon( "document-properties") );
-	layout->addWidget( propertyButton, 6, 1 );
+	listLayout->addWidget( propertyButton );
+
+	layout->addLayout( listLayout );
+	layout->addLayout( buttonLayout );
 
 	tabWidget->insertTab( -1, ingredientTab, i18nc( "@title:tab", "Ingredients" ) );
 

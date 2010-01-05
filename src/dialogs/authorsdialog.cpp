@@ -31,8 +31,6 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 	// Store pointer to database
 	database = db;
 	QHBoxLayout* layout = new QHBoxLayout( this );
-	layout->setMargin( KDialog::marginHint() );
-	layout->setSpacing( KDialog::spacingHint() );
 
 	//Author List
 	authorListView = new StdAuthorListView( this, database, true );
