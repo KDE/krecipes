@@ -35,8 +35,6 @@ protected slots:
 
 	void checkCreateHeader( const Element &el );
 
-protected:
-	virtual void init();
 };
 
 class StdHeaderListView : public HeaderListView

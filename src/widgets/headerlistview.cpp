@@ -26,10 +26,6 @@ HeaderListView::HeaderListView( QWidget *parent, RecipeDB *db ) : DBListViewBase
 {
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( Q3ListView::Reject );
-}
-
-void HeaderListView::init()
-{
 	connect( database, SIGNAL( ingGroupCreated( const Element & ) ), SLOT( checkCreateHeader( const Element & ) ) );
 	connect( database, SIGNAL( ingGroupRemoved( int ) ), SLOT( removeHeader( int ) ) );
 }
