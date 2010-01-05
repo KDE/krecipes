@@ -95,9 +95,11 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 	QImage image;
 
 	if ( event->mimeData()->hasImage() ) {
+		image = qvariant_cast<QImage>(event->mimeData()->imageData());
 		if ( ( image.width() > width() || image.height() > height() ) || ( image.width() < width() && image.height() < height() ) ) {
 			QPixmap pm_scaled;
-			pm_scaled.fromImage( image.scaled( QSize( width(), height()), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+			pm_scaled = pm_scaled.fromImage( image.scaled( QSize( width(), height()),
+				Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 			setPixmap( pm_scaled );
 
 			sourcePhoto = pm_scaled; // to save scaled later on
