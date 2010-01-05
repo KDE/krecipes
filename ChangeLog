@@ -5,6 +5,9 @@ Changes from 2.0-alpha4 to svn:
     very much faster when compiling the test programs.
   * Added KUIT and context stuff to a huge number of i18n strings. Thanks to
     Mike Ferguson who did most of this work.
+  * When you try to load USDA property information in the EditPropertiesDialog
+    the program warns you if you didn't select one ingredient in the USDA
+    ingredient list.
   * Fixes for bugs:
     + Don't crash when closing the "Page Setup" and "Print Setup" dialogs.
     + Uncategorized recipes are displayed when using MySQL 4, this fixes

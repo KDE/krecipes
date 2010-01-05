@@ -636,5 +636,10 @@ void EditPropertiesDialog::loadUSDAData()
 			}
 		}
 	}
+	else {
+		KMessageBox::sorry( this, i18nc( "@info",
+		"Please select an ingredient in the USDA ingredient list" ) );
+	}
+
 	updateLists();
 }
