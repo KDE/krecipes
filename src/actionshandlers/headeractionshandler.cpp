@@ -66,8 +66,7 @@ void HeaderActionsHandler::remove()
 			list.list = dependingRecipes;
 			list.name = i18n( "Recipes" );
 
-			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( parentListView, list );
-			warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( parentListView, list, false );
 			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeIngredientGroup( id );
 			delete warnDialog;
