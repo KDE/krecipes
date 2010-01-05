@@ -1,5 +1,6 @@
 /***************************************************************************
 *   Copyright © 2005 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2010 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -12,9 +13,8 @@
 
 #include <kcombobox.h>
 
-#include "datablocks/element.h"
-
 class RecipeDB;
+class Element;
 
 class HeaderComboBox : public KComboBox
 {
@@ -25,7 +25,13 @@ public:
 
 	void reload();
 
-private:
+private slots:
+	void createHeader( const Element & element);
+	void removeHeader( int id );
+
+private:	
+	int findInsertionPoint( const QString &name );
+
 	RecipeDB *database;
 };
 
