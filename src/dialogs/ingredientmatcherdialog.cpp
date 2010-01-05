@@ -64,23 +64,21 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	layout2->addWidget( allIngListView );
 
 	QVBoxLayout *layout1 = new QVBoxLayout();
-	layout1->setMargin( 0 );
-	layout1->setSpacing( 6 );
+	layout1->addStretch();
 	layout1->setObjectName( "layout1" );
 
 	addButton = new KPushButton( this );
 	addButton->setObjectName( "addButton" );
-	addButton->setIcon( KIcon( "go-next" ) );
+	addButton->setIcon( KIcon( "arrow-right" ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new KPushButton( this );
 	removeButton->setObjectName( "removeButton" );
-	removeButton->setIcon( KIcon( "go-previous" ) );
+	removeButton->setIcon( KIcon( "arrow-left" ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
-	QSpacerItem *spacer1 = new QSpacerItem( 32, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	layout1->addItem( spacer1 );
+	layout1->addStretch();
 	layout2->addLayout( layout1 );
 
 	ingListView = new KreListView( this, QString::null, true );

@@ -82,20 +82,19 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	recipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
-	vboxl->setSpacing( KDialog::spacingHint() );
+	vboxl->addStretch();
 	addRecipeButton = new KPushButton( this );
-	addRecipeButton->setIcon( KIcon( "go-next" ) );
+	addRecipeButton->setIcon( KIcon( "arrow-left" ) );
 	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
 	vboxl->addWidget( addRecipeButton );
 
 	removeRecipeButton = new KPushButton( this );
-	removeRecipeButton->setIcon( KIcon( "go-previous" ) );
-	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
+	removeRecipeButton->setIcon( KIcon( "arrow-left" ) );
 	removeRecipeButton->setFixedSize( QSize( 32, 32 ) );
 	vboxl->addWidget( removeRecipeButton );
 	vboxl->addStretch();
 
-	layout->addItem( vboxl, 0, 1 );
+	layout->addLayout( vboxl, 0, 1 );
 
 	shopRecipeListView = new KreListView ( this, i18nc("@title", "Shopping List") );
 	ShoppingListView *slistview = new ShoppingListView( shopRecipeListView );
