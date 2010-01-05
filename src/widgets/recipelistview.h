@@ -140,7 +140,6 @@ protected slots:
 	virtual void removeRecipe( int, int );
 
 protected:
-	virtual void init();
 	virtual void createElement( Q3ListViewItem * );
 	virtual void removeCategory( int id );
 	virtual Q3DragObject *dragObject();
