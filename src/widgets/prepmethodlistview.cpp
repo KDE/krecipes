@@ -24,10 +24,6 @@ PrepMethodListView::PrepMethodListView( QWidget *parent, RecipeDB *db ) : DBList
 {
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( Q3ListView::Reject );
-}
-
-void PrepMethodListView::init()
-{
 	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( checkCreatePrepMethod( const Element & ) ) );
 	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
 }

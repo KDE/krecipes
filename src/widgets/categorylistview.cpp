@@ -150,10 +150,7 @@ CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListView
 	setRootIsDecorated( true );
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( Q3ListView::Reject );
-}
 
-void CategoryListView::init()
-{
 	connect( database, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( checkCreateCategory( const Element &, int ) ) );
 	connect( database, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
 	connect( database, SIGNAL( categoryModified( const Element & ) ), SLOT( modifyCategory( const Element & ) ) );

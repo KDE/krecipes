@@ -160,8 +160,6 @@ void DBListViewBase::reload( ReloadFlags flag )
 	if ( flag == ForceReload || (!firstChild() && flag == Load) || (firstChild() && flag == ReloadIfPopulated) ) {
 		KApplication::setOverrideCursor( Qt::WaitCursor );
 
-		init();
-
 		//m_progress = new KProgressDialog(this,0,QString::null,i18n("Loading..."),true);
 		//m_progress->setAllowCancel(false);
 		//m_progress->progressBar()->setPercentageVisible(false);

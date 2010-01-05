@@ -38,9 +38,6 @@ protected slots:
 	virtual void removeUnit( int ) = 0;
 
 	void checkCreateUnit( const Unit &el );
-
-protected:
-	virtual void init();
 };
 
 class StdUnitListView : public UnitListView

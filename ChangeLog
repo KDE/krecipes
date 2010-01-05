@@ -47,6 +47,11 @@ Changes from 2.0-alpha4 to svn:
       perform the search; in previous releases if you push the clear button the
       ingredients in the list placed on the right side would count for future
       searches.
+    + If you set in Settings -> Configure Krecipes -> Performance something
+      different to "Unlimited", you may see the special items "Next" and
+      "Previous" in lists. Due to some wrong connect(...) calls in previous
+      releases if you push some of this special buttons and you create a new
+      element in the list, you will see the new element repeated various times.
 
 Changes from 2.0-alpha3 to 2.0-alpha4:
   * Fixed issues reported by Sanitizer in the user manual. Note that the user

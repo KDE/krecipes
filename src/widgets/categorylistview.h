@@ -119,8 +119,6 @@ public slots:
 protected:
 	QMap<int, Q3ListViewItem*> items_map;
 
-	virtual void init();
-
 	virtual void load( int limit, int offset );
 
 	/** so that it allows dropping into
