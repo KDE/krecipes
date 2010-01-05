@@ -868,7 +868,7 @@ void QSqlRecipeDB::loadUncategorizedRecipes( ElementList *list )
 		"category_list cl join recipes r "
 		"on cl.recipe_id = r.id "
 	"GROUP BY cl.recipe_id,r.title HAVING COUNT(cl.recipe_id)=1 "
-	"ORDER BY title DESC";
+	"ORDER BY title";
 
 	m_query->exec( command );
 	if ( m_query->isActive() ) {

@@ -271,7 +271,7 @@ void RecipeListView::createRecipe( const Recipe &recipe, int parent_id )
 		}
 
 		if ( m_uncat_item )
-			new RecipeListItem( m_uncat_item, recipe );
+			createElement(new RecipeListItem( m_uncat_item, recipe ));
 	}
 	else {
 		CategoryListItem *parent = (CategoryListItem*)items_map[ parent_id ];
