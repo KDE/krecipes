@@ -149,7 +149,7 @@ void ResizeRecipeDialog::activateCurrentOption( int button_id )
 
 void ResizeRecipeDialog::accept()
 {
-	if ( currentYieldInput->text().toInt() == 0 )
+	if ( m_recipe->yield.amount == 0 ) 
 		KMessageBox::error( this, i18nc( "@info", "Unable to scale a recipe with zero yield" ) );
 	else if ( buttonGroup->selected() == yieldRadioButton ) {
 		if ( newYieldInput->isInputValid() ) {
