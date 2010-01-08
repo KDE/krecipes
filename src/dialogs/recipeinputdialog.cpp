@@ -1303,6 +1303,7 @@ void RecipeInputDialog::showRecipe( void )
 void RecipeInputDialog::resizeRecipe( void )
 {
 	yieldNumInput->value( loadedRecipe->yield.amount, loadedRecipe->yield.amount_offset );
+	loadedRecipe->yield.type = yieldTypeEdit->text();
 	QPointer<ResizeRecipeDialog> dlg = new ResizeRecipeDialog( this, loadedRecipe );
 
 	if ( dlg->exec() == QDialog::Accepted )
