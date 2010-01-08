@@ -69,6 +69,9 @@ Changes from 2.0-alpha4 to svn:
       yield type.
     + When editing a recipe if you change the yield type and you click "resize
       recipe" the shown dialog will be aware of the change.
+    + "Search as you type" option is now suposed to be applied with all lists in
+      the user interface, not just the recipe list in the "find/edit recipes"
+      component.
 
 Changes from 2.0-alpha3 to 2.0-alpha4:
   * Fixed issues reported by Sanitizer in the user manual. Note that the user

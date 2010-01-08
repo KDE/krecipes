@@ -17,6 +17,7 @@
 #include <kdialog.h>
 #include <kglobal.h>
 #include <kapplication.h>
+#include <KConfigGroup>
 
 #include "backends/recipedb.h"
 #include "refineshoppinglistdialog.h"
@@ -74,7 +75,14 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	listview->setDragEnabled( true );
 	listview->setAcceptDrops( true );
 	listview->setDropVisualizer( false );
-	connect( recipeListView, SIGNAL( textChanged(const QString&) ), SLOT( ensurePopulated() ) );
+
+	//FIXME: Connecting to ensurePopulated here is so disgusting, RecipeFilter should handle it.
+	KConfigGroup config (KGlobal::config(), "Performance" );
+	if ( config.readEntry("SearchAsYouType",true) )
+		connect( recipeListView, SIGNAL( textChanged(const QString&) ), SLOT( ensurePopulated() ) );
+	else
+		connect( recipeListView, SIGNAL( returnPressed(const QString&) ), SLOT( ensurePopulated() ) );
+
 	connect( listview, SIGNAL( dropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ),
 		      this, SLOT( slotDropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ) );
 	recipeListView->setListView( listview );
@@ -109,7 +117,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	shopRecipeListView->listView() ->addColumn( i18nc( "@title:column", "Recipe Title" ) );
 
-	KConfigGroup config( KGlobal::config(), "Advanced" );
+	config.changeGroup( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
 	shopRecipeListView->listView() ->addColumn( "Id" , show_id ? -1 : 0 );
 

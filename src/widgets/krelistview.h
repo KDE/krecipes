@@ -49,6 +49,7 @@ public slots:
 
 signals:
 	void textChanged( const QString & );
+	void returnPressed( const QString & );
 
 private:
 	KHBox *filterBox;
@@ -60,6 +61,7 @@ private:
 
 private slots:
 	void filter( const QString& s );
+	void clearSearch();
 };
 
 #endif

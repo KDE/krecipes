@@ -10,6 +10,8 @@
 
 #include "krelistview.h"
 
+#include <KApplication>
+#include <KConfigGroup>
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -21,6 +23,7 @@
 
 #include "widgets/dblistviewbase.h"
 
+//FIXME: this constructor should have an "searchAsYouType" parameter instead of reading the config
 KreListView::KreListView( QWidget *parent, const QString &title, bool filter, int filterCol, QWidget *embeddedWidget ):
 	KVBox( parent )
 {
@@ -54,7 +57,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		filterLabel->setText( " " + i18nc( "@label:textbox Search recipes", "Search:" ) );
 		filterEdit = new KLineEdit( filterBox );
 		filterEdit->setClearButtonShown( true );
-		connect( filterEdit, SIGNAL( clearButtonClicked() ), filterEdit, SLOT( clear() ) );
+		connect( filterEdit, SIGNAL( clearButtonClicked() ), this, SLOT( clearSearch() ) );
 	}
 
 	list = new K3ListView( this );
@@ -70,7 +73,12 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	//Connect Signals & Slots
 	if ( filter ) {
 		connect( filterEdit, SIGNAL( textChanged( const QString& ) ), SIGNAL( textChanged(const QString&) ) );
-		connect( this, SIGNAL( textChanged( const QString& ) ), SLOT( filter( const QString& ) ) );
+		connect( filterEdit, SIGNAL( returnPressed( const QString& ) ), SIGNAL( returnPressed(const QString&) ) );
+		KConfigGroup config (KGlobal::config(), "Performance" );
+		if ( config.readEntry("SearchAsYouType",true) )
+			connect( this, SIGNAL( textChanged( const QString& ) ), SLOT( filter( const QString& ) ) );
+		else
+			connect( this, SIGNAL( returnPressed( const QString& ) ), SLOT( filter( const QString& ) ) );
 	}
 }
 
@@ -110,7 +118,14 @@ void KreListView::refilter()
 
 void KreListView::setCustomFilter( QObject *receiver, const char *slot )
 {
-	connect( this, SIGNAL( textChanged( const QString& ) ), receiver, slot );
+	KConfigGroup config (KGlobal::config(), "Performance" );
+	if ( config.readEntry("SearchAsYouType",true) ) {
+		disconnect( this, SIGNAL( textChanged( const QString& ) ), this, SLOT( filter( const QString& ) ) );
+		connect( this, SIGNAL( textChanged( const QString& ) ), receiver, slot );
+	} else {
+		disconnect( this, SIGNAL( returnPressed( const QString& ) ), this, SLOT( filter( const QString& ) ) );
+		connect( this, SIGNAL( returnPressed( const QString& ) ), receiver, slot );
+	}
 }
 
 void KreListView::setListView( DBListViewBase *list_view )
@@ -120,6 +135,12 @@ void KreListView::setListView( DBListViewBase *list_view )
 	connect( list_view, SIGNAL( nextGroupLoaded() ), SLOT( refilter() ) );
 	connect( list_view, SIGNAL( prevGroupLoaded() ), SLOT( refilter() ) );
 	list = list_view;
+}
+
+void KreListView::clearSearch()
+{
+	filterEdit->clear();
+	filter( QString::null );
 }
 
 #include "krelistview.moc"

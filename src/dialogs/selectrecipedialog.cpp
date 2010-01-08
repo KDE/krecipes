@@ -76,6 +76,7 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	layout->addWidget( searchBar );
 
 
+	//FIXME: use KreListView here instead of reinventing the wheel
 	searchLabel = new QLabel( searchBar );
 	searchLabel->setText( i18nc( "@label:textbox Search recipes", "Search:" ) );
 	searchBox = new KLineEdit( searchBar );
