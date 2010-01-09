@@ -52,10 +52,10 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	// Add/Remove buttons
 
 	addAuthorButton = new KPushButton( topBox );
-	addAuthorButton->setIcon( KIcon( "go-down" ) );
+	addAuthorButton->setIcon( KIcon( "list-add" ) );
 
 	removeAuthorButton = new KPushButton( topBox );
-	removeAuthorButton->setIcon( KIcon( "go-up" ) );
+	removeAuthorButton->setIcon( KIcon( "list-remove" ) );
 
 	// Author List
 
