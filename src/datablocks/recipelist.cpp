@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright © 2003 Unai Garro <ugarro@users.sourceforge.net>            *
+*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *                                                                         *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *

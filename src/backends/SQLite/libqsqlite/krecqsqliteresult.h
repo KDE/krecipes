@@ -1,6 +1,6 @@
 /***************************************************************************
 *                                                                         *
-* Copyright © 2003 Unai Garro <ugarro@users.sourceforge.net>              *
+* Copyright © 2003 Unai Garro <ugarro@gmail.com>                          *
 * Copyright © 2003 Martin Imobersteg <imm@gmx.ch>                         *
 * Copyright © 2003 Opie Project <opie-devel@handhelds.org>                *
 *                                                                         *

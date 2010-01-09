@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright © 2003-2005 Unai Garro <ugarro@users.sourceforge.net>       *
+*   Copyright © 2003-2005 Unai Garro <ugarro@gmail.com>                   *
 *   Copyright © 2003-2005 Jason Kivlighn <jkivlighn@gmail.com>            *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
@@ -30,7 +30,7 @@ int main( int argc, char **argv )
 
 
 	KAboutData about( "krecipes", 0, ki18n( "Krecipes" ), version, ki18n( "The KDE Cookbook" ), KAboutData::License_GPL, ki18n( "(C) 2003 Unai Garro\n(C) 2004-2006 Jason Kivlighn"), ki18n("This product is RecipeML compatible.\nYou can get more information about this file format in:\nhttp://www.formatdata.com/recipeml" ), "http://krecipes.sourceforge.net/", "panfaust@gmail.com" );
-	about.addAuthor( ki18n("Unai Garro"), KLocalizedString(), "ugarro@users.sourceforge.net", 0 );
+	about.addAuthor( ki18n("Unai Garro"), KLocalizedString(), "ugarro@gmail.com", 0 );
 	about.addAuthor( ki18n("Jason Kivlighn"), KLocalizedString(), "jkivlighn@gmail.com", 0 );
 	about.addAuthor( ki18n("Cyril Bosselut"), KLocalizedString(), "bosselut@b1project.com", "http://b1project.com" );
 
