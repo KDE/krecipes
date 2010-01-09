@@ -245,13 +245,16 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// Backup options
 	QGroupBox *yieldGBox = new QGroupBox( serv_prep_box );
-	yieldGBox->setTitle( i18nc( "@label", "Yield" ) );
+	yieldGBox->setTitle( i18nc(
+		"@label How much food you will produce with a given cooking recipe "
+		"(e.g. 2 servings or 3 bottles)", "Yield" ) );
 	QGridLayout *yieldGBoxLayout = new QGridLayout;
 	yieldGBox->setLayout( yieldGBoxLayout );
 
-	yieldLabel = new QLabel( i18nc( "@label", "Amount" ) );
+	yieldLabel = new QLabel( i18nc( "@label The amount for yield", "Amount" ) );
 	yieldGBoxLayout->addWidget( yieldLabel, 0, 0 );
-	QLabel *yieldTypeLabel = new QLabel( i18n( "Type" ) );
+	QLabel *yieldTypeLabel = new QLabel( i18nc(
+		"@label The type of yield (e.g. servings, bottles...", "Type" ) );
 	yieldGBoxLayout->addWidget( yieldTypeLabel, 0, 1 );
 	yieldNumInput = new FractionInput;
 	yieldGBoxLayout->addWidget( yieldNumInput, 1, 0 );
