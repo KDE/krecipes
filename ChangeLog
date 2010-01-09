@@ -1,4 +1,4 @@
-Changes from 2.0-alpha4 to svn:
+Changes from 2.0-alpha4 to 2.0-alpha5:
   * Fixed issues in i18n strings, most of them reported by Krazy. Thanks to Mike
     Ferguson who did most of this work.
   * Created static library libkrecipescommon. This makes the project to compile

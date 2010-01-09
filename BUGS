@@ -1,7 +1,7 @@
-* Importing recipes from *.kreml files does not work with PostgreSQL backend,
-  loading the examples from the setup assistant does not work for the same
-  reason.
-
 * On my debian system, if I don't provide a password for PostgreSQL, krecipes
   silently fails.
 
+* Autocompletion does not work for recipe instructions.
+
+* I conversion tables, it seems there was a tooltip displaying something, not
+  anymore.

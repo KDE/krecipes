@@ -1,5 +1,5 @@
 Krecipes is a Recipe Book for KDE. It requires KDE 4.2 or greater (and Qt 4).
-Developed and tested on Debian GNU/Linux sid (KDE 4.3.2 and Qt 4.5.3).
+Developed and tested on Debian GNU/Linux sid (KDE 4.3.4 and Qt 4.5.3).
 
 
 ** Dependencies
@@ -20,11 +20,11 @@ to use the Krecipes backup feature. If you want to use "krecipes
  the following packages: 
  libqimageblitz-dev libsqlite0-dev libsqlite3-dev libmysqlclient-dev libpq-dev
  
-** Building The Latest (2.0-alpha4) Release
+** Building The Latest (2.0-alpha5) Release
  
  Just untar the package first:
  
- tar -zxf krecipes-2.0-alpha4.tar.gz
+ tar -zxf krecipes-2.0-alpha5.tar.gz
  
  And compile:
  
@@ -80,5 +80,18 @@ to use the Krecipes backup feature. If you want to use "krecipes
  ${foo}test.txt. IMPORTANT: to execute the test programs you should do it
  inside that "tests" directory, otherwise the test programs will not find the
  input data files.
+
+** Hidden features
+
+ There are a couple of hidden (hidden because they are not supported yet)
+ features, to show it you can put these two lines:
+
+ [Advanced]
+ UnhideMergeTools=true
+
+ in krecipesrc configuration file.
+
+ You can see the features ("Merge Similar Categories..." and "Merge Similar
+ Ingredients...") in the "Tools" menu.
 
 
