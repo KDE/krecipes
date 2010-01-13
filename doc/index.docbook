@@ -3290,7 +3290,7 @@ the ingredient.</para>
 
 <para>Above this list there is an <guibutton>Add</guibutton> button, for adding
 ingredient properties to the list, and a <guibutton>Remove</guibutton>, button
-for removing properties, See the section on <link
+for removing properties, see the section on <link
 linkend="ingredient-properties">Properties in Ingredients</link> for more
 details.</para>
 </listitem>
@@ -3309,7 +3309,7 @@ orange juice example, the ingredient weight table shows that the weight of
 orange juice is 248 grams per cup of orange juice, or 31 grams per fluid
 ounce of orange juice.</para>
 
-<para>As with the ingredient porperties list, above the ingredient weights
+<para>As with the ingredient properties list, above the ingredient weights
 list, an <guibutton>Add</guibutton> button is available for adding ingredient
 weights and a <guibutton>Remove</guibutton> button is available for removing
 ingredient weights. See the section <link linkend="ingredient-weights">Working
