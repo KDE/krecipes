@@ -564,8 +564,8 @@ void EditPropertiesDialog::loadUSDAData()
 		USDA::PrepDataList prep_data_list =  USDA::loadPrepMethods();
 		USDA::UnitDataList unit_data_list =  USDA::loadUnits();
 		 
-		Q3ValueList<USDA::PropertyData>::const_iterator propertyIt = property_data_list.begin();
-		for ( QStringList::const_iterator it = data.begin()+2; propertyIt != property_data_list.end(); ++it, ++propertyIt ) {
+		Q3ValueList<USDA::PropertyData>::const_iterator propertyIt = property_data_list.constBegin();
+		for ( QStringList::const_iterator it = data.constBegin()+2; propertyIt != property_data_list.constEnd(); ++it, ++propertyIt ) {
 			int property_id = property_list.findByName( (*propertyIt).name );
 			if ( property_id == -1 ) {
 				db->addProperty( (*propertyIt).name, (*propertyIt).unit );
