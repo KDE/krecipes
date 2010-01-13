@@ -71,13 +71,7 @@ SetupAssistant::SetupAssistant( QWidget *parent, Qt::WFlags f ) : KAssistantDial
 	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 
 	#if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
-		#ifdef HAVE_MYSQL
-			showPages( MySQL );
-		#else
-		#ifdef HAVE_POSTGRESQL
-			showPages( PostgreSQL );
-		#endif
-		#endif
+		showPages( MySQL );
 	#else
 		showPages( SQLite );
 	#endif
@@ -868,17 +862,7 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	
 	bg->setLayout(vbox);
 
-#ifndef HAVE_POSTGRESQL
-	psqlCheckBox->setEnabled( false );
-#else
-	psqlCheckBox->click();
-#endif
-
-#ifndef HAVE_MYSQL
-	mysqlCheckBox->setEnabled( false );
-#else
 	mysqlCheckBox->click();
-#endif
 
 #if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
 	liteCheckBox->setEnabled( false );

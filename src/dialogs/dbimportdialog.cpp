@@ -145,31 +145,11 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	languageChange();
 
 
-#ifndef HAVE_MYSQL
-
-	mysqlRadioButton->setEnabled( false );
-#endif
-
-#ifndef HAVE_POSTGRESQL
-
-	psqlRadioButton->setEnabled( false );
-#endif
-
 #if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
-
 	liteRadioButton->setEnabled( false );
-#ifdef HAVE_MYSQL
-
 	dbButtonGroup->setButton( 1 ); // Otherwise by default liteCheckBox is checked even if it's disabled
 	switchDBPage(1);
-#else
-	#ifdef HAVE_POSTGRESQL
-
-	dbButtonGroup->setButton( 2 );
-	switchDBPage(2);
 #endif
-	#endif
-	#endif
 
 	// signals and slots connections
 	connect( dbButtonGroup, SIGNAL( clicked( int ) ), this, SLOT( switchDBPage( int ) ) );

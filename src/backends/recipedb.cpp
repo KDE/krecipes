@@ -39,13 +39,9 @@
 
 #include "importers/kreimporter.h"
 
-#ifdef HAVE_POSTGRESQL
 #include "PostgreSQL/psqlrecipedb.h"
-#endif
 
-#ifdef HAVE_MYSQL
 #include "MySQL/mysqlrecipedb.h"
-#endif
 
 #if HAVE_SQLITE || HAVE_SQLITE3
 #include "SQLite/literecipedb.h"
@@ -137,16 +133,12 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 		database = new LiteRecipeDB( file );
 	}
 #endif //HAVE_SQLITE || HAVE_SQLITE3
-#ifdef HAVE_MYSQL
 	else if ( dbType == "MySQL" ) {
 		database = new MySQLRecipeDB( host, user, pass, dbname, port );
 	}
-#endif //HAVE_MYSQL
-#ifdef HAVE_POSTGRESQL
 	else if ( dbType == "PostgreSQL" ) {
 		database = new PSqlRecipeDB( host, user, pass, dbname, port );
 	}
-#endif //HAVE_POSTGRESQL
 	else {
 		kDebug() << "No database support included (or available) for the " << dbType << " database." ;
 	}

@@ -1,3 +1,8 @@
+Changes from 2.0-alpha5 to svn:
+  * Removed unnecesary build dependencies, so you don't need to link against:
+    + MySQL development libraries.
+    + PostgreSQL develpment libraries.
+
 Changes from 2.0-alpha4 to 2.0-alpha5:
   * Fixed issues in i18n strings, most of them reported by Krazy. Thanks to Mike
     Ferguson who did most of this work.
