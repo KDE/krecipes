@@ -230,14 +230,6 @@ elseif ( SQLITE2_FOUND )
    target_link_libraries(${TEST} ${SQLITE2_LIBRARIES})
 endif ( SQLITE_FOUND )
 
-if ( MYSQL_FOUND )
-   target_link_libraries(${TEST} ${MYSQL_LIBRARIES})
-endif ( MYSQL_FOUND )
-
-if ( POSTGRESQL_FOUND )
-   target_link_libraries(${TEST} ${POSTGRESQL_LIBRARIES})
-endif ( POSTGRESQL_FOUND )
-
 install(TARGETS ${TEST}
    DESTINATION ${DATA_INSTALL_DIR}/krecipes/tests)
 
@@ -287,14 +279,6 @@ if ( SQLITE_FOUND )
 elseif ( SQLITE2_FOUND )
    target_link_libraries(krecipes ${SQLITE2_LIBRARIES})
 endif ( SQLITE_FOUND )
-
-if ( MYSQL_FOUND )
-   target_link_libraries(krecipes ${MYSQL_LIBRARIES})
-endif ( MYSQL_FOUND )
-
-if ( POSTGRESQL_FOUND )
-   target_link_libraries(krecipes ${POSTGRESQL_LIBRARIES})
-endif ( POSTGRESQL_FOUND )
 
 
 install(TARGETS krecipes ${INSTALL_TARGETS_DEFAULT_ARGS})
