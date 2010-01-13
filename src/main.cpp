@@ -19,7 +19,7 @@
 
 #include "convert_sqlite3.h"
 
-static const char *version = "2.0-alpha5";
+static const char *version = "2.0-alpha5+svn";
 
 static KCmdLineOptions options;
 
@@ -43,7 +43,7 @@ int main( int argc, char **argv )
 	
 	about.addCredit( ki18n("Patrick Spendrin"), ki18n("Patches to make Krecipes work under Windows"), "ps_ml@gmx.de", 0 );
 	about.addCredit( ki18n("Mike Ferguson"), ki18n("Help with bugs, patches"), "", 0 );
-
+	
 	about.setTranslator( ki18n( "INSERT YOUR NAME HERE" ), ki18n( "INSERT YOUR EMAIL ADDRESS" ) );
 	KCmdLineArgs::init( argc, argv, &about );
 	KCmdLineArgs::addCmdLineOptions( options );
