@@ -83,6 +83,7 @@ public:
 	}
 
 	void setType( Unit::Type type ){ m_unit.type = type; updateType(type); }
+	Unit::Type type(){ return m_unit.type; }
 
 	Unit unit() const { return m_unit; };
 	void setUnit( const Unit &u ) { m_unit = u; }

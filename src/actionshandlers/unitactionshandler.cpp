@@ -60,11 +60,12 @@ void UnitActionsHandler::createNew()
 
 void UnitActionsHandler::rename()
 {
-	Q3ListViewItem * item = parentListView->currentItem();
+	UnitListViewItem * item = (UnitListViewItem*)parentListView->currentItem();
 
 	if ( item ) {
 		QPointer<CreateUnitDialog> unitDialog = new CreateUnitDialog( 
-			parentListView, item->text(0), item->text(2), item->text(1), item->text(3), false );
+			parentListView, item->text(0), item->text(2), item->text(1), item->text(3),
+			item->type(), false );
 		unitDialog->setCaption( i18n("Rename Unit") );
 
 		if ( unitDialog->exec() == QDialog::Accepted ) {
@@ -102,6 +103,12 @@ void UnitActionsHandler::rename()
 				unit.plural_abbrev = newUnit.plural_abbrev;
 				unit_item->setUnit( unit );
 				saveUnit( unit_item, newUnit.plural_abbrev, 3 );
+				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id), 5 );
+			}
+			if ( newUnit.type != unit.type ) {
+				unit.type = newUnit.type;
+				unit_item->setUnit( unit );
+				saveUnit( unit_item, unit_item->text(4), 5 );
 			}
 		}
 		delete unitDialog;

@@ -19,7 +19,8 @@
 #include <kcombobox.h>
 #include <KVBox>
 
-CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const QString &plural, const QString &name_abbrev, const QString &plural_abbrev, bool newUnit )
+CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const QString &plural,
+	const QString &name_abbrev, const QString &plural_abbrev, Unit::Type type, bool newUnit )
 		: KDialog( parent )
 {
 	setCaption(newUnit?i18nc( "@title:window", "New Unit" ):i18nc( "@title:window", "Unit" ));
@@ -68,6 +69,8 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	typeComboBox->insertItem( typeComboBox->count(), i18nc("@item:inlistbox Unit type other", "Other") );
 	typeComboBox->insertItem( typeComboBox->count(), i18nc("@item:inlistbox Unit type mass", "Mass") );
 	typeComboBox->insertItem( typeComboBox->count(), i18nc("@item:inlistbox Unit type volume", "Volume") );
+
+	typeComboBox->setCurrentIndex( type );
 
 	gridLayout->addWidget( typeLabel, 2, 0 );
 	gridLayout->addWidget( typeComboBox, 2, 1, 1, 3, 0 );

@@ -3,6 +3,10 @@ Changes from 2.0-alpha5 to svn:
     + MySQL development libraries.
     + PostgreSQL develpment libraries.
   * Fix FTBFS with GCC 4.5, thanks to Pino Toscano for fixing it.
+  * Fixes for bugs:
+    + When you rename an unit (typing ctrl+r or right click -> rename) you can
+      change the type of the unit in the shown dialog, however previous releases
+      ignore what type you select, keeping the same type for the modified unit.
 
 Changes from 2.0-alpha4 to 2.0-alpha5:
   * Fixed issues in i18n strings, most of them reported by Krazy. Thanks to Mike
