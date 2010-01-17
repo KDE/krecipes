@@ -67,20 +67,21 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	layout1->setMargin( 0 );
 	layout1->setSpacing( 6 );
 
+	layout1->addStretch();
 
 	addButton = new KPushButton( layout2Widget );
 	addButton->setObjectName( "addButton" );
-	addButton->setIcon( KIcon( "go-next" ) );
+	addButton->setIcon( KIcon( "arrow-right" ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
 	removeButton = new KPushButton( layout2Widget );
 	removeButton->setObjectName( "removeButton" );
-	removeButton->setIcon( KIcon( "go-previous" ) );
+	removeButton->setIcon( KIcon( "arrow-left" ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( removeButton );
-	spacer1 = new QSpacerItem( 51, 191, QSizePolicy::Minimum, QSizePolicy::Expanding );
-	layout1->addItem( spacer1 );
+
+	layout1->addStretch();
 	layout2->addLayout( layout1 );
 
 	ingListView = new KreListView( layout2Widget, QString::null, true );

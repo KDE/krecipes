@@ -24,7 +24,6 @@
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
-class QSpacerItem;
 class QLabel;
 class Q3ListViewItem;
 class KPushButton;
@@ -49,7 +48,6 @@ public:
 
 protected:
 	QVBoxLayout* layout1;
-	QSpacerItem* spacer1;
 
 protected slots:
 	virtual void languageChange();

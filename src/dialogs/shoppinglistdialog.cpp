@@ -92,7 +92,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	QVBoxLayout* vboxl = new QVBoxLayout();
 	vboxl->addStretch();
 	addRecipeButton = new KPushButton( this );
-	addRecipeButton->setIcon( KIcon( "arrow-left" ) );
+	addRecipeButton->setIcon( KIcon( "arrow-right" ) );
 	addRecipeButton->setFixedSize( QSize( 32, 32 ) );
 	vboxl->addWidget( addRecipeButton );
 
