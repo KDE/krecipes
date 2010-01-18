@@ -182,8 +182,8 @@ void QSqlRecipeDB::execSQL( const QString &command )
 
 void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 {
-	// Empty the recipe first
-	rlist->empty();
+	// Empty the recipe list first
+	rlist->clear();
 
 	QMap <int, RecipeList::Iterator> recipeIterators; // Stores the iterator of each recipe in the list;
 

@@ -7,6 +7,8 @@ Changes from 2.0-alpha5 to svn:
     + When you rename an unit (typing ctrl+r or right click -> rename) you can
       change the type of the unit in the shown dialog, however previous releases
       ignore what type you select, keeping the same type for the modified unit.
+    + Clear rlist properly in QSqlRecipeDB::loadRecipes(rlist,..) which might
+      fix sourceforge #2934428.
 
 Changes from 2.0-alpha4 to 2.0-alpha5:
   * Fixed issues in i18n strings, most of them reported by Krazy. Thanks to Mike
