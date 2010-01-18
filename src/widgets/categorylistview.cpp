@@ -374,13 +374,16 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 
 
 CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, bool _exclusive, const ElementList &init_items_checked ) :
-CategoryListView( parent, db ), exclusive(_exclusive)
+CategoryListView( parent, db ), exclusive( _exclusive )
 {
 	addColumn( i18n( "Category" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
 	addColumn( "Id" , show_id ? -1 : 0 );
+
+	for ( ElementList::const_iterator it = init_items_checked.begin(); it != init_items_checked.end(); ++it )
+		m_selections.append(*it);
 }
 
 void CategoryCheckListView::removeCategory( int id )
@@ -432,6 +435,8 @@ void CategoryCheckListView::stateChange( CategoryCheckListItem* it, bool on )
 void CategoryCheckListView::load( int limit, int offset )
 {
 	CategoryListView::load(limit,offset);
+
+	populateAll();
 
 	for ( Q3ValueList<Element>::const_iterator it = m_selections.begin(); it != m_selections.end(); ++it ) {
 		Q3CheckListItem * item = ( Q3CheckListItem* ) findItem( QString::number( (*it).id ), 1 );

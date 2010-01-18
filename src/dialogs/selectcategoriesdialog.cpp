@@ -63,7 +63,7 @@ void SelectCategoriesDialog::getSelectedCategories( ElementList *newSelected )
 
 void SelectCategoriesDialog::loadCategories( const ElementList &items_on )
 {
-	categoryListView->populateAll();
+	/*categoryListView->populateAll();
 
 	ElementList::const_iterator it;
 	for ( it = items_on.begin(); it != items_on.end(); ++it ) {
@@ -71,7 +71,7 @@ void SelectCategoriesDialog::loadCategories( const ElementList &items_on )
 		if ( new_item ) {
 			new_item->setOn(true);
 		}
-	}
+	}*/
 }
 
 void SelectCategoriesDialog::createNewCategory( void )
