@@ -9,6 +9,8 @@ Changes from 2.0-alpha5 to svn:
       ignore what type you select, keeping the same type for the modified unit.
     + Clear rlist properly in QSqlRecipeDB::loadRecipes(rlist,..) which might
       fix sourceforge #2934428.
+    + Don't double categories when amending recipe categories having nested
+      categories. Fixes sourceforge #2933497.
 
 Changes from 2.0-alpha4 to 2.0-alpha5:
   * Fixed issues in i18n strings, most of them reported by Krazy. Thanks to Mike

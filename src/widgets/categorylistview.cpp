@@ -381,9 +381,6 @@ CategoryListView( parent, db ), exclusive(_exclusive)
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
 	addColumn( "Id" , show_id ? -1 : 0 );
-
-	for ( ElementList::const_iterator it = init_items_checked.begin(); it != init_items_checked.end(); ++it )
-		m_selections.append(*it);
 }
 
 void CategoryCheckListView::removeCategory( int id )
