@@ -354,6 +354,9 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 {
 	Q3ListViewItem * item = items_map[ cat_id ];
 
+	if (!item)
+		return;
+
 	//find out if this is the only category the recipe belongs to
 	int finds = 0;
 	Q3ListViewItemIterator iterator( this );

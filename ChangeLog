@@ -11,6 +11,8 @@ Changes from 2.0-alpha5 to svn:
       fix sourceforge #2934428.
     + Don't double categories when amending recipe categories having nested
       categories. Fixes sourceforge #2933497.
+    + Don't crash when removing a recipe from a category. Fixes sourceforge
+      #2934312.
 
 Changes from 2.0-alpha4 to 2.0-alpha5:
   * Fixed issues in i18n strings, most of them reported by Krazy. Thanks to Mike
