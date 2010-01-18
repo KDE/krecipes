@@ -13,6 +13,13 @@ Changes from 2.0-alpha5 to svn:
       categories. Fixes sourceforge #2933497.
     + Don't crash when removing a recipe from a category. Fixes sourceforge
       #2934312.
+    + When you remove a recipe from a category, the recipe is properly placed
+      in "Uncategorized", even when you're limiting the number of categories to
+      display in the GUI list. You can reproduce the (now fixed) bug thusly:
+      create a recipe included in 3 categories; a, z1 and z2, limit the number
+      of categories to display, make sure that this z1 and z2 categories are not
+      displayed in the first page, remove the recipe from the a category and the
+      recipe will be added to "Uncategorized" which is wrong.
 
 Changes from 2.0-alpha4 to 2.0-alpha5:
   * Fixed issues in i18n strings, most of them reported by Krazy. Thanks to Mike

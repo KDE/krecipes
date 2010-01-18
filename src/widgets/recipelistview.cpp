@@ -358,20 +358,10 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 		return;
 
 	//find out if this is the only category the recipe belongs to
-	int finds = 0;
-	Q3ListViewItemIterator iterator( this );
-	while ( iterator.current() ) {
-		if ( iterator.current() ->rtti() == 1000 ) {
-			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
-
-			if ( recipe_it->recipeID() == recipe_id ) {
-				if ( finds > 1 )
-					break;
-				finds++;
-			}
-		}
-		++iterator;
-	}
+	bool one_category;
+	Recipe r;
+	database->loadRecipe(&r, RecipeDB::Categories, recipe_id );
+	one_category = r.categoryList.isEmpty();
 
 	//do this to only iterate over children of 'item'
 	Q3ListViewItem *pEndItem = NULL;
@@ -384,15 +374,16 @@ void RecipeListView::removeRecipe( int recipe_id, int cat_id )
 	}
 	while ( pStartItem && !pEndItem );
 
-	iterator = Q3ListViewItemIterator( item );
+	Q3ListViewItemIterator iterator( item );
 	while ( iterator.current() != pEndItem ) {
 		if ( iterator.current() ->rtti() == 1000 ) {
 			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
 
 			if ( recipe_it->recipeID() == recipe_id ) {
 				
-				if ( finds == 1 ) {
+				if ( one_category ) {
 					//the item is now uncategorized
+					kDebug() << "uncat";
 					if ( !m_uncat_item && curr_offset == 0 )
 						m_uncat_item = new UncategorizedItem(this);
 					if ( m_uncat_item ) {
