@@ -4,11 +4,6 @@ Developed and tested on Debian GNU/Linux sid (KDE 4.3.4 and Qt 4.5.3).
 
 ** Dependencies
 
-First of all, make sure you have at least one of the three necessary databases
-installed: SQLite, MySQL, or PostgreSQL. In case you decide to use MySQL or
-PostgreSQL, make sure also that you have Qt's MySQL or PostgreSQL plugin
-properly installed. The program won't work without database support.
-
 Additionally to whatever Krecipes is linked against, you will need the client
 programs (i.e shell commands sqlite3, mysql ... ) for your database if you want
 to use the Krecipes backup feature. If you want to use "krecipes
@@ -18,18 +13,23 @@ to use the Krecipes backup feature. If you want to use "krecipes
 
  If you're using a Debian-like GNU/Linux distribution you may want to install
  the following packages: 
- libqimageblitz-dev libsqlite0-dev libsqlite3-dev libmysqlclient-dev libpq-dev
+  - kdelibs5-dev
+  - libqimageblitz-dev 
+  - libsqlite3-dev or libsqlite0-dev
+  - libxml2-dev
+  - libxslt1-dev
  
-** Building The Latest (2.0-alpha5) Release
+** Building The Latest (2.0-alpha6) Release
  
  Just untar the package first:
  
- tar -zxf krecipes-2.0-alpha5.tar.gz
+ tar -zxf krecipes-2.0-alpha6.tar.gz
  
  And compile:
  
- cd krecipes
- cmake .
+ cd krecipes-2.0-alpha6
+ mkdir build && cd build
+ cmake ..
  make
  make install
  
@@ -80,6 +80,7 @@ to use the Krecipes backup feature. If you want to use "krecipes
  ${foo}test.txt. IMPORTANT: to execute the test programs you should do it
  inside that "tests" directory, otherwise the test programs will not find the
  input data files.
+
 
 ** Hidden features
 

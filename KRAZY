@@ -3,7 +3,7 @@ krazy2 Analysis
 
 Checkers Run = 46
 Files Processed = 295
-Total Issues = 513 ...as of January 09 2010 17:05:25 CET
+Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 
 ==>For File Type c++<==
 1. Check for TRUE and FALSE macros [captruefalse]... Ok!
@@ -25,15 +25,13 @@ Total Issues = 513 ...as of January 09 2010 17:05:25 CET
 	copyright looks like: "Copyright 2002,2005-2006 Joe Hacker
 	<joe.hacker@kde.org>"
 
-4. Check for cpp macros and usage [cpp]... 32 issues found
+4. Check for cpp macros and usage [cpp]... 20 issues found
 	./src/pref.cpp: Unknown HAVE_FOO macro line#373[HAVE_SQLITE3] (1)
-	./src/setupassistant.cpp: Unknown HAVE_FOO macro line#74[HAVE_MYSQL],77[HAVE_POSTGRESQL],871[HAVE_POSTGRESQL],877[HAVE_MYSQL] (4)
-	./src/backends/recipedb.cpp: Unknown HAVE_FOO macro line#42[HAVE_POSTGRESQL],46[HAVE_MYSQL],50[HAVE_SQLITE3],134[HAVE_SQLITE3],140[HAVE_MYSQL],145[HAVE_POSTGRESQL] (6)
+	./src/backends/recipedb.cpp: Unknown HAVE_FOO macro line#46[HAVE_SQLITE3],130[HAVE_SQLITE3] (2)
 	./src/backends/SQLite/literecipedb.cpp: Unknown HAVE_FOO macro line#27[HAVE_SQLITE3],69[HAVE_SQLITE3],85[HAVE_SQLITE3],1023[HAVE_SQLITE3],1029[HAVE_SQLITE3] (5)
 	./src/backends/SQLite/qsql_sqlite.cpp: Unknown HAVE_FOO macro line#31[HAVE_SQLITE3],451[HAVE_SQLITE3] (2)
 	./src/backends/SQLite/libqsqlite/krecqsqlitedb.h: Unknown HAVE_FOO macro line#29[HAVE_SQLITE3],51[HAVE_SQLITE3] (2)
 	./src/backends/SQLite/libqsqlite/krecqsqlitedb.cpp: Unknown HAVE_FOO macro line#34[HAVE_SQLITE3],49[HAVE_SQLITE3],57[HAVE_SQLITE3],70[HAVE_SQLITE3],90[HAVE_SQLITE3],103[HAVE_SQLITE3],110[HAVE_SQLITE3],147[HAVE_SQLITE3] (8)
-	./src/dialogs/dbimportdialog.cpp: Unknown HAVE_FOO macro line#148[HAVE_MYSQL],153[HAVE_POSTGRESQL],161[HAVE_MYSQL],166[HAVE_POSTGRESQL] (4)
 	C++ source files and non-installed headers should NOT use cpp
 	conditionals that check for a certain O/S or compiler; instead use
 	CMake HAVE_foo macros. We want to check for features discovered
@@ -65,9 +63,9 @@ Total Issues = 513 ...as of January 09 2010 17:05:25 CET
 	./src/widgets/ingredientinputwidget.cpp: split issues line#263 (1)
 	./src/backends/qsqlrecipedb.cpp: line#209,799,813,1487,1491,1499,1526,1530,1819,2330 (10)
 	./src/backends/qsqlrecipedb.cpp: replace issues line#1860,1861 (2)
-	./src/backends/recipedb.cpp: line#591,678,685,694,701,710,712,717,725,732,739,746,777,778,783,784,787,793,794,799,800,803,809,810,815,816,819,824,828 (29)
-	./src/backends/recipedb.cpp: starts/endsWith issues line#595 (1)
-	./src/backends/recipedb.cpp: split issues line#868 (1)
+	./src/backends/recipedb.cpp: line#583,670,677,686,693,702,704,709,717,724,731,738,769,770,775,776,779,785,786,791,792,795,801,802,807,808,811,816,820 (29)
+	./src/backends/recipedb.cpp: starts/endsWith issues line#587 (1)
+	./src/backends/recipedb.cpp: split issues line#860 (1)
 	./src/backends/PostgreSQL/psqlrecipedb.cpp: line#487,496,505,506,518,562 (6)
 	./src/backends/SQLite/literecipedb.cpp: line#798,854,932,942,956,958 (6)
 	./src/dialogs/editpropertiesdialog.cpp: line#80,82 (2)
@@ -184,7 +182,7 @@ Total Issues = 513 ...as of January 09 2010 17:05:25 CET
 	./src/krecipesview.h: line#154 (1)
 	./src/convert_sqlite3.h: line#26 (1)
 	./src/krecipes.cpp: line#648,667,709 (3)
-	./src/setupassistant.cpp: line#613 (1)
+	./src/setupassistant.cpp: line#607 (1)
 	./src/krecipesview.cpp: line#887,959 (2)
 	./src/importers/mmfimporter.cpp: line#336,337,339 (3)
 	./src/importers/rezkonvimporter.cpp: line#134 (1)
@@ -218,7 +216,7 @@ Total Issues = 513 ...as of January 09 2010 17:05:25 CET
 	./src/backends/qsqlrecipedb.cpp: line#552,603,1511,1899,1909,1919,1930,2023,2385,2507,2628,2649,2775,2783,2793 (15)
 	./src/backends/qsqlrecipedb.h: line#38,68,161 (3)
 	./src/backends/usda_ingredient_data.cpp: line#47 (1)
-	./src/backends/recipedb.cpp: line#99,317,489,590,593,597 (6)
+	./src/backends/recipedb.cpp: line#95,309,481,582,585,589 (6)
 	./src/backends/progressinterface.h: line#61 (1)
 	./src/backends/usda_unit_data.cpp: line#39,83,139 (3)
 	./src/backends/usda_property_data.cpp: line#44 (1)
@@ -235,7 +233,7 @@ Total Issues = 513 ...as of January 09 2010 17:05:25 CET
 	./src/dialogs/ingredientmatcherdialog.cpp: line#60,84,183 (3)
 	./src/dialogs/setupdisplay.cpp: line#141,310,518 (3)
 	./src/dialogs/setupdisplay.h: line#129 (1)
-	./src/dialogs/refineshoppinglistdialog.cpp: line#59,86 (2)
+	./src/dialogs/refineshoppinglistdialog.cpp: line#59,87 (2)
 	./src/dialogs/selectpropertydialog.cpp: line#118 (1)
 	./src/dialogs/similarcategoriesdialog.cpp: line#382 (1)
 	./src/dialogs/resizerecipedialog.cpp: line#126 (1)
@@ -244,7 +242,7 @@ Total Issues = 513 ...as of January 09 2010 17:05:25 CET
 	./src/dialogs/editratingdialog.cpp: line#192 (1)
 	./src/dialogs/createunitconversiondialog.cpp: line#77 (1)
 	./src/dialogs/pagesetupdialog.h: line#31 (1)
-	./src/dialogs/dbimportdialog.cpp: line#230 (1)
+	./src/dialogs/dbimportdialog.cpp: line#210 (1)
 	./src/dialogs/ingredientsdialog.cpp: line#54,136 (2)
 	./src/dialogs/ingredientgroupsdialog.cpp: line#31 (1)
 	./src/dialogs/conversiondialog.cpp: line#101,112,131 (3)
@@ -311,7 +309,7 @@ Total Issues = 513 ...as of January 09 2010 17:05:25 CET
 	./src/importers/mmfimporter.cpp: QLatin1String issues line#48,56,60,113,119,179,242,260 (8)
 	./src/importers/nycgenericimporter.cpp: QLatin1String issues line#38,89,90,95,98,105,108,111 (8)
 	./src/importers/mx2importer.cpp: QLatin1String issues line#46 (1)
-	./src/backends/recipedb.cpp: QLatin1String issues line#463,592,595 (3)
+	./src/backends/recipedb.cpp: QLatin1String issues line#455,584,587 (3)
 	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1732,1738 (2)
 	./src/dialogs/pagesetupdialog.cpp: QLatin1String issues line#196 (1)
 	./src/exporters/xsltexporter.cpp: QLatin1String issues line#74 (1)

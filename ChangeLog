@@ -1,4 +1,4 @@
-Changes from 2.0-alpha5 to svn:
+Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:
     + MySQL development libraries.
     + PostgreSQL develpment libraries.
