@@ -52,7 +52,8 @@ to use the Krecipes backup feature. If you want to use "krecipes
 
  To compile it:
 
- cmake .
+ mkdir build && cd build
+ cmake ..
  make
 
  To install it:
