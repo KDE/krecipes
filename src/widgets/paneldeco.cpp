@@ -97,12 +97,12 @@ TopDeco::~TopDeco()
 void TopDeco::paintEvent( QPaintEvent * )
 {
 	// Get gradient colors
-	QColor c1 = QColorGroup( QPalette() ).color( QPalette::Button ).light( 120 );
+	QColor c1 = palette().color( QPalette::Light );
 	QColor c2 = palette().color(backgroundRole());
 
 	// Add a line on top
 	QPainter painter(this );
-	painter.setPen( QColorGroup( QPalette() ).color( QPalette::Button ).dark( 130 ) );
+	painter.setPen( palette().color( QPalette::Dark ));
 	painter.drawLine( 0, 0, width(), 0 );
 
 	QLinearGradient linearGrad(QPointF(0, 0), QPointF(0, height()) );
@@ -125,7 +125,7 @@ void TopDeco::paintEvent( QPaintEvent * )
 		xpos += 15;
 		QRect r = rect();
 		r.setLeft( xpos );
-		painter.setPen( QColor( 0x00, 0x00, 0x00 ) );
+		painter.setPen( palette().color( QPalette::WindowText  ));
 		QFont ft = font();
 		ft.setBold( true );
 		painter.setFont( ft );
@@ -151,3 +151,4 @@ QSize TopDeco::sizeHint( void ) const
 }
 
 #include "paneldeco.moc"
+

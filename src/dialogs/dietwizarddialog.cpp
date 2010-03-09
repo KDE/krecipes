@@ -672,9 +672,9 @@ void DishTitle::paintEvent( QPaintEvent * )
 		titleFont.setPointSize( 15 );
 		painter.setFont( titleFont );
 		painter.rotate( -90 );
-		painter.setPen( QColor( 0x00, 0x00, 0x00 ) );
+		painter.setPen( palette().color( QPalette::WindowText  ));
 		painter.drawText( 0, 0, -height(), 30, Qt::AlignCenter, titleText );
-		painter.setPen( QColor( 0xFF, 0xFF, 0xFF ) );
+		painter.setPen( palette().color( QPalette::Window  ));
 		painter.drawText( -1, -1, -height() - 1, 29, Qt::AlignCenter, titleText );
 		painter.end();
 
