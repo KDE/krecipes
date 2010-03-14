@@ -1,7 +1,8 @@
 Changes from 2.0-alpha6 to svn:
   * Fixes for bugs:
-    + Right pane header and diet helper title follow theme colour settings
-      rather than set absolute colours. Thanks to Mike Ferguson for the patch.
+    + Right pane header, diet helper title and list titles follow theme colour
+      settings rather than set absolute colours. Thanks to Mike Ferguson for the
+      patches.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:
