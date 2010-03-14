@@ -41,7 +41,7 @@
 IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeader ) : KHBox(parent), database(db)
 {
 	KVBox *ingredientVBox = new KVBox( this );
-	KHBox *typeHBox = new KHBox( ingredientVBox );
+	KVBox *typeHBox = new KVBox( ingredientVBox );
 
 	if ( allowHeader ) {
 		typeButtonGrp = new Q3ButtonGroup();
@@ -74,12 +74,14 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 
 	KVBox *amountVBox = new KVBox( this );
 	amountLabel = new QLabel( i18n( "Amount:" ), amountVBox );
+	amountLabel->setAlignment( Qt::AlignBottom );
 	amountEdit = new FractionInput( amountVBox );
 	amountEdit->setAllowRange(true);
 	amountEdit->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 
 	KVBox *unitVBox = new KVBox( this );
 	unitLabel = new QLabel( i18n( "Unit:" ), unitVBox );
+	unitLabel->setAlignment( Qt::AlignBottom );
 	unitBox = new KComboBox( true, unitVBox );
 	unitBox->setAutoCompletion( true );
 	unitBox->lineEdit() ->disconnect( unitBox ); //so hitting enter doesn't enter the item into the box
@@ -87,6 +89,7 @@ IngredientInput::IngredientInput( RecipeDB *db, QWidget *parent, bool allowHeade
 
 	KVBox *prepMethodVBox = new KVBox( this );
 	prepMethodLabel = new QLabel( i18n( "Preparation Method:" ), prepMethodVBox );
+	prepMethodLabel->setAlignment( Qt::AlignBottom );
 	prepMethodBox = new PrepMethodComboBox( true, prepMethodVBox, database );
 	prepMethodBox->setAutoCompletion( true );
 	prepMethodBox->lineEdit() ->disconnect( prepMethodBox ); //so hitting enter doesn't enter the item into the box

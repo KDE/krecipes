@@ -59,8 +59,8 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	}
 
 	list = new K3ListView( this );
-	list->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
-	setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
+	list->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
+	setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
 	//setSpacing( 10 );
 
 	// If the user provides a widget, embed it into the header
@@ -133,6 +133,7 @@ void KreListView::setListView( DBListViewBase *list_view )
 	connect( list_view, SIGNAL( nextGroupLoaded() ), SLOT( refilter() ) );
 	connect( list_view, SIGNAL( prevGroupLoaded() ), SLOT( refilter() ) );
 	list = list_view;
+	list->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 }
 
 void KreListView::clearSearch()

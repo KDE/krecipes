@@ -87,7 +87,6 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 		      this, SLOT( slotDropped( K3ListView*, QDropEvent*, Q3ListViewItem* ) ) );
 	recipeListView->setListView( listview );
 	recipeListView->setCustomFilter( new RecipeFilter( recipeListView->listView() ), SLOT( filter( const QString & ) ) );
-	recipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
 	vboxl->addStretch();
@@ -106,7 +105,6 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	shopRecipeListView = new KreListView ( this, i18nc("@title", "Shopping List") );
 	ShoppingListView *slistview = new ShoppingListView( shopRecipeListView );
-	slistview->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 	slistview->setDragEnabled( true );
 	slistview->setAcceptDrops( true );
 	slistview->setDropVisualizer( false );

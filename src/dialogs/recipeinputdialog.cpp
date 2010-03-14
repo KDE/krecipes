@@ -162,13 +162,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	photoLabel->setPixmap( image1 );
 	photoLabel->setFixedSize( QSize( 221, 166 ) );
 	photoLabel->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	photoLabel->setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
-	recipeLayout->addWidget( photoLabel, 3, 1, 5, 1, 0 );
+	recipeLayout->addWidget( photoLabel, 3, 1, 5, 1, Qt::AlignTop );
 
-	KVBox *photoButtonsBox = new KVBox( recipeTab );
+	KHBox *photoButtonsBox = new KHBox( recipeTab );
 
 	changePhotoButton = new KPushButton( photoButtonsBox );
-	changePhotoButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored ) );
 	changePhotoButton->setText( "..." );
 	changePhotoButton->setToolTip( i18nc( "@info:tooltip", "Select photo" ) );
 
@@ -180,7 +178,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	clearPhotoButton->setIcon( KIcon( "edit-clear" ) );
 	clearPhotoButton->setToolTip( i18nc( "@info:tooltip", "Clear photo" ) );
 
-	recipeLayout->addWidget( photoButtonsBox, 3, 2, 5, 1, 0 );
+	recipeLayout->addWidget( photoButtonsBox, 7, 1, 1, 1, Qt::AlignTop );
 
 
 	//Title->photo spacer
@@ -213,7 +211,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	authorShow = new KLineEdit( authorInput );
 	authorShow->setReadOnly( true );
-	authorShow->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 
 
 	addAuthorButton = new KPushButton( authorInput );
@@ -230,7 +227,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	categoryShow = new KLineEdit( categoryInput );
 	categoryShow->setReadOnly( true );
-	categoryShow->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 	recipeLayout->addWidget( categoryBox, 4, 4 );
 
 	addCategoryButton = new KPushButton( categoryInput );
@@ -240,7 +236,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	QSpacerItem* category_yield = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	recipeLayout->addItem( category_yield, 5, 4 );
 
-	KHBox *serv_prep_box = new KHBox( recipeTab );
+	KVBox *serv_prep_box = new KVBox( recipeTab );
 	serv_prep_box->setSpacing( 5 );
 
 	// Backup options
@@ -262,16 +258,17 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	yieldTypeEdit = new KLineEdit;
 	yieldGBoxLayout->addWidget( yieldTypeEdit, 1, 1 );
 
-	KVBox *prepTimeBox = new KVBox( serv_prep_box );
-	prepTimeBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
+	KHBox *prepTimeBox = new KHBox( serv_prep_box );
+	//prepTimeBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
 	prepTimeBox->setSpacing( 5 );
 
-	( void ) new QLabel( i18nc( "@label", "Preparation Time" ), prepTimeBox );
+	QLabel * prepTimeLabel = new QLabel( i18nc( "@label", "Preparation Time" ), prepTimeBox );
+	prepTimeLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
 	prepTimeEdit = new QDateTimeEdit( prepTimeBox );
 	prepTimeEdit->setMinimumTime( QTime( 0, 0 ) );
 	prepTimeEdit->setDisplayFormat( "hh:mm");
 
-	recipeLayout->addWidget( serv_prep_box, 6, 4 );
+	recipeLayout->addWidget( serv_prep_box, 6, 4, 2, 1, 0);
 
 	//------- END OF Recipe Tab ---------------
 
@@ -285,8 +282,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// Border
 	QSpacerItem* spacerBoxLeft = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	ingredientsLayout->addItem( spacerBoxLeft, 1, 0 );
-	QSpacerItem* spacerBoxTop = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	ingredientsLayout->addItem( spacerBoxTop, 0, 1 );
 
 	//Input Widgets
 	ingInput = new IngredientInputWidget( database, ingredientsTab );

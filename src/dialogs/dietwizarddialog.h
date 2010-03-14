@@ -20,7 +20,6 @@
 #include <q3ptrlist.h>
 #include <QSlider>
 #include <qspinbox.h>
-#include <QToolButton>
 #include <q3valuelist.h>
 
 #include <QStackedWidget>
@@ -40,7 +39,6 @@
 #include "widgets/dblistviewbase.h"
 
 class KDoubleNumInput;
-class QFrame;
 class KPushButton;
 class QGroupBox;
 class KTabWidget;
@@ -150,9 +148,8 @@ private:
 	QSpinBox *dishNumberInput;
 
 	// Move <-> buttons
-	QFrame *toolBar;
-	QToolButton *buttonNext;
-	QToolButton *buttonPrev;
+	KPushButton *buttonNext;
+	KPushButton *buttonPrev;
 
 	// Settings for the dish
         QStackedWidget *dishStack;

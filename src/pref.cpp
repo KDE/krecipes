@@ -458,6 +458,7 @@ ServerPrefs::ServerPrefs( QWidget *parent )
 		serverWidget = new SQLiteServerPrefs( this );
 
 	serverWidget->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
+	serverWidget->setMinimumSize( serverWidget->sizeHint() );
 	Form1Layout->addWidget( serverWidget );
 
 	Form1Layout->addItem( new QSpacerItem( 20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
@@ -469,6 +470,7 @@ ServerPrefs::ServerPrefs( QWidget *parent )
 	Form1Layout->addWidget( wizard_button );
 
 	QLabel *note = new QLabel( i18n( "Note: Krecipes must be restarted for most server preferences to take effect." ), this );
+	note->setWordWrap( true );
 	Form1Layout->addWidget( note );
 
 	adjustSize();

@@ -1,4 +1,5 @@
 Changes from 2.0-alpha6 to svn:
+  * Various changes to make the windows able to be smaller than 800x600.
   * Fixes for bugs:
     + Right pane header, diet helper title and list titles follow theme colour
       settings rather than set absolute colours. Thanks to Mike Ferguson for the

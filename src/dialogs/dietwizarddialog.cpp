@@ -57,15 +57,15 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 
 	daysSliderBox = new QGroupBox( optionsBox );
 	daysSliderBox->setTitle( i18nc( "@label:slider", "Number of Days" ) );
-	QVBoxLayout *daysSliderBoxLayout = new QVBoxLayout;
+	QHBoxLayout *daysSliderBoxLayout = new QHBoxLayout;
 	daysSliderBox->setLayout( daysSliderBoxLayout );
 	dayNumberLabel = new QLabel;
 	dayNumberLabel->setText( "- 1 -" );
-	dayNumberLabel->setFixedWidth( 100 );
-	dayNumberLabel->setAlignment( Qt::AlignHCenter );
-	daysSliderBoxLayout->addWidget( dayNumberLabel );
+	dayNumberLabel->setAlignment( Qt::AlignCenter );
 	dayNumberSelector = new QSlider;
+
 	daysSliderBoxLayout->addWidget( dayNumberSelector );
+	daysSliderBoxLayout->addWidget( dayNumberLabel );
 
 	dayNumberSelector->setOrientation( Qt::Horizontal );
 	dayNumberSelector->setRange( 1, 10 );
@@ -76,15 +76,15 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 
 	mealsSliderBox = new QGroupBox( optionsBox );
 	mealsSliderBox->setTitle( i18nc( "@label:slider", "Meals per Day" ) );
-	QVBoxLayout *mealsSliderBoxLayout = new QVBoxLayout;
+	QHBoxLayout *mealsSliderBoxLayout = new QHBoxLayout;
 	mealsSliderBox->setLayout( mealsSliderBoxLayout );
 	mealNumberLabel = new QLabel;
 	mealNumberLabel->setText( "- 1 -" );
-	mealNumberLabel->setFixedWidth( 100 );
-	mealNumberLabel->setAlignment( Qt::AlignHCenter );
-	mealsSliderBoxLayout->addWidget( mealNumberLabel );
+	mealNumberLabel->setAlignment( Qt::AlignCenter );
 	mealNumberSelector = new QSlider;
+
 	mealsSliderBoxLayout->addWidget( mealNumberSelector );
+	mealsSliderBoxLayout->addWidget( mealNumberLabel );
 
 	mealNumberSelector->setOrientation( Qt::Horizontal );
 	mealNumberSelector->setRange( 1, 10 );
@@ -327,7 +327,6 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 {
 	// Design the dialog
 	QVBoxLayout *layout = new QVBoxLayout( this );
-	layout->setSpacing( 10 );
 
 	// Options box
 
@@ -344,28 +343,13 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	dishNumberInput->setMaximum( 10 );
 	dishNumberBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) );
 
-	// Toolbar
-
-	toolBar = new QFrame( mealOptions );
-	toolBar->setFrameStyle ( QFrame::Panel | QFrame::Sunken );
-	QHBoxLayout *toolBarLayout = new QHBoxLayout;
-	toolBar->setLayout( toolBarLayout );
-
 	// Next dish/ Previous dish buttons
-	buttonPrev = new QToolButton;
-	toolBarLayout->addWidget( buttonPrev );
-	buttonPrev->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+	buttonPrev = new KPushButton( mealOptions );
 	buttonPrev->setText( i18nc( "@action:button", "Previous Dish" ) );
 	buttonPrev->setIcon( KIcon( "go-previous" ) );
-	buttonNext = new QToolButton;
-	toolBarLayout->addWidget( buttonNext );
-	buttonNext->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+	buttonNext = new KPushButton( mealOptions );
 	buttonNext->setText( i18nc( "@action:button", "Next Dish" ) );
 	buttonNext->setIcon( KIcon( "go-next" ) );
-
-	buttonPrev->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
-	buttonNext->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
-	toolBar->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Minimum ) );
 
 	// Dish widgets
 	dishStack = new  QStackedWidget( this );
