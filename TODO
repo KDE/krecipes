@@ -9,8 +9,6 @@ Planned for the next release in 2.0 branch:
  * Update user manual.
  
  [Brainstorming]
- * Make the window enough small to be displayed in an 800x600 screen? This is
-   not easy to do.
  * D-BUS interface and service menus to import recipes and restore databases.
 
 Planned for the 2.1 branch:
