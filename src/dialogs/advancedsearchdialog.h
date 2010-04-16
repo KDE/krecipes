@@ -14,6 +14,7 @@
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QGridLayout>
+#include <QFormLayout>
 #include <QFrame>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -52,15 +53,13 @@ public:
 	AdvancedSearchDialog( QWidget *parent, RecipeDB * );
 	~AdvancedSearchDialog();
 
-	virtual void languageChange();
-
 	RecipeActionsHandler *actionHandler;
 	void addAction( KAction * action );
 
 protected:
 	virtual void showEvent( QShowEvent * event );
 
-	QLabel* textLabel1_4;
+	QLabel* searchLabel;
 	QScrollArea* scrollArea1;
 	QFrame* parametersFrame;
 	KLineEdit* titleEdit;
@@ -70,23 +69,14 @@ protected:
 	QFrame* ingredientFrame;
 	KLineEdit* ingredientsAllEdit;
 	KLineEdit* ingredientsAnyEdit;
-	QLabel* textLabel1_2;
-	QLabel* textLabel1;
 	KLineEdit* ingredientsWithoutEdit;
-	QLabel* textLabel1_3;
 	KPushButton* categoriesButton;
 	QFrame* categoryFrame;
 	KLineEdit* categoriesAllEdit;
-	QLabel* textLabel1_5;
-	QLabel* textLabel1_3_3;
 	KLineEdit* categoriesAnyEdit;
-	QLabel* textLabel1_2_3;
 	KLineEdit* categoriesNotEdit;
 	KPushButton* authorsButton;
 	QFrame* authorsFrame;
-	QLabel* textLabel1_2_4;
-	QLabel* textLabel1_6;
-	QLabel* textLabel1_3_4;
 	KLineEdit* authorsAnyEdit;
 	KLineEdit* authorsAllEdit;
 	KLineEdit* authorsWithoutEdit;
@@ -137,18 +127,18 @@ protected:
 	QVBoxLayout* layout7;
 	QHBoxLayout* scrollView1Layout;
 	QVBoxLayout* parametersFrameLayout;
-	QSpacerItem* spacer3_2_3_2_2;
-	QSpacerItem* spacer3_2_3_2;
-	QSpacerItem* spacer3_2_3;
-	QSpacerItem* spacer3_2_2;
+	QSpacerItem* ingredientspacer;
+	QSpacerItem* categoryspacer;
+	QSpacerItem* authorspacer;
+	QSpacerItem* servingsspacer;
 	QSpacerItem* titleFrameSpacer;
 	QSpacerItem* instructionsFrameSpacer;
 	QSpacerItem* metaDataFrameSpacer;
 	QSpacerItem* spacer15;
 	QVBoxLayout* titleFrameLayout;
-	QGridLayout* ingredientFrameLayout;
-	QGridLayout* categoryFrameLayout;
-	QGridLayout* authorsFrameLayout;
+	QFormLayout* ingredientFrameLayout;
+	QFormLayout* categoryFrameLayout;
+	QFormLayout* authorsFrameLayout;
 	QVBoxLayout* servingsFrameLayout;
 	QHBoxLayout* layout5;
 	QVBoxLayout* prepTimeFrameLayout;
