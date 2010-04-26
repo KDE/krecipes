@@ -15,6 +15,7 @@
 #include <QObject>
 #include <QString>
 #include <q3valuelist.h>
+#include <QList>
 
 class QEventLoop;
 class QTimer;
@@ -38,7 +39,7 @@ class QTextStream;
 class CategoryTree;
 class RecipeSearchParameters;
 class Weight;
-class WeightList;
+typedef QList<Weight> WeightList;
 
 typedef struct
 {

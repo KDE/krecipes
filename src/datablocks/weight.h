@@ -11,7 +11,7 @@
 #define WEIGHT_H
 
 #include <QString>
-#include <q3valuelist.h>
+#include <QList>
 
 #include "datablocks/elementlist.h"
 
@@ -32,10 +32,6 @@ public:
 	QString prepMethod;
 };
 
-class WeightList : public Q3ValueList<Weight>
-{
-public:
-	WeightList() : Q3ValueList<Weight>(){}
-};
+typedef QList<Weight> WeightList;
 
 #endif
