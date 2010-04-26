@@ -71,7 +71,6 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 		int pos = recipePropertyList->findIndex( *prop_it );
 		if ( pos >= 0 )  //Exists. Add to it
 		{
-			IngredientPropertyList::iterator rec_property_it = recipePropertyList->at( pos );
 			Ingredient result;
 
 			bool converted;
@@ -92,7 +91,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			}
 
 			if ( converted )  // Could convert units to perUnit
-				(*rec_property_it).amount += ( (*prop_it).amount ) * result.amount;
+				(*recipePropertyList)[pos].amount += ( (*prop_it).amount ) * result.amount;
 		}
 		else // Append new property
 		{

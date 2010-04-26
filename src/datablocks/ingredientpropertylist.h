@@ -9,11 +9,11 @@
 #ifndef INGREDIENTPROPERTYLIST_H
 #define INGREDIENTPROPERTYLIST_H
 
-#include <q3valuelist.h>
+#include <QtCore/QList>
 
 #include "datablocks/ingredientproperty.h"
 
-class IngredientPropertyList : public Q3ValueList<IngredientProperty>
+class IngredientPropertyList : public QList<IngredientProperty>
 {
 public:
 	IngredientPropertyList();

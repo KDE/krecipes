@@ -8,8 +8,6 @@
 ***************************************************************************/
 
 #include "datablocks/ingredientpropertylist.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 IngredientPropertyList::IngredientPropertyList()
 {}
@@ -22,7 +20,7 @@ IngredientPropertyList::const_iterator IngredientPropertyList::find( int id )
 {
 	IngredientProperty ip;
 	ip.id = id;
-	return Q3ValueList<IngredientProperty>::find( ip );
+	return QList<IngredientProperty>::find( ip );
 }
 
 int IngredientPropertyList::findByName( const QString &name )
