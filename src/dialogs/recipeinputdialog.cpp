@@ -1393,7 +1393,8 @@ void RecipeInputDialog::slotAddRating()
 		}
 
 		RatingDisplayWidget *item = new RatingDisplayWidget( this );
-		item->rating_it = loadedRecipe->ratingList.append(r);
+		loadedRecipe->ratingList.append(r);
+		item->rating_it = --(loadedRecipe->ratingList.end());
 		addRating(r,item);
 		ratingListDisplayWidget->insertItem(item,0);
 		emit( recipeChanged() ); //Indicate that the recipe changed

@@ -810,7 +810,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		if ( (*rating_it).id == -1 )
 			(*rating_it).id = lastInsertID();
 
-		for ( QLinkedList<RatingCriteria>::const_iterator rc_it = (*rating_it).ratingCriteriaList.constBegin(); rc_it != (*rating_it).ratingCriteriaList.constEnd(); ++rc_it ) {
+		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.constBegin(); rc_it != (*rating_it).ratingCriteriaList.constEnd(); ++rc_it ) {
 			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+","+QString::number((*rc_it).id)+","+QString::number((*rc_it).stars)+")" );
 			recipeToSave.exec( command );
 		}

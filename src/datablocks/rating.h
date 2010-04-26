@@ -10,7 +10,7 @@
 #ifndef RATING_H
 #define RATING_H
 
-#include <q3valuelist.h>
+#include <QList>
 #include <QString>
 
 #include <QPixmap>
@@ -25,7 +25,7 @@ public:
 	double stars;
 };
 
-typedef Q3ValueList< RatingCriteria > RatingCriteriaList;
+typedef QList< RatingCriteria > RatingCriteriaList;
 
 class Rating
 {
@@ -45,7 +45,7 @@ public:
 	RatingCriteriaList ratingCriteriaList;
 };
 
-class RatingList : public Q3ValueList< Rating >
+class RatingList : public QList< Rating >
 {
 public:
 	double average();
