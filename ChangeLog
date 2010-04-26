@@ -3,6 +3,8 @@ Changes from 2.0-alpha6 to svn:
   * The setup assistant, preferences dialog and advanced search dialog follow
     the HIG about form label alignment, we are using QFormLayout. Thank you to
     Mike Ferguson for doing the advanced search dialog.
+  * Added an exporter for MasterCook *.mx2 files. Thank you to Warren Severin
+    for writing it.
   * Fixes for bugs:
     + Right pane header, diet helper title and list titles follow theme colour
       settings rather than set absolute colours. Thanks to Mike Ferguson for the

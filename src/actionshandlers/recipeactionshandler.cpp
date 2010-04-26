@@ -35,6 +35,7 @@
 #include "exporters/kreexporter.h"
 #include "exporters/mmfexporter.h"
 #include "exporters/recipemlexporter.h"
+#include "exporters/mx2exporter.h"
 #include "exporters/plaintextexporter.h"
 #include "exporters/rezkonvexporter.h"
 
@@ -348,6 +349,7 @@ void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString &
 		"*.html|%2 (*.html)\n"
 		"*.mmf|Meal-Master (*.mmf)\n"
 		"*.xml|RecipeML (*.xml)\n"
+		"*.mx2|MasterCook (*.mx2)\n"
 		"*.rk|Rezkonv (*.rk)"
 		).arg( i18n( "Compressed Krecipes format" ) )
 		.arg( i18n( "Web page" ) )
@@ -366,6 +368,8 @@ void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString &
 			BaseExporter * exporter;
 			if ( fd->currentFilter() == "*.xml" )
 				exporter = new RecipeMLExporter( fileName, fd->currentFilter() );
+			else if ( fd->currentFilter() == "*.mx2" )
+			    exporter = new mx2Exporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.mmf" )
 				exporter = new MMFExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*" ) {
@@ -413,6 +417,8 @@ void RecipeActionsHandler::recipesToClipboard( const QList<int> &ids, RecipeDB *
 	BaseExporter * exporter;
 	if ( formatFilter == "*.xml" )
 		exporter = new RecipeMLExporter( QString::null, formatFilter );
+	else if ( formatFilter == "*.mx2" )
+		exporter = new mx2Exporter( QString::null, formatFilter );
 	else if ( formatFilter == "*.mmf" )
 		exporter = new MMFExporter( QString::null, formatFilter );
 	else if ( formatFilter == "*.cml" )

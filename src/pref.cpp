@@ -500,6 +500,7 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Meal-Master (*.mmf)");
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "Rezkonv (*.rk)");
 	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "RecipeML (*.xml)");
+	clipBoardFormatComboBox->insertItem( clipBoardFormatComboBox->count(), "MasterCook (*.mx2)");
 	//clipBoardFormatComboBox->insertItem("CookML (*.cml)");
 	exportGroupLayout->addWidget( clipBoardFormatComboBox, 0, 1 ); 
 
@@ -511,6 +512,8 @@ ImportPrefs::ImportPrefs( QWidget *parent )
 		clipBoardFormatComboBox->setCurrentIndex(2);
 	else if ( clipboardFormat == "*.xml" )
 		clipBoardFormatComboBox->setCurrentIndex(3);
+	else if ( clipboardFormat == "*.mx2" )
+		clipBoardFormatComboBox->setCurrentIndex(4);
 	else
 		clipBoardFormatComboBox->setCurrentIndex(0);
 

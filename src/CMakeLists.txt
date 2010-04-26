@@ -168,6 +168,7 @@ set (krecipesexporters_SRCS
    exporters/rezkonvexporter.cpp
    exporters/htmlbookexporter.cpp
    exporters/xsltexporter.cpp
+   exporters/mx2exporter.cpp
    )
 
 
