@@ -233,7 +233,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 		for ( IngredientList::iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ing_list_end; ++ing_it ) {
 			importIngredient( *ing_it, db, progress_dialog );
 
-			for ( Q3ValueList<IngredientData>::iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+			for ( Ingredient::SubstitutesList::iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
 				importIngredient( *sub_it, db, progress_dialog );
 			}
 		}

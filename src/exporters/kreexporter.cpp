@@ -174,7 +174,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 
 				if ( (*ing_it).substitutes.count() > 0 ) {
 					xml += "<substitutes>\n";
-					for ( QLinkedList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+					for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
 						xml += "<ingredient>\n";
 						xml += generateIngredient(*sub_it);
 						xml += "</ingredient>\n";

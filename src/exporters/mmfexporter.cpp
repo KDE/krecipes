@@ -99,8 +99,8 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 		if ( ( *ing_it ).groupID == -1 ) {
 			writeSingleIngredient( content, *ing_it, (*ing_it).substitutes.count() > 0 );
 
-			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
-				Q3ValueList<IngredientData>::const_iterator save_it = sub_it;
+			for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+				Ingredient::SubstitutesList::const_iterator save_it = sub_it;
 
 				 ++sub_it;
 				writeSingleIngredient( content, *save_it, sub_it != (*ing_it).substitutes.end() );
@@ -124,8 +124,8 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
 			writeSingleIngredient( content, *ing_it, (*ing_it).substitutes.count() > 0  );
 
-			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
-				Q3ValueList<IngredientData>::const_iterator save_it = sub_it;
+			for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+				Ingredient::SubstitutesList::const_iterator save_it = sub_it;
 
 				 ++sub_it;
 				writeSingleIngredient( content, *save_it, sub_it != (*ing_it).substitutes.end() );

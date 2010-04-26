@@ -145,8 +145,8 @@ void check( const Recipe &recipe, const Recipe &base )
 	for ( ; ing_it != recipe.ingList.end() || base_ing_it != base.ingList.end(); ++ing_it, ++base_ing_it ) {
 		check( *ing_it, *base_ing_it, ing_num );
 
-		Q3ValueList<IngredientData>::const_iterator base_sub_it = (*base_ing_it).substitutes.begin();
-		for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it, ++base_sub_it ) {
+		Ingredient::SubstitutesList::const_iterator base_sub_it = (*base_ing_it).substitutes.begin();
+		for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it, ++base_sub_it ) {
 			check( *sub_it, *base_sub_it, ing_num+1000 );
 		}
 

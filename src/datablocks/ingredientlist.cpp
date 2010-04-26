@@ -39,7 +39,7 @@ bool IngredientList::contains( const Ingredient &ing, bool compareAmount, Recipe
 		}
 	}
 	if ( !ret ) {
-		for ( Q3ValueList<IngredientData>::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
+		for ( Ingredient::SubstitutesList::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
 			ret = contains(*it, compareAmount, database);
 			if ( ret ) break;
 		}
@@ -102,7 +102,7 @@ Ingredient IngredientList::findByName( const QString &ing ) const
 		if ( ( *it ).name == ing )
 			return *it;
 
-		for ( Q3ValueList<IngredientData>::const_iterator sub_it = ( *it ).substitutes.begin(); sub_it != ( *it ).substitutes.end(); ++sub_it ) {
+		for ( Ingredient::SubstitutesList::const_iterator sub_it = ( *it ).substitutes.begin(); sub_it != ( *it ).substitutes.end(); ++sub_it ) {
 			if ( ( *sub_it ).name == ing )
 				return *sub_it;
 		}
@@ -120,7 +120,7 @@ Ingredient IngredientList::findByName( const QRegExp &rx ) const
 		if ( rx.exactMatch( it->name ) ) 
 			return *it;
 
-		for ( Q3ValueList<IngredientData>::const_iterator sub_it = ( *it ).substitutes.begin(); sub_it != ( *it ).substitutes.end(); ++sub_it ) {
+		for ( Ingredient::SubstitutesList::const_iterator sub_it = ( *it ).substitutes.begin(); sub_it != ( *it ).substitutes.end(); ++sub_it ) {
 			if ( rx.exactMatch( sub_it->name ) )
 				return *sub_it;
 		}
@@ -150,7 +150,7 @@ IngredientData& IngredientList::findSubstitute( const Ingredient &i )  // Search
 	Q3ValueList<Ingredient>::iterator result = Q3ValueList<Ingredient>::find(i);
 	if ( result == end() ) {
 		for ( IngredientList::iterator it = begin(); it != end(); ++it ) {
-			Q3ValueList<IngredientData>::iterator result = (*it).substitutes.find(i);
+			Ingredient::SubstitutesList::iterator result = (*it).substitutes.find(i);
 			if ( result != (*it).substitutes.end() )
 				return *result;
 		}
@@ -163,7 +163,7 @@ void IngredientList::removeSubstitute( const Ingredient &i )
 	Q3ValueList<Ingredient>::iterator result = Q3ValueList<Ingredient>::find(i);
 	if ( result == end() ) {
 		for ( IngredientList::iterator it = begin(); it != end(); ++it ) {
-			Q3ValueList<IngredientData>::iterator result = (*it).substitutes.find(i);
+			Ingredient::SubstitutesList::iterator result = (*it).substitutes.find(i);
 			if ( result != (*it).substitutes.end() ) {
 				(*it).substitutes.remove(result);
 				return;

@@ -314,7 +314,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 			ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
 
-			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+			for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
 				QString amount_str = MixedNumber( ( *sub_it ).amount ).toString( number_format );
 	
 				if ( (*ing_it).amount_offset > 0 )

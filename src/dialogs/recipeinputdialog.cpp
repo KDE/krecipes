@@ -618,7 +618,7 @@ void RecipeInputDialog::reload( void )
 				lastElement = new IngListViewItem ( ingredientList, lastElement, *ing_it );
 			}
 
-			for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+			for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
 				new IngSubListViewItem ( lastElement, *sub_it );
 				lastElement->setOpen(true);
 			}
@@ -1487,14 +1487,14 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing, bool noHeader )
 		ingCopy.groupID = header->id();
 
 		lastElement = new IngListViewItem( header, lastElement, ingCopy );
-		for ( Q3ValueList<IngredientData>::const_iterator it = ingCopy.substitutes.begin(); it != ingCopy.substitutes.end(); ++it ) {
+		for ( Ingredient::SubstitutesList::const_iterator it = ingCopy.substitutes.begin(); it != ingCopy.substitutes.end(); ++it ) {
 			new IngSubListViewItem( lastElement, *it );
 		}
 		lastElement->setOpen(true);
 	}
 	else {
 		lastElement = new IngListViewItem( ingredientList, lastElement, ingCopy );
-		for ( Q3ValueList<IngredientData>::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
+		for ( Ingredient::SubstitutesList::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
 			new IngSubListViewItem( lastElement, *it );
 		}
 		lastElement->setOpen(true);

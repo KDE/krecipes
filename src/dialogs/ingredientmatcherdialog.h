@@ -50,7 +50,7 @@ public:
 			if ( (*ili).substitutes.count() > 0 ) {
 				QStringList subs;
 				subs << ( *ili ).name;
-				for ( Q3ValueList<IngredientData>::const_iterator it = (*ili).substitutes.begin(); it != (*ili).substitutes.end(); ++it ) {
+				for ( Ingredient::SubstitutesList::const_iterator it = (*ili).substitutes.begin(); it != (*ili).substitutes.end(); ++it ) {
  					subs << (*it).name;
 				}
 				ingredientListStored->append( subs.join(QString(" %1 ").arg(i18n("OR"))) );

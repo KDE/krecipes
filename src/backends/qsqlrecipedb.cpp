@@ -713,7 +713,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 			recipeToSave.exec( command );
 		}
 
-		for ( QLinkedList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.constBegin(); sub_it != (*ing_it).substitutes.constEnd(); ++sub_it ) {
+		for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.constBegin(); sub_it != (*ing_it).substitutes.constEnd(); ++sub_it ) {
 			order_index++;
 			QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 			command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9);" )

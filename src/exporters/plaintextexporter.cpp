@@ -116,7 +116,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 					content += ", "+i18n("or");
 				content += "\n";
 				
-				for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
+				for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
 					if ( !group.isEmpty() )
 						content += "  ";
 

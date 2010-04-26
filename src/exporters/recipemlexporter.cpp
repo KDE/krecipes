@@ -175,7 +175,7 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 
 				createIngredient( ing_tag, *ing_it, doc );
 
-				for ( Q3ValueList<IngredientData>::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
+				for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
 					QDomElement alt_ing_tag = doc.createElement( "alt-ing" );
 					ing_tag.appendChild( alt_ing_tag );
 					createIngredient( alt_ing_tag, *sub_it, doc );
