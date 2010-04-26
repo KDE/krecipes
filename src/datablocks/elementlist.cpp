@@ -13,7 +13,7 @@
 #include <QStringList>
 
 
-ElementList::ElementList() : Q3ValueList <Element>()
+ElementList::ElementList() : QList <Element>()
 {}
 
 ElementList::~ElementList()
@@ -21,7 +21,7 @@ ElementList::~ElementList()
 
 Element ElementList::getElement( int index ) const
 {
-	return * ( at( index ) );
+	return at( index );
 }
 
 Element ElementList::findByName( const QString &name ) const
@@ -58,7 +58,7 @@ bool ElementList::containsId( int id ) const // Search by id (which uses search 
 
 	Element i;
 	i.id = id;
-	return ( find( i ) != end() );
+	return contains(i);
 }
 
 bool ElementList::containsSubSet( ElementList &el )

@@ -10,7 +10,7 @@
 #ifndef ELEMENTLIST_H
 #define ELEMENTLIST_H
 
-#include <q3valuelist.h>
+#include <QList>
 #include <QRegExp>
 
 #include "element.h"
@@ -18,7 +18,7 @@
 /**
 @author Unai Garro
 */
-class ElementList: public Q3ValueList<Element>
+class ElementList: public QList<Element>
 {
 public:
 	ElementList();
