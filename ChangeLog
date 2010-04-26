@@ -9,6 +9,8 @@ Changes from 2.0-alpha6 to svn:
     + Right pane header, diet helper title and list titles follow theme colour
       settings rather than set absolute colours. Thanks to Mike Ferguson for the
       patches.
+    + When you click on a recipe in the advanced search dialog results, the
+      recipe actions (i.e. edit, export...) are updated properly.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:

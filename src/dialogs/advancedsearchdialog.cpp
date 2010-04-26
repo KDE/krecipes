@@ -610,6 +610,8 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataFrame->setVisible(false);
 	ratingButtonGroup->setVisible(false);
 
+	//connect( resultsListView, SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
+	connect( actionHandler, SIGNAL( recipeSelected( bool ) ), SIGNAL( recipeSelected( bool ) ) );
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QList<int> &, int ) ), SIGNAL( recipesSelected( const QList<int> &, int ) ) );
 
@@ -986,6 +988,14 @@ void AdvancedSearchDialog::slotAddRatingCriteria()
 void AdvancedSearchDialog::slotRemoveRatingCriteria()
 {
 	delete criteriaListView->selectedItem();
+}
+
+void AdvancedSearchDialog::haveSelectedItems()
+{
+	if ( resultsListView->selectedItems().isEmpty() )
+		emit recipeSelected( false );
+	else
+		emit recipeSelected( true );
 }
 
 #include "advancedsearchdialog.moc"

@@ -502,9 +502,12 @@ void RecipeActionsHandler::selectionChangedSlot()
 		// We have a single recipe as our selection
 		RecipeListItem * recipe_it = ( RecipeListItem* ) items.first();
 		emit recipeSelected( recipe_it->recipeID(), 4 );
+		emit recipeSelected( true );
 	}
-	else
+	else {
 		emit recipeSelected( 0, 5 ); //id doesn't matter here
+		emit recipeSelected( false );
+	}
 }
 
 #include "recipeactionshandler.moc"

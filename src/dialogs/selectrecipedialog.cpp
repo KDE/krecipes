@@ -150,9 +150,11 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 	connect( recipeListView, SIGNAL( nextGroupLoaded() ), SLOT( refilter() ) );
 	connect( recipeListView, SIGNAL( prevGroupLoaded() ), SLOT( refilter() ) );
 
+	connect( advancedSearch, SIGNAL( recipeSelected( bool ) ), SIGNAL( recipeSelected( bool ) ) );
 	connect( advancedSearch, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( advancedSearch, SIGNAL( recipesSelected( const QList<int> &, int ) ), SIGNAL( recipesSelected( const QList<int> &, int ) ) );
 
+	connect( actionHandler, SIGNAL( recipeSelected( bool ) ), SIGNAL( recipeSelected( bool ) ) );
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QList<int> &, int ) ), SIGNAL( recipesSelected( const QList<int> &, int ) ) );
 }

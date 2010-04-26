@@ -52,6 +52,7 @@ public:
 	static void recipesToClipboard( const QList<int> &ids, RecipeDB *db );
 
 signals:
+	void recipeSelected( bool );
 	void recipeSelected( int id, int action );
 	void recipesSelected( const QList<int> &ids, int action );
 

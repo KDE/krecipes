@@ -155,6 +155,7 @@ protected:
 	RecipeDB *database;
 
 signals:
+	void recipeSelected( bool );
 	void recipeSelected( int, int );
 	void recipesSelected( const QList<int> &, int );
 
@@ -166,6 +167,7 @@ private slots:
 	void activateRatingOptionCriterion();
 	void slotAddRatingCriteria();
 	void slotRemoveRatingCriteria();
+	void haveSelectedItems();
 
 	//called by a signal from the database when a recipe is removed
 	void removeRecipe( int id );
