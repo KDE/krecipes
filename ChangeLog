@@ -5,6 +5,7 @@ Changes from 2.0-alpha6 to svn:
     Mike Ferguson for doing the advanced search dialog.
   * Added an exporter for MasterCook *.mx2 files. Thank you to Warren Severin
     for writing it.
+  * Porting of datablock classes to Qt4
   * Fixes for bugs:
     + Right pane header, diet helper title and list titles follow theme colour
       settings rather than set absolute colours. Thanks to Mike Ferguson for the
