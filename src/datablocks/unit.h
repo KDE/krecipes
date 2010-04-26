@@ -11,7 +11,7 @@
 #define UNIT_H
 
 #include <QString>
-#include <q3valuelist.h>
+#include <QList>
 
 class Unit
 {
@@ -39,6 +39,6 @@ public:
 	QString plural_abbrev;
 };
 
-typedef Q3ValueList< Unit > UnitList;
+typedef QList< Unit > UnitList;
 
 #endif //UNIT_H

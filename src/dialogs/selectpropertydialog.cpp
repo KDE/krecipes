@@ -107,7 +107,7 @@ int SelectPropertyDialog::perUnitsID()
 	int comboCount = perUnitsBox->count();
 	for (int i = 0; i < comboCount; ++i) {
 		if (perUnitsBox->currentText() == perUnitsBox->itemText(i))
-			return ( *unitListBack->at( i ) ).id;
+			return unitListBack->at( i ).id;
 	}
 
 	//new unit, add it to the database
