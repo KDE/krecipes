@@ -33,15 +33,12 @@ void calculateShopping( const ElementList &recipeList, IngredientList *ingredien
 void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList, RecipeDB *db )
 {
 	for ( IngredientList::const_iterator ing_it = newIngredientList->begin(); ing_it != newIngredientList->end(); ++ing_it ) {
-		IngredientList::iterator pos_it;
 
 		// Find out if ingredient exists in list already
 		int pos = totalIngredientList->find( ( *ing_it ).ingredientID );
 
 		if ( pos >= 0 )  // the ingredient is already listed
 		{
-			pos_it = totalIngredientList->at( pos );
-
 			// Variables to store the new total
 			Ingredient result;
 			bool converted;
@@ -49,19 +46,19 @@ void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList
 			// Do the conversion
 			// try to with this and next in the list until conversion rate is
 			// found or end of list is reached
-			IngredientList::iterator lastpos_it; // for 'backup'
+			int lastpos; // for 'backup'
 			do
 			{
-				lastpos_it = pos_it;
+				lastpos = pos;
 
 				// Try to convert
-				converted = autoConvert( db, *ing_it, *pos_it, result );
+				converted = autoConvert( db, *ing_it, totalIngredientList->at(pos), result );
 			}
-			while ( ( !converted ) && ( ( ( pos_it = totalIngredientList->find( ++pos_it, ( *ing_it ).ingredientID ) ) ) != totalIngredientList->end() ) );
+			while ( ( !converted ) && ( ( ( pos = totalIngredientList->indexOf(++pos, ( *ing_it ).ingredientID) ) ) != -1 ) );
 
 			// If the conversion was succesfull, Set the New Values
 			if ( converted ) {
-				*lastpos_it = result;
+				(*totalIngredientList)[lastpos] = result;
 			}
 			else // Otherwise append this ingredient at the end of the list
 			{

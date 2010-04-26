@@ -774,9 +774,9 @@ void RecipeInputDialog::moveIngredientUp( void )
 			loadedRecipe->ingList.move( iabove_index, ( iabove->rtti() == INGGRPLISTVIEWITEM_RTTI ) ? iabove->childCount() : 1, it_index + it->childCount() - 1 );
 		}
 		else {
-			int it_index = ingItemIndex( ingredientList, it );
+			const int it_index = ingItemIndex( ingredientList, it );
 			int iabove_index = ingItemIndex( ingredientList, iabove );
-			IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
+			//IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
 
 			if ( iabove->parent() != it->parent() ) {
 				if ( iabove->rtti() == INGGRPLISTVIEWITEM_RTTI && it->parent() ) { //move the item out of the group
@@ -798,9 +798,9 @@ void RecipeInputDialog::moveIngredientUp( void )
 			}
 
 			if ( it->parent() )
-				( *ing ).groupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
+				loadedRecipe->ingList[it_index].groupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
 			else
-				( *ing ).groupID = -1;
+				loadedRecipe->ingList[it_index].groupID = -1;
 		}
 
 		emit changed();
@@ -837,7 +837,7 @@ void RecipeInputDialog::moveIngredientDown( void )
 		else {
 			int it_index = ingItemIndex( ingredientList, it );
 			int ibelow_index = ingItemIndex( ingredientList, ibelow );
-			IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
+			//IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
 
 			if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI || ( ibelow->parent() != it->parent() ) ) {
 				if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI && !it->parent() ) { //move the item into the group
@@ -863,9 +863,9 @@ void RecipeInputDialog::moveIngredientDown( void )
 			}
 
 			if ( it->parent() )
-				( *ing ).groupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
+				loadedRecipe->ingList[it_index].groupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
 			else
-				( *ing ).groupID = -1;
+				loadedRecipe->ingList[it_index].groupID = -1;
 		}
 
 		emit changed();
@@ -877,8 +877,8 @@ void RecipeInputDialog::moveIngredientDown( void )
 		ingredientList->setCurrentItem( it ); //Keep selected
 
 		int it_index = ingItemIndex( ingredientList, it );
-		IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
-		( *ing ).groupID = -1;
+		//IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
+		loadedRecipe->ingList[it_index].groupID = -1;
 
 		emit changed();
 	}

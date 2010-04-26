@@ -173,11 +173,11 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	if ( string.at( 11 ) == '-' && string.mid( 0, 11 ).trimmed().isEmpty() && !list.isEmpty() )  //continuation of previous ingredient
 	{
 		//kDebug()<<"Appending to last ingredient in column: "<<string.trimmed().mid(1,string.length());
-		( *list.at( list.count() - 1 ) ).name += " " + string.trimmed().mid( 1, string.length() );
-		QString name = ( *list.at( list.count() - 1 ) ).name;
+		list.last().name += " " + string.trimmed().mid( 1, string.length() );
+		QString name = list.last().name;
 
 		if ( name.endsWith(", or") ) {
-			( *list.at( list.count() - 1 ) ).name = name.left(name.length()-4);
+			list.last().name = name.left(name.length()-4);
 			is_sub = true;
 		}
 		else
@@ -247,7 +247,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		is_sub = false;
 
 	if ( last_is_sub )
-		( *list.at( list.count() - 1 ) ).substitutes.append(new_ingredient);
+		list.last().substitutes.append(new_ingredient);
 	else
 		list.append( new_ingredient );
 

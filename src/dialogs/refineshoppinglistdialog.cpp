@@ -163,7 +163,8 @@ void RefineShoppingListDialog::addIngredient()
 		ingListView->listView() ->ensureItemVisible( new_item );
 		allIngListView->listView() ->setSelected( item, false );
 
-		item_ing_map.insert( new_item, ingredientList.append( Ingredient( item->text( 0 ), 0, Unit() ) ) );
+        ingredientList.append( Ingredient( item->text( 0 ), 0, Unit() ) );
+		item_ing_map.insert( new_item, ingredientList.end()-- );
 	}
 }
 

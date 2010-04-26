@@ -145,7 +145,7 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, boo
 		name.remove( cont_test );
 		kDebug() << "Appending to last ingredient: " << name ;
 		if ( !recipe.ingList.isEmpty() )  //so it doesn't crash when the first ingredient appears to be a continuation of another
-			( *recipe.ingList.at( recipe.ingList.count() - 1 ) ).name += " " + name;
+			recipe.ingList.last().name += " " + name;
 
 		return ;
 	}
@@ -182,7 +182,7 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, boo
 		is_sub = false;
 
 	if ( last_is_sub )
-		( *recipe.ingList.at( recipe.ingList.count() - 1 ) ).substitutes.append(new_ingredient);
+		recipe.ingList.last().substitutes.append(new_ingredient);
 	else
 		recipe.ingList.append( new_ingredient );
 }
