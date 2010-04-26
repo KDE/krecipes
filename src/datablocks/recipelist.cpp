@@ -10,9 +10,3 @@
 
 #include "recipelist.h"
 
-RecipeList::RecipeList() : Q3ValueList <Recipe>()
-{}
-
-RecipeList::~RecipeList()
-{}
-

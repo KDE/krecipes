@@ -13,14 +13,6 @@
 
 #include "datablocks/recipe.h"
 
-/**
-@author Unai Garro
-*/
-class RecipeList: public Q3ValueList <Recipe>
-{
-public:
-	RecipeList();
-	~RecipeList();
-};
+typedef QList<Recipe> RecipeList;
 
 #endif

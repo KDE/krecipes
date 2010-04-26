@@ -249,7 +249,8 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 			if ( items & RecipeDB::Meta )
 				loadRecipeMetadata(&recipe);
 
-			recipeIterators[ recipe.recipeID ] = rlist->append( recipe );
+			rlist->append( recipe );
+			recipeIterators[ recipe.recipeID ] = --(rlist->end());
 		}
 	}
 

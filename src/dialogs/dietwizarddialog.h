@@ -47,7 +47,6 @@ class DishInput;
 class DishTitle;
 class MealInput;
 class RecipeDB;
-class RecipeList;
 class CategoryCheckListView;
 class PropertyConstraintListView;
 

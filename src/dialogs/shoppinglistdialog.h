@@ -20,11 +20,11 @@
 #include <kiconloader.h>
 #include <kvbox.h>
 
+#include "datablocks/recipelist.h"
 #include "widgets/krelistview.h"
 #include "widgets/dblistviewbase.h"
 
 class RecipeDB;
-class RecipeList;
 class ShoppingListViewDialog;
 class RecipeActionsHandler;
 class RecipeListView;
