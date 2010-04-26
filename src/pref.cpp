@@ -27,6 +27,7 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QVBoxLayout>
+#include <QFormLayout>
 
 #include <kapplication.h>
 #include <kconfiggroup.h>
@@ -129,91 +130,46 @@ void KrecipesPreferences::slotHelp()
 
 MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this );
-	layout->cellRect( 1,1 );
-	layout->setSpacing( KDialog::spacingHint() );
-	layout->setMargin( 0 );
-
-	QSpacerItem* spacerTop = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerTop, 0, 1 );
-	QSpacerItem* spacerLeft = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacerLeft, 1, 0 );
-
-	QLabel* serverText = new QLabel( i18n( "Server:" ), this );
-	layout->addWidget( serverText, 1, 1 );
+	QVBoxLayout * layout = new QVBoxLayout( this );
+	
+	QFormLayout * dbLayout = new QFormLayout;
 
 	serverEdit = new KLineEdit( this );
-	layout->addWidget( serverEdit, 1, 2 );
-
-	QSpacerItem* spacerRow1 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerRow1, 2, 1 );
-
-	QLabel* usernameText = new QLabel( i18nc( "@label:textbox Database Username", "Username:" ), this );
-	layout->addWidget( usernameText, 3, 1 );
+	dbLayout->addRow( i18n( "Server:" ),  serverEdit );
 
 	usernameEdit = new KLineEdit( this );
-	layout->addWidget( usernameEdit, 3, 2 );
-
-	QSpacerItem* spacerRow2 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerRow2, 4, 1 );
-
-	QLabel* passwordText = new QLabel( i18n( "Password:" ), this );
-	layout->addWidget( passwordText, 5, 1 );
+	dbLayout->addRow( i18nc( "@label:textbox Database Username", "Username:" ), usernameEdit );
 
 	passwordEdit = new KLineEdit( this );
 	passwordEdit->setEchoMode( KLineEdit::Password );
-	layout->addWidget( passwordEdit, 5, 2 );
-
-	QSpacerItem* spacerRow3 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerRow3, 6, 1 );
-
-	QLabel* portText = new QLabel( i18n( "Port:" ), this );
-	layout->addWidget( portText, 7, 1 );
+	dbLayout->addRow( i18n( "Password:" ), passwordEdit );
 
 	portEdit = new KIntNumInput( this );
 	portEdit->setMinimum(0);
 	portEdit->setSpecialValueText( i18nc("Default Port", "Default") );
-	layout->addWidget( portEdit, 7, 2 );
-
-	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerRow4, 8, 1 );
-
-	QLabel* dbNameText = new QLabel( i18n( "Database name:" ), this );
-	layout->addWidget( dbNameText, 9, 1 );
+	dbLayout->addRow( i18n( "Port:" ), portEdit );
 
 	dbNameEdit = new KLineEdit( this );
-	layout->addWidget( dbNameEdit, 9, 2 );
+	dbLayout->addRow( i18n( "Database name:" ), dbNameEdit );
 
-	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow5, 10, 1 );
+	layout->addLayout( dbLayout );
 
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this );
 	backupGBox->setTitle( i18n( "Backup" ) );
+	QFormLayout *backupGBoxLayout = new QFormLayout;
 
-	QLabel *dumpPathLabel = new QLabel;
-	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("mysqldump") ));
-
-	QLabel *mysqlPathLabel = new QLabel;
-	mysqlPathLabel->setText( i18n( "Path to '%1':" ,QString("mysql") ));
-
-	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow6, 11, 1 );
-	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
-	layout->addItem( spacerRight, 1, 4 );
-	
 	dumpPathRequester = new KUrlRequester;
-	mysqlPathRequester = new KUrlRequester;
 	dumpPathRequester->fileDialog()->setCaption( i18n( "Select MySQL dump command" ) );
-	mysqlPathRequester->fileDialog()->setCaption( i18n( "Select MySQL command" ) );
+	backupGBoxLayout->addRow( i18n( "Path to '%1':" ,QString("mysqldump") ), dumpPathRequester );
 
-	QGridLayout *backupGBoxLayout = new QGridLayout;
-	backupGBoxLayout->addWidget( dumpPathLabel, 0, 0 );
-	backupGBoxLayout->addWidget( mysqlPathLabel, 0, 1 );
-	backupGBoxLayout->addWidget( dumpPathRequester, 1, 0 );
-	backupGBoxLayout->addWidget( mysqlPathRequester, 1, 1 );
+	mysqlPathRequester = new KUrlRequester;
+	mysqlPathRequester->fileDialog()->setCaption( i18n( "Select MySQL command" ) );
+	backupGBoxLayout->addRow( i18n( "Path to '%1':" ,QString("mysql") ),mysqlPathRequester );
+
 	backupGBox->setLayout(backupGBoxLayout);
-	layout->addWidget( backupGBox, 10, 1, 1, 4 );
+
+	layout->addWidget( backupGBox );
 
 	// Load Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Server" );
@@ -244,91 +200,46 @@ void MySQLServerPrefs::saveOptions( void )
 
 PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( parent )
 {
-	QGridLayout * layout = new QGridLayout( this );
-	layout->cellRect( 1,1 );
-	layout->setSpacing( KDialog::spacingHint() );
-	layout->setMargin( 0 );
+	QVBoxLayout * layout = new QVBoxLayout( this );
 
-	QSpacerItem* spacerTop = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerTop, 0, 1 );
-	QSpacerItem* spacerLeft = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	layout->addItem( spacerLeft, 1, 0 );
-
-	QLabel* serverText = new QLabel( i18n( "Server:" ), this );
-	layout->addWidget( serverText, 1, 1 );
+	QFormLayout * dbLayout = new QFormLayout;
 
 	serverEdit = new KLineEdit( this );
-	layout->addWidget( serverEdit, 1, 2 );
-
-	QSpacerItem* spacerRow1 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerRow1, 2, 1 );
-
-	QLabel* usernameText = new QLabel( i18nc("@label:textbox Database Username", "Username:" ), this );
-	layout->addWidget( usernameText, 3, 1 );
+	dbLayout->addRow( i18n( "Server:" ), serverEdit );
 
 	usernameEdit = new KLineEdit( this );
-	layout->addWidget( usernameEdit, 3, 2 );
-
-	QSpacerItem* spacerRow2 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerRow2, 4, 1 );
-
-	QLabel* passwordText = new QLabel( i18n( "Password:" ), this );
-	layout->addWidget( passwordText, 5, 1 );
+	dbLayout->addRow ( i18nc("@label:textbox Database Username", "Username:" ), usernameEdit );
 
 	passwordEdit = new KLineEdit( this );
 	passwordEdit->setEchoMode( KLineEdit::Password );
-	layout->addWidget( passwordEdit, 5, 2 );
-
-	QSpacerItem* spacerRow3 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerRow3, 6, 1 );
-
-	QLabel* portText = new QLabel( i18n( "Port:" ), this );
-	layout->addWidget( portText, 7, 1 );
+	dbLayout->addRow( i18n( "Password:" ), passwordEdit );
 
 	portEdit = new KIntNumInput( this );
 	portEdit->setMinimum(0);
 	portEdit->setSpecialValueText( i18nc("Default Port", "Default") );
-	layout->addWidget( portEdit, 7, 2 );
-
-	QSpacerItem* spacerRow4 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	layout->addItem( spacerRow4, 8, 1 );
-
-	QLabel* dbNameText = new QLabel( i18n( "Database name:" ), this );
-	layout->addWidget( dbNameText, 9, 1 );
+	dbLayout->addRow( i18n( "Port:" ), portEdit );
 
 	dbNameEdit = new KLineEdit( this );
-	layout->addWidget( dbNameEdit, 9, 2 );
+	dbLayout->addRow( i18n( "Database name:" ), dbNameEdit );
 
-	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow5, 10, 1 );
+	layout->addLayout( dbLayout );
 
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this );
-	QGridLayout *backupGBoxLayout = new QGridLayout;
+	QFormLayout *backupGBoxLayout = new QFormLayout;
 	backupGBox->setTitle( i18n( "Backup" ) );
 
-	QLabel *dumpPathLabel = new QLabel( backupGBox );
-	dumpPathLabel->setText( i18n( "Path to '%1':" ,QString("pg_dump") ));
-
-	QLabel *psqlPathLabel = new QLabel( backupGBox );
-	psqlPathLabel->setText( i18n( "Path to '%1':" ,QString("psql") ));
-
 	dumpPathRequester = new KUrlRequester;
-	psqlPathRequester = new KUrlRequester;
 	dumpPathRequester->fileDialog()->setCaption( i18n( "Select PostgreSQL dump command" ) );
-	dumpPathRequester->fileDialog()->setCaption( i18n( "Select PostgreSQL command" ) );
-	
-	backupGBox->setLayout( backupGBoxLayout );
-	backupGBoxLayout->addWidget( dumpPathLabel, 0, 0 );
-	backupGBoxLayout->addWidget( psqlPathLabel, 0, 1 ); 
-	backupGBoxLayout->addWidget( dumpPathRequester, 1, 0 );
-	backupGBoxLayout->addWidget( psqlPathRequester, 1, 1 );
-	layout->addWidget( backupGBox, 10, 1, 1, 4 );
+	backupGBoxLayout->addRow( i18n( "Path to '%1':" ,QString("pg_dump") ), dumpPathRequester );
 
-	QSpacerItem* spacerRow6 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
-	layout->addItem( spacerRow6, 11, 1 );
-	QSpacerItem* spacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed );
-	layout->addItem( spacerRight, 1, 4 );
+	psqlPathRequester = new KUrlRequester;
+	dumpPathRequester->fileDialog()->setCaption( i18n( "Select PostgreSQL command" ) );
+	backupGBoxLayout->addRow( i18n( "Path to '%1':" ,QString("psql") ), psqlPathRequester );
+
+	backupGBox->setLayout( backupGBoxLayout );
+	
+	layout->addWidget( backupGBox );
 
 	// Load & Save Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Server" );
@@ -379,41 +290,31 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this );
 	backupGBox->setTitle( i18n( "Backup" ) );
-
-	QLabel *dumpPathLabel = new QLabel( backupGBox );
-	dumpPathLabel->setText( i18n( "Path to '%1':" ,sqliteBinary));
 	
+	QFormLayout *backupGBoxLayout = new QFormLayout;
+	backupGBox->setLayout( backupGBoxLayout );
+
 	dumpPathRequester = new KUrlRequester;
 	dumpPathRequester->fileDialog()->setCaption( i18n( "Select SQLite command" ) );
+	backupGBoxLayout->addRow( i18n( "Path to '%1':", sqliteBinary ), dumpPathRequester );
 	
-	QGridLayout *backupGBoxLayout = new QGridLayout;
-	backupGBox->setLayout( backupGBoxLayout );
-	backupGBoxLayout->addWidget( dumpPathLabel, 0, 0 );
-	backupGBoxLayout->addWidget( dumpPathRequester, 0, 1 );
 	Form1Layout->addWidget( backupGBox );
 
 	// SQLite converter options
 	QGroupBox *converterGBox = new QGroupBox( this );
 	converterGBox->setTitle( i18n( "SQLite converter" ) );
 
-	QLabel *oldLabel = new QLabel( backupGBox );
-	oldLabel->setText( i18n( "Path to SQLite old version command:" ));
-	
+	QFormLayout *converterGBoxLayout = new QFormLayout;
+	converterGBox->setLayout( converterGBoxLayout );
+
 	oldPathRequester = new KUrlRequester;
 	oldPathRequester->fileDialog()->setCaption( i18n( "Select old SQLite version command" ) );
-
-	QLabel *newLabel = new QLabel( backupGBox );
-	newLabel->setText( i18n( "Path to SQLite new version command:" ));
+	converterGBoxLayout->addRow( i18n( "Path to SQLite old version command:" ), oldPathRequester );
 	
 	newPathRequester = new KUrlRequester;
 	newPathRequester->fileDialog()->setCaption( i18n( "Select new SQLite version command" ) );
+	converterGBoxLayout->addRow( i18n( "Path to SQLite new version command:" ), newPathRequester );
 	
-	QGridLayout *converterGBoxLayout = new QGridLayout;
-	converterGBox->setLayout( converterGBoxLayout );
-	converterGBoxLayout->addWidget( oldLabel, 0, 0 );
-	converterGBoxLayout->addWidget( oldPathRequester, 0, 1 );
-	converterGBoxLayout->addWidget( newLabel, 1, 0 );
-	converterGBoxLayout->addWidget( newPathRequester, 1, 1 );
 	Form1Layout->addWidget( converterGBox );
 
 

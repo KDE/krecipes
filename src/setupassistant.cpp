@@ -18,6 +18,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QFormLayout>
 #include <QLabel>
 
 #include <kconfig.h>
@@ -206,23 +207,17 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 
 	// MySQL root/admin info
 	QGroupBox *rootInfoGBox = new QGroupBox( this );
-	QGridLayout *rootInfoLayout = new QGridLayout;
+	QFormLayout *rootInfoLayout = new QFormLayout;
 	rootInfoGBox->setTitle( i18n( "MySQL Administrator Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
 	// User Entry
-	QLabel *userLabel = new QLabel( rootInfoGBox );
-	userLabel->setText( i18nc("@label:textbox Database Username", "Username:" ) );
-	rootInfoLayout->addWidget( userLabel, 0, 0 );
 	userEdit = new KLineEdit( rootInfoGBox );
 	userEdit->setText( "root" );
-	rootInfoLayout->addWidget( userEdit, 0, 1 );
+	rootInfoLayout->addRow( i18nc("@label:textbox Database Username", "Username:" ), userEdit );
 	// Password Entry
-	QLabel *passLabel = new QLabel( rootInfoGBox );
-	passLabel->setText( i18n( "Password:" ) );
-	rootInfoLayout->addWidget( passLabel, 1, 0 );
 	passEdit = new KLineEdit( rootInfoGBox );
 	passEdit->setEchoMode( QLineEdit::Password );
-	rootInfoLayout->addWidget( passEdit, 1, 1 );
+	rootInfoLayout->addRow( i18n( "Password:" ), passEdit );
 	rootInfoGBox->setLayout(rootInfoLayout);
 	layout->addWidget( rootInfoGBox, 7, 3 );
 
@@ -321,23 +316,18 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 	// PostgreSQL root/admin info
 	QGroupBox *rootInfoGBox = new QGroupBox( this );
-	QGridLayout *rootInfoLayout = new QGridLayout;
+	QFormLayout *rootInfoLayout = new QFormLayout;
 	rootInfoGBox->setTitle( i18n( "PostgreSQL Superuser or Privileged Account" ) );
 	rootInfoGBox->setEnabled( false ); // Disable by default
 	// User Entry
-	QLabel *userLabel = new QLabel( rootInfoGBox );
-	userLabel->setText( i18nc("@label:textbox Database Username", "Username:" ) );
-	rootInfoLayout->addWidget( userLabel, 0, 0 );
 	userEdit = new KLineEdit( rootInfoGBox );
 	userEdit->setText( "postgres" );
-	rootInfoLayout->addWidget( userEdit, 0, 1 );
+	rootInfoLayout->addRow( i18nc("@label:textbox Database Username", "Username:" ), userEdit );
 	// Password Entry
-	QLabel *passLabel = new QLabel( rootInfoGBox );
-	passLabel->setText( i18n( "Password:" ) );
-	rootInfoLayout->addWidget( passLabel, 1, 0 );
 	passEdit = new KLineEdit( rootInfoGBox );
 	passEdit->setEchoMode( QLineEdit::Password );
-	rootInfoLayout->addWidget( passEdit, 1, 1 );
+	rootInfoLayout->addRow( i18n( "Password:" ), passEdit );
+
 	rootInfoGBox->setLayout( rootInfoLayout );
 	layout->addWidget( rootInfoGBox, 7, 3 );
 
@@ -421,17 +411,13 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	// Input Boxes
 
 	QGroupBox *inputGBox = new QGroupBox( this );
-	QGridLayout *inputLayout = new QGridLayout;
+	QFormLayout *inputLayout = new QFormLayout;
 	inputGBox->setLayout( inputLayout );
 	layout->addWidget( inputGBox, 3, 3 );
 
 	// Username Input
 
-	QLabel* usernameText = new QLabel( i18nc( "@label:textbox Database Username", "Username:" ), inputGBox );
-	inputLayout->addWidget( usernameText, 0, 0 );
-
 	usernameEdit = new KLineEdit( inputGBox );
-	inputLayout->addWidget( usernameEdit, 0, 1 );
 	// get username
 	uid_t userID;
 	QString username;
@@ -441,25 +427,21 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	username = user->pw_name;
 
 	usernameEdit->setText( username );
+	inputLayout->addRow( i18nc( "@label:textbox Database Username", "Username:" ), usernameEdit );
 
 
 	// Password
 
-	QLabel* passwordText = new QLabel( i18n( "Password:" ), inputGBox );
-	inputLayout->addWidget( passwordText, 1, 0 );
-
 	passwordEdit = new KLineEdit( inputGBox );
 	passwordEdit->setEchoMode( QLineEdit::Password );
-	inputLayout->addWidget( passwordEdit, 1, 1 );
+	inputLayout->addRow( i18n( "Password:" ), passwordEdit );
+
 
 	// DB Name
 
-	QLabel* dbNameText = new QLabel( i18n( "Database name:" ), inputGBox );
-	inputLayout->addWidget( dbNameText, 2, 0 );
-
 	dbNameEdit = new KLineEdit( inputGBox );
 	dbNameEdit->setText( "Krecipes" );
-	inputLayout->addWidget( dbNameEdit, 2, 1 );
+	inputLayout->addRow( i18n( "Database name:" ), dbNameEdit );
 
 
 	// Spacer from box
@@ -479,7 +461,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 	// Server & Client Box
 	QGroupBox *serverSettingsGBox = new QGroupBox( this );
-	QGridLayout *serverSettingsLayout = new QGridLayout;
+	QFormLayout *serverSettingsLayout = new QFormLayout;
 	serverSettingsGBox->setLayout( serverSettingsLayout );
 	serverSettingsGBox->setTitle( i18n( "Server / Client Settings" ) );
 	serverSettingsGBox->setEnabled( false ); // Disable by default
@@ -487,26 +469,20 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 
 
 	// Server
-	QLabel *serverText = new QLabel( i18n( "Server:" ), serverSettingsGBox );
-	serverSettingsLayout->addWidget( serverText, 0, 0 );
 	serverEdit = new KLineEdit( serverSettingsGBox );
 	serverEdit->setText( "localhost" );
-	serverSettingsLayout->addWidget( serverEdit, 0, 1);
+	serverSettingsLayout->addRow( i18n( "Server:" ), serverEdit );
 
 	// Client
-	QLabel *clientText = new QLabel( i18n( "Client:" ), serverSettingsGBox );
-	serverSettingsLayout->addWidget( clientText, 1, 0 );
 	clientEdit = new KLineEdit( serverSettingsGBox );
 	clientEdit->setText( "localhost" );
-	serverSettingsLayout->addWidget( clientEdit, 1, 1 );
+	serverSettingsLayout->addRow( i18n( "Client:" ), clientEdit );
 
 	//Port
-	QLabel* portText = new QLabel( i18n( "Port:" ), serverSettingsGBox );
-	serverSettingsLayout->addWidget( portText, 2, 0 );
 	portEdit = new KIntNumInput( serverSettingsGBox );
 	portEdit->setMinimum(0);
 	portEdit->setSpecialValueText( i18nc("@label:textbox Default Port", "Default") );
-	serverSettingsLayout->addWidget( portEdit, 2, 1 );
+	serverSettingsLayout->addRow( i18n( "Port:" ), portEdit );
 
 	// Bottom Spacers
 
