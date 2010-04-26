@@ -8,14 +8,14 @@
 ***************************************************************************/
 #ifndef UNITRATIOLIST_H
 #define UNITRATIOLIST_H
-#include <QList>
+#include <QtCore/QList>
 #include "unitratio.h"
 
 
 /**
 @author Unai Garro
 */
-class UnitRatioList : public QList<UnitRatio>
+class UnitRatioList : public QList <UnitRatio>
 {
 public:
 	UnitRatioList();
