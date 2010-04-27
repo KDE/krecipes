@@ -32,7 +32,7 @@ class CustomCheckListItem;
 class RecipeImportDialog : public KDialog
 {
 public:
-	RecipeImportDialog( const RecipeList &all_recipes, QWidget *parent = 0 );
+	explicit RecipeImportDialog( const RecipeList &all_recipes, QWidget *parent = 0 );
 	~RecipeImportDialog();
 
 	RecipeList getSelectedRecipes();
