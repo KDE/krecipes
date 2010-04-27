@@ -95,7 +95,7 @@ public:
 	 * @param r ResultItems
 	 * @param error Error Message
 	 */
-	QSQLiteResult( enum Status status = Undefined,
+	explicit QSQLiteResult( enum Status status = Undefined,
 	               const Columns &r = Columns(),
 	               const QString &error = 0L );
 	~QSQLiteResult();
