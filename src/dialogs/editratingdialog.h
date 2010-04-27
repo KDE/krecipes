@@ -39,8 +39,8 @@ class EditRatingDialog : public KDialog
 Q_OBJECT
 
 public:
-	EditRatingDialog( const ElementList &criteriaList, const Rating &, QWidget* parent = 0, const char* name = 0 );
-	EditRatingDialog( const ElementList &criteriaList, QWidget* parent = 0, const char* name = 0 );
+	explicit EditRatingDialog( const ElementList &criteriaList, const Rating &, QWidget* parent = 0, const char* name = 0 );
+	explicit EditRatingDialog( const ElementList &criteriaList, QWidget* parent = 0, const char* name = 0 );
 	~EditRatingDialog();
 
 	QLabel* criteriaLabel;
