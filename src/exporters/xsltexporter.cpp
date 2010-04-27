@@ -166,7 +166,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	//put all the recipe photos into this directory
 	QDir dir;
 	QFileInfo fi(fileName());
-	dir.mkdir( fi.absolutePath() + "/" + fi.baseName() + "_photos" );
+	dir.mkdir( fi.absolutePath() + '/' + fi.baseName() + "_photos" );
 
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
@@ -177,9 +177,9 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 				QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
-				if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
+				if ( !QFile::exists( fi.absolutePath() + '/' + image_url ) ) {
 					QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars);
-					starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
+					starPixmap.save( fi.absolutePath() + '/' + image_url, "PNG" );
 				}
 				rating_total++;
 				rating_sum += (*rc_it).stars;
@@ -189,9 +189,9 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 		if ( rating_total > 0 ) {
 			double average = round(2*rating_sum/rating_total)/2;
 			QString image_url = fi.baseName() + "_photos/" + QString::number(average) + "-stars.png";
-			if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
+			if ( !QFile::exists( fi.absolutePath() + '/' + image_url ) ) {
 				QPixmap starPixmap = Rating::starsPixmap(average);
-				starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
+				starPixmap.save( fi.absolutePath() + '/' + image_url, "PNG" );
 			}
 		}
 	}
@@ -201,8 +201,8 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 	QString cssContent;
 	QFileInfo info(m_templateFilename);
-	QFile cssFile(info.absolutePath() + "/" + info.baseName() + ".css");
-	kDebug()<<info.absolutePath() + "/" + info.baseName() + ".css";
+	QFile cssFile(info.absolutePath() + '/' + info.baseName() + ".css");
+	kDebug()<<info.absolutePath() + '/' + info.baseName() + ".css";
 	if ( cssFile.open( QIODevice::ReadOnly ) ) {
 		cssContent = QString( cssFile.readAll() );
 	}
@@ -241,13 +241,13 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 	const char *params[NUM_I18N_STRINGS+3];
 	int i = 0;
 	params[i++] = "imgDir";
-	QByteArray imgDir = "'"+imgDirInfo.absolutePath().toUtf8()+"'";
+	QByteArray imgDir = '\''+imgDirInfo.absolutePath().toUtf8()+'\'';
 	params[i++] = imgDir.data();
 
 	for ( uint j = 0; j < NUM_I18N_STRINGS; j+=2 ) {
 		params[i++] = i18n_strings[j];
 
-		QString translatedString = "'"+i18n(i18n_strings[j+1])+"'";
+		QString translatedString = '\''+i18n(i18n_strings[j+1])+'\'';
 		params[i++] = qstrdup(translatedString.toUtf8());
 	}
 	params[i] = NULL;
@@ -273,7 +273,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 
 void XSLTExporter::beginObject( const QString &object )
 {
-	m_cachedCSS += "."+object+", ."+object+" td { \n";
+	m_cachedCSS += '.'+object+", ."+object+" td { \n";
 }
 
 void XSLTExporter::endObject()
@@ -333,7 +333,7 @@ void XSLTExporter::storePhoto( const Recipe &recipe )
 	QPixmap pm = QPixmap::fromImage( image );//image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QFileInfo fi(fileName());
-	QString photo_path = fi.absolutePath() + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
+	QString photo_path = fi.absolutePath() + '/' + fi.baseName() + "_photos/" + photo_name + ".png";
 	if ( !QFile::exists( photo_path ) ) {
 		kDebug() << "photo: " << photo_path ;
 		pm.save( photo_path, "PNG" );
