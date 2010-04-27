@@ -151,7 +151,7 @@ private:
 	void initializeData( const QString &host, const QString &dbName, const QString &user, const QString &pass, int port );
 	void initDatabase(  );
 	bool questionRerunWizard( const QString &message, const QString &errormsg = "", RecipeDB::Error error = RecipeDB::NoError );
-	void setupUserPermissions( const QString &host, const QString &client, const QString &dbName, const QString &newUser, const QString &newPass, const QString &adminUser = QString::null, const QString &adminPass = QString::null, int port = 0 );
+	void setupUserPermissions( const QString &host, const QString &client, const QString &dbName, const QString &newUser, const QString &newPass, const QString &adminUser = QString(), const QString &adminPass = QString(), int port = 0 );
 	void wizard( bool force = false );
 
 
