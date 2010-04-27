@@ -182,7 +182,7 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 
 				item->setText(1,QString::null);
 			} else {
-				item->setText(1,amount.toString()+" "+((amount.toDouble()>1)?unit.plural:unit.name));
+				item->setText(1,amount.toString()+' '+((amount.toDouble()>1)?unit.plural:unit.name));
 			}
 
 			item->setText(2,amount.toString());
