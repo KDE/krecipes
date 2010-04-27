@@ -43,7 +43,7 @@ public:
 	// Methods
 
 	Menu( void );
-	explicit Menu( const Menu &m );
+	Menu( const Menu &m );
 	~Menu( void );
 	void addButton( KreMenuButton *button );
 	Menu& operator=( const Menu &m );
@@ -66,7 +66,7 @@ class KreMenu : public QWidget
 {
 	Q_OBJECT
 public:
-	KreMenu( QWidget *parent = 0, const char *name = 0 );
+	explicit KreMenu( QWidget *parent = 0, const char *name = 0 );
 	~KreMenu();
 
 	MenuId createSubMenu( const QString &title, const QString &icon );
@@ -111,7 +111,7 @@ class KreMenuButton: public QWidget
 {
 	Q_OBJECT
 public:
-	KreMenuButton( KreMenu *parent, KrePanel panel = KrePanel( -1 ), MenuId id = MenuId() );
+	explicit KreMenuButton( KreMenu *parent, KrePanel panel = KrePanel( -1 ), MenuId id = MenuId() );
 
 	~KreMenuButton();
 
