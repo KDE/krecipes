@@ -884,7 +884,7 @@ void KrecipesView::wizard( bool force )
 						adminUser = "root";
 					else if ( dbType == "PostgreSQL" )
 						adminUser = "postgres";
-					adminPass = QString::null;
+					adminPass.clear();
 				}
 				if ( !isRemote )  // Use localhost
 				{
@@ -955,8 +955,8 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 {
 	QString user = adminUser;
 	QString pass = adminPass;
-	if ( user.isNull() ) {
-		pass = QString::null;
+	if ( user.isEmpty() ) {
+		pass.clear();
 
 		if ( dbType == "PostgreSQL" )
 			user = "postgres";
