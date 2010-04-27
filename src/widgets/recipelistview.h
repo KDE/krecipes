@@ -117,7 +117,7 @@ private:
 class RecipeItemDrag : public Q3StoredDrag
 {
 public:
-	RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource = 0, const char *name = 0 );
+	explicit RecipeItemDrag( RecipeListItem *recipeItem, QWidget *dragSource = 0, const char *name = 0 );
 	static bool canDecode( QMimeSource* e );
 	static bool decode( const QMimeSource* e, RecipeListItem& item );
 };
