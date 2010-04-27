@@ -262,7 +262,7 @@ void MXPImporter::loadInstructions( QTextStream &stream, Recipe &recipe )
 			//kDebug()<<"Found cuisine (adding as category): "<<new_cat.name;
 		}
 		else
-			recipe.instructions += current + "\n";
+			recipe.instructions += current + '\n';
 
 		current = stream.readLine().trimmed();
 	}
@@ -322,7 +322,7 @@ void MXPImporter::loadOptionalFields( QTextStream &stream, Recipe &recipe )
 		else if ( current.mid( 0, current.indexOf( ":" ) ).simplified().toLower() == "notes" )  //notes
 			notes = current.mid( current.indexOf( ":" ) + 1, current.length() ).trimmed();
 		else if ( !current.isEmpty() && current != "_____" )  //if it doesn't belong to any other field, assume it a part of a multi-line notes field
-			notes += "\n" + current;
+			notes += '\n' + current;
 
 		current = stream.readLine().trimmed();
 	}
@@ -373,7 +373,7 @@ QString MXPImporter::getNextQuotedString( QTextStream &stream )
 
 	while ( current.right( 1 ) != "\"" && !stream.atEnd() ) {
 		current = stream.readLine().trimmed();
-		return_str += "\n" + current;
+		return_str += '\n' + current;
 	}
 
 	//take off quote at end
