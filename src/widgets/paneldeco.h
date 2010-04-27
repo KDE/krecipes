@@ -57,7 +57,7 @@ class TopDeco: public QWidget
 {
 	Q_OBJECT
 public:
-	TopDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString(), const QString &iconName = QString() );
+	explicit TopDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString(), const QString &iconName = QString() );
 	~TopDeco();
 
 	virtual QSize sizeHint( void ) const;
