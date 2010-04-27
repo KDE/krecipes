@@ -51,7 +51,7 @@ public:
 
 public:
 
-    ThumbBarView(QWidget* parent, int orientation=Qt::Vertical);
+    explicit ThumbBarView(QWidget* parent, int orientation=Qt::Vertical);
     ~ThumbBarView();
 
     int  countItems();
