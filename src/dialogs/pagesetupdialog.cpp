@@ -76,7 +76,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	connect(thumbBar,SIGNAL(signalURLSelected(const QString&)), this, SLOT(loadTemplate(const QString&)));
 	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
 	for ( uint i = 0; i < included_templates.count(); i++ ) {
-		new ThumbBarItem(thumbBar,included_templates.path() + "/" +included_templates[ i ]);
+		new ThumbBarItem(thumbBar,included_templates.path() + '/' +included_templates[ i ]);
 	}
 	m_htmlPart = new SetupDisplay(sample, viewBox);
 	//m_htmlPart->view()->setParent( viewBox, windowFlags() & ~Qt::WindowType_Mask);
@@ -203,7 +203,7 @@ void PageSetupDialog::loadFile()
 
 void PageSetupDialog::loadLayout( int popup_param )
 {
-	loadLayout( getIncludedLayoutDir() + "/" + included_layouts_map[ popup_param ] );
+	loadLayout( getIncludedLayoutDir() + '/' + included_layouts_map[ popup_param ] );
 }
 
 void PageSetupDialog::loadTemplate( const QString& filename )
