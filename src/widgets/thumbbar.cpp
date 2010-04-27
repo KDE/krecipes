@@ -549,7 +549,7 @@ ThumbBarItem::ThumbBarItem(ThumbBarView* view, const QString& url)
 	QFileInfo fi(url);
 
 	d->pixmap = new QPixmap();
-	d->pixmap->load(fi.absolutePath()+"/"+fi.baseName()+".png","PNG");
+	d->pixmap->load(fi.absolutePath()+'/'+fi.baseName()+".png","PNG");
 	repaint();
 }
 
