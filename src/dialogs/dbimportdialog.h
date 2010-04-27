@@ -36,7 +36,7 @@ class DBImportDialog: public KDialog
 {
 	Q_OBJECT
 public:
-	DBImportDialog( QWidget *parent = 0, const char *name = 0 );
+	explicit DBImportDialog( QWidget *parent = 0, const char *name = 0 );
 
 	QString dbType() const;
 	void serverParams( QString &host, QString &user, QString &pass, int &port, QString &table ) const;
