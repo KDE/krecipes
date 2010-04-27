@@ -131,7 +131,7 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	add
 		( recipe );
 
-	current_header = QString();
+	current_header.clear();
 }
 
 void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, bool &is_sub )
