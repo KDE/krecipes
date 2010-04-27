@@ -645,7 +645,7 @@ void Krecipes::pageSetupSlot()
 
 	if ( layout == printLayout ) {
 		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
-		QString::null, "sharedLayoutWarning" );
+		QString(), "sharedLayoutWarning" );
 	}
 
 	QPointer<PageSetupDialog> page_setup = new PageSetupDialog( this, recipe );
@@ -664,7 +664,7 @@ void Krecipes::printSetupSlot()
 
 	if ( layout == printLayout ) {
 		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
-		QString::null, "sharedLayoutWarning" );
+		QString(), "sharedLayoutWarning" );
 	}
 
 	QPointer<PageSetupDialog> pageSetup = new PageSetupDialog( this, recipe, "Print" );
@@ -706,7 +706,7 @@ void Krecipes::restoreSlot()
 		this,i18n("Restore Backup"));
 
 	if ( !filename.isNull() ) {
-		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database.</b><br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString::null,KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "RestoreWarning") ) {
+		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database.</b><br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString(),KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "RestoreWarning") ) {
 		case KMessageBox::Continue: {
 			ProgressInterface pi(this);
 			pi.listenOn(m_view->database);
