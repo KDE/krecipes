@@ -83,7 +83,7 @@ Ingredient IngListViewItem::ingredient() const
 
 void IngListViewItem::setAmount( double amount, double amount_offset )
 {
-	amount_str = QString();
+	amount_str.clear();
 
 	if ( amount+amount_offset > 0 ) {
 		KConfigGroup config = KGlobal::config()->group( "Formatting" );
