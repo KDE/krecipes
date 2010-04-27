@@ -43,11 +43,11 @@ QString MMFExporter::createContent( const RecipeList& recipes )
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		writeMMFHeader( content, *recipe_it );
-		content += "\n";
+		content += '\n';
 		writeMMFIngredients( content, *recipe_it );
-		content += "\n";
+		content += '\n';
 		writeMMFDirections( content, *recipe_it );
-		content += "\n";
+		content += '\n';
 
 		content += "-----\n"; //end of recipe indicator
 	}
@@ -67,7 +67,7 @@ void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
 
 	QString title = recipe.title;
 	title.truncate( 60 );
-	content += "      Title: " + title + "\n";
+	content += "      Title: " + title + '\n';
 
 	int i = 0;
 	QStringList categories;
@@ -80,9 +80,9 @@ void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
 	}
 	QString cat_str = " Categories: " + categories.join( ", " );
 	cat_str.truncate( 67 );
-	content += cat_str + "\n";
+	content += cat_str + '\n';
 
-	content += "   Servings: " + QString::number( qMin( 9999.0, recipe.yield.amount ) ) + "\n"; //some yield info is lost here, but hey, that's the MM format
+	content += "   Servings: " + QString::number( qMin( 9999.0, recipe.yield.amount ) ) + '\n'; //some yield info is lost here, but hey, that's the MM format
 }
 
 /* Ingredient lines:
@@ -118,7 +118,7 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 			int length = group.length();
 			QString filler_lt = QString().fill( '-', ( 76 - length ) / 2 );
 			QString filler_rt = ( length % 2 ) ? QString().fill( '-', ( 76 - length ) / 2 + 1 ) : filler_lt;
-			content += filler_lt + group + filler_rt + "\n";
+			content += filler_lt + group + filler_rt + '\n';
 		}
 
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
@@ -141,7 +141,7 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 
 	//columns 1-7
 	if ( ing.amount > 0 )
-		content += MixedNumber( ing.amount ).toString( number_format, false ).rightJustified( 7, ' ', true ) + " ";
+		content += MixedNumber( ing.amount ).toString( number_format, false ).rightJustified( 7, ' ', true ) + ' ';
 	else
 		content += "        ";
 
@@ -152,7 +152,7 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 		        unit_info[ i ].plural_expanded_form == ing.units.plural ||
 		        unit_info[ i ].short_form == ing.units.name ) {
 			found_short_form = true;
-			content += QString( unit_info[ i ].short_form ).leftJustified( 2 ) + " ";
+			content += QString( unit_info[ i ].short_form ).leftJustified( 2 ) + ' ';
 			break;
 		}
 	}
@@ -171,7 +171,7 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 		ing_name += ", or";
 
 	if ( !found_short_form )
-		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + " " );
+		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + ' ' );
 
 	//try and split the ingredient on a word boundary
 	int split_index;
@@ -183,10 +183,10 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 	else
 		split_index = 28;
 
-	content += ing_name.left(split_index) + "\n";
+	content += ing_name.left(split_index) + '\n';
 
 	for ( int i = 0; i < ( ing_name.length() - 1 ) / 28; i++ )  //if longer than 28 chars, continue on next line(s)
-		content += "           -" + ing_name.mid( 28 * ( i ) + split_index, 28 ) + "\n";
+		content += "           -" + ing_name.mid( 28 * ( i ) + split_index, 28 ) + '\n';
 }
 
 void MMFExporter::writeMMFDirections( QString &content, const Recipe &recipe )
@@ -195,10 +195,10 @@ void MMFExporter::writeMMFDirections( QString &content, const Recipe &recipe )
    if (recipe.instructions.isEmpty())
        lines = QStringList();
    else
-      lines = recipe.instructions.split( "\n", QString::KeepEmptyParts);
+      lines = recipe.instructions.split( '\n', QString::KeepEmptyParts);
 	
    for ( QStringList::const_iterator it = lines.constBegin(); it != lines.constEnd(); ++it ) {
-		content += wrapText( *it, 80 ).join( "\n" ) + "\n";
+		content += wrapText( *it, 80 ).join( "\n" ) + '\n';
 	}
 }
 
@@ -214,11 +214,11 @@ QStringList MMFExporter::wrapText( const QString& str, int at ) const
 		else {
 			QRegExp rxp( "(\\s\\S*)$", Qt::CaseInsensitive ); // last word in the new line
 			rxp.setMinimal( true );    // one word, only one word, please
-			line = line.replace( rxp, "" ); // remove last word
+			line = line.remove( rxp ); // remove last word
 		}
 		copy = copy.remove( 0, line.length() );
 		line = line.trimmed();
-		line.prepend( " " );       // indent line by one char
+		line.prepend( ' ' );       // indent line by one char
 		ret << line; // output of current line
 	}
 
