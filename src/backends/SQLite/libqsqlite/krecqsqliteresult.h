@@ -44,7 +44,7 @@ public:
 	/**
 	 * Default c'tor. It has a TableString and a TableInt
 	 */
-	QSQLiteResultRow( const TableString& = TableString(),
+	explicit QSQLiteResultRow( const TableString& = TableString(),
 	                  const TableInt& = TableInt() );
 	QSQLiteResultRow( const QSQLiteResultRow& );
 	~QSQLiteResultRow();
