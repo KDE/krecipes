@@ -127,7 +127,7 @@ class RecipeListView : public StdCategoryListView
 	Q_OBJECT
 
 public:
-	RecipeListView( QWidget *parent, RecipeDB *db );
+	explicit RecipeListView( QWidget *parent, RecipeDB *db );
 
 public slots:
 	void populateAll( Q3ListViewItem *parent = 0 );
