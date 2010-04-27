@@ -27,7 +27,7 @@ class KreListView: public KVBox
 	Q_OBJECT
 public:
 
-	KreListView( QWidget *parent, const QString &title = QString(), bool filter = false, int filterCol = 0, QWidget *embeddedWidget = 0 );
+	explicit KreListView( QWidget *parent, const QString &title = QString(), bool filter = false, int filterCol = 0, QWidget *embeddedWidget = 0 );
 	~KreListView();
 	K3ListView *listView()
 	{
