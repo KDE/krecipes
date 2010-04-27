@@ -582,11 +582,11 @@ void RecipeDB::execSQL( QTextStream &stream )
 	while ( (line = stream.readLine()) != QString() ) {
 		command += ' '+line;
 		if ( command.startsWith(" --") ) {
-			command = QString();
+			command.clear();
 		}
 		else if ( command.endsWith(';') ) {
 			execSQL( command );
-			command = QString();
+			command.clear();
 		}
 	}
 }
