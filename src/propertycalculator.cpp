@@ -99,7 +99,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			property.id = (*prop_it).id;
 			property.name = (*prop_it).name;
 			property.perUnit.id = -1; // It's not per unit, it's total sum of the recipe
-			property.perUnit.name = QString::null; // "
+			property.perUnit.name.clear(); // "
 			property.units = (*prop_it).units;
 
 			Ingredient result;
