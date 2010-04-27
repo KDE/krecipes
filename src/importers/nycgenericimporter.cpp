@@ -103,13 +103,13 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 			m_recipe.yield.type = current.mid( amount_type_sep_index+3, current.length() );
 		}
 		else if ( current.startsWith( "NYC Nutrition Analysis (per serving or yield unit):" ) ) {
-			//m_recipe.instructions += current + "\n";
+			//m_recipe.instructions += current + '\n';
 		}
 		else if ( current.startsWith( "NYC Nutrilink:" ) ) {
-			//m_recipe.instructions += current + "\n";
+			//m_recipe.instructions += current + '\n';
 		}
 		else if ( !current.trimmed().isEmpty() && !current.startsWith("** Exported from Now You're Cooking!") ) {
-			m_recipe.instructions += current + "\n";
+			m_recipe.instructions += current + '\n';
 		}
 	}
 
