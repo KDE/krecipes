@@ -31,7 +31,7 @@ class CreateUnitDialog : public KDialog
 Q_OBJECT
 
 public:
-	CreateUnitDialog( QWidget *parent, const QString &name = QString(), const QString &plural = QString(), const QString &name_abbrev = QString(), const QString &plural_abbrev = QString(), Unit::Type type = Unit::Other, bool newUnit = true );
+	explicit CreateUnitDialog( QWidget *parent, const QString &name = QString(), const QString &plural = QString(), const QString &name_abbrev = QString(), const QString &plural_abbrev = QString(), Unit::Type type = Unit::Other, bool newUnit = true );
 	~CreateUnitDialog();
 	Unit newUnit( void );
 
