@@ -1744,7 +1744,7 @@ void RecipeInputDialog::statusLinkClicked( const QUrl &link )
 				lastUnit = id;
 			}
 		}
-		QPointer<CreateUnitConversionDialog> dlg = new CreateUnitConversionDialog( database->unitName(unitFrom).name, toUnits, this );
+		QPointer<CreateUnitConversionDialog> dlg = new CreateUnitConversionDialog( Element(database->unitName(unitFrom).name), toUnits, this );
 		if ( dlg->exec() == QDialog::Accepted ) {
 			UnitRatio ratio;
 			ratio.uID1 = dlg->toUnitID();

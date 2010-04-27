@@ -19,7 +19,7 @@ class Element
 {
 public:
 	Element();
-	Element( const QString &name, int id = -1 );
+	explicit Element( const QString &name, int id = -1 );
 	Element( const Element &el );
 
 	~Element();
