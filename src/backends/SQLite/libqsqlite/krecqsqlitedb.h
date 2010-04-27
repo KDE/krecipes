@@ -36,7 +36,7 @@
 class QSQLiteDB
 {
 public:
-	QSQLiteDB( QObject *parent = 0, const char *name = 0 );
+	explicit QSQLiteDB( QObject *parent = 0, const char *name = 0 );
 	bool open( const QString &dbname );
 	void close();
 	QSQLiteResult executeQuery( const QString &query, int *lastID = 0 );
