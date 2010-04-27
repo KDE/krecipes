@@ -37,7 +37,7 @@ class SimilarCategoriesDialog : public QDialog
 Q_OBJECT
 	
 public:
-	SimilarCategoriesDialog( ElementList &, QWidget* parent = 0 );
+	explicit SimilarCategoriesDialog( ElementList &, QWidget* parent = 0 );
 	~SimilarCategoriesDialog();
 
 	QList<int> matches() const;
