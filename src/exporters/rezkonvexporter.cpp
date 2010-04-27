@@ -110,10 +110,10 @@ QString RezkonvExporter::createContent( const RecipeList& recipes )
 	RecipeList::const_iterator recipe_it;
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 		writeHeader( content, *recipe_it );
-		content += "\n";
+		content += '\n';
 		writeIngredients( content, *recipe_it );
 		writeDirections( content, *recipe_it );
-		content += "\n";
+		content += '\n';
 
 		content += "=====\n\n"; //end of recipe indicator
 	}
@@ -133,7 +133,7 @@ void RezkonvExporter::writeHeader( QString &content, const Recipe &recipe )
 
 	QString title = recipe.title;
 	title.truncate( 60 );
-	content += QString("Titel: ").rightJustified( 13, ' ', true) + title + "\n";
+	content += QString("Titel: ").rightJustified( 13, ' ', true) + title + '\n';
 
 	int i = 0;
 	QStringList categories;
@@ -146,15 +146,15 @@ void RezkonvExporter::writeHeader( QString &content, const Recipe &recipe )
 	}
 	QString cat_str = QString("Kategorien: ").rightJustified( 13, ' ', true) + categories.join( ", " );
 	cat_str.truncate( 67 );
-	content += cat_str + "\n";
+	content += cat_str + '\n';
 
-	content += QString("Menge: ").rightJustified( 13, ' ', true) + recipe.yield.toString() + "\n";
+	content += QString("Menge: ").rightJustified( 13, ' ', true) + recipe.yield.toString() + '\n';
 }
 
 /* Ingredient lines:
  * Positions 1-7 contains a numeric quantity
  * Positions 9-10 Meal-Master unit of measure codes
- * Positions 12-39 contain text for an ingredient name, or a "-"
+ * Positions 12-39 contain text for an ingredient name, or a '-'
  *   in position 12 and text in positions 13-39 (the latter is a
  *   "continuation" line for the previous ingredient name)
  */
@@ -184,7 +184,7 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 			int length = group.length();
 			QString filler_lt = QString().fill( '=', ( 76 - length ) / 2 );
 			QString filler_rt = ( length % 2 ) ? QString().fill( '=', ( 76 - length ) / 2 + 1 ) : filler_lt;
-			content += filler_lt + group + filler_rt + "\n";
+			content += filler_lt + group + filler_rt + '\n';
 		}
 
 		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
@@ -202,14 +202,14 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 	QString authorLines;
 	if ( recipe.authorList.count() > 0 ) {
 		content += "============================== QUELLE ==============================\n";
-		authorLines = "                   "+(*recipe.authorList.begin()).name+"\n";
+		authorLines = "                   "+(*recipe.authorList.begin()).name+'\n';
 	}
 	for ( ElementList::const_iterator author_it = ++recipe.authorList.begin(); author_it != recipe.authorList.end(); ++author_it ) {
 		authorLines += "                   -- ";
-		authorLines += (*author_it).name + "\n";
+		authorLines += (*author_it).name + '\n';
 	}
 	if ( !authorLines.isEmpty() )
-		authorLines += "\n";
+		authorLines += '\n';
 	content += authorLines;
 }
 
@@ -223,7 +223,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 		QString amount_str = MixedNumber( ing.amount ).toString( number_format, false );
 
 		if ( ing.amount_offset > 0 )
-			amount_str += "-"+MixedNumber( ing.amount + ing.amount_offset ).toString( number_format, false );
+			amount_str += '-'+MixedNumber( ing.amount + ing.amount_offset ).toString( number_format, false );
 
 		if ( amount_str.length() > 7 ) { //too long, let's try the other formatting
 			MixedNumber::Format other_format = (number_format == MixedNumber::DecimalFormat) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
@@ -231,14 +231,14 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 			QString new_amount_str = MixedNumber( ing.amount ).toString( other_format, false );
 	
 			if ( ing.amount_offset > 0 )
-				new_amount_str += "-"+MixedNumber( ing.amount + ing.amount_offset ).toString( other_format, false );
+				new_amount_str += '-'+MixedNumber( ing.amount + ing.amount_offset ).toString( other_format, false );
 
 			if (new_amount_str.length() > 7) { //still too long, use original formatting, but truncate it
 				amount_str = amount_str.left(7);
 				kDebug()<<"Warning: Amount text too long, truncating";
 			}
 		}
-		content += amount_str.rightJustified( 7, ' ', true ) + " ";
+		content += amount_str.rightJustified( 7, ' ', true ) + ' ';
 	}
 	else
 		content += QString().fill(' ',7+1);
@@ -253,7 +253,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 				unit += translate_units[i].german;
 			else
 				unit += translate_units[i].german_plural;
-			content += unit.leftJustified( 9 ) + " ";
+			content += unit.leftJustified( 9 ) + ' ';
 			break;
 		}
 	}
@@ -272,22 +272,22 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 		ing_name += ", or"; //FIXME: what's 'or' in German?
 
 	if ( !found_translation )
-		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + " " );
+		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + ' ' );
 
 	//try and split the ingredient on a word boundary
 	int split_index;
 	if ( ing_name.length() > 50 ) {
-		split_index = ing_name.left(50).lastIndexOf(" ")+1;
+		split_index = ing_name.left(50).lastIndexOf(' ')+1;
 		if ( split_index == 0 )
 			split_index = 50;
 	}
 	else
 		split_index = 50;
 
-	content += ing_name.left(split_index) + "\n";
+	content += ing_name.left(split_index) + '\n';
 
 	for ( int i = 0; i < ( ing_name.length() - 1 ) / 50; i++ )  //if longer than 50 chars, continue on next line(s)
-		content += QString().fill(' ',(7+1)+(9+1)) + "-" + ing_name.mid( 50 * ( i ) + split_index, 50 ) + "\n";
+		content += QString().fill(' ',(7+1)+(9+1)) + '-' + ing_name.mid( 50 * ( i ) + split_index, 50 ) + '\n';
 }
 
 void RezkonvExporter::writeDirections( QString &content, const Recipe &recipe )
@@ -296,11 +296,11 @@ void RezkonvExporter::writeDirections( QString &content, const Recipe &recipe )
     if (recipe.instructions.isEmpty())
         lines = QStringList();
     else
-       lines = recipe.instructions.split( "\n", QString::KeepEmptyParts);
+       lines = recipe.instructions.split( '\n', QString::KeepEmptyParts);
    
 
 	for ( QStringList::const_iterator it = lines.constBegin(); it != lines.constEnd(); ++it ) {
-		content += wrapText( *it, 80 ).join( "\n" ) + "\n";
+		content += wrapText( *it, 80 ).join( "\n" ) + '\n';
 	}
 }
 
@@ -316,11 +316,11 @@ QStringList RezkonvExporter::wrapText( const QString& str, int at ) const
 		else {
 			QRegExp rxp( "(\\s\\S*)$", Qt::CaseInsensitive ); // last word in the new line
 			rxp.setMinimal( true );    // one word, only one word, please
-			line = line.replace( rxp, "" ); // remove last word
+			line = line.remove( rxp ); // remove last word
 		}
 		copy = copy.remove( 0, line.length() );
 		line = line.trimmed();
-		line.prepend( " " );       // indent line by one char
+		line.prepend( ' ' );       // indent line by one char
 		ret << line; // output of current line
 	}
 
