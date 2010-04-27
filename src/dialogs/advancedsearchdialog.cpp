@@ -957,11 +957,11 @@ QStringList AdvancedSearchDialog::split( const QString &text, bool sql_wildcards
 
 	if ( sql_wildcards ) {
 		for ( QStringList::iterator it = result.begin(); it != result.end(); ++it ) {
-			(*it).replace("%","\\%");
-			(*it).replace("_","\\_");
+			(*it).replace('%',"\\%");
+			(*it).replace('_',"\\_");
 
-			(*it).replace("*","%");
-			(*it).replace("?","_");
+			(*it).replace('*',"%");
+			(*it).replace('?',"_");
 		}
 	}
 
@@ -977,7 +977,7 @@ void AdvancedSearchDialog::slotAddRatingCriteria()
 	starsWidget->value(stars,stars_offset);
 	QString stars_str = stars.toString();
 	if ( stars_offset > 0 )
-		stars_str += "-"+MixedNumber( stars + stars_offset ).toString();
+		stars_str += '-'+MixedNumber( stars + stars_offset ).toString();
 	else if ( stars.toDouble() <= 1e-10 )
 		stars_str = "";
 
