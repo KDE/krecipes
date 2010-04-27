@@ -214,7 +214,7 @@ void RecipeMLImporter::readRecipemlIng( const QDomElement& ing, Ingredient *ing_
 	}
 
 	if ( !size.isEmpty() )
-		unit.prepend( size + " " );
+		unit.prepend( size + ' ' );
 
 	new_ing.name = name;
 	new_ing.units = Unit( unit, quantity.amount+quantity.amount_offset );
