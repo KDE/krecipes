@@ -145,7 +145,7 @@ void RezkonvImporter::loadIngredient( const QString &string, Recipe &recipe, boo
 		name.remove( cont_test );
 		kDebug() << "Appending to last ingredient: " << name ;
 		if ( !recipe.ingList.isEmpty() )  //so it doesn't crash when the first ingredient appears to be a continuation of another
-			recipe.ingList.last().name += " " + name;
+			recipe.ingList.last().name += ' ' + name;
 
 		return ;
 	}
@@ -249,13 +249,13 @@ void RezkonvImporter::loadReferences( QStringList::const_iterator &text_it, Reci
 			date.remove( rx_creation_date ).remove( QRegExp( " von\\s*$" ) );
 
 			// Date is given as DD.MM.YY
-			QString s = date.section( ".", 0, 0 );
+			QString s = date.section( '.', 0, 0 );
 			int day = s.toInt();
 
-			s = date.section( ".", 1, 1 );
+			s = date.section( '.', 1, 1 );
 			int month = s.toInt();
 
-			s = date.section( ".", 2, 2 );
+			s = date.section( '.', 2, 2 );
 			int year = s.toInt();
 			year += 1900;
 			if ( year < 1970 )
