@@ -257,7 +257,7 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 		case Unit::Volume: from_str = "Volume"; break;
 		case Unit::All: kDebug()<<"Code error: trying to convert from unit of type 'All'"; return InvalidTypes;
 		}
-		kDebug()<<"Can't handle conversion from "<<from_str<<"("<<from.units.id<<") to "<<to_str<<"("<<to.id<<")";
+		kDebug()<<"Can't handle conversion from "<<from_str<<'('<<from.units.id<<") to "<<to_str<<'('<<to.id<<')';
 
 		return InvalidTypes;
 	}
@@ -580,11 +580,11 @@ void RecipeDB::execSQL( QTextStream &stream )
     kDebug();
 	QString line, command;
 	while ( (line = stream.readLine()) != QString::null ) {
-		command += " "+line;
+		command += ' '+line;
 		if ( command.startsWith(" --") ) {
 			command = QString::null;
 		}
-		else if ( command.endsWith(";") ) {
+		else if ( command.endsWith(';') ) {
 			execSQL( command );
 			command = QString::null;
 		}
@@ -667,14 +667,14 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 		tableList << "ingredient_list il" << "ingredients i";
 		conditionList << "il.ingredient_id=i.id" << "il.recipe_id=r.id";
 
-		QString condition = "(";
+		QString condition('(');
 		for ( QStringList::const_iterator it = p.ingsOr.begin(); it != p.ingsOr.end();) {
 			condition += "i.name LIKE '"+escapeAndEncode(*it)+"' ";
 			if ( ++it != p.ingsOr.end() ) {
 				condition += "OR ";
 			}
 		}
-		condition += ")";
+		condition += ')';
 
 		conditionList << condition;
 	}
@@ -683,14 +683,14 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 		tableList << "category_list cl" << "categories c";
 		conditionList << "cl.category_id=c.id" << "cl.recipe_id=r.id";
 
-		QString condition = "(";
+		QString condition('(');
 		for ( QStringList::const_iterator it = p.catsOr.begin(); it != p.catsOr.end();) {
 			condition += "c.name LIKE '"+escapeAndEncode(*it)+"' ";
 			if ( ++it != p.catsOr.end() ) {
 				condition += "OR ";
 			}
 		}
-		condition += ")";
+		condition += ')';
 
 		conditionList << condition;
 	}
@@ -699,14 +699,14 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 		tableList << "author_list al" << "authors a";
 		conditionList << "al.author_id=a.id" << "al.recipe_id=r.id";
 
-		QString condition = "(";
+		QString condition('(');
 		for ( QStringList::const_iterator it = p.authorsOr.begin(); it != p.authorsOr.end();) {
-			condition += "a.name LIKE '"+escapeAndEncode(*it)+"'";
+			condition += "a.name LIKE '"+escapeAndEncode(*it)+'\'';
 			if ( ++it != p.authorsOr.end() ) {
 				condition += "OR ";
 			}
 		}
-		condition += ")";
+		condition += ')';
 
 		conditionList << condition;
 	}
@@ -714,28 +714,28 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 	if ( p.titleKeywords.count() != 0 ) {
 		QString op = (p.requireAllTitleWords) ? "AND " : "OR ";
 
-		QString condition = "(";
+		QString condition('(');
 		for ( QStringList::const_iterator it = p.titleKeywords.begin(); it != p.titleKeywords.end();) {
 			condition += "r.title LIKE '"+escapeAndEncode(*it)+"' ";
 			if ( ++it != p.titleKeywords.end() ) {
 				condition += op;
 			}
 		}
-		condition += ")";
+		condition += ')';
 		conditionList << condition;
 	}
 
 	if ( p.instructionsKeywords.count() != 0 ) {
 		QString op = (p.requireAllInstructionsWords) ? "AND " : "OR ";
 
-		QString condition = "(";
+		QString condition('(');
 		for ( QStringList::const_iterator it = p.instructionsKeywords.begin(); it != p.instructionsKeywords.end();) {
 			condition += "r.instructions LIKE '% "+escapeAndEncode(*it)+" %' ";
 			if ( ++it != p.instructionsKeywords.end() ) {
 				condition += op;
 			}
 		}
-		condition += ")";
+		condition += ')';
 		conditionList << condition;
 	}
 
@@ -766,58 +766,58 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 
 	if ( p.createdDateBegin.isValid() ) {
 		if ( p.createdDateEnd.isValid() ) {
-			conditionList << "r.ctime >= '"+p.createdDateBegin.toString(Qt::ISODate)+"'";
-			conditionList << "r.ctime <= '"+p.createdDateEnd.toString(Qt::ISODate)+"'";
+			conditionList << "r.ctime >= '"+p.createdDateBegin.toString(Qt::ISODate)+'\'';
+			conditionList << "r.ctime <= '"+p.createdDateEnd.toString(Qt::ISODate)+'\'';
 		}
 		else {
 			if ( p.createdDateBegin.time().isNull() ) { //we just want something on a particular date, not time
 				QDateTime end = p.createdDateBegin.addDays(1);
-				conditionList << "r.ctime >= '"+p.createdDateBegin.toString(Qt::ISODate)+"'";
-				conditionList << "r.ctime <= '"+end.toString(Qt::ISODate)+"'";
+				conditionList << "r.ctime >= '"+p.createdDateBegin.toString(Qt::ISODate)+'\'';
+				conditionList << "r.ctime <= '"+end.toString(Qt::ISODate)+'\'';
 			}
 			else //use the exact time
-				conditionList << "r.ctime = '"+p.createdDateBegin.toString(Qt::ISODate)+"'";
+				conditionList << "r.ctime = '"+p.createdDateBegin.toString(Qt::ISODate)+'\'';
 		}
 	}
 
 	if ( p.modifiedDateBegin.isValid() ) {
 		if ( p.modifiedDateEnd.isValid() ) {
-			conditionList << "r.mtime >= '"+p.modifiedDateBegin.toString(Qt::ISODate)+"'";
-			conditionList << "r.mtime <= '"+p.modifiedDateEnd.toString(Qt::ISODate)+"'";
+			conditionList << "r.mtime >= '"+p.modifiedDateBegin.toString(Qt::ISODate)+'\'';
+			conditionList << "r.mtime <= '"+p.modifiedDateEnd.toString(Qt::ISODate)+'\'';
 		}
 		else {
 			if ( p.modifiedDateBegin.time().isNull() ) { //we just want something on a particular date, not time
 				QDateTime end = p.modifiedDateBegin.addDays(1);
-				conditionList << "r.mtime >= '"+p.modifiedDateBegin.toString(Qt::ISODate)+"'";
-				conditionList << "r.mtime <= '"+end.toString(Qt::ISODate)+"'";
+				conditionList << "r.mtime >= '"+p.modifiedDateBegin.toString(Qt::ISODate)+'\'';
+				conditionList << "r.mtime <= '"+end.toString(Qt::ISODate)+'\'';
 			}
 			else //use the exact time
-				conditionList << "r.mtime = '"+p.modifiedDateBegin.toString(Qt::ISODate)+"'";
+				conditionList << "r.mtime = '"+p.modifiedDateBegin.toString(Qt::ISODate)+'\'';
 		}
 	}
 
 	if ( p.accessedDateBegin.isValid() ) {
 		if ( p.accessedDateEnd.isValid() ) {
-			conditionList << "r.atime >= '"+p.accessedDateBegin.toString(Qt::ISODate)+"'";
-			conditionList << "r.atime <= '"+p.accessedDateEnd.toString(Qt::ISODate)+"'";
+			conditionList << "r.atime >= '"+p.accessedDateBegin.toString(Qt::ISODate)+'\'';
+			conditionList << "r.atime <= '"+p.accessedDateEnd.toString(Qt::ISODate)+'\'';
 		}
 		else {
 			if ( p.accessedDateBegin.time().isNull() ) { //we just want something on a particular date, not time
 				QDateTime end = p.accessedDateBegin.addDays(1);
-				conditionList << "r.atime >= '"+p.accessedDateBegin.toString(Qt::ISODate)+"'";
-				conditionList << "r.atime <= '"+end.toString(Qt::ISODate)+"'";
+				conditionList << "r.atime >= '"+p.accessedDateBegin.toString(Qt::ISODate)+'\'';
+				conditionList << "r.atime <= '"+end.toString(Qt::ISODate)+'\'';
 			}
 			else //use the exact time
-				conditionList << "r.atime = '"+p.accessedDateBegin.toString(Qt::ISODate)+"'";
+				conditionList << "r.atime = '"+p.accessedDateBegin.toString(Qt::ISODate)+'\'';
 		}
 	}
 
 	QString wholeQuery = "SELECT r.id FROM recipes r"
-		+QString(tableList.count()!=0?","+tableList.join(","):"")
+		+QString(tableList.count()!=0?','+tableList.join(","):"")
 		+QString(conditionList.count()!=0?" WHERE "+conditionList.join(" AND "):"");
 
 	kDebug()<<"calling: "<<wholeQuery;
-	return wholeQuery+";";
+	return wholeQuery+';';
 }
 
 //These are helper functions solely for use by the USDA data importer
@@ -857,7 +857,7 @@ void RecipeDB::importUSDADatabase()
 
 	kDebug() << "Parsing abbrev.txt" ;
 	while ( !stream.atEnd() ) {
-		QStringList fields = stream.readLine().split( "^", QString::KeepEmptyParts);
+		QStringList fields = stream.readLine().split( '^', QString::KeepEmptyParts);
 
 		int id = fields[ 0 ].mid( 1, fields[ 0 ].length() - 2 ).toInt();
 
