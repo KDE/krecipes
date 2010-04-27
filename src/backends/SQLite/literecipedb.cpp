@@ -795,7 +795,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "',NULL"                                         //name_abbrev
 				          + ",'" + escape( copyQuery.value( 2 ).toString() ) //plural
 				          + "',NULL"                                         //plural_abbrev
-				          + ")";
+				          + ')';
 				database->exec( command );
 
 				emit progress();
@@ -851,7 +851,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "'," +  name_abbrev //name_abbrev
 				          + ",'" + escape( copyQuery.value( 3 ).toString() ) //plural
 				          + "'," + plural_abbrev //plural_abbrev
-				          + ")";
+				          + ')';
 				database->exec( command );
 
 				emit progress();
@@ -929,7 +929,7 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 
 				QString data = copyQuery.value(i).toString();
 
-				dataList << "'"+escape(data)+"'";
+				dataList << '\''+escape(data)+'\'';
 			}
 			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
 			kDebug()<<"calling: "<<command;
@@ -939,7 +939,7 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 		}
 	}
 	database->exec( "DROP TABLE "+table_name );
-	database->exec( QString(new_table_sql).arg(table_name).arg(new_col_info+",") );
+	database->exec( QString(new_table_sql).arg(table_name).arg(new_col_info+',') );
 	copyQuery = database->exec( "SELECT * FROM "+table_name+"_copy" );
 	if ( copyQuery.isActive() ) {
 		while ( copyQuery.next() ) {
@@ -953,9 +953,9 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 
 				QString data = copyQuery.value(i).toString();
 
-				dataList << "'"+escape(data)+"'";
+				dataList << '\''+escape(data)+'\'';
 			}
-			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+")";
+			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+')';
 			kDebug()<<"calling: "<<command;
 			database->exec( command );
 
