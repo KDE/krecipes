@@ -37,7 +37,7 @@ class BorderDialog : public KDialog
 	Q_OBJECT
 
 public:
-	BorderDialog( const KreBorder &border, QWidget* parent = 0, const char* name = 0 );
+	explicit BorderDialog( const KreBorder &border, QWidget* parent = 0, const char* name = 0 );
 	~BorderDialog();
 
 	KreBorder border() const;
