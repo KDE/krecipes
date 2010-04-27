@@ -42,13 +42,13 @@ QString Yield::amountToString() const
 {
 	QString ret = QString::number(amount);
 	if ( amount_offset > 0 )
-		ret += "-"+QString::number(amount+amount_offset);
+		ret += '-'+QString::number(amount+amount_offset);
 
 	return ret;
 }
 
 QString Yield::toString() const
 {
-	return amountToString() + " " + type;
+	return amountToString() + ' ' + type;
 }
 
