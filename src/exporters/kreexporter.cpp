@@ -217,7 +217,7 @@ QString KreExporter::createContent( const RecipeList& recipes )
 					}
 				}
 				else
-					amount_str = "0";
+					amount_str = '0';
 
 				xml += "<amount>";
 				xml += amount_str;
