@@ -333,9 +333,9 @@ void MMFImporter::resetVars()
 
 	m_servings = 0;
 
-	m_title = QString();
-	m_instructions = QString();
+	m_title.clear();
+	m_instructions.clear();
 
-	current_header = QString();
+	current_header.clear();
 }
 
