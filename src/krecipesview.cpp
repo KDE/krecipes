@@ -326,7 +326,7 @@ bool KrecipesView::questionRerunWizard( const QString &message, const QString &e
 	RecipeDB::Error error )
 {
 	if ( (error == RecipeDB::FixDbFailed) && (dbType == "SQLite") ) {
-		QString finalMessage = message + " " +
+		QString finalMessage = message + ' ' +
 		i18n( "\nYou are using SQLite; this error is often caused by using an SQLite 2 "
 		"database with Krecipes supporting SQLite 3, if this is the case you could run "
 		"the SQLite converter.\n"
@@ -348,7 +348,7 @@ bool KrecipesView::questionRerunWizard( const QString &message, const QString &e
 		}
 		return true;
 	} else {
-		QString finalMessage = message + " " +
+		QString finalMessage = message + ' ' +
 		i18n( "\nWould you like to run the setup wizard again? "
 		"Otherwise, the application will be closed." );
 
