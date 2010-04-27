@@ -40,7 +40,7 @@ class SetupAssistant: public KAssistantDialog
 	Q_OBJECT
 public:
 
-	SetupAssistant( QWidget *parent = 0, Qt::WFlags f = 0 );
+	explicit SetupAssistant( QWidget *parent = 0, Qt::WFlags f = 0 );
 	~SetupAssistant();
 	void getOptions( bool &setupUser, bool &initializeData, bool &doUSDAImport );
 	void getAdminInfo( bool &enabled, QString &adminUser, QString &adminPass, const QString &dbType );

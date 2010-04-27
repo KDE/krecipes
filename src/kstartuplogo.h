@@ -29,7 +29,7 @@ class KStartupLogo : public QWidget
 {
 	Q_OBJECT
 public:
-	KStartupLogo( QWidget *parent = 0, const char *name = 0 );
+	explicit KStartupLogo( QWidget *parent = 0, const char *name = 0 );
 	~KStartupLogo();
 	void setHideEnabled( bool bEnabled )
 	{
