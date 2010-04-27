@@ -123,7 +123,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 	//put all the recipe photos into this directory
 	QDir dir;
 	QFileInfo fi(fileName());
-	dir.mkdir( fi.absolutePath() + "/" + fi.baseName() + "_photos" );
+	dir.mkdir( fi.absolutePath() + '/' + fi.baseName() + "_photos" );
 
 	RecipeList::const_iterator recipe_it;
 
@@ -184,7 +184,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 	QPixmap pm = QPixmap::fromImage( image );//image.smoothScale( phwidth, 0, QImage::ScaleMax );
 
 	QFileInfo fi(fileName());
-	QString photo_path = fi.absolutePath() + "/" + fi.baseName() + "_photos/" + photo_name + ".png";
+	QString photo_path = fi.absolutePath() + '/' + fi.baseName() + "_photos/" + photo_name + ".png";
 	if ( !QFile::exists( photo_path ) ) {
 		pm.save( photo_path, "PNG" );
 	}
@@ -197,7 +197,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 
 	//=======================INSTRUCTIONS======================//
 	QString instr_html = Qt::escape( recipe.instructions );
-	instr_html.replace( "\n", "<br />" );
+	instr_html.replace( '\n', "<br />" );
 	if (!instr_html.isEmpty()) {
 		instr_html.prepend("<h1 class=\"instructions-header\">"+i18n("Instructions")+"</h1>");
 	}
@@ -296,7 +296,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( number_format );
 
 			if ( (*ing_it).amount_offset > 0 )
-				amount_str += "-"+MixedNumber( ( *ing_it ).amount + ( *ing_it ).amount_offset ).toString( number_format );
+				amount_str += '-'+MixedNumber( ( *ing_it ).amount + ( *ing_it ).amount_offset ).toString( number_format );
 			else if ( ( *ing_it ).amount <= 1e-10 )
 				amount_str = "";
 
@@ -318,7 +318,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 				QString amount_str = MixedNumber( ( *sub_it ).amount ).toString( number_format );
 	
 				if ( (*ing_it).amount_offset > 0 )
-					amount_str += "-"+MixedNumber( ( *sub_it ).amount + ( *sub_it ).amount_offset ).toString( number_format );
+					amount_str += '-'+MixedNumber( ( *sub_it ).amount + ( *sub_it ).amount_offset ).toString( number_format );
 				else if ( ( *sub_it ).amount <= 1e-10 )
 					amount_str = "";
 	
@@ -378,7 +378,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			amount_str = beautify( KGlobal::locale() ->formatNumber( prop_amount, 5 ) );
 		}
 		else
-			amount_str = "0";
+			amount_str = '0';
 
 		properties_html += QString( "<li>%1: <nobr>%2 %3</nobr></li>" )
 		                   .arg( Qt::escape( (*prop_it).name ) )
@@ -413,10 +413,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
 			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+image_url+"\" /></td></tr>";
-			if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
+			if ( !QFile::exists( fi.absolutePath() + '/' + image_url ) ) {
 				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars);
-				starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
-				kDebug() << "saving: " << fi.absolutePath() + "/" + image_url ;
+				starPixmap.save( fi.absolutePath() + '/' + image_url, "PNG" );
+				kDebug() << "saving: " << fi.absolutePath() + '/' + image_url ;
 			}
 
 			rating_total++;
@@ -436,9 +436,9 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		overall_html += QString("<b>%1:</b>").arg(i18n("Overall Rating"));
 		QString image_url = fi.baseName() + "_photos/" + QString::number(average) + "-stars.png";
 		overall_html +=  "<img src=\""+ image_url+"\" />";
-		if ( !QFile::exists( fi.absolutePath() + "/" + image_url ) ) {
+		if ( !QFile::exists( fi.absolutePath() + '/' + image_url ) ) {
 			QPixmap starPixmap = Rating::starsPixmap(average);
-			starPixmap.save( fi.absolutePath() + "/" + image_url, "PNG" );
+			starPixmap.save( fi.absolutePath() + '/' + image_url, "PNG" );
 		}
 	}
 	content = content.replace( "**OVERALL_RATING**", overall_html );
@@ -481,5 +481,5 @@ void HTMLExporter::removeHTMLFiles( const QString &filename, const QList<int> &r
 QString HTMLExporter::escape( const QString & str )
 {
 	QString tmp( str );
-	return tmp.replace( '/', "_" );
+	return tmp.replace( '/', '_' );
 }
