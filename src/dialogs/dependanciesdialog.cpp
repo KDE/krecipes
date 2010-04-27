@@ -83,7 +83,7 @@ void DependanciesDialog::loadList( K3ListBox* listBox, const ElementList &list )
 	for ( ElementList::const_iterator el_it = list.begin(); el_it != list.end(); ++el_it ) {
 		QString name = ( *el_it ).name;
 		if ( show_id )
-			name += " (" + QString::number(( *el_it ).id) + ")";
+			name += " (" + QString::number(( *el_it ).id) + ')';
 		listBox->insertItem( name );
 	}
 }
