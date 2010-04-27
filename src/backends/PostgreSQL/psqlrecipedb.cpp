@@ -216,7 +216,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 
 		addColumn("CREATE TABLE %1 (recipe_id INTEGER, ingredient_id INTEGER, amount FLOAT, %2 unit_id INTEGER, prep_method_id INTEGER, order_index INTEGER, group_id INTEGER);","amount_offset FLOAT","'0'","ingredient_list",3);
 
-		QSqlQuery query( QString::null, *database );
+		QSqlQuery query( QString(), *database );
 		query.exec( "CREATE INDEX ridil_index ON ingredient_list USING BTREE (recipe_id);" );
 		query.exec( "CREATE INDEX iidil_index ON ingredient_list USING BTREE (ingredient_id);");
 
@@ -234,7 +234,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		QSqlQuery copyQuery = database->exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes;" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
-				QSqlQuery query( QString::null, *database );
+				QSqlQuery query( QString(), *database );
 				query.prepare( "INSERT INTO recipes_copy VALUES (?, ?, ?, ?, ?, ?)" );
 				query.addBindValue( copyQuery.value( 0 ) );
 				query.addBindValue( copyQuery.value( 1 ) );
@@ -252,7 +252,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		copyQuery = database->exec( "SELECT id,title,persons,instructions,photo,prep_time FROM recipes_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
-				QSqlQuery query( QString::null, *database );
+				QSqlQuery query( QString(), *database );
  				query.prepare( "INSERT INTO recipes VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
 				query.addBindValue( copyQuery.value( 0 ) ); //id
 				query.addBindValue( copyQuery.value( 1 ) ); //title
@@ -288,7 +288,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 			while ( copyQuery.next() ) {
 				int ing_list_id = getNextInsertID("ingredient_list","id");
 
-				QSqlQuery query( QString::null, *database );
+				QSqlQuery query( QString(), *database );
 				query.prepare( "INSERT INTO ingredient_list VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
 				query.addBindValue( ing_list_id );
 				query.addBindValue( copyQuery.value( 0 ) );
@@ -422,7 +422,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		QSqlQuery copyQuery = database->exec( "SELECT id,name,plural FROM units_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
-				QSqlQuery query( QString::null, *database );
+				QSqlQuery query( QString(), *database );
 				query.prepare( "INSERT INTO units VALUES(?, ?, ?, ?, ?)" );
 				query.addBindValue( copyQuery.value( 0 ) );
 				query.addBindValue( copyQuery.value( 1 ) );
@@ -480,7 +480,7 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 {
 	QString command;
 
-	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString::null);
+	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString());
 	kDebug()<<"calling: "<<command;
 	QSqlQuery query( command, *database );
 
@@ -575,7 +575,7 @@ void PSqlRecipeDB::empty( void )
 	QStringList tables;
 	tables << "authors_id_seq" << "categories_id_seq" << "ingredient_properties_id_seq" << "ingredient_weights_id_seq" << "ingredients_id_seq" << "prep_methods_id_seq" << "recipes_id_seq" << "units_id_seq" << "ingredient_groups_id_seq" << "yield_types_id_seq" << "ingredient_list_id_seq" << "prep_method_list_id_seq" << "ratings_id_seq" << "rating_criteria_id_seq";
 
-	QSqlQuery tablesToEmpty( QString::null, *database );
+	QSqlQuery tablesToEmpty( QString(), *database );
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DELETE FROM %1;" ).arg( *it );
 		tablesToEmpty.exec( command );

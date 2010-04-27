@@ -81,9 +81,9 @@ public:
 		else if ( c == 1 )
 			return QString::number(m_weight.perAmount)+' '
 			  +m_weight.perAmountUnit
-			  +((m_weight.prepMethodID!=-1)?", "+m_weight.prepMethod:QString::null);
+			  +((m_weight.prepMethodID!=-1)?", "+m_weight.prepMethod:QString());
 		else
-			return QString::null;
+			return QString();
 	}
 
 private:
@@ -123,7 +123,7 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 
 	KVBox* higherBox = new KVBox;
 
-	usdaListView = new KreListView( higherBox, QString::null, higherBox, 0 );
+	usdaListView = new KreListView( higherBox, QString(), higherBox, 0 );
 	usdaListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 	usdaListView->listView()->addColumn( i18nc( "@title:column", "USDA Ingredient" ) );
 	usdaListView->listView()->addColumn( "Id" );
@@ -395,7 +395,7 @@ void EditPropertiesDialog::reloadWeightList( void )
 		WeightListItem *weight = new WeightListItem( weightListView, lastElement, w );
 		weight->setAmountUnit( w.perAmount,
 			db->unitName(w.perAmountUnitID),
-			Element((w.prepMethodID==-1)?QString::null:db->prepMethodName(w.prepMethodID),w.prepMethodID)
+			Element((w.prepMethodID==-1)?QString():db->prepMethodName(w.prepMethodID),w.prepMethodID)
 		);
 		weight->setWeightUnit( w.weight, db->unitName(w.weightUnitID) );
 	}

@@ -189,7 +189,7 @@ void UnitsDialog::saveAllRatios( UnitRatioList &/*ratioList*/ )
 #if 0
 	ConversionTable *conversionTable = massConversionTable;
 
-	KProgressDialog progress_dialog( this, "progress_dialog", i18nc( "@title:window", "Finding Unit Ratios" ), QString::null, true );
+	KProgressDialog progress_dialog( this, "progress_dialog", i18nc( "@title:window", "Finding Unit Ratios" ), QString(), true );
 	progress_dialog.progressBar() ->setTotalSteps( ratioList.count() * ratioList.count() );
 
 	for ( UnitRatioList::const_iterator current_it = ratioList.begin(); current_it != ratioList.end(); ++current_it ) {

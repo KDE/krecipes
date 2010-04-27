@@ -78,7 +78,7 @@ public:
 		case 3: return m_unit.plural_abbrev;
 		case 4: return m_type;
 		case 5: return QString::number(m_unit.id);
-		default: return QString::null;
+		default: return QString();
 		}
 	}
 

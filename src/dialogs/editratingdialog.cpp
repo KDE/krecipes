@@ -189,7 +189,7 @@ void EditRatingDialog::itemRenamed(Q3ListViewItem* it, const QString &, int c)
 			it->setPixmap(c,starsPic);
 		}
 
-		it->setText(c,QString::null);
+		it->setText(c,QString());
 	}
 }
 

@@ -364,7 +364,7 @@ void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString &
 	fd->setMode( KFile::File | KFile::Directory );
 	if ( fd->exec() == KFileDialog::Accepted ) {
 		QString fileName = fd->selectedFile();
-		if ( !fileName.isNull() ) {
+		if ( !fileName.isEmpty() ) {
 			BaseExporter * exporter;
 			if ( fd->currentFilter() == "*.xml" )
 				exporter = new RecipeMLExporter( fileName, fd->currentFilter() );
@@ -399,7 +399,7 @@ void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString &
 			}
 
 			if ( overwrite == KMessageBox::Yes || overwrite == -1 ) {
-				KProgressDialog progress_dialog( 0, QString::null, i18n( "Saving recipes..." ) );
+				KProgressDialog progress_dialog( 0, QString(), i18n( "Saving recipes..." ) );
 				progress_dialog.setObjectName("export_progress_dialog");
 				exporter->exporter( ids, database, &progress_dialog );
 			}
@@ -416,22 +416,22 @@ void RecipeActionsHandler::recipesToClipboard( const QList<int> &ids, RecipeDB *
 
 	BaseExporter * exporter;
 	if ( formatFilter == "*.xml" )
-		exporter = new RecipeMLExporter( QString::null, formatFilter );
+		exporter = new RecipeMLExporter( QString(), formatFilter );
 	else if ( formatFilter == "*.mx2" )
-		exporter = new mx2Exporter( QString::null, formatFilter );
+		exporter = new mx2Exporter( QString(), formatFilter );
 	else if ( formatFilter == "*.mmf" )
-		exporter = new MMFExporter( QString::null, formatFilter );
+		exporter = new MMFExporter( QString(), formatFilter );
 	else if ( formatFilter == "*.cml" )
-		exporter = new CookMLExporter( QString::null, formatFilter );
+		exporter = new CookMLExporter( QString(), formatFilter );
 	else if ( formatFilter == "*.rk" )
-		exporter = new RezkonvExporter( QString::null, formatFilter );
+		exporter = new RezkonvExporter( QString(), formatFilter );
 	else if ( formatFilter == "*.kre" || formatFilter == "*.kreml" ) {
 		CategoryTree *cat_structure = new CategoryTree;
 		db->loadCategories( cat_structure );
 		exporter = new KreExporter( cat_structure, QString::null, formatFilter );
 	}
 	else //default to plain text
-		exporter = new PlainTextExporter( QString::null, "*.txt" );
+		exporter = new PlainTextExporter( QString(), "*.txt" );
 
 	RecipeList recipeList;
 	db->loadRecipes( &recipeList, exporter->supportedItems(), ids );

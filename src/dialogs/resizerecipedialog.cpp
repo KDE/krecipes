@@ -123,7 +123,7 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 
 void ResizeRecipeDialog::languageChange()
 {
-	buttonGroup->setTitle( QString::null );
+	buttonGroup->setTitle( QString() );
 	yieldRadioButton->setText( i18nc( "@option:radio", "Scale by yield" ) );
 	newYieldLabel->setText( i18nc( "@label:textbox", "New yield:" ) );
 	currentYieldLabel->setText( i18nc( "@label:textbox", "Current yield:" ) );

@@ -83,7 +83,7 @@ Ingredient IngListViewItem::ingredient() const
 
 void IngListViewItem::setAmount( double amount, double amount_offset )
 {
-	amount_str = QString::null;
+	amount_str = QString();
 
 	if ( amount+amount_offset > 0 ) {
 		KConfigGroup config = KGlobal::config()->group( "Formatting" );
@@ -155,7 +155,7 @@ QString IngListViewItem::text( int column ) const
 		return m_ing.prepMethodList.join(",");
 		break;
 	default:
-		return ( QString::null );
+		return ( QString() );
 	}
 }
 
@@ -194,7 +194,7 @@ QString IngGrpListViewItem::text( int column ) const
 		return m_group + ':';
 		break;
 	default:
-		return ( QString::null );
+		return ( QString() );
 	}
 }
 

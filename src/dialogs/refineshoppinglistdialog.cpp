@@ -56,7 +56,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	layout2->setMargin( 0 );
 	layout2->setSpacing( 6 );
 
-	allIngListView = new KreListView( layout2Widget, QString::null, true, 0 );
+	allIngListView = new KreListView( layout2Widget, QString(), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
 	list_view->reload();
  	allIngListView->setListView(list_view);
@@ -84,7 +84,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	layout1->addStretch();
 	layout2->addLayout( layout1 );
 
-	ingListView = new KreListView( layout2Widget, QString::null, true );
+	ingListView = new KreListView( layout2Widget, QString(), true );
 	ingListView->listView() ->addColumn( i18nc( "@title:column", "Ingredients in Shopping List" ) );
 	ingListView->listView() ->addColumn( i18nc( "@title:column", "Amount" ) );
 	ingListView->listView() ->addColumn( i18nc( "@title:column", "Unit" ) );

@@ -35,7 +35,7 @@ protected:
 private:
 	void readRecipemlDirections( const QDomElement& dirs );
 	void readRecipemlHead( const QDomElement& head );
-	void readRecipemlIng( const QDomElement& ing, Ingredient *ing_parent = 0, const QString &header = QString::null );
+	void readRecipemlIng( const QDomElement& ing, Ingredient *ing_parent = 0, const QString &header = QString() );
 	void readRecipemlIngs( const QDomElement& ings );
 	void readRecipemlMenu( const QDomElement& menu );
 	void readRecipemlSrcItems( const QDomElement& sources );

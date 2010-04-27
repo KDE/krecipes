@@ -319,7 +319,7 @@ void RecipeActionsHandler::mergeSimilar()
 {
 	QList<Q3ListViewItem> items = parentListView->selectedItems();
 	if ( items.count() > 1 )
-		KMessageBox::sorry( kapp->mainWidget(), i18nc("@info", "Please select only one category."), QString::null );
+		KMessageBox::sorry( kapp->mainWidget(), i18nc("@info", "Please select only one category."), QString() );
 	else if ( items.count() == 1 && items.at(0)->rtti() == 1001 ) {
 		CategoryListItem * cat_it = ( CategoryListItem* ) items.at(0);
 		QString name = cat_it->categoryName();
@@ -379,7 +379,7 @@ void SimilarCategoriesDialog::findMatches()
 void SimilarCategoriesDialog::mergeMatches()
 {
 	if ( !toMergeListView->firstChild() ) {
-		KMessageBox::sorry( this, i18nc("@info", "No categories selected to merge."), QString::null );
+		KMessageBox::sorry( this, i18nc("@info", "No categories selected to merge."), QString() );
 		return;
 	}
 

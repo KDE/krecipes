@@ -73,13 +73,13 @@ void StdAuthorListView::removeAuthor( int id )
 }
 
 
-AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author ) : Q3CheckListItem( qlv, QString::null, Q3CheckListItem::CheckBox ),
+AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, const Element &author ) : Q3CheckListItem( qlv, QString(), Q3CheckListItem::CheckBox ),
 	authorStored(author),
 	m_listview(qlv)
 {
 }
 
-AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, Q3ListViewItem *after, const Element &author ) : Q3CheckListItem( qlv, after, QString::null, Q3CheckListItem::CheckBox ),
+AuthorCheckListItem::AuthorCheckListItem( AuthorCheckListView* qlv, Q3ListViewItem *after, const Element &author ) : Q3CheckListItem( qlv, after, QString(), Q3CheckListItem::CheckBox ),
 	authorStored(author),
 	m_listview(qlv)
 {
@@ -98,7 +98,7 @@ QString AuthorCheckListItem::text( int column ) const
 	case 1:
 		return ( QString::number( authorStored.id ) );
 	default:
-		return QString::null;
+		return QString();
 	}
 }
 

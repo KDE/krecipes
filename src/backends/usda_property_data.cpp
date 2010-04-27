@@ -41,7 +41,7 @@ Q3ValueList<PropertyData> loadProperties()
 		QTextStream stream( &dataFile );
 
 		QString line;
-		while ( (line = stream.readLine()) != QString::null ) {
+		while ( (line = stream.readLine()) != QString() ) {
 			if ( line.trimmed().isEmpty() ) continue;
 
 			PropertyData data;

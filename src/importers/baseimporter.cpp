@@ -96,7 +96,7 @@ void BaseImporter::import( RecipeDB *db, bool /*automatic*/ )
 	if ( direct ) {
 		m_database = db;
 
-		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), i18n( "Importing selected recipes" ), QString::null, Qt::Dialog );
+		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), i18n( "Importing selected recipes" ), QString(), Qt::Dialog );
 		m_progress_dialog->setModal( true );
 		m_progress_dialog->progressBar()->setRange( 0, 0 );
 	
@@ -119,7 +119,7 @@ void BaseImporter::import( RecipeDB *db, bool /*automatic*/ )
 		m_recipe_list->empty();
 		//db->blockSignals(true);
 
-		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), i18n( "Importing selected recipes" ), QString::null, Qt::Dialog );
+		m_progress_dialog = new KProgressDialog( kapp->mainWidget(), i18n( "Importing selected recipes" ), QString(), Qt::Dialog );
 		m_progress_dialog->setModal( true );
 		m_progress_dialog->progressBar()->setRange( 0, m_recipe_list->count() );
 		m_progress_dialog->progressBar()->setFormat( i18n( "%v/%m Recipes" ) );
@@ -353,12 +353,12 @@ void BaseImporter::importUnitRatios( RecipeDB *db )
 		for ( UnitList::const_iterator unit_it = m_unitList.begin(); unit_it != m_unitList.end(); ++unit_it ) {
 			if ( ( *it ).uID1 == ( *unit_it ).id ) {
 				unitName1 = ( *unit_it ).name;
-				if ( !unitName2.isNull() )
+				if ( !unitName2.isEmpty() )
 					break;
 			}
 			else if ( ( *it ).uID2 == ( *unit_it ).id ) {
 				unitName2 = ( *unit_it ).name;
-				if ( !unitName1.isNull() )
+				if ( !unitName1.isEmpty() )
 					break;
 			}
 		}

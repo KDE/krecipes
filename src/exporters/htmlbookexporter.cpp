@@ -47,7 +47,7 @@ QString HTMLBookExporter::createContent( const RecipeList& recipes )
 		}
 	}
 
-	return QString::null;
+	return QString();
 }
 
 QString HTMLBookExporter::createHeader( const RecipeList &list )

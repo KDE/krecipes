@@ -171,7 +171,7 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 	else
 		return ;
 
-	QSqlQuery databaseToCreate( QString::null, *database );
+	QSqlQuery databaseToCreate( QString(), *database );
 
 	// execute the queries
 	for ( QStringList::const_iterator it = commands.constBegin(); it != commands.constEnd(); ++it )
@@ -227,7 +227,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 
 		//*1:: Recipes have always category -1 to speed up searches (no JOINs needed)
 		command = "SELECT r.id FROM recipes r;"; // Find all recipes
-		QSqlQuery categoryToAdd( QString::null, *database );
+		QSqlQuery categoryToAdd( QString(), *database );
 		tableToAlter.exec( command );
 		if ( tableToAlter.isActive() )
 		{
@@ -369,7 +369,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		QSqlQuery copyQuery = database->exec( "SELECT recipe_id,ingredient_id,amount,amount_offset,unit_id,prep_method_id,order_index,group_id FROM ingredient_list_copy" );
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
-				QSqlQuery query(QString::null,*database);
+				QSqlQuery query(QString(),*database);
  				query.prepare( "INSERT INTO ingredient_list VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)" );
 				query.addBindValue( copyQuery.value( 0 ) );
 				query.addBindValue( copyQuery.value( 1 ) );

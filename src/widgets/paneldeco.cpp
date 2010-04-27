@@ -79,12 +79,12 @@ TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const
 {
 	setObjectName( name );
 	setMinimumHeight( 30 );
-	panelTitle = QString::null;
-	if ( !iconName.isNull() ) {
+	panelTitle = QString();
+	if ( !iconName.isEmpty() ) {
 		icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
 	}
 
-	if ( !title.isNull() ) {
+	if ( !title.isEmpty() ) {
 		panelTitle = title;
 	}
 }
@@ -121,7 +121,7 @@ void TopDeco::paintEvent( QPaintEvent * )
 	}
 
 	// Finally, draw the text besides the icon
-	if ( !panelTitle.isNull() ) {
+	if ( !panelTitle.isEmpty() ) {
 		xpos += 15;
 		QRect r = rect();
 		r.setLeft( xpos );
@@ -136,12 +136,12 @@ void TopDeco::paintEvent( QPaintEvent * )
 
 void TopDeco::setHeader( const QString &title, const QString &iconName )
 {
-	if ( !title.isNull() )
+	if ( !title.isEmpty() )
 		panelTitle = title;
-	if ( !iconName.isNull() ) {
+	if ( !iconName.isEmpty() ) {
 		icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
 	}
-	if ( !title.isNull() || !iconName.isNull() )
+	if ( !title.isEmpty() || !iconName.isEmpty() )
 		update();
 }
 

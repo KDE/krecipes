@@ -124,7 +124,7 @@ void ConversionTable::clearCellWidget( int r, int c )
 }
 
 
-ConversionTableItem::ConversionTableItem( Q3Table *t, EditType et ) : Q3TableItem( t, et, QString::null )
+ConversionTableItem::ConversionTableItem( Q3Table *t, EditType et ) : Q3TableItem( t, et, QString() )
 {
 	// we do not want this item to be replaced
 	setReplaceable( false );
@@ -163,7 +163,7 @@ void ConversionTableItem::setContentFromEditor( QWidget *w )
 			emit ratioChanged( row(), col(), editor->value().toDouble() ); // Signal to store
 		}
 		else {
-			setText( QString::null );
+			setText( QString() );
 			emit ratioRemoved( row(), col() );
 		}
 	}
@@ -180,7 +180,7 @@ QString ConversionTable::text( int r, int c ) const			 // without this function,
 	if ( item( r, c ) )
 		return item( r, c ) ->text();  //Note that item(r,c) was reimplemented here for large sparse tables...
 	else
-		return QString::null;
+		return QString();
 }
 
 void ConversionTable::initTable()

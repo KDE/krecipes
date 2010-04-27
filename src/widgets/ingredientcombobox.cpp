@@ -41,7 +41,7 @@ void IngredientComboBox::reload()
 	ingredientComboRows.clear();
 
 	int row = 0;
-	if ( !m_specialItem.isNull() ) {
+	if ( !m_specialItem.isEmpty() ) {
 		insertItem( count(), m_specialItem );
 		ingredientComboRows.insert( row, -1 );
 		row++;

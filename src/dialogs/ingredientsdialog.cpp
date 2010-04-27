@@ -51,7 +51,7 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	listLayout = new QVBoxLayout;
 
-	ingredientListView = new KreListView ( ingredientTab, QString::null, true, 0 );
+	ingredientListView = new KreListView ( ingredientTab, QString(), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
 	ingredientActionsHandler = new IngredientActionsHandler( list_view, database );
 	ingredientListView->setListView( list_view );
@@ -133,7 +133,7 @@ void IngredientsDialog::showPropertyEdit()
 		delete d;
 	}
 	else
-		KMessageBox::information( this, i18nc( "@info", "No ingredient selected." ), QString::null );
+		KMessageBox::information( this, i18nc( "@info", "No ingredient selected." ), QString() );
 }
 
 #include "ingredientsdialog.moc"

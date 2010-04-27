@@ -33,7 +33,7 @@ public:
 			return QString("<< %1").arg(i18nc("Previous item", "Previous"));
 		}
 		else
-			return QString::null;
+			return QString();
 	}
 };
 
@@ -49,7 +49,7 @@ public:
 			return QString("%1 >>").arg(i18nc("Next item", "Next"));
 		}
 		else
-			return QString::null;
+			return QString();
 	}
 };
 
@@ -160,7 +160,7 @@ void DBListViewBase::reload( ReloadFlags flag )
 	if ( flag == ForceReload || (!firstChild() && flag == Load) || (firstChild() && flag == ReloadIfPopulated) ) {
 		KApplication::setOverrideCursor( Qt::WaitCursor );
 
-		//m_progress = new KProgressDialog(this,0,QString::null,i18n("Loading..."),true);
+		//m_progress = new KProgressDialog(this,0,QString(),i18n("Loading..."),true);
 		//m_progress->setAllowCancel(false);
 		//m_progress->progressBar()->setPercentageVisible(false);
 		//m_progress->progressBar()->setTotalSteps( m_totalSteps );

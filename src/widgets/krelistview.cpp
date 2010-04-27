@@ -35,7 +35,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		( ( KHBox* ) header ) ->setSpacing( 15 );
 	}
 
-	if ( !title.isNull() ) {
+	if ( !title.isEmpty() ) {
 		listLabel = new QLabel( header );
 		listLabel->setFrameShape( QFrame::NoFrame  );
 		listLabel->setFrameShadow( QFrame::Plain );
@@ -139,7 +139,7 @@ void KreListView::setListView( DBListViewBase *list_view )
 void KreListView::clearSearch()
 {
 	filterEdit->clear();
-	filter( QString::null );
+	filter( QString() );
 }
 
 #include "krelistview.moc"

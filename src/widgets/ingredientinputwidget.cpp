@@ -236,7 +236,7 @@ void IngredientInput::signalIngredient()
 bool IngredientInput::isInputValid()
 {
 	if ( ingredientBox->currentText().trimmed().isEmpty() ) {
-		KMessageBox::error( this, i18n( "Please enter an ingredient" ), QString::null );
+		KMessageBox::error( this, i18n( "Please enter an ingredient" ), QString() );
 		ingredientBox->setFocus();
 		return false;
 	}
@@ -485,7 +485,7 @@ int IngredientInputWidget::createNewUnitIfNecessary( const QString &unit, bool p
 	if ( -1 == id )
 	{
 		QPointer<CreateUnitDialog> getUnit =
-			new CreateUnitDialog( 0, ( plural ) ? QString::null : unit, ( !plural ) ? QString::null : unit );
+			new CreateUnitDialog( 0, ( plural ) ? QString() : unit, ( !plural ) ? QString() : unit );
 		if ( getUnit->exec() == QDialog::Accepted ) {
 			new_unit = getUnit->newUnit();
 			database->createNewUnit( new_unit );

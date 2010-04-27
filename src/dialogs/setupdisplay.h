@@ -126,7 +126,7 @@ private:
 	// Methods
 	void applyStylesheet();
 	void loadPageLayout( const QDomElement &tag );
-	void loadHTMLView( const QString &templateFile = QString::null, const QString &styleFile = QString::null );
+	void loadHTMLView( const QString &templateFile = QString(), const QString &styleFile = QString() );
 
 	void createItem( const QString &id, const QString &name, unsigned int properties );
 

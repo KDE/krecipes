@@ -20,13 +20,13 @@
 #include "backends/recipedb.h"
 #include "dialogs/createpropertydialog.h"
 
-PropertyCheckListItem::PropertyCheckListItem( Q3ListView* klv, const IngredientProperty &property ) : Q3CheckListItem( klv, QString::null, Q3CheckListItem::CheckBox ),
+PropertyCheckListItem::PropertyCheckListItem( Q3ListView* klv, const IngredientProperty &property ) : Q3CheckListItem( klv, QString(), Q3CheckListItem::CheckBox ),
 		m_property( property )
 {
 	//setOn( false ); // Set unchecked by default
 }
 
-PropertyCheckListItem::PropertyCheckListItem( Q3ListViewItem* it, const IngredientProperty &property ) : Q3CheckListItem( it, QString::null, Q3CheckListItem::CheckBox ),
+PropertyCheckListItem::PropertyCheckListItem( Q3ListViewItem* it, const IngredientProperty &property ) : Q3CheckListItem( it, QString(), Q3CheckListItem::CheckBox ),
 		m_property( property )
 {
 	//setOn( false ); // Set unchecked by default
@@ -47,7 +47,7 @@ QString PropertyCheckListItem::text( int column ) const
 
 	}
 
-	return QString::null;
+	return QString();
 }
 
 

@@ -99,7 +99,7 @@ public:
 			return ( QString::number( recipeStored->recipeID ) );
 			break;
 		default:
-			return ( QString::null );
+			return ( QString() );
 		}
 	}
 

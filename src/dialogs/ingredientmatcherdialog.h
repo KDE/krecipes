@@ -107,7 +107,7 @@ public:
 		if ( column == 0 )
 			return ( mText );
 		else
-			return ( QString::null );
+			return ( QString() );
 	}
 };
 class IngredientMatcherDialog: public QWidget

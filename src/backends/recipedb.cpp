@@ -92,7 +92,7 @@ QString RecipeDB::krecipes_version() const
 	if ( this_instance && this_instance->aboutData() )
 		return this_instance->aboutData() ->version();
 
-	return QString::null; //Oh, well.  We couldn't get the version (shouldn't happen).
+	return QString(); //Oh, well.  We couldn't get the version (shouldn't happen).
 }
 
 void RecipeDB::cancelOperation()
@@ -306,7 +306,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 	haltOperation = false;
 	m_operationHalted = false;
 
-	emit progressBegin(0,QString::null,
+	emit progressBegin(0,QString(),
 		QString("<center><b>%1</b></center>%2")
 			.arg(i18n("Creating complete backup"))
 			.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")),50);
@@ -478,7 +478,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		m_processError = false;
 		m_operationHalted = false;
 
-		emit progressBegin(0,QString::null,
+		emit progressBegin(0,QString(),
 			QString("<center><b>%1</b></center>%2")
 				.arg(i18n("Restoring backup"))
 				.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")),50);
@@ -579,14 +579,14 @@ void RecipeDB::execSQL( QTextStream &stream )
 {
     kDebug();
 	QString line, command;
-	while ( (line = stream.readLine()) != QString::null ) {
+	while ( (line = stream.readLine()) != QString() ) {
 		command += ' '+line;
 		if ( command.startsWith(" --") ) {
-			command = QString::null;
+			command = QString();
 		}
 		else if ( command.endsWith(';') ) {
 			execSQL( command );
-			command = QString::null;
+			command = QString();
 		}
 	}
 }

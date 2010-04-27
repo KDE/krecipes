@@ -27,7 +27,7 @@
 #include <Q3ValueList>
 #include <QPixmap>
 
-CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : Q3CheckListItem( klv, QString::null, Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
+CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : Q3CheckListItem( klv, QString(), Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
 		m_listview(klv)
@@ -35,7 +35,7 @@ CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const 
 	setOn( false ); // Set unchecked by default
 }
 
-CategoryCheckListItem::CategoryCheckListItem( Q3ListViewItem* it, const Element &category, bool _exclusive ) : Q3CheckListItem( it, QString::null, Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
+CategoryCheckListItem::CategoryCheckListItem( Q3ListViewItem* it, const Element &category, bool _exclusive ) : Q3CheckListItem( it, QString(), Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
 		m_listview((CategoryCheckListView*)it->listView())
@@ -43,7 +43,7 @@ CategoryCheckListItem::CategoryCheckListItem( Q3ListViewItem* it, const Element 
 	setOn( false ); // Set unchecked by default
 }
 
-CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, Q3ListViewItem* it, const Element &category, bool _exclusive ) : Q3CheckListItem( klv, it, QString::null, Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
+CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, Q3ListViewItem* it, const Element &category, bool _exclusive ) : Q3CheckListItem( klv, it, QString(), Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
 		locked( false ),
 		exclusive( _exclusive ),
 		m_listview(klv)

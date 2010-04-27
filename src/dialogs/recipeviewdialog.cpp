@@ -109,14 +109,14 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 
 	if ( ids.count() > 1 )  //we don't want a progress bar coming up when there is only one recipe... it may show up during the splash screen
 	{
-		progress_dialog = new KProgressDialog( this, QString::null, i18nc( "@title:window", "Opening recipes, please wait..." ) );
+		progress_dialog = new KProgressDialog( this, QString(), i18nc( "@title:window", "Opening recipes, please wait..." ) );
 		progress_dialog->setObjectName( "open_progress_dialog" );
 		progress_dialog->setModal( true );
 		progress_dialog->resize( 240, 80 );
 	}
 
 	XSLTExporter html_generator( tmp_filename + ".html", "html" );
-	if ( layoutConfig != QString::null ) {
+	if ( layoutConfig != QString() ) {
             KConfigGroup config(KGlobal::config(), "Page Setup" );
 		QString styleFile = config.readEntry( layoutConfig+"Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
 		if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )

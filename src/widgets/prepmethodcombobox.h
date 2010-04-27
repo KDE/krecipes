@@ -23,7 +23,7 @@ class PrepMethodComboBox : public KComboBox
 	Q_OBJECT
 
 public:
-	PrepMethodComboBox( bool, QWidget *parent, RecipeDB *db, const QString &specialItem = QString::null );
+	PrepMethodComboBox( bool, QWidget *parent, RecipeDB *db, const QString &specialItem = QString() );
 
 	void reload();
 	int id( int row );

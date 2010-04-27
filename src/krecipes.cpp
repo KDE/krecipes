@@ -459,10 +459,10 @@ void Krecipes::fileOpen()
 	// button is clicked
 	/*
 	    // this brings up the generic open dialog
-	    KUrl url = KUrlRequesterDlg::getURL(QString::null, this, i18n("Open Location") );
+	    KUrl url = KUrlRequesterDlg::getURL(QString(), this, i18n("Open Location") );
 	*/
 	// standard filedialog
-	/*KUrl url = KFileDialog::getOpenUrl(QString::null, QString::null, this, i18n("Open Location"));
+	/*KUrl url = KFileDialog::getOpenUrl(QString(), QString(), this, i18n("Open Location"));
 	if (!url.isEmpty())
 		m_view->openURL(url);*/
 }
@@ -689,7 +689,7 @@ void Krecipes::backupSlot()
 		overwrite = KMessageBox::warningYesNo( this, i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" , fileName ) );
 	}
 
-	if ( !fileName.isNull() && overwrite == KMessageBox::Yes ) {
+	if ( !fileName.isEmpty() && overwrite == KMessageBox::Yes ) {
 		ProgressInterface pi(this);
 		pi.listenOn(m_view->database);
 
@@ -705,7 +705,7 @@ void Krecipes::restoreSlot()
 		QString("*.krecbk|%1 (*.krecbk)").arg(i18n("Krecipes Backup File")),
 		this,i18n("Restore Backup"));
 
-	if ( !filename.isNull() ) {
+	if ( !filename.isEmpty() ) {
 		switch ( KMessageBox::warningContinueCancel(this,i18n("<b>Restoring this file will erase ALL data currently in the database.</b><br /><br />If you want to keep the recipes in your database, click \"Cancel\" and first export your recipes.  These can then be imported once the restore is complete.<br /><br />Are you sure you want to proceed?"),QString(),KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "RestoreWarning") ) {
 		case KMessageBox::Continue: {
 			ProgressInterface pi(this);

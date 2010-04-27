@@ -163,7 +163,7 @@ QString HTMLExporter::createHeader( const RecipeList & )
 QString HTMLExporter::createFooter()
 {
 	if ( m_error )
-		return QString::null;
+		return QString();
 
 	return "</body></html>";
 }

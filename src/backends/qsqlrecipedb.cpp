@@ -107,9 +107,9 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 
         kDebug()<<" DBname :"<<DBname;
 	database->setDatabaseName( DBname );
-	if ( !( DBuser.isNull() ) )
+	if ( !( DBuser.isEmpty() ) )
 		database->setUserName( DBuser );
-	if ( !( DBpass.isNull() ) )
+	if ( !( DBpass.isEmpty() ) )
 		database->setPassword( DBpass );
 	database->setHostName( DBhost );
 	if ( DBport > 0 )
@@ -126,7 +126,7 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 		}
 		else {
 			// Handle the error (passively)
-			if ( DBuser.isNull() ) {
+			if ( DBuser.isEmpty() ) {
 				dbErr = i18n( "Krecipes could not open the \"%1\" database.", DBname );
 			}
 			else {
@@ -141,7 +141,7 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 			QString error = i18n( "Database message: %1" , database->lastError().databaseText() );
 			kDebug() << i18n( "Failing to open database. Exiting\n" ).toLatin1();
 			// Handle the error (passively)
-			if ( DBuser.isNull() ) {
+			if ( DBuser.isEmpty() ) {
 				dbErr = i18n( "Krecipes could not open the \"%1\" database.", DBname );
 			}
 			else {
@@ -510,7 +510,7 @@ void QSqlRecipeDB::modProperty( int propertyID, const QString &newLabel, const Q
 {
 	QString command;
 
-	if ( unit.isNull() )
+	if ( unit.isEmpty() )
 		command = QString( "UPDATE ingredient_properties SET name='%1' WHERE id=%2" ).arg( escapeAndEncode( newLabel ) ).arg( propertyID );
 	else
 		command = QString( "UPDATE ingredient_properties SET name='%1',units='%2' WHERE id=%3" ).arg( escapeAndEncode( newLabel ) ).arg( escapeAndEncode( unit ) ).arg( propertyID );
@@ -550,7 +550,7 @@ void QSqlRecipeDB::loadPossibleUnits( int ingredientID, UnitList *list )
 
 void QSqlRecipeDB::storePhoto( int recipeID, const QByteArray &data )
 {
-	QSqlQuery query( QString::null, *database);
+	QSqlQuery query( QString(), *database);
 
 	query.prepare( "UPDATE recipes SET photo=?,ctime=ctime,atime=atime,mtime=mtime WHERE id=" + QString::number( recipeID ) );
 	query.addBindValue( KCodecs::base64Encode( data ) );
@@ -601,7 +601,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	// First check if the recipe ID is set, if so, update (not create)
 	// Be carefull, first check if the recipe hasn't been deleted while changing.
 
-	QSqlQuery recipeToSave( QString::null, *database );
+	QSqlQuery recipeToSave( QString(), *database );
 
 	QString command;
 
@@ -1509,7 +1509,7 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 
 void QSqlRecipeDB::modUnit( const Unit &unit )
 {
-	QSqlQuery unitQuery( QString::null, *database);
+	QSqlQuery unitQuery( QString(), *database);
 
 	QString real_name = unit.name.left( maxUnitNameLength() ).trimmed();
 	QString real_plural = unit.plural.left( maxUnitNameLength() ).trimmed();
@@ -1796,7 +1796,7 @@ void QSqlRecipeDB::findUnitDependancies( int unitID, ElementList *properties, El
 					prep = unescapeAndDecode( query.value( 0 ).toByteArray() );
 			}
 
-			el.name = i18n("In ingredient '%1': weight [%2/%3%4]", ingName , weightUnit , perUnit, (prepID == -1)?QString::null:"; "+prep );
+			el.name = i18n("In ingredient '%1': weight [%2/%3%4]", ingName , weightUnit , perUnit, (prepID == -1)?QString():"; "+prep );
 			weights->append( el );
 		}
 	}
@@ -1897,7 +1897,7 @@ QString QSqlRecipeDB::categoryName( int ID )
 	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode( toLoad.value( 0 ).toByteArray() ) );
 
-	return ( QString::null );
+	return ( QString() );
 }
 
 QString QSqlRecipeDB::ingredientName( int ID )
@@ -1907,7 +1907,7 @@ QString QSqlRecipeDB::ingredientName( int ID )
 	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode( toLoad.value( 0 ).toByteArray() ) );
 
-	return ( QString::null );
+	return ( QString() );
 }
 
 QString QSqlRecipeDB::prepMethodName( int ID )
@@ -1917,7 +1917,7 @@ QString QSqlRecipeDB::prepMethodName( int ID )
 	if ( toLoad.isActive() && toLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode( toLoad.value( 0 ).toByteArray() ) );
 
-	return ( QString::null );
+	return ( QString() );
 }
 
 IngredientProperty QSqlRecipeDB::propertyName( int ID )
@@ -1928,7 +1928,7 @@ IngredientProperty QSqlRecipeDB::propertyName( int ID )
 		return ( IngredientProperty( unescapeAndDecode( toLoad.value( 0 ).toByteArray() ), unescapeAndDecode( toLoad.value( 1 ).toByteArray() ), ID ) );
 	}
 
-	return ( IngredientProperty( QString::null, QString::null ) );
+	return ( IngredientProperty( QString(), QString() ) );
 }
 
 Unit QSqlRecipeDB::unitName( int ID )
@@ -2021,7 +2021,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 		"<p>Cancelling this operation may result in corrupting the database.</p>"
 		"</warning>" ) ) ) {
 		case KMessageBox::Yes:
-			emit progressBegin(0,QString::null,i18n("Porting database structure..."),50);
+			emit progressBegin(0,QString(),i18n("Porting database structure..."),50);
 			portOldDatabases( version );
 			emit progressDone();
 			break;
@@ -2383,7 +2383,7 @@ int QSqlRecipeDB::findExistingYieldTypeByName( const QString& name )
 
 void QSqlRecipeDB::mergeAuthors( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, *database);
+	QSqlQuery update( QString(), *database);
 
 	//change all instances of 'id2' to 'id1'
 	QString command = QString( "UPDATE author_list SET author_id=%1 WHERE author_id=%2" )
@@ -2505,7 +2505,7 @@ void QSqlRecipeDB::mergeIngredientGroups( int id1, int id2 )
 
 void QSqlRecipeDB::mergeIngredients( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, *database);
+	QSqlQuery update( QString(), *database);
 
 	//change all instances of 'id2' to 'id1'
 	QString command = QString( "UPDATE ingredient_list SET ingredient_id=%1 WHERE ingredient_id=%2" )
@@ -2626,7 +2626,7 @@ void QSqlRecipeDB::mergePrepMethods( int id1, int id2 )
 
 void QSqlRecipeDB::mergeProperties( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, *database);
+	QSqlQuery update( QString(), *database);
 
 	//change all instances of 'id2' to 'id1'
 	QString command = QString( "UPDATE ingredient_properties SET id=%1 WHERE id=%2" )
@@ -2647,7 +2647,7 @@ void QSqlRecipeDB::mergeProperties( int id1, int id2 )
 
 void QSqlRecipeDB::mergeUnits( int id1, int id2 )
 {
-	QSqlQuery update( QString::null, *database);
+	QSqlQuery update( QString(), *database);
 
 	//change all instances of 'id2' to 'id1' in unit list
 	QString command = QString( "UPDATE unit_list SET unit_id=%1 WHERE unit_id=%2" )
@@ -2773,7 +2773,7 @@ QString QSqlRecipeDB::recipeTitle( int recipeID )
 	if ( recipeToLoad.isActive() && recipeToLoad.next() )  // Go to the first record (there should be only one anyway.
 		return ( unescapeAndDecode(recipeToLoad.value( 0 ).toByteArray()) );
 
-	return ( QString::null );
+	return ( QString() );
 }
 
 void QSqlRecipeDB::emptyData( void )
@@ -2781,7 +2781,7 @@ void QSqlRecipeDB::emptyData( void )
     kDebug();
 	QStringList tables;
 	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "yield_types" << "ratings" << "rating_criteria" << "rating_criterion_list";
-	QSqlQuery tablesToEmpty( QString::null, *database);
+	QSqlQuery tablesToEmpty( QString(), *database);
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
 		QString command = QString( "DELETE FROM %1;" ).arg( *it );
 		tablesToEmpty.exec( command );
@@ -2791,7 +2791,7 @@ void QSqlRecipeDB::emptyData( void )
 void QSqlRecipeDB::empty( void )
 {
     kDebug();
-	QSqlQuery tablesToEmpty( QString::null, *database);
+	QSqlQuery tablesToEmpty( QString(), *database);
 
 	QStringList list = database->tables();
 	QStringList::const_iterator it = list.constBegin();

@@ -138,7 +138,7 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 	kDebug()<<"loading template: "<<templateFile<<" style: "<<styleFile;
 	QString tmp_filename = KStandardDirs::locateLocal( "tmp", "krecipes_recipe_view" );
 	XSLTExporter exporter( tmp_filename + ".html", "html" );
-	if ( templateFile != QString::null )
+	if ( templateFile != QString() )
 		exporter.setTemplate( templateFile );
 	exporter.setStyle( styleFile );
 
@@ -307,7 +307,7 @@ void SetupDisplay::loadSize( const QString &/*object*/, const QSize &size )
 void SetupDisplay::saveLayout( const QString &filename )
 {
 	QDomImplementation dom_imp;
-	QDomDocument doc = dom_imp.createDocument( QString::null, "krecipes-layout", dom_imp.createDocumentType( "krecipes-layout", QString::null, QString::null ) );
+	QDomDocument doc = dom_imp.createDocument( QString(), "krecipes-layout", dom_imp.createDocumentType( "krecipes-layout", QString(), QString() ) );
 
 	QDomElement layout_tag = doc.documentElement();
 	layout_tag.setAttribute( "version", 0.5 );
@@ -515,7 +515,7 @@ void SetupDisplay::setBorder()
 void SetupDisplay::setColumns()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	int cols = QInputDialog::getInteger( view(), QString::null, i18n("Select the number of columns to use:"), item->columns, 1, 100, 1, 0 );
+	int cols = QInputDialog::getInteger( view(), QString(), i18n("Select the number of columns to use:"), item->columns, 1, 100, 1, 0 );
 	if ( cols > 0 ) {
 		m_currentItem = item;
 		loadColumns( m_currNodeId, cols );

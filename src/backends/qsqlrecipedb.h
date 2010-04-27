@@ -35,7 +35,7 @@ class QSqlRecipeDB : public RecipeDB
 	Q_OBJECT
 
 protected:
-	virtual QString qsqlDriverPlugin() const { return QString::null; }
+	virtual QString qsqlDriverPlugin() const { return QString(); }
 	virtual QSqlDriver *qsqlDriver() const { return 0; }
 	virtual void createDB( void ) = 0;
 
@@ -65,7 +65,7 @@ protected:
 	int DBport;
 
 public:
-	QSqlRecipeDB( const QString &host, const QString &user = QString::null, const QString &pass = QString::null, const QString &DBName = DEFAULT_DB_NAME, int port = 0 );
+	QSqlRecipeDB( const QString &host, const QString &user = QString(), const QString &pass = QString(), const QString &DBName = DEFAULT_DB_NAME, int port = 0 );
 	~QSqlRecipeDB( void );
 
 	RecipeDB::Error connect( bool create_db, bool create_tables );
@@ -158,7 +158,7 @@ public:
 
 	void modPrepMethod( int prepMethodID, const QString &newLabel );
 
-	void modProperty( int propertyID, const QString &newLabel, const QString &unit = QString::null );
+	void modProperty( int propertyID, const QString &newLabel, const QString &unit = QString() );
 
 	QString recipeTitle( int recipeID );
 

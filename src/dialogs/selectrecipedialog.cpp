@@ -166,8 +166,8 @@ SelectRecipeDialog::~SelectRecipeDialog()
 
 void SelectRecipeDialog::clearSearch()
 {
-	searchBox->setText( QString::null );
-	recipeFilter->filter( QString::null );
+	searchBox->setText( QString() );
+	recipeFilter->filter( QString() );
 }
 
 void SelectRecipeDialog::reload( ReloadFlags flag )

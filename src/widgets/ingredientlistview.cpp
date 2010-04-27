@@ -23,7 +23,7 @@
 //Added by qt3to4:
 #include <QList>
 
-IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing ) : Q3CheckListItem( qlv, QString::null, Q3CheckListItem::CheckBox ),
+IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing ) : Q3CheckListItem( qlv, QString(), Q3CheckListItem::CheckBox ),
 	m_listview(qlv)
 {
 	// Initialize the ingredient data with the the property data
@@ -32,7 +32,7 @@ IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, 
 	ingStored->name = ing.name;
 }
 
-IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, Q3ListViewItem *after, const Element &ing ) : Q3CheckListItem( qlv, after, QString::null, Q3CheckListItem::CheckBox ),
+IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, Q3ListViewItem *after, const Element &ing ) : Q3CheckListItem( qlv, after, QString(), Q3CheckListItem::CheckBox ),
 	m_listview(qlv)
 {
 	// Initialize the ingredient data with the the property data
@@ -66,7 +66,7 @@ QString IngredientCheckListItem::text( int column ) const
 	case 1:
 		return ( QString::number( ingStored->id ) );
 	default:
-		return QString::null;
+		return QString();
 	}
 }
 

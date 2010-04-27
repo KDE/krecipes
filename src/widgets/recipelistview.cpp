@@ -160,7 +160,7 @@ QString RecipeListView::tooltip(Q3ListViewItem *item, int /*column*/) const
 		.arg(QString::number(WHATEVER THE CHILD COUNT IS));
 	}*/
 
-	return QString::null;
+	return QString();
 }
 
 void RecipeListView::load(int limit, int offset)
@@ -233,7 +233,7 @@ void RecipeListView::populateAll( Q3ListViewItem *parent )
 	bool first = false;
 	if ( !parent ) {
 		first = true;
-		m_progress_dlg = new KProgressDialog(this,QString::null,i18n("Loading recipes"));
+		m_progress_dlg = new KProgressDialog(this,QString(),i18n("Loading recipes"));
 		m_progress_dlg->setObjectName( "populate_all_prog_dlg" );
 		m_progress_dlg->setModal( true );
 		m_progress_dlg->setAllowCancel(false);

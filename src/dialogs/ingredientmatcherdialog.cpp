@@ -57,7 +57,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	layout2->setMargin( 0 );
 	layout2->setSpacing( 6 );
 
-	allIngListView = new KreListView( this, QString::null, true, 0 );
+	allIngListView = new KreListView( this, QString(), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
 	list_view->setSelectionMode( Q3ListView::Multi );
  	allIngListView->setListView(list_view);
@@ -81,7 +81,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	layout1->addStretch();
 	layout2->addLayout( layout1 );
 
-	ingListView = new KreListView( this, QString::null, true );
+	ingListView = new KreListView( this, QString(), true );
 	ingListView->listView() ->addColumn( i18nc( "@title:column", "Ingredient (required?)" ) );
 	ingListView->listView() ->addColumn( i18nc( "@title:column", "Amount Available" ) );
 	layout2->addWidget( ingListView );
@@ -180,7 +180,7 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 				amount = -1;
 				unit.id = -1;
 
-				item->setText(1,QString::null);
+				item->setText(1,QString());
 			} else {
 				item->setText(1,amount.toString()+' '+((amount.toDouble()>1)?unit.plural:unit.name));
 			}

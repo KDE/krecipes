@@ -98,7 +98,7 @@ void ConversionDialog::languageChange()
 	toLabel->setText( i18nc( "@label Convert to", "To" ) );
 	resultLabel->setText( i18nc( "@label Result of an unit conversion",
 		"<b>Result:</b>" ) );
-	resultText->setText( QString::null );
+	resultText->setText( QString() );
 }
 
 void ConversionDialog::show()
@@ -109,7 +109,7 @@ void ConversionDialog::show()
 
 void ConversionDialog::reset()
 {
-	resultText->setText( QString::null );
+	resultText->setText( QString() );
 	ingredientBox->setCurrentItem( 0 );
 	prepMethodBox->setCurrentItem( 0 );
 	toUnitBox->setCurrentItem( 0 );
@@ -128,7 +128,7 @@ void ConversionDialog::convert()
 
 	int prepID = prepMethodBox->id(prepMethodBox->currentIndex());
 	if ( prepID != -1 )
-		ing.prepMethodList.append(Element(QString::null,prepID));
+		ing.prepMethodList.append(Element(QString(),prepID));
 
 	switch ( m_database->convertIngredientUnits( ing, unit, result ) ) {
 	case RecipeDB::Success:

@@ -25,10 +25,10 @@ void Recipe::empty( void )
 
 	yield.amount = 0;
 	yield.amount_offset = 0;
-	yield.type = QString::null;
+	yield.type.clear();
 
-	title = QString::null;
-	instructions = QString::null;
+	title.clear();
+	instructions.clear();
 	photo = QPixmap();
 	ingList.clear();
 	categoryList.clear();

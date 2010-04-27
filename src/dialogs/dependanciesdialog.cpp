@@ -93,7 +93,7 @@ void DependanciesDialog::accept()
 	if ( !m_msg.isEmpty() ) {
 		switch ( KMessageBox::warningYesNo(this,
 			QString("<b>%1</b><br><br>%2").arg(m_msg).arg(i18nc("@info", "Are you sure you wish to proceed?")),
-			QString::null,KStandardGuiItem::yes(),KStandardGuiItem::no(),"doubleCheckDelete") )
+			QString(),KStandardGuiItem::yes(),KStandardGuiItem::no(),"doubleCheckDelete") )
 		{
 		case KMessageBox::Yes: KDialog::accept(); break;
 		case KMessageBox::No: KDialog::reject(); break;

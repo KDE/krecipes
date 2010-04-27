@@ -34,7 +34,7 @@ class PanelDeco : public QWidget
 	Q_OBJECT
 public:
 	// Methods
-	PanelDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString::null, const QString &iconName = QString::null );
+	PanelDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString(), const QString &iconName = QString() );
 	~PanelDeco();
 	int id( QWidget* w ); // obtain the id of the given panel
 	QWidget* visiblePanel( void ); // obtain the current active panel no.
@@ -49,7 +49,7 @@ private:
 
 public slots:
 	void raise( QWidget *w );
-	void setHeader( const QString &title = QString::null, const QString &icon = QString::null );
+	void setHeader( const QString &title = QString(), const QString &icon = QString() );
 
 };
 
@@ -57,12 +57,12 @@ class TopDeco: public QWidget
 {
 	Q_OBJECT
 public:
-	TopDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString::null, const QString &iconName = QString::null );
+	TopDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString(), const QString &iconName = QString() );
 	~TopDeco();
 
 	virtual QSize sizeHint( void ) const;
 public slots:
-	void setHeader( const QString &title = QString::null, const QString &iconName = QString::null );
+	void setHeader( const QString &title = QString(), const QString &iconName = QString() );
 protected:
 	virtual void paintEvent( QPaintEvent *e );
 private:

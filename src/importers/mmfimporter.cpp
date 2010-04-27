@@ -235,7 +235,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	//name and preparation method
 	new_ingredient.name = string.mid( 11, 41 ).trimmed();
 
-	//put in the header... it there is no header, current_header will be QString::null
+	//put in the header... it there is no header, current_header will be QString()
 	new_ingredient.group = current_header;
 
 	bool last_is_sub = is_sub;
@@ -333,9 +333,9 @@ void MMFImporter::resetVars()
 
 	m_servings = 0;
 
-	m_title = QString::null;
-	m_instructions = QString::null;
+	m_title = QString();
+	m_instructions = QString();
 
-	current_header = QString::null;
+	current_header = QString();
 }
 

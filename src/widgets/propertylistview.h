@@ -56,7 +56,7 @@ private:
 class ConstraintsListItem: public Q3CheckListItem
 {
 public:
-	ConstraintsListItem( Q3ListView* klv, const IngredientProperty &pty ) : Q3CheckListItem( klv, QString::null, Q3CheckListItem::CheckBox )
+	ConstraintsListItem( Q3ListView* klv, const IngredientProperty &pty ) : Q3CheckListItem( klv, QString(), Q3CheckListItem::CheckBox )
 	{
 		// Initialize the constraint data with the the property data
 		ctStored = new Constraint();
@@ -118,7 +118,7 @@ public:
 		case 4:
 			return ( QString::number( ctStored->id ) );
 		default:
-			return ( QString::null );
+			return ( QString() );
 		}
 	}
 };

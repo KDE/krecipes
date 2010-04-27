@@ -78,7 +78,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	connect ( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
 	connect ( removeAuthorButton, SIGNAL( clicked() ), this, SLOT( removeAuthor() ) );
 
-	authorsCombo->setEditText(QString::null);
+	authorsCombo->setEditText(QString());
 	authorsCombo->lineEdit()->setFocus();
 }
 

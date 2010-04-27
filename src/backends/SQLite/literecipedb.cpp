@@ -34,7 +34,7 @@
 int sqlite_decode_binary( const unsigned char *in, unsigned char *out );
 QString escape( const QString &s );
 
-LiteRecipeDB::LiteRecipeDB( const QString &_dbFile ) : QSqlRecipeDB( QString::null, QString::null, QString::null, _dbFile )
+LiteRecipeDB::LiteRecipeDB( const QString &_dbFile ) : QSqlRecipeDB( QString(), QString(), QString(), _dbFile )
 {
     kDebug();
 /*	KConfig * config = KGlobal::config();
@@ -913,7 +913,7 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 {
 	QString command;
 
-	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString::null);
+	command = QString(new_table_sql).arg(table_name+"_copy").arg(QString());
 	kDebug()<<"calling: "<<command;
 	database->exec( command );
 
@@ -1036,7 +1036,7 @@ QString escape( const QString &s )
 
 void LiteRecipeDB::storePhoto( int recipeID, const QByteArray &data )
 {
-	QSqlQuery query( QString::null, *database);
+	QSqlQuery query( QString(), *database);
 
 	query.prepare( "UPDATE recipes SET photo=\"?\",ctime=ctime,atime=atime,mtime=mtime WHERE id=" + QString::number( recipeID ) );
 	query.addBindValue( KCodecs::base64Encode( data ) );

@@ -167,6 +167,6 @@ QString BaseExporter::krecipes_version() const
 	if ( this_instance && this_instance->aboutData() )
 		return this_instance->aboutData() ->version();
 
-	return QString::null; //Oh, well.  We couldn't get the version.
+	return QString(); //Oh, well.  We couldn't get the version.
 }
 

@@ -207,7 +207,7 @@ QString DBImportDialog::dbType() const
 	case 2:
 		return "PostgreSQL";
 	default:
-		return QString::null;
+		return QString();
 	}
 }
 

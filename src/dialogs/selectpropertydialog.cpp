@@ -115,7 +115,7 @@ int SelectPropertyDialog::perUnitsID()
 	int id = db->findExistingUnitByName( unit );
 	if ( -1 == id )
 	{
-		QPointer<CreateUnitDialog> getUnit = new CreateUnitDialog( this, unit, QString::null );
+		QPointer<CreateUnitDialog> getUnit = new CreateUnitDialog( this, unit, QString() );
 		if ( getUnit->exec() == QDialog::Accepted ) {
 			Unit new_unit = getUnit->newUnit();
 			db->createNewUnit( new_unit );

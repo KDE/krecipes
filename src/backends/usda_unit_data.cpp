@@ -36,7 +36,7 @@ UnitDataList loadUnits()
 		QTextStream stream( &dataFile );
 
 		QString line;
-		while ( (line = stream.readLine()) != QString::null ) {
+		while ( (line = stream.readLine()) != QString() ) {
 			if ( line.trimmed().isEmpty() ) continue;
 
 			QStringList parts = line.split(':' , QString::KeepEmptyParts);
@@ -80,7 +80,7 @@ PrepDataList loadPrepMethods()
 		QTextStream stream( &dataFile );
 
 		QString line;
-		while ( (line = stream.readLine()) != QString::null ) {
+		while ( (line = stream.readLine()) != QString() ) {
 			if ( line.trimmed().isEmpty() ) continue;
 
 			PrepData data;
@@ -136,7 +136,7 @@ bool parseUnitAndPrep( const QString &string, QString &unit, QString &prep, cons
 		}
 	}
 	if ( !acceptable )
-		prepPart = QString::null;
+		prepPart = QString();
 
 	unit = localizedUnit;
 	prep = localizedPrep;

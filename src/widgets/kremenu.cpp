@@ -293,7 +293,7 @@ KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id ):
 	QWidget( parent, Qt::WNoAutoErase ), panel( _panel )
 {
 	highlighted = false;
-	text = QString::null;
+	text = QString();
 
 	if ( id == Q3ValueList <Menu>::Iterator() ) // KDE4 port to be check
 	{

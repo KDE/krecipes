@@ -58,7 +58,7 @@ public:
 	ProgressSlotObject( QWidget*parent, ProgressInterface *p ) : QObject(parent), pInterface(p){}
 
 public slots:
-	void progressBegin(int i,const QString &caption=QString::null,const QString &text=QString::null,int rate=1){ pInterface->progressBegin(i,caption,text,rate); }
+	void progressBegin(int i,const QString &caption=QString(),const QString &text=QString(),int rate=1){ pInterface->progressBegin(i,caption,text,rate); }
 	void progressDone(){ pInterface->progressDone(); }
 	void progress(){ pInterface->progress(); }
 

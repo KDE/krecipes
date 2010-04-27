@@ -39,7 +39,7 @@ public:
 	bool loadRecipe( int recipeID );
 
 	/** @return Boolean indicating whether or not the recipes were successfully loaded */
-	bool loadRecipes( const QList<int> &ids, const QString &layoutConfig = QString::null );
+	bool loadRecipes( const QList<int> &ids, const QString &layoutConfig = QString() );
 
 	int recipesLoaded() const
 	{
@@ -50,7 +50,7 @@ public:
 		return ids_loaded;
 	}
 
-	void reload( const QString &layoutConfig = QString::null );
+	void reload( const QString &layoutConfig = QString() );
 
 	void showButtons();
 	void hideButtons();

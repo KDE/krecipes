@@ -103,7 +103,7 @@ public slots:
 	void cancelOperation();
 
 signals:
-	void progressBegin(int,const QString &c=QString::null,const QString &t=QString::null,int rate=1);
+	void progressBegin(int,const QString &c=QString(),const QString &t=QString(),int rate=1);
 	void progressDone();
 	void progress();
 
@@ -195,7 +195,7 @@ public:
 
 	void getIDList( const CategoryTree *categoryTree, QStringList &ids );
 	virtual QString getUniqueRecipeTitle( const QString &recipe_title ) = 0;
-	virtual void givePermissions( const QString &dbName, const QString &username, const QString &password = QString::null, const QString &clientHost = "localhost" ) = 0;
+	virtual void givePermissions( const QString &dbName, const QString &username, const QString &password = QString(), const QString &clientHost = "localhost" ) = 0;
 
 	void importUSDADatabase();
 
@@ -267,7 +267,7 @@ public:
 
 	virtual void modPrepMethod( int prepMethodID, const QString &newLabel ) = 0;
 
-	virtual void modProperty( int propertyID, const QString &newLabel, const QString &unit = QString::null ) = 0;
+	virtual void modProperty( int propertyID, const QString &newLabel, const QString &unit = QString() ) = 0;
 
 	virtual QString recipeTitle( int recipeID ) = 0;
 

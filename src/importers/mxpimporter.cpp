@@ -342,7 +342,7 @@ void MXPImporter::loadOptionalFields( QTextStream &stream, Recipe &recipe )
 	               Tartness 7
 
 	*/
-	if ( !notes.isNull() ) {
+	if ( !notes.isEmpty() ) {
 		//kDebug()<<QString("Found notes: %s (adding to end of instructions)").arg(m_notes);
 		recipe.instructions += "\n\nNotes: " + notes.trimmed();
 	}

@@ -142,7 +142,7 @@ QString XSLTExporter::createFooter()
 	xsltCleanupGlobals();
 	xmlCleanupParser();
 
-	return QString::null;
+	return QString();
 }
 
 QString XSLTExporter::createHeader( const RecipeList & )
@@ -156,7 +156,7 @@ QString XSLTExporter::createHeader( const RecipeList & )
 	else
 		processDocument(doc);
 
-	return QString::null;
+	return QString();
 }
 
 QString XSLTExporter::createContent( const RecipeList &recipes )
@@ -215,7 +215,7 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 		stream << cssContent;
 	}
 
-	m_cachedCSS = QString::null;
+	m_cachedCSS = QString();
 
 	KreExporter *exporter = new KreExporter( NULL, "unused", "*.kreml", false );
 	QString buffer;

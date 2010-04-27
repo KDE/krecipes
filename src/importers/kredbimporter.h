@@ -21,7 +21,7 @@
 class KreDBImporter : public BaseImporter
 {
 public:
-	KreDBImporter( const QString &dbType, const QString &host = QString::null, const QString &user = QString::null, const QString &pass = QString::null, int port = 0 );
+	KreDBImporter( const QString &dbType, const QString &host = QString(), const QString &user = QString(), const QString &pass = QString(), int port = 0 );
 	virtual ~KreDBImporter();
 
 private:

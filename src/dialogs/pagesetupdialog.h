@@ -28,7 +28,7 @@ class PageSetupDialog : public KDialog
 	Q_OBJECT
 
 public:
-	PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry = QString::null );
+	PageSetupDialog( QWidget *parent, const Recipe &sample, const QString &configEntry = QString() );
 	~PageSetupDialog()
 	{}
 

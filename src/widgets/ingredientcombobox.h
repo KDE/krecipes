@@ -25,7 +25,7 @@ class IngredientComboBox : public KComboBox
 	Q_OBJECT
 
 public:
-	IngredientComboBox( bool, QWidget *parent, RecipeDB *db, const QString &specialItem = QString::null );
+	IngredientComboBox( bool, QWidget *parent, RecipeDB *db, const QString &specialItem = QString() );
 
 	void reload();
 	int id( int row );
