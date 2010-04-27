@@ -141,7 +141,7 @@ void SelectPropertyDialog::loadUnits( UnitList *unitList )
 		QString unitName = ( *unit_it ).name;
 		if ( unitName.isEmpty() ) {
 			if ( m_showEmpty == ShowEmptyUnit )
-				unitName = " "+i18nc("@item", "-No unit-");
+				unitName = ' '+i18nc("@item", "-No unit-");
 			else
 				continue;
 		}
