@@ -40,7 +40,7 @@ public:
 		QString col_unit = table->horizontalHeader() ->label( col );
 		QString text = table->text( row, col );
 		if ( text.isEmpty() )
-			text = "X"; //### Is this i18n friendly???
+			text = 'X'; //### Is this i18n friendly???
 
 		QRect cr = table->cellGeometry( row, col );
 		cr.moveTopLeft( table->contentsToViewport( cr.topLeft() ) );
