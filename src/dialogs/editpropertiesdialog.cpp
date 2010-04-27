@@ -310,7 +310,7 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		WeightListItem *it = (WeightListItem*)item;
 		Weight w = it->weight();
 
-		amountEdit->setAmount( w.weight );
+		amountEdit->setAmount( MixedNumber(w.weight) );
 		amountEdit->setUnit( Unit(w.weightUnit,w.weightUnit,w.weightUnitID) );
 
 		amountEditDialog->setMainWidget(box);
@@ -341,7 +341,7 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		WeightListItem *it = (WeightListItem*)item;
 		Weight w = it->weight();
 
-		amountEdit->setAmount( w.perAmount );
+		amountEdit->setAmount( MixedNumber(w.perAmount) );
 		amountEdit->setUnit( Unit(w.perAmountUnit,w.perAmountUnit,w.perAmountUnitID) );
 		amountEdit->setPrepMethod( Element(w.prepMethod,w.prepMethodID) );
 

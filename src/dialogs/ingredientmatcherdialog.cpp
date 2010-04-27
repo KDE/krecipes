@@ -161,7 +161,7 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 			u.id = item->text(3).toInt();
 			amountEdit->setUnit( u );
 		} else {
-			amountEdit->setAmount( -1 );
+			amountEdit->setAmount( MixedNumber(-1) );
 			Unit u;
 			u.id = -1;
 			amountEdit->setUnit( u );
@@ -177,7 +177,7 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 			Unit unit = amountEdit->unit();
 
 			if ( amount.toDouble() <= 1e-5 ) {
-				amount = -1;
+				amount = MixedNumber(-1);
 				unit.id = -1;
 
 				item->setText(1,QString());

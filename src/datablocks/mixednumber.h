@@ -30,7 +30,7 @@ public:
 	  * The closer @param precision is to zero without being zero, the more precisely
 	  * it will try to approximate the fraction.
 	  */
-	MixedNumber( double decimal, double precision = 1e-6 );
+	explicit MixedNumber( double decimal, double precision = 1e-6 );
 
 	/** Creates a mixed number with an initial value of zero. */
 	MixedNumber();
