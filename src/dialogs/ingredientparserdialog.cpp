@@ -237,7 +237,7 @@ void IngredientParserDialog::parseText()
 	if (ingredientTextEdit->document()->isEmpty())
 		ingredients = QStringList();
 	else
-		ingredients = ingredientTextEdit->toPlainText().split( "\n", QString::SkipEmptyParts);
+		ingredients = ingredientTextEdit->toPlainText().split( '\n', QString::SkipEmptyParts);
 
 	for ( QStringList::const_iterator it = ingredients.constBegin(); it != ingredients.constEnd(); ++it ) {
 		QString line = (*it).simplified();
