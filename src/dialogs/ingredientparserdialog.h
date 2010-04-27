@@ -34,7 +34,7 @@ class IngredientParserDialog : public KDialog
 	Q_OBJECT
 
 public:
-	IngredientParserDialog( const UnitList &units, QWidget* parent = 0, const char* name = 0 );
+	explicit IngredientParserDialog( const UnitList &units, QWidget* parent = 0, const char* name = 0 );
 	~IngredientParserDialog();
 
 	IngredientList ingredients() const { return m_ingList; }
