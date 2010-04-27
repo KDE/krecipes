@@ -239,11 +239,11 @@ QString MixedNumber::toString( Format format, bool locale_aware ) const
 	if ( m_whole != 0 ) {
 		result += QString::number( m_whole );
 		if ( m_numerator != 0 )
-			result += " ";
+			result += ' ';
 	}
 
 	if ( m_numerator != 0 )
-		result += QString::number( m_numerator ) + "/" + QString::number( m_denominator );
+		result += QString::number( m_numerator ) + '/' + QString::number( m_denominator );
 
 	return result;
 }
