@@ -38,7 +38,7 @@ class KWidgetListbox : public Q3Table
     Q_OBJECT
 
   public:
-    KWidgetListbox(QWidget *parent = 0, const char *name = 0);
+    explicit KWidgetListbox(QWidget *parent = 0, const char *name = 0);
     ~KWidgetListbox();
 
     int insertItem(QWidget* item, int index = -1);
