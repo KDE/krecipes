@@ -25,7 +25,7 @@ class FractionInput : public KLineEdit
 Q_OBJECT
 
 public:
-	FractionInput( QWidget *parent = 0, MixedNumber::Format = MixedNumber::MixedNumberFormat );
+	explicit FractionInput( QWidget *parent = 0, MixedNumber::Format = MixedNumber::MixedNumberFormat );
 	~FractionInput();
 
 	void setAllowRange( bool b ){ m_allowRange = b; }
