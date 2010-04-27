@@ -18,7 +18,7 @@
 class KreBorder
 {
 public:
-	KreBorder( int w = 1, const QString & s = "none", const QColor &c = Qt::black );
+	explicit KreBorder( int w = 1, const QString & s = "none", const QColor &c = Qt::black );
 
 	int width;
 	QString style;
