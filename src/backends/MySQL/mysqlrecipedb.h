@@ -29,7 +29,7 @@ private:
 	void createDB( void );
 
 public:
-	MySQLRecipeDB( const QString &host, const QString &user = QString(), const QString &pass = QString(), const QString &DBName = DEFAULT_DB_NAME, int port = 0 );
+	explicit MySQLRecipeDB( const QString &host, const QString &user = QString(), const QString &pass = QString(), const QString &DBName = DEFAULT_DB_NAME, int port = 0 );
 	~MySQLRecipeDB( void );
 
 	int lastInsertID();
