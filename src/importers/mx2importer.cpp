@@ -116,7 +116,7 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 		else if ( tagName == "IngR" ) {
 			double quantity1=0, quantity2=0, offset=0;
 			bool ok;
-			QStringList qtyStrList = el.attribute( "qty" ).split( " " );
+			QStringList qtyStrList = el.attribute( "qty" ).split( ' ' );
 			if ( !qtyStrList.isEmpty() ) {
 				quantity1 = MixedNumber::fromString( qtyStrList.first(), &ok, false ).toDouble();
 				if ( !ok )
