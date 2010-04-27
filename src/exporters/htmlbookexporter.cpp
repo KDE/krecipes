@@ -88,7 +88,7 @@ void HTMLBookExporter::createCategoryStructure( QTextStream &xml, const RecipeLi
 			if ( categoriesUsed.indexOf( ( *cat_it ).id ) == -1 ) {
 				categoriesUsed << ( *cat_it ).id;
 
-				QString catPageName = m_basedir+"/"+escape((*cat_it).name)+".html";
+				QString catPageName = m_basedir+'/'+escape((*cat_it).name)+".html";
 				QFile *catPage = new QFile( catPageName );
 				catPage->open( QIODevice::WriteOnly );
 				QTextStream *stream = new QTextStream( catPage );
