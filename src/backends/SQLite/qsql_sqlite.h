@@ -24,8 +24,8 @@ class QSQLiteDB;
 class KreSQLiteDriver : public QSqlDriver
 {
 public:
-	KreSQLiteDriver(QObject * parent = 0, const char * name = 0);
-	KreSQLiteDriver(QSQLiteDB *connection, QObject *parent = 0, const char *name = 0);
+	explicit KreSQLiteDriver(QObject * parent = 0, const char * name = 0);
+	explicit KreSQLiteDriver(QSQLiteDB *connection, QObject *parent = 0, const char *name = 0);
 	~KreSQLiteDriver();
 
 	bool    hasFeature( DriverFeature ) const;
