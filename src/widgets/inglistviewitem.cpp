@@ -91,7 +91,7 @@ void IngListViewItem::setAmount( double amount, double amount_offset )
 		KLocale * locale = KGlobal::locale();
 		amount_str = beautify( locale->formatNumber( amount, 6 ) );
 		if ( amount_offset > 0 )
-			amount_str += "-" + beautify( locale->formatNumber( amount+amount_offset, 6 ) );
+			amount_str += '-' + beautify( locale->formatNumber( amount+amount_offset, 6 ) );
 	}
 
 	m_ing.amount = amount;
@@ -191,7 +191,7 @@ QString IngGrpListViewItem::text( int column ) const
 {
 	switch ( column ) {
 	case 0:
-		return m_group + ":";
+		return m_group + ':';
 		break;
 	default:
 		return ( QString::null );
