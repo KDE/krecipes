@@ -34,7 +34,7 @@ BaseExporter::BaseExporter( const QString& _filename, const QString &format ) :
 	//automatically append extension
 	QString extension = format.right( format.length()-2 );
 	if ( filename.right( extension.length() ) != extension )
-		filename += "." + extension;
+		filename += '.' + extension;
 }
 
 BaseExporter::~BaseExporter()
