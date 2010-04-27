@@ -43,7 +43,7 @@ public:
 	// Methods
 
 	Menu( void );
-	Menu( const Menu &m );
+	explicit Menu( const Menu &m );
 	~Menu( void );
 	void addButton( KreMenuButton *button );
 	Menu& operator=( const Menu &m );
