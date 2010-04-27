@@ -44,7 +44,7 @@ public:
 		if ( completion_txt.isEmpty() )
 			completion_txt = string;
 		else if ( comma_index != -1 )
-			completion_txt = string.left( comma_index ) + "," + completion_txt;
+			completion_txt = string.left( comma_index ) + ',' + completion_txt;
 
 		kDebug()<<"returning: "<<completion_txt;
 		return completion_txt;
