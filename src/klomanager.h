@@ -41,7 +41,7 @@ protected:
 
 	bool getBoolAttribute( const QDomElement &obj, const QString &attr, bool defaultValue = true ) const;
 	QColor getColorAttribute( const QDomElement &obj, const QString &attr, const QColor &defaultValue = Qt::white ) const;
-	QString getTextAttribute( const QDomElement &obj, const QString &attr, const QString &defaultValue = QString::null ) const;
+	QString getTextAttribute( const QDomElement &obj, const QString &attr, const QString &defaultValue = QString() ) const;
 	int getIntAttribute( const QDomElement &obj, const QString &attr, int defaultValue = 0 ) const;
 	KreBorder getBorderAttribute( const QDomElement &obj, const QString &attr, const KreBorder &defaultValue = KreBorder() ) const;
 	QFont getFontAttribute( const QDomElement &obj, const QString &attr, const QFont &defaultValue = QFont() ) const;
