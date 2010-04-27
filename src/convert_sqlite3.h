@@ -23,7 +23,7 @@ class ConvertSQLite3 : public QObject
 Q_OBJECT
 
 public:
-	ConvertSQLite3( const QString &db_file = QString::null );
+	ConvertSQLite3( const QString &db_file = QString() );
 	void convert();
 	~ConvertSQLite3();
 
