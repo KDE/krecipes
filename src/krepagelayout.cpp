@@ -61,16 +61,16 @@ void KoPageLayout::loadKreFormat(const QDomElement &style)
 {
     if ( !style.isNull() )
     {
-        ptWidth = KoUnit::parseValue(style.attribute("page-width", QString::null ) );
-        ptHeight = KoUnit::parseValue(style.attribute( "page-height", QString::null ) );
-        if (style.attribute( "print-orientation", QString::null)=="portrait")
+        ptWidth = KoUnit::parseValue(style.attribute("page-width", QString() ) );
+        ptHeight = KoUnit::parseValue(style.attribute( "page-height", QString() ) );
+        if (style.attribute( "print-orientation", QString())=="portrait")
             orientation=PG_PORTRAIT;
         else
             orientation=PG_LANDSCAPE;
-        ptRight = KoUnit::parseValue( style.attribute( "margin-right", QString::null ) );
-        ptBottom = KoUnit::parseValue( style.attribute( "margin-bottom", QString::null ) );
-        ptLeft = KoUnit::parseValue( style.attribute( "margin-left", QString::null ) );
-        ptTop = KoUnit::parseValue( style.attribute( "margin-top", QString::null ) );
+        ptRight = KoUnit::parseValue( style.attribute( "margin-right", QString() ) );
+        ptBottom = KoUnit::parseValue( style.attribute( "margin-bottom", QString() ) );
+        ptLeft = KoUnit::parseValue( style.attribute( "margin-left", QString() ) );
+        ptTop = KoUnit::parseValue( style.attribute( "margin-top", QString() ) );
         // guessFormat takes millimeters
         if ( orientation == PG_LANDSCAPE )
             format = KoPageFormat::guessFormat( POINT_TO_MM(ptHeight), POINT_TO_MM(ptWidth) );
