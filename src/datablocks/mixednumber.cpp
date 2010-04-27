@@ -248,7 +248,7 @@ QString MixedNumber::toString( Format format, bool locale_aware ) const
 	return result;
 }
 
-bool MixedNumber::operator!=( const MixedNumber &fraction )
+bool MixedNumber::operator!=( const MixedNumber &fraction ) const
 {
 	return ( fraction.toDouble() != toDouble() );
 }

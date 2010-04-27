@@ -39,8 +39,8 @@ public:
 
 	MixedNumber& operator+=( const MixedNumber & );
 	MixedNumber& operator+=( double );
-	bool operator!=( const MixedNumber &fraction );
-	bool operator>( double d )
+	bool operator!=( const MixedNumber &fraction ) const;
+	bool operator>( double d ) const
 	{
 		return ( toDouble() > d );
 	}
