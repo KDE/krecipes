@@ -149,7 +149,7 @@ void MMFImporter::importMMF( QTextStream &stream )
 		        !loadIngredientHeader( current.trimmed() ) ) {
 			if ( !current.trimmed().isEmpty() )
 				instruction_found = true;
-			m_instructions += current.trimmed() + "\n";
+			m_instructions += current.trimmed() + '\n';
 			//kDebug()<<"Found instruction line: "<<current.trimmed();
 		}
 
@@ -173,7 +173,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	if ( string.at( 11 ) == '-' && string.mid( 0, 11 ).trimmed().isEmpty() && !list.isEmpty() )  //continuation of previous ingredient
 	{
 		//kDebug()<<"Appending to last ingredient in column: "<<string.trimmed().mid(1,string.length());
-		list.last().name += " " + string.trimmed().mid( 1, string.length() );
+		list.last().name += ' ' + string.trimmed().mid( 1, string.length() );
 		QString name = list.last().name;
 
 		if ( name.endsWith(", or") ) {
