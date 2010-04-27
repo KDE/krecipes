@@ -136,7 +136,7 @@ bool parseUnitAndPrep( const QString &string, QString &unit, QString &prep, cons
 		}
 	}
 	if ( !acceptable )
-		prepPart = QString();
+		prepPart.clear();
 
 	unit = localizedUnit;
 	prep = localizedPrep;
