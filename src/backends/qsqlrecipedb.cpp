@@ -206,7 +206,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 	if ( items & RecipeDB::Instructions ) command += ",instructions";
 	if ( items & RecipeDB::PrepTime ) command += ",prep_time";
 	if ( items & RecipeDB::Yield ) command += ",yield_amount,yield_amount_offset,yield_type_id";
-	command += " FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+")":"");
+	command += " FROM recipes"+(ids_str.count()!=0?" WHERE id IN ("+ids_str.join(",")+')':"");
 
 	QSqlQuery recipeQuery(command,*database);
 	if ( recipeQuery.isActive() ) {
@@ -797,7 +797,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	for ( RatingList::iterator rating_it = recipe->ratingList.begin(); rating_it != recipe->ratingList.end(); ++rating_it ) {
 		//double average = (*rating_it).average();
 		if ( (*rating_it).id == -1 ) //new rating
-			command ="INSERT INTO ratings VALUES("+QString(getNextInsertIDStr("ratings","id"))+","+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment))+"','"+QString(escapeAndEncode((*rating_it).rater))+/*"','"+QString::number(average)+*/"','"+current_timestamp+"')";
+			command ="INSERT INTO ratings VALUES("+QString(getNextInsertIDStr("ratings","id"))+','+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment))+"','"+QString(escapeAndEncode((*rating_it).rater))+/*"','"+QString::number(average)+*/"','"+current_timestamp+"')";
 		else //existing rating
 			command = "UPDATE ratings SET "
 			  "comment='"+QString(escapeAndEncode((*rating_it).comment))+"',"
@@ -811,7 +811,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 			(*rating_it).id = lastInsertID();
 
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.constBegin(); rc_it != (*rating_it).ratingCriteriaList.constEnd(); ++rc_it ) {
-			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+","+QString::number((*rc_it).id)+","+QString::number((*rc_it).stars)+")" );
+			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+','+QString::number((*rc_it).id)+','+QString::number((*rc_it).stars)+')' );
 			recipeToSave.exec( command );
 		}
 
@@ -1485,11 +1485,11 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 	if ( real_name_abbrev.isEmpty() )
 		real_name_abbrev = "NULL";
 	else
-		real_name_abbrev = "'"+escapeAndEncode(real_name_abbrev)+"'";
+		real_name_abbrev = '\''+escapeAndEncode(real_name_abbrev)+'\'';
 	if ( real_plural_abbrev.isEmpty() )
 		real_plural_abbrev = "NULL";
 	else
-		real_plural_abbrev = "'"+escapeAndEncode(real_plural_abbrev)+"'";
+		real_plural_abbrev = '\''+escapeAndEncode(real_plural_abbrev)+'\'';
 
 
 	QString command = "INSERT INTO units VALUES(" + getNextInsertIDStr( "units", "id" )
@@ -1497,7 +1497,7 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 	   + "'," + real_name_abbrev
 	   + ",'" + escapeAndEncode( real_plural )
 	   + "'," + real_plural_abbrev
-	   + "," + QString::number(unit.type)
+	   + ',' + QString::number(unit.type)
 	   + ");";
 
 	QSqlQuery unitToCreate( command, *database);
@@ -1524,11 +1524,11 @@ void QSqlRecipeDB::modUnit( const Unit &unit )
 	if ( real_name_abbrev.isEmpty() )
 		real_name_abbrev = "NULL";
 	else
-		real_name_abbrev = "'"+escapeAndEncode(real_name_abbrev)+"'";
+		real_name_abbrev = '\''+escapeAndEncode(real_name_abbrev)+'\'';
 	if ( real_plural_abbrev.isEmpty() )
 		real_plural_abbrev = "NULL";
 	else
-		real_plural_abbrev = "'"+escapeAndEncode(real_plural_abbrev)+"'";
+		real_plural_abbrev = '\''+escapeAndEncode(real_plural_abbrev)+'\'';
 
 	QString command = QString("UPDATE units SET name='%1',name_abbrev=%2,plural='%3',plural_abbrev=%4,type=%6 WHERE id='%5'")
 	  .arg(escapeAndEncode(real_name))
@@ -1817,7 +1817,7 @@ void QSqlRecipeDB::findPrepMethodDependancies( int prepMethodID, ElementList *re
 	}
 
 	//now get the titles of the ids
-	command = QString( "SELECT r.id, r.title FROM recipes r WHERE r.id IN ("+ids.join(",")+")" );
+	command = QString( "SELECT r.id, r.title FROM recipes r WHERE r.id IN ("+ids.join(",")+')' );
 	QSqlQuery prepMethodToRemove( command, *database);
 	loadElementList( recipes, &prepMethodToRemove );
 }
@@ -1858,8 +1858,8 @@ QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 {
 	QString s_escaped = s;
 
-	s_escaped.replace ( "'", "\\'" );
-	s_escaped.replace ( ";", "\";@" ); // Small trick for only for parsing later on
+	s_escaped.replace ( '\'', "\\'" );
+	s_escaped.replace ( ';', "\";@" ); // Small trick for only for parsing later on
 
 	return QString::fromLatin1( s_escaped.toUtf8() );
 }
@@ -2328,7 +2328,7 @@ int QSqlRecipeDB::findExistingUnitByName( const QString& name )
 		  + "' OR plural LIKE '" + search_str
 		  + "' OR name_abbrev LIKE '" + search_str
 		  + "' OR plural_abbrev LIKE '" + search_str
-		  + "'";
+		  + '\'';
 
 	QSqlQuery elementToLoad( command, *database); // Run the query
 	int id = -1;
