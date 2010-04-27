@@ -77,9 +77,9 @@ public:
 	virtual QString text( int c ) const
 	{
 		if ( c == 0 )
-			return QString::number(m_weight.weight)+" "+m_weight.weightUnit;
+			return QString::number(m_weight.weight)+' '+m_weight.weightUnit;
 		else if ( c == 1 )
-			return QString::number(m_weight.perAmount)+" "
+			return QString::number(m_weight.perAmount)+' '
 			  +m_weight.perAmountUnit
 			  +((m_weight.prepMethodID!=-1)?", "+m_weight.prepMethod:QString::null);
 		else
@@ -521,7 +521,7 @@ void EditPropertiesDialog::loadDataFromFile()
 			continue;
 		}
 
-		QStringList fields = line.split( "^", QString::KeepEmptyParts );
+		QStringList fields = line.split( '^', QString::KeepEmptyParts );
 		loaded_data << fields;
 
 		QString ing_id = fields[ 0 ].mid( 1, fields[ 1 ].length() - 2 );
