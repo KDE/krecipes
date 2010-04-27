@@ -1046,7 +1046,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			if (new_text.isEmpty())
 				prepMethodList = QStringList();
 			else
-				prepMethodList = new_text.split( ",", QString::SkipEmptyParts);
+				prepMethodList = new_text.split( ',', QString::SkipEmptyParts);
 
 			for ( QStringList::const_iterator it = prepMethodList.constBegin(); it != prepMethodList.constEnd(); ++it ) {
 				if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
@@ -1704,19 +1704,19 @@ QString RecipeInputDialog::statusMessage() const
 
 QString RecipeInputDialog::conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const
 {
-	QString path = "'"+ingUnit+"'";
+	QString path = '\''+ingUnit+'\'';
 
 	QString lastUnit = ingUnit;
 	if ( lastUnit != toUnit ) {
-		path.append(" =&gt; '"+toUnit+"'");
+		path.append(" =&gt; '"+toUnit+'\'');
 		lastUnit = toUnit;
 	}
 	if ( lastUnit != fromUnit ) {
-		path.append(" =&gt; '"+fromUnit+"'");
+		path.append(" =&gt; '"+fromUnit+'\'');
 		lastUnit = fromUnit;
 	}
 	if ( lastUnit != propUnit ) {
-		path.append(" =&gt; '"+propUnit+"'");
+		path.append(" =&gt; '"+propUnit+'\'');
 		lastUnit = propUnit;
 	}
 	return path;
@@ -1733,7 +1733,7 @@ void RecipeInputDialog::statusLinkClicked( const QUrl &link )
 		delete d;
 	} else if (linkString.startsWith("unit#")) { //FIXME: Not used?
 		QString unitIDs = linkString.mid(linkString.indexOf("#")+1);
-		QStringList idList = unitIDs.split(",", QString::SkipEmptyParts );
+		QStringList idList = unitIDs.split(',', QString::SkipEmptyParts );
 		int unitFrom = idList[0].toInt();
 		ElementList toUnits;
 		int lastUnit = -1;
