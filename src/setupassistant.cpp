@@ -580,7 +580,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 	hbox->setStretchFactor( fileEdit, 2 );
 
 	KIconLoader *il = KIconLoader::global();
-	QPushButton *file_select = new QPushButton( il->loadIcon( "document-open", KIconLoader::NoGroup, 16 ), QString::null, hbox );
+	QPushButton *file_select = new QPushButton( il->loadIcon( "document-open", KIconLoader::NoGroup, 16 ), QString(), hbox );
 	file_select->setToolTip( i18n( "Open file dialog" ) );
 	file_select->setFixedWidth( 25 );
 
