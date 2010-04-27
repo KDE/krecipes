@@ -484,7 +484,7 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 	kDebug()<<"calling: "<<command;
 	QSqlQuery query( command, *database );
 
-	command = "SELECT * FROM "+table_name+";";
+	command = "SELECT * FROM "+table_name+';';
 	query.exec( command );
 	if ( query.isActive() ) {
 		while ( query.next() ) {
@@ -493,7 +493,7 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 				QVariant variant = query.value(i);
 				if ( variant.type() == QVariant::Invalid ) break;
 
-				dataList << "'"+variant.toString()+"'";
+				dataList << '\''+variant.toString()+'\'';
 			}
 			command = "INSERT INTO "+table_name+"_copy VALUES("+dataList.join(",")+");";
 			kDebug()<<"calling: "<<command;
@@ -502,8 +502,8 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 			emit progress();
 		}
 	}
-	query.exec( "DROP TABLE "+table_name+";" );
-	query.exec( QString(new_table_sql).arg(table_name).arg(new_col_info+",") );
+	query.exec( "DROP TABLE "+table_name+';' );
+	query.exec( QString(new_table_sql).arg(table_name).arg(new_col_info+',') );
 	query.exec( "SELECT * FROM "+table_name+"_copy;" );
 	if ( query.isActive() ) {
 		while ( query.next() ) {
@@ -515,7 +515,7 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 				QVariant variant = query.value(i);
 				if ( variant.type() == QVariant::Invalid ) break;
 
-				dataList << "'"+variant.toString()+"'";
+				dataList << '\''+variant.toString()+'\'';
 			}
 			command = "INSERT INTO "+table_name+" VALUES(" +dataList.join(",")+");";
 			QSqlQuery insert_query( command, *database );
@@ -559,7 +559,7 @@ void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &u
 	kDebug() << "I'm doing the query to create the new user" ;
 	command = "CREATE USER " + username;
 	if ( !password.isEmpty() )
-		command.append( "WITH PASSWORD '" + password + "'" );
+		command.append( "WITH PASSWORD '" + password + '\'' );
 	command.append( ";" );
 	QSqlQuery permissionsToSet( command, *database );
 
