@@ -79,7 +79,7 @@ TopDeco::TopDeco( QWidget *parent, const char *name, const QString &title, const
 {
 	setObjectName( name );
 	setMinimumHeight( 30 );
-	panelTitle = QString();
+	panelTitle.clear();
 	if ( !iconName.isEmpty() ) {
 		icon = KIconLoader::global()->loadIcon( iconName, KIconLoader::NoGroup, 22 );
 	}
