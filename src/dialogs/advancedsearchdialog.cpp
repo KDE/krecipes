@@ -517,7 +517,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	clearButton->setObjectName( "clearButton" );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
 	clearButton->setText( i18nc( "@action:button Clear search criteria", "C&lear" ) );
-	clearButton->setShortcut( QKeySequence( i18n( "Alt+L" ) ) );	
 	layout9->addWidget( clearButton );
 	spacer3 = new QSpacerItem( 110, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
 	layout9->addItem( spacer3 );
