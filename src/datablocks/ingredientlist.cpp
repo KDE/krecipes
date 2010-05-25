@@ -231,6 +231,9 @@ IngredientList IngredientList::firstGroup()
 {
 	usedGroups.clear();
 
+	if ( isEmpty() )
+		return IngredientList();
+
 	QList<IngredientList::const_iterator> members = _groupMembers( ( *begin() ).groupID, begin() );
 
 	for ( QList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
