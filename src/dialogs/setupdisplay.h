@@ -26,6 +26,7 @@
 #include <math.h>
 
 class KMenu;
+class KTempDir;
 
 class QAction;
 class QLabel;
@@ -142,6 +143,8 @@ private:
 
 	QString m_activeTemplate;
 	QString m_activeStyle;
+
+	KTempDir * m_tempdir;
 };
 
 #endif //SETUPDISPLAY_H

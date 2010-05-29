@@ -19,6 +19,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
+#include <KTempDir>
 #include <kdialog.h>
 #include <QPointer>
 
@@ -110,6 +111,8 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		m_sample.ratingList.append(rating1);
 	}
 
+	m_tempdir = new KTempDir(KStandardDirs::locateLocal("tmp", "krecipes-data-configlayout"));
+
 	kDebug()<<"first load";
 	loadHTMLView();
 	show();
@@ -129,6 +132,8 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 
 SetupDisplay::~SetupDisplay()
 {
+	m_tempdir->unlink();
+	delete m_tempdir;
 	delete box_properties;
 	delete node_item_map;
 }
@@ -136,8 +141,8 @@ SetupDisplay::~SetupDisplay()
 void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &styleFile )
 {
 	kDebug()<<"loading template: "<<templateFile<<" style: "<<styleFile;
-	QString tmp_filename = KStandardDirs::locateLocal( "tmp", "krecipes_recipe_view" );
-	XSLTExporter exporter( tmp_filename + ".html", "html" );
+	QString tmp_filename = m_tempdir->name() + "krecipes_recipe_view.html";
+	XSLTExporter exporter( tmp_filename, "html" );
 	if ( templateFile != QString() )
 		exporter.setTemplate( templateFile );
 	exporter.setStyle( styleFile );
@@ -145,7 +150,7 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 	RecipeList recipeList;
 	recipeList.append(m_sample);
 
-	QFile file(tmp_filename + ".html");
+	QFile file( tmp_filename );
 	if ( file.open( QIODevice::WriteOnly ) ) {
 		QTextStream stream(&file);
 		exporter.writeStream(stream,recipeList);
@@ -156,7 +161,7 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 	file.close();
 
 	KUrl url;
-	url.setPath( tmp_filename + ".html" );
+	url.setPath( tmp_filename );
 	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) ;
 
 	//KDE4 port
@@ -172,6 +177,7 @@ void SetupDisplay::loadHTMLView( const QString &templateFile, const QString &sty
 
 void SetupDisplay::reload()
 {
+	m_tempdir->unlink();
 	loadHTMLView( m_activeTemplate, m_activeStyle );
 }
 
