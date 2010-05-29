@@ -340,37 +340,3 @@ void XSLTExporter::storePhoto( const Recipe &recipe )
 	}
 }
 
-void XSLTExporter::removeHTMLFiles( const QString &filename, int recipe_id )
-{
-	QList<int> id;
-	id << recipe_id;
-	removeHTMLFiles( filename, id );
-}
-
-void XSLTExporter::removeHTMLFiles( const QString &filename, const QList<int> &recipe_ids )
-{
-	kDebug() << "removing html files" ;
-	//remove HTML file
-	QFile old_file( filename + ".html" );
-	if ( old_file.exists() )
-		old_file.remove();
-
-	//remove photos
-	for ( QList<int>::const_iterator it = recipe_ids.begin(); it != recipe_ids.end(); ++it ) {
-		QFile photo( filename + "_photos/" + QString::number(*it) + ".png" );
-		if ( photo.exists() )
-			photo.remove(); //remove photos in directory before removing it
-	}
-
-	//take care of the default photo
-	QFile photo( filename + "_photos/default_photo.png" );
-	if ( photo.exists() ) photo.remove();
-
-	//remove photo directory
-	QDir photo_dir;
-	photo_dir.rmdir( filename + "_photos" );
-
-	for ( double d = 0.5; d < 5.5; d += 0.5 ) {
-		if ( QFile::exists(filename+"_photos/"+QString::number(d)+"-stars.png") ) photo.remove(filename+"_photos/"+QString::number(d)+"-stars.png");
-	}
-}

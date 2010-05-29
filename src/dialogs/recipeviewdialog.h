@@ -16,6 +16,7 @@
 #include <QString>
 #include <kvbox.h>
 #include <QList>
+class KTempDir;
 class RecipeDB;
 class Recipe;
 class KHTMLPart;
@@ -75,9 +76,10 @@ private:
 	QList<int> ids_loaded;
 	QString tmp_filename;
 
+	KTempDir * m_tempdir;
+
 	// Internal Methods
 	bool showRecipes( const QList<int> &ids, const QString &layoutConfig );
-	void removeOldFiles();
 
 private slots:
 	void recipeRemoved(int);

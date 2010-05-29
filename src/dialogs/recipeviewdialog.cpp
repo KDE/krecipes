@@ -28,6 +28,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kvbox.h>
+#include <KTempDir>
 #include <QFrame>
 #include <QToolButton>
 #include <QHBoxLayout>
@@ -47,7 +48,8 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 
 	connect( database, SIGNAL(recipeRemoved(int)), SLOT(recipeRemoved(int)) );
 
-	tmp_filename = KStandardDirs::locateLocal( "tmp", "krecipes_recipe_view" );
+	m_tempdir = new KTempDir(KStandardDirs::locateLocal("tmp", "krecipes-data-view"));
+	tmp_filename = m_tempdir->name() + "krecipes_recipe_view.html";
 
 	// Functions Box
 	QHBoxLayout* functionsLayout = new QHBoxLayout;
@@ -76,8 +78,7 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 
 RecipeViewDialog::~RecipeViewDialog()
 {
-	if ( recipe_loaded )
-		removeOldFiles();
+	delete m_tempdir;
 }
 
 bool RecipeViewDialog::loadRecipe( int recipeID )
@@ -92,7 +93,9 @@ bool RecipeViewDialog::loadRecipes( const QList<int> &ids, const QString &layout
 	KApplication::setOverrideCursor( Qt::WaitCursor );
 
 	// Remove any files created by the last recipe loaded
-	removeOldFiles();
+	delete m_tempdir;
+	m_tempdir = new KTempDir(KStandardDirs::locateLocal("tmp", "krecipes-data-view"));
+	tmp_filename = m_tempdir->name() + "krecipes_recipe_view.html";
 
 	ids_loaded = ids; //need to save these ids in order to delete the html files later...make sure this comes after the call to removeOldFiles()
 	recipe_loaded = ( ids.count() > 0 && ids[ 0 ] >= 0 );
@@ -115,7 +118,7 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 		progress_dialog->resize( 240, 80 );
 	}
 
-	XSLTExporter html_generator( tmp_filename + ".html", "html" );
+	XSLTExporter html_generator( tmp_filename, "html" );
 	if ( layoutConfig != QString() ) {
             KConfigGroup config(KGlobal::config(), "Page Setup" );
 		QString styleFile = config.readEntry( layoutConfig+"Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
@@ -127,7 +130,7 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 			html_generator.setTemplate( templateFile );
 	}
 
-	html_generator.exporter( ids, database, progress_dialog ); //writes the generated HTML to 'tmp_filename+".html"'
+	html_generator.exporter( ids, database, progress_dialog ); //writes the generated HTML to 'tmp_filename'
 	if ( progress_dialog && progress_dialog->wasCancelled() ) {
 		delete progress_dialog;
 		return false;
@@ -145,7 +148,7 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 	recipeView->browserExtension()->setBrowserArguments(args);
 
 	KUrl url;
-	url.setPath( tmp_filename + ".html" );
+	url.setPath( tmp_filename );
 	recipeView->openUrl( url );
 	recipeView->show();
 	kDebug() << "Opening URL: " << Qt::escape(url.prettyUrl()) ;
@@ -192,27 +195,13 @@ void RecipeViewDialog::hideButtons()
 	functionsBox->setVisible( false );
 }
 
-void RecipeViewDialog::removeOldFiles()
-{
-	if ( ids_loaded.count() > 0 ) {
-		RecipeList recipe_list;
-		database->loadRecipes( &recipe_list, RecipeDB::Title, ids_loaded );
-
-		QList<int> recipe_ids;
-		for ( RecipeList::const_iterator it = recipe_list.begin(); it != recipe_list.end(); ++it )
-			recipe_ids << ( *it ).recipeID;
-
-		XSLTExporter::removeHTMLFiles( tmp_filename, recipe_ids );
-	}
-}
-
 void RecipeViewDialog::recipeRemoved( int id )
 {
 	//if the deleted recipe is loaded, clean the view up
 	if ( ids_loaded.indexOf(id) != -1 ) {
-		Recipe recipe; database->loadRecipe( &recipe, RecipeDB::Title, id );
-		XSLTExporter::removeHTMLFiles( tmp_filename, recipe.recipeID );
 		ids_loaded.removeAll(id);
+		reload(); //FIXME: This is wrong because we don't know
+			// here the proper value for 'layoutConfig' param
 	}
 }
 
