@@ -11,8 +11,9 @@
 #ifndef RECIPELIST_H
 #define RECIPELIST_H
 
+#include <QLinkedList>
 #include "datablocks/recipe.h"
 
-typedef QList<Recipe> RecipeList;
+typedef QLinkedList<Recipe> RecipeList;
 
 #endif
