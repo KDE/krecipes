@@ -3,6 +3,13 @@ Note that this is only a draft, to get a rough idea about what will be done.
 Planned for the next release in 2.0 branch:
 
  [Mandatory]
+ * Revert IngredientList, it should inherit Q3ValueList instead of QList for
+   now. The reason is solving the same problem described in the message log of
+   the svn commit #1132914.
+ * Use WebKit instead of KHTML for printing recipes. Probably this would fix
+   sourceforge #2990118 and #2960140.
+ * There are still some dialogs that don't follow HIG.
+ * Some dialogs are too small by default.
  * Using a QSplitter on the ingredient matcher dialog.
  * Support ranges when resizing a recipe.
  * Fix bugs.
