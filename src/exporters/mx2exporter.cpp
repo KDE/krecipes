@@ -52,7 +52,8 @@ QString mx2Exporter::createContent( const RecipeList& recipes )
 	QDomElement summ_tag = doc.createElement("Summ");
 	for ( recipe_it = recipes.begin(); recipe_it != recipes.end(); ++recipe_it ) {
 	  QDomElement nam_tag = doc.createElement("Nam");
-	  nam_tag.appendChild( doc.createTextNode( ( *recipe_it ).title ) );
+	  // The only reason the recipe title has leading and trailing newlines is that the importer in MC6 wants it that way.
+	  nam_tag.appendChild( doc.createTextNode( "\n" + ( *recipe_it ).title + "\n" ) );
 	  summ_tag.appendChild(nam_tag);
 	} // for recipes - summ of nam
 	doc.appendChild(summ_tag);
