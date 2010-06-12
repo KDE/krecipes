@@ -69,6 +69,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	layout->addWidget( toolbar );
 
 	QLabel *help = new QLabel(i18n("<i>Usage: Select a template along the left, and right-click any element to edit the look of that element.</i>"),this);
+	help->setWordWrap( true );
 	layout->addWidget( help );
 
 	KHBox *viewBox = new KHBox( this );
@@ -97,7 +98,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	connect( cancelButton, SIGNAL( clicked() ), SLOT( reject() ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Page Setup" );
-	QSize defaultSize(800,600);
+	QSize defaultSize(722,502);
 	resize(config.readEntry( "WindowSize", defaultSize ));
 
 	//let's do everything we can to be sure at least some layout is loaded
