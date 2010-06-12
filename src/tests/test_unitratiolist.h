@@ -1,5 +1,4 @@
 /***************************************************************************
- *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
  *   Copyright © 2010 Martin Engelmann <murphi.oss@googlemail.com>         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -8,25 +7,18 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifndef UNITRATIOLIST_H
-#define UNITRATIOLIST_H
 
-#include <QtCore/QList>
+#ifndef TEST_UNITRATIOLIST_H
+#define TEST_UNITRATIOLIST_H
 
-#include "unitratio.h"
+#include <QtCore/QObject>
 
-
-/**
-@author Unai Garro
-*/
-class UnitRatioList : public QList <UnitRatio>
+class Test_UnitRatioList : public QObject
 {
-public:
-    UnitRatioList();
-    ~UnitRatioList();
+    Q_OBJECT;
 
-    void add(const UnitRatio& r);
-    double getRatio(int uid1, int uid2);
+private slots:
+    void testGetRatio();
 };
 
-#endif
+#endif // TEST_UNITRATIOLIST_H

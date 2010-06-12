@@ -224,6 +224,7 @@ set(UNIT_TESTS
     test_yield
     test_unit
     test_unitratio
+    test_unitratiolist
     )
 
 macro(add_import_export_test _TEST)
