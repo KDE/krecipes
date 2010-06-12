@@ -198,12 +198,12 @@ set(datablocks_SRCS
 # once for *all* executables in this project.
 # (i.e. I want to save CPU time when compiling with test programs)
 
-kde4_add_library(libkrecipescommon STATIC
+kde4_add_library(krecipescommon STATIC
    ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
    ${datablocks_SRCS} klomanager.cpp propertycalculator.cpp)
 
-target_link_libraries(libkrecipescommon
+target_link_libraries(krecipescommon
    ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
    ${QT_QTSQL_LIBRARY} ${NEPOMUK_LIBRARIES} 
    ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}) 
@@ -220,7 +220,7 @@ set(TEST_SRCS tests/${TEST}.cpp)
 
 kde4_add_executable(${TEST} ${TEST_SRCS})
 
-target_link_libraries(${TEST} libkrecipescommon
+target_link_libraries(${TEST} krecipescommon
    ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
    ${QT_QTSQL_LIBRARY} ${NEPOMUK_LIBRARIES} 
    ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}) 
@@ -273,7 +273,7 @@ kde4_add_executable(krecipes
    ${krecipesdialogs_SRCS}
    ${krecipesactionshandlers_SRCS})
 
-target_link_libraries(krecipes libkrecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${NEPOMUK_LIBRARIES})
+target_link_libraries(krecipes krecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${NEPOMUK_LIBRARIES})
 
 if ( SQLITE_FOUND )
    target_link_libraries(krecipes ${SQLITE_LIBRARIES})
