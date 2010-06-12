@@ -28,6 +28,7 @@ public:
 	~PropertyCheckListItem( void )
 	{}
 	virtual QString text( int column ) const;
+	virtual void setText ( int column, const QString & text );
 
 	IngredientProperty property() const
 	{

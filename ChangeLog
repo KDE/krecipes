@@ -16,6 +16,7 @@ Changes from 2.0-alpha6 to svn:
       patches.
     + When you click on a recipe in the advanced search dialog results, the
       recipe actions (i.e. edit, export...) are updated properly.
+    + You can rename the properties (in data -> properties).
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:

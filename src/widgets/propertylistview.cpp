@@ -50,6 +50,17 @@ QString PropertyCheckListItem::text( int column ) const
 	return QString();
 }
 
+void PropertyCheckListItem::setText ( int column, const QString & text )
+{
+	switch ( column ) {
+	case 0:
+		m_property.name = text;
+		break;
+	case 1:
+		m_property.units = text;
+		break;
+	}
+}
 
 HidePropertyCheckListItem::HidePropertyCheckListItem( Q3ListView* klv, const IngredientProperty &property, bool enable ) : PropertyCheckListItem( klv, property )
 {
