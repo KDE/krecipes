@@ -82,7 +82,7 @@ void MMFExporter::writeMMFHeader( QString &content, const Recipe &recipe )
 	cat_str.truncate( 67 );
 	content += cat_str + '\n';
 
-	content += "   Servings: " + QString::number( qMin( 9999.0, recipe.yield.amount ) ) + '\n'; //some yield info is lost here, but hey, that's the MM format
+	content += "   Servings: " + QString::number( qMin( 9999.0, recipe.yield.amount() ) ) + '\n'; //some yield info is lost here, but hey, that's the MM format
 }
 
 /* Ingredient lines:

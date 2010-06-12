@@ -44,9 +44,9 @@ main(int argc, char *argv[])
 
 	Recipe recipe;
 	recipe.title = "Cookies Test";
-	recipe.yield.amount = 2;
-	recipe.yield.amount_offset = 0;
-	recipe.yield.type = "servings";
+	recipe.yield.setAmount(2);
+	recipe.yield.setAmountOffset(0);
+	recipe.yield.setType("servings");
 	recipe.categoryList.append( Element("Snacks",1) );
 	recipe.categoryList.append( Element("Cookies & Squares",2) );
 	recipe.instructions = 

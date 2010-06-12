@@ -104,10 +104,10 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	languageChange();
 
 
-	newYieldInput->setValue( m_recipe->yield.amount, 0 ); //Ignore the range info, it doesn't work in this context
+	newYieldInput->setValue( m_recipe->yield.amount(), 0 ); //Ignore the range info, it doesn't work in this context
 	currentYieldInput->setText( m_recipe->yield.toString() );
 
-	if ( recipe->yield.amount_offset > 0 ) {
+	if ( recipe->yield.amountOffset() > 0 ) {
 		yieldRadioButton->setEnabled(false);
 		buttonGroup->setButton( FACTOR_RADIO_BUTTON );
 		activateCurrentOption( FACTOR_RADIO_BUTTON );
@@ -149,7 +149,7 @@ void ResizeRecipeDialog::activateCurrentOption( int button_id )
 
 void ResizeRecipeDialog::accept()
 {
-	if ( m_recipe->yield.amount == 0 ) 
+	if ( m_recipe->yield.amount() == 0 )
 		KMessageBox::error( this, i18nc( "@info", "Unable to scale a recipe with zero yield" ) );
 	else if ( buttonGroup->selected() == yieldRadioButton ) {
 		if ( newYieldInput->isInputValid() ) {
@@ -180,7 +180,7 @@ void ResizeRecipeDialog::accept()
 //TODO YIELD: handle ranges
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
-	m_recipe->yield.amount = MixedNumber::fromString(currentYieldInput->text()).toDouble() * factor;
+	m_recipe->yield.setAmount(MixedNumber::fromString(currentYieldInput->text()).toDouble() * factor);
 
 	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it ) {
 		( *ing_it ).amount = ( *ing_it ).amount * factor;

@@ -86,7 +86,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 			content += '\n';
 		}
 
-		if ( ( *recipe_it ).yield.amount > 0 ) {
+		if ( ( *recipe_it ).yield.amount() > 0 ) {
 			content += QString("%1: ").arg(i18n("Yields"));
 			content += ( *recipe_it ).yield.toString();
 			content += '\n';

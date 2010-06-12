@@ -270,13 +270,13 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			( *cat_it ).id = new_cat_id;
 		}
 
-		if ( !(*recipe_it).yield.type.isEmpty() ) {
-			int new_id = db->findExistingYieldTypeByName((*recipe_it).yield.type);
+		if ( !(*recipe_it).yield.type().isEmpty() ) {
+			int new_id = db->findExistingYieldTypeByName((*recipe_it).yield.type());
 			if ( new_id == -1 ) {
-				db->createNewYieldType( (*recipe_it).yield.type );
+				db->createNewYieldType( (*recipe_it).yield.type() );
 				new_id = db->lastInsertID();
 			}
-			(*recipe_it).yield.type_id = new_id;
+			(*recipe_it).yield.setTypeId(new_id);
 		}
 
 		RatingList::iterator rating_list_end( ( *recipe_it ).ratingList.end() );

@@ -90,9 +90,12 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	yield_str.remove( QRegExp( "^Menge:\\s*" ) );
 	int sep_index = yield_str.indexOf( ' ' );
 	if ( sep_index != -1 )
-		recipe.yield.type = yield_str.mid( sep_index+1 );
-	readRange( yield_str.mid( 0, sep_index ), recipe.yield.amount, recipe.yield.amount_offset );
-	kDebug() << "Found yield: " << recipe.yield.amount ;
+		recipe.yield.setType(yield_str.mid( sep_index+1 ));
+    double amount = 0.0, amountOffset = 0.0;
+	readRange( yield_str.mid( 0, sep_index ), amount, amountOffset );
+    recipe.yield.setAmount(amount);
+    recipe.yield.setAmountOffset(amountOffset);
+	kDebug() << "Found yield: " << recipe.yield.amount();
 
 	bool is_sub = false;
 	bool last_line_empty = false;

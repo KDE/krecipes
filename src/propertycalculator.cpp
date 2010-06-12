@@ -54,7 +54,7 @@ void calculateProperties( Recipe& recipe, RecipeDB* database )
 
 	for ( IngredientList::const_iterator ing_it = recipe.ingList.begin(); ing_it != recipe.ingList.end(); ++ing_it ) {
 		database->loadProperties( &ingredientPropertyList, ( *ing_it ).ingredientID );
-		ingredientPropertyList.divide( recipe.yield.amount ); // calculates properties per yield unit
+		ingredientPropertyList.divide( recipe.yield.amount() ); // calculates properties per yield unit
 		addPropertyToList( database, &recipe.properties, ingredientPropertyList, *ing_it, ingredientNo );
 		ingredientNo++;
 	}

@@ -112,9 +112,9 @@ void check( const IngredientData &ing, const IngredientData &base_ing, int ing_n
 void check( const Recipe &recipe, const Recipe &base )
 {
 	check( "Recipe title", recipe.title, base.title );
-	check( "Yield base", recipe.yield.amount, base.yield.amount );
-	check( "Yield offset", recipe.yield.amount_offset, base.yield.amount_offset );
-	check( "Yield type", recipe.yield.type, base.yield.type );
+	check( "Yield base", recipe.yield.amount(), base.yield.amount() );
+	check( "Yield offset", recipe.yield.amountOffset(), base.yield.amountOffset() );
+	check( "Yield type", recipe.yield.type(), base.yield.type() );
 	check( "Instructions", recipe.instructions, base.instructions );
 	check( "Photo", recipe.photo, base.photo );
 	check( "Preparation time", recipe.prepTime, base.prepTime );

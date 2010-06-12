@@ -79,8 +79,8 @@ QString mx2Exporter::createContent( const RecipeList& recipes )
 // where ".type" might be servings or might be some other units like liters or cups. So we test if the yield type is 
 // "servings" and it it is, use it.
 		QDomElement serv_tag = doc.createElement("Serv");
-		if (( *recipe_it ).yield.type == "servings") 
-			serv_tag.setAttribute("qty", ( *recipe_it ).yield.amount);
+		if (( *recipe_it ).yield.type() == "servings") 
+			serv_tag.setAttribute("qty", ( *recipe_it ).yield.amount());
 		else serv_tag.setAttribute("qty", 0);
 		recipe_tag.appendChild(serv_tag);
 // Now preparation time, "PrpT". MasterCook distinguishes prep time from Total time; krecipes does not.
@@ -149,8 +149,8 @@ QString mx2Exporter::createContent( const RecipeList& recipes )
 // Now the recipe yield...
 		QDomElement yield_tag = doc.createElement( "Yield" );
 //		once again MasterCook doesn't know about ranges so we're ignoring them
-		yield_tag.setAttribute( "unit", ( *recipe_it ).yield.type);
-		yield_tag.setAttribute("qty", ( *recipe_it ).yield.amount);
+		yield_tag.setAttribute( "unit", ( *recipe_it ).yield.type());
+		yield_tag.setAttribute("qty", ( *recipe_it ).yield.amount());
 		recipe_tag.appendChild(yield_tag);
 // Ratings... The problem here being that MasterCook doesn't seem to recognize more than one set of ratings. So, we'll
 // just use the first one...

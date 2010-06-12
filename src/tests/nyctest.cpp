@@ -44,8 +44,8 @@ main(int argc, char *argv[])
 
 	Recipe recipe;
 	recipe.title = "Cookies_Test";
-	recipe.yield.amount = 2;
-	recipe.yield.type = "dozen";
+	recipe.yield.setAmount(2);
+	recipe.yield.setType("dozen");
 	recipe.categoryList.append( Element("Snacks",1) );
 	recipe.categoryList.append( Element("Cookies & Squares",2) );
 	recipe.instructions = 

@@ -587,8 +587,8 @@ void RecipeInputDialog::reload( void )
 	titleEdit->setText( loadedRecipe->title );
 	instructionsEdit->clearCompletionItems();
 	instructionsEdit->setText( loadedRecipe->instructions );
-	yieldNumInput->setValue( loadedRecipe->yield.amount, loadedRecipe->yield.amount_offset );
-	yieldTypeEdit->setText( loadedRecipe->yield.type );
+	yieldNumInput->setValue( loadedRecipe->yield.amount(), loadedRecipe->yield.amountOffset() );
+	yieldTypeEdit->setText( loadedRecipe->yield.type() );
 	prepTimeEdit->setTime( loadedRecipe->prepTime );
 
 	//show ingredient list
@@ -1120,8 +1120,11 @@ void RecipeInputDialog::saveRecipe( void )
 	loadedRecipe->photo = sourcePhoto;
 	loadedRecipe->instructions = instructionsEdit->text();
 	loadedRecipe->title = titleEdit->text();
-	yieldNumInput->value(loadedRecipe->yield.amount,loadedRecipe->yield.amount_offset);
-	loadedRecipe->yield.type_id = createNewYieldIfNecessary(yieldTypeEdit->text());
+    double amount = 0.0, amountOffset = 0.0;
+	yieldNumInput->value(amount, amountOffset);
+    loadedRecipe->yield.setAmount(amount);
+    loadedRecipe->yield.setAmountOffset(amountOffset);
+	loadedRecipe->yield.setTypeId(createNewYieldIfNecessary(yieldTypeEdit->text()));
 	loadedRecipe->prepTime = prepTimeEdit->time();
 
 	// Now save()
@@ -1300,8 +1303,11 @@ void RecipeInputDialog::showRecipe( void )
 
 void RecipeInputDialog::resizeRecipe( void )
 {
-	yieldNumInput->value( loadedRecipe->yield.amount, loadedRecipe->yield.amount_offset );
-	loadedRecipe->yield.type = yieldTypeEdit->text();
+    double amount = 0.0, amountOffset = 0.0;
+	yieldNumInput->value(amount, amountOffset);
+    loadedRecipe->yield.setAmount(amount);
+    loadedRecipe->yield.setAmountOffset(amountOffset);
+	loadedRecipe->yield.setType(yieldTypeEdit->text());
 	QPointer<ResizeRecipeDialog> dlg = new ResizeRecipeDialog( this, loadedRecipe );
 
 	if ( dlg->exec() == QDialog::Accepted )

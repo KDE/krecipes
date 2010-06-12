@@ -18,20 +18,7 @@
 #include "datablocks/rating.h"
 #include "datablocks/elementlist.h"
 #include "datablocks/ingredientpropertylist.h"
-
-class Yield
-{
-public:
-	Yield() : amount(0), amount_offset(0), type(QString()), type_id(-1){}
-
-	QString amountToString() const;
-	QString toString() const;
-
-	double amount;
-	double amount_offset;
-	QString type;
-	int type_id;
-};
+#include "yield.h"
 
 /**
 @author Unai Garro

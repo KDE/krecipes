@@ -124,10 +124,15 @@ void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 			for ( int j = 0; j < yieldChildren.count(); j++ ) {
 				QDomElement y = yieldChildren.item( j ).toElement();
 				QString tagName = y.tagName();
-				if ( tagName == "range" )
-					readRecipemlRange( y, recipe.yield.amount, recipe.yield.amount_offset );
+				if ( tagName == "range" ) {
+                    double amount = 0.0;
+                    double amountOffset = 0.0;
+					readRecipemlRange( y, amount, amountOffset );
+                    recipe.yield.setAmount(amount);
+                    recipe.yield.setAmountOffset(amountOffset);
+                }
 				else if ( tagName == "unit" )
-					recipe.yield.type = y.text();
+					recipe.yield.setType(y.text());
 				else
 					kDebug() << "Unknown tag within <yield>: " << y.tagName() ;
 			}

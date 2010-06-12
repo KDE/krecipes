@@ -145,15 +145,15 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += "</category>\n";
 		xml += "<yield>";
 		xml += "<amount>";
-		if ( ( *recipe_it ).yield.amount_offset < 1e-10 ) {
-			xml += MixedNumber( ( *recipe_it ).yield.amount ).toString( m_number_format, m_locale_aware_numbers );
+		if ( ( *recipe_it ).yield.amountOffset() < 1e-10 ) {
+			xml += MixedNumber( ( *recipe_it ).yield.amount() ).toString( m_number_format, m_locale_aware_numbers );
 		}
 		else {
-			xml += "<min>"+MixedNumber( ( *recipe_it ).yield.amount ).toString( m_number_format, m_locale_aware_numbers )+"</min>";
-			xml += "<max>"+MixedNumber( ( *recipe_it ).yield.amount + ( *recipe_it ).yield.amount_offset ).toString( m_number_format, m_locale_aware_numbers )+"</max>";
+			xml += "<min>"+MixedNumber( ( *recipe_it ).yield.amount() ).toString( m_number_format, m_locale_aware_numbers )+"</min>";
+			xml += "<max>"+MixedNumber( ( *recipe_it ).yield.amount() + ( *recipe_it ).yield.amountOffset() ).toString( m_number_format, m_locale_aware_numbers )+"</max>";
 		}
 		xml += "</amount>";
-		xml += "<type>"+( *recipe_it ).yield.type+"</type>";
+		xml += "<type>"+( *recipe_it ).yield.type()+"</type>";
 		xml += "</yield>\n";
 		xml += "<preparation-time>";
 		xml += ( *recipe_it ).prepTime.toString( "hh:mm" );

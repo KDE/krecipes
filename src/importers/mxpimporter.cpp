@@ -99,8 +99,8 @@ void MXPImporter::importMXP( QTextStream &stream )
 		else
 			end_index = current.length();
 
-		recipe.yield.amount = current.mid( current.indexOf( ":" ) + 1, end_index ).trimmed().toInt();
-		recipe.yield.type = i18n("servings");
+		recipe.yield.setAmount(current.mid( current.indexOf( ":" ) + 1, end_index ).trimmed().toInt());
+		recipe.yield.setType(i18n("servings"));
 		//kDebug()<<"Found serving size: "<<recipe.yield.amount;
 	}
 	else {
@@ -248,8 +248,8 @@ void MXPImporter::loadInstructions( QTextStream &stream, Recipe &recipe )
 			recipe.instructions += "\n\nInternet address: " + internet;
 		}
 		else if ( current.trimmed() == "Yield:" ) {
-			recipe.yield.amount = getNextQuotedString( stream ).trimmed().toInt();
-			recipe.yield.type = i18n("servings");
+			recipe.yield.setAmount(getNextQuotedString( stream ).trimmed().toInt());
+			recipe.yield.setType(i18n("servings"));
 			//kDebug()<<"Found yield: "<<recipe.yield.amount<<" (adding as servings)";
 		}
 		else if ( current.trimmed() == "T(Cook Time):" ) {

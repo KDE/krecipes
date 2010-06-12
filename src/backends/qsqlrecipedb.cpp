@@ -233,14 +233,14 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 				// QCString().toString().toDouble() does a locale-aware
 				// conversion, which isn't what we want.  The real fix is in the SQLite plugin,
 				// but rather than spending time on that, I'll wait and use Qt4's plugins.
-				recipe.yield.amount = recipeQuery.value( row_at ).toString().toDouble(); ++row_at;
-				recipe.yield.amount_offset = recipeQuery.value( row_at ).toString().toDouble(); ++row_at;
-				recipe.yield.type_id = recipeQuery.value( row_at ).toInt(); ++row_at;
-				if ( recipe.yield.type_id != -1 ) {
-					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.type_id);
+				recipe.yield.setAmount(recipeQuery.value( row_at ).toString().toDouble()); ++row_at;
+				recipe.yield.setAmountOffset(recipeQuery.value( row_at ).toString().toDouble()); ++row_at;
+				recipe.yield.setTypeId(recipeQuery.value( row_at ).toInt()); ++row_at;
+				if ( recipe.yield.typeId() != -1 ) {
+					QString y_command = QString("SELECT name FROM yield_types WHERE id=%1;").arg(recipe.yield.typeId());
 					QSqlQuery yield_query(y_command,*database);
 					if ( yield_query.isActive() && yield_query.first() )
-						recipe.yield.type = unescapeAndDecode(yield_query.value( 0 ).toByteArray());
+						recipe.yield.setType(unescapeAndDecode(yield_query.value( 0 ).toByteArray()));
 					else
 						kDebug()<<yield_query.lastError().databaseText();
 				}
@@ -610,9 +610,9 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	if ( newRecipe ) {
 		command = QString( "INSERT INTO recipes VALUES ("+getNextInsertIDStr("recipes","id")+",'%1',%2,'%3','%4','%5',NULL,'%6','%7','%8','%9');" )  // Id is autoincremented
 		          .arg( escapeAndEncode( recipe->title ) )
-		          .arg( recipe->yield.amount )
-		          .arg( recipe->yield.amount_offset )
-		          .arg( recipe->yield.type_id )
+		          .arg( recipe->yield.amount() )
+		          .arg( recipe->yield.amountOffset() )
+		          .arg( recipe->yield.typeId() )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
 		          .arg( current_timestamp )
@@ -623,9 +623,9 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	else {
 		command = QString( "UPDATE recipes SET title='%1',yield_amount='%2',yield_amount_offset='%3',yield_type_id='%4',instructions='%5',prep_time='%6',mtime='%8',ctime=ctime,atime=atime WHERE id=%7;" )
 		          .arg( escapeAndEncode( recipe->title ) )
-		          .arg( recipe->yield.amount )
-		          .arg( recipe->yield.amount_offset )
-		          .arg( recipe->yield.type_id )
+		          .arg( recipe->yield.amount() )
+		          .arg( recipe->yield.amountOffset() )
+		          .arg( recipe->yield.typeId() )
 		          .arg( escapeAndEncode( recipe->instructions ) )
 		          .arg( recipe->prepTime.toString( "hh:mm:ss" ) )
 		          .arg( recipe->recipeID )

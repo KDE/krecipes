@@ -23,9 +23,9 @@ void Recipe::empty( void )
 {
 	recipeID = -1;
 
-	yield.amount = 0;
-	yield.amount_offset = 0;
-	yield.type.clear();
+	yield.setAmount(0);
+	yield.setAmountOffset(0);
+	yield.setType(QString());
 
 	title.clear();
 	instructions.clear();
@@ -37,18 +37,4 @@ void Recipe::empty( void )
 	prepTime = QTime( 0, 0 );
 }
 
-
-QString Yield::amountToString() const
-{
-	QString ret = QString::number(amount);
-	if ( amount_offset > 0 )
-		ret += '-'+QString::number(amount+amount_offset);
-
-	return ret;
-}
-
-QString Yield::toString() const
-{
-	return amountToString() + ' ' + type;
-}
 

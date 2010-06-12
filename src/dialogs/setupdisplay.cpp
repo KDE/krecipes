@@ -69,8 +69,8 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		m_sample = sample;
 	else {
 		m_sample.title = i18n("Recipe Title");
-		m_sample.yield.amount = 1;
-		m_sample.yield.type = i18n("serving");
+		m_sample.yield.setAmount(1);
+		m_sample.yield.setType(i18n("serving"));
 		m_sample.categoryList.append( Element(i18n( "Category 1, Category 2, ..." ) ) );
 		m_sample.instructions = i18n("Instructions");
 		m_sample.prepTime = QTime(0,0);

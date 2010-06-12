@@ -192,7 +192,9 @@ set(datablocks_SRCS
    datablocks/mixednumber.cpp
    datablocks/rating.cpp
    datablocks/ratingcriteria.cpp
-   datablocks/weight.cpp)
+   datablocks/weight.cpp
+   datablocks/yield.cpp
+   )
 
 ############### common library ################
 # The reason to have this static library is to compile some files
@@ -219,6 +221,7 @@ set(IMPORT_EXPORT_TESTS
 set(UNIT_TESTS
     test_rating
     test_ratingcriteria
+    test_yield
     )
 
 macro(add_import_export_test _TEST)

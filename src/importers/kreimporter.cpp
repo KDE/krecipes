@@ -149,16 +149,20 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 			recipe->authorList.append( Element( el.text() ) );
 		}
 		else if ( el.tagName() == "serving" ) { //### Keep for < 0.9 compatibility
-			recipe->yield.amount = el.text().toInt();
+			recipe->yield.setAmount(el.text().toInt());
 		}
 		else if ( el.tagName() == "yield" ) {
 			QDomNodeList yield_children = el.childNodes();
 			for ( int j = 0; j < yield_children.count(); j++ ) {
 				QDomElement y = yield_children.item( j ).toElement();
-				if ( y.tagName() == "amount" )
-					readAmount(y,recipe->yield.amount,recipe->yield.amount_offset);
+				if ( y.tagName() == "amount" ) {
+                    double amount = 0.0, amountOffset = 0.0;
+					readAmount(y, amount, amountOffset);
+                    recipe->yield.setAmount(amount);
+                    recipe->yield.setAmountOffset(amountOffset);
+                }
 				else if ( y.tagName() == "type" )
-					recipe->yield.type = y.text();
+					recipe->yield.setType(y.text());
 			}
 		}
 		else if ( el.tagName() == "preparation-time" ) {

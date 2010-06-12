@@ -306,8 +306,8 @@ void MMFImporter::putDataInRecipe()
 
 	//create the recipe
 	Recipe new_recipe;
-	new_recipe.yield.amount = m_servings;
-	new_recipe.yield.type = i18n("servings");
+	new_recipe.yield.setAmount(m_servings);
+	new_recipe.yield.setType(i18n("servings"));
 	new_recipe.title = m_title;
 	new_recipe.instructions = m_instructions;
 	new_recipe.ingList = m_all_ing;

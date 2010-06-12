@@ -113,23 +113,23 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 		head_tag.appendChild( categories_tag );
 
 		QDomElement yield_tag = doc.createElement( "yield" );
-		if ( ( *recipe_it ).yield.amount_offset < 1e-10 )
-			yield_tag.appendChild( doc.createTextNode( QString::number( ( *recipe_it ).yield.amount ) ) );
+		if ( ( *recipe_it ).yield.amountOffset() < 1e-10 )
+			yield_tag.appendChild( doc.createTextNode( QString::number( ( *recipe_it ).yield.amount() ) ) );
 		else {
 			QDomElement range_tag = doc.createElement( "range" );
 			yield_tag.appendChild(range_tag);
 			
 			QDomElement q1_tag = doc.createElement( "q1" );
-			q1_tag.appendChild( doc.createTextNode( QString::number(( *recipe_it ).yield.amount ) ) );
+			q1_tag.appendChild( doc.createTextNode( QString::number(( *recipe_it ).yield.amount() ) ) );
 			QDomElement q2_tag = doc.createElement( "q2" );
-			q2_tag.appendChild( doc.createTextNode( QString::number( ( *recipe_it ).yield.amount + ( *recipe_it ).yield.amount_offset ) ) );
+			q2_tag.appendChild( doc.createTextNode( QString::number( ( *recipe_it ).yield.amount() + ( *recipe_it ).yield.amountOffset() ) ) );
 
 			range_tag.appendChild(q1_tag);
 			range_tag.appendChild(q2_tag);
 		}
-		if ( !( *recipe_it ).yield.type.isEmpty() ) {
+		if ( !( *recipe_it ).yield.type().isEmpty() ) {
 			QDomElement yield_unit_tag = doc.createElement( "unit" );
-			yield_unit_tag.appendChild( doc.createTextNode(( *recipe_it ).yield.type) );
+			yield_unit_tag.appendChild( doc.createTextNode(( *recipe_it ).yield.type()) );
 			yield_tag.appendChild( yield_unit_tag );
 		}
 

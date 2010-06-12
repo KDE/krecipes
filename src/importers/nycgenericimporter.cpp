@@ -99,8 +99,8 @@ void NYCGenericImporter::importNYCGeneric( QTextStream &stream )
 			int colon_index = current.indexOf( ':' );
 			int amount_type_sep_index = current.indexOf(" ",colon_index+1);
 
-			m_recipe.yield.amount = current.mid( colon_index+2, amount_type_sep_index-colon_index ).toDouble();
-			m_recipe.yield.type = current.mid( amount_type_sep_index+3, current.length() );
+			m_recipe.yield.setAmount(current.mid( colon_index+2, amount_type_sep_index-colon_index ).toDouble());
+			m_recipe.yield.setType(current.mid( amount_type_sep_index+3, current.length() ));
 		}
 		else if ( current.startsWith( "NYC Nutrition Analysis (per serving or yield unit):" ) ) {
 			//m_recipe.instructions += current + '\n';
