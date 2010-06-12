@@ -190,17 +190,33 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 
 
 	// "The user already has permissions" checkbox
-	noSetupCheckBox = new QCheckBox( i18n( "I have already set the necessary permissions" ), this );
+	//FIXME: We need to do a workaround to have word wrapping in QCheckBox.
+	//see http://bugreports.qt.nokia.com/browse/QTBUG-5370
+	KHBox * noSetupContainer = new KHBox;
+	noSetupCheckBox = new QCheckBox( noSetupContainer );
 	noSetupCheckBox->setObjectName( "noSetupCheckBox" );
-	layout->addWidget( noSetupCheckBox, 3, 3 );
+	noSetupCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	QLabel * noSetupLabel = new QLabel(
+		i18n( "I have already set the necessary permissions" ),
+		noSetupContainer );
+	noSetupLabel->setWordWrap( true );
+	layout->addWidget( noSetupContainer, 3, 3 );
 
 	QSpacerItem *checkBoxSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( checkBoxSpacer, 4, 3 );
 
 	// root checkbox
-	rootCheckBox = new QCheckBox( i18n( "I have already set a MySQL root/admin account" ), this );
+	//FIXME: We need to do a workaround to have word wrapping in QCheckBox.
+	//see http://bugreports.qt.nokia.com/browse/QTBUG-5370
+	KHBox * rootContainer = new KHBox;
+	rootCheckBox = new QCheckBox( rootContainer );
 	rootCheckBox->setObjectName( "rootCheckBox" );
-	layout->addWidget( rootCheckBox, 5, 3 );
+	rootCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	QLabel * rootLabel = new QLabel(
+		i18n( "I have already set a MySQL root/admin account" ),
+		rootContainer );
+	rootLabel->setWordWrap( true );
+	layout->addWidget( rootContainer, 5, 3 );
 
 	QSpacerItem *rootInfoSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( rootInfoSpacer, 6, 3 );
@@ -299,17 +315,34 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 
 	// "The user already has permissions" checkbox
-	noSetupCheckBox = new QCheckBox( i18n( "I have already set the necessary permissions" ), this );
+	//FIXME: We need to do a workaround to have word wrapping in QCheckBox.
+	//see http://bugreports.qt.nokia.com/browse/QTBUG-5370
+	KHBox * noSetupContainer = new KHBox;
+	noSetupCheckBox = new QCheckBox( noSetupContainer );
 	noSetupCheckBox->setObjectName( "noSetupCheckBox" );
-	layout->addWidget( noSetupCheckBox, 3, 3 );
+	noSetupCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	QLabel * noSetupLabel = new QLabel(
+		i18n( "I have already set the necessary permissions" ),
+		noSetupContainer );
+	noSetupLabel->setWordWrap( true );
+	layout->addWidget( noSetupContainer, 3, 3 );
 
 	QSpacerItem *checkBoxSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( checkBoxSpacer, 4, 3 );
 
 	// root checkbox
-	rootCheckBox = new QCheckBox( i18n( "I have already set a superuser or privileged account" ), this );
+	//FIXME: We need to do a workaround to have word wrapping in QCheckBox.
+	//see http://bugreports.qt.nokia.com/browse/QTBUG-5370
+	KHBox * rootContainer = new KHBox;
+	rootCheckBox = new QCheckBox( rootContainer );
 	rootCheckBox->setObjectName( "rootCheckBox" );
-	layout->addWidget( rootCheckBox, 5, 3 );
+	rootCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	QLabel * rootLabel = new QLabel(
+		i18n( "I have already set a superuser or privileged account" ),
+		rootContainer );
+	rootLabel->setWordWrap( true );
+	layout->addWidget( rootContainer, 5, 3 );
+
 
 	QSpacerItem *rootInfoSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( rootInfoSpacer, 6, 3 );
@@ -748,10 +781,17 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	layout->addItem( logoSpacer, 1, 2 );
 
 	// Initialize data checkbox
-
-	initializeCheckBox = new QCheckBox( i18n( "Yes please, initialize the database with the examples" ), this );
+	//FIXME: We need to do a workaround to have word wrapping in QCheckBox.
+	//see http://bugreports.qt.nokia.com/browse/QTBUG-5370
+	KHBox * initializeContainer = new KHBox(this);
+	initializeCheckBox = new QCheckBox( initializeContainer );
 	initializeCheckBox->setObjectName( "initializeCheckBox" );
-	layout->addWidget( initializeCheckBox, 3, 3 );
+	initializeCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	QLabel * initializeLabel = new QLabel(
+		i18n( "Yes please, initialize the database with the examples" ),
+		initializeContainer );
+	initializeLabel->setWordWrap( true );
+	layout->addWidget( initializeContainer, 3, 3 );
 
 	QSpacerItem *textInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( textInfoSpacer, 4, 3 );
@@ -763,9 +803,17 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	QSpacerItem *importInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	layout->addItem( importInfoSpacer, 6, 3 );
 
-	USDAImportCheckBox = new QCheckBox( i18n( "Yes please, load the database with nutrient data for 400+ foods." ), this );
+	//FIXME: We need to do a workaround to have word wrapping in QCheckBox.
+	//see http://bugreports.qt.nokia.com/browse/QTBUG-5370
+	KHBox * USDAImportContainer = new KHBox(this);
+	USDAImportCheckBox = new QCheckBox( USDAImportContainer );
 	USDAImportCheckBox->setObjectName( "USDAImportCheckBox" );
-	layout->addWidget( USDAImportCheckBox, 7, 3 );
+	USDAImportCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+	QLabel * USDAImportLabel = new QLabel(
+		i18n("Yes please, load the database with nutrient data for 400+ foods."),
+		USDAImportContainer );
+	USDAImportLabel->setWordWrap( true );
+	layout->addWidget( USDAImportContainer, 7, 3 );
 }
 
 bool DataInitializePage::doInitialization( void )
