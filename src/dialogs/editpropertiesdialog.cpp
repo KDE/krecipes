@@ -124,10 +124,10 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	KVBox* higherBox = new KVBox;
 
 	usdaListView = new KreListView( higherBox, QString(), higherBox, 0 );
-	usdaListView->listView()->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 	usdaListView->listView()->addColumn( i18nc( "@title:column", "USDA Ingredient" ) );
 	usdaListView->listView()->addColumn( "Id" );
 	usdaListView->listView()->setAllColumnsShowFocus( true );
+	usdaListView->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
 	loadDataFromFile();
 
 	loadButton = new QPushButton( higherBox );
@@ -163,7 +163,6 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 
 	propertyListView = new K3ListView( page );
 	propertyListView->setObjectName( "propertyListView" );
-	propertyListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	propertyListView->setAllColumnsShowFocus( true );
 	propertyListView->addColumn( i18nc( "@title:column", "Property" ) );
 	propertyListView->addColumn( i18nc( "@title:column", "Amount" ) );

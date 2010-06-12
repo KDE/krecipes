@@ -60,6 +60,8 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
 	list_view->reload();
  	allIngListView->setListView(list_view);
+	allIngListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
+	allIngListView->listView()->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	layout2->addWidget( allIngListView );
 
 	layout1 = new QVBoxLayout( );
@@ -92,6 +94,8 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	ingListView->listView() ->setRenameable( 0, false );
 	ingListView->listView() ->setRenameable( 1, true );
 	ingListView->listView() ->setRenameable( 2, true );
+	ingListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
+	ingListView->listView()->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	layout2->addWidget( ingListView );
 
 	languageChange();
