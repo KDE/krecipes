@@ -351,12 +351,12 @@ void BaseImporter::importUnitRatios( RecipeDB *db )
 	for ( UnitRatioList::const_iterator it = m_ratioList.begin(); it != m_ratioList.end(); ++it ) {
 		QString unitName1, unitName2;
 		for ( UnitList::const_iterator unit_it = m_unitList.begin(); unit_it != m_unitList.end(); ++unit_it ) {
-			if ( ( *it ).uID1 == ( *unit_it ).id() ) {
+			if ( ( *it ).unitId1() == ( *unit_it ).id() ) {
 				unitName1 = ( *unit_it ).name();
 				if ( !unitName2.isEmpty() )
 					break;
 			}
-			else if ( ( *it ).uID2 == ( *unit_it ).id() ) {
+			else if ( ( *it ).unitId2() == ( *unit_it ).id() ) {
 				unitName2 = ( *unit_it ).name();
 				if ( !unitName1.isEmpty() )
 					break;
@@ -369,10 +369,7 @@ void BaseImporter::importUnitRatios( RecipeDB *db )
 		//the unit needed for the ratio may not have been added, because the
 		//recipes chosen did not include the unit
 		if ( unitId1 != -1 && unitId2 != -1 ) {
-			UnitRatio ratio;
-			ratio.uID1 = unitId1;
-			ratio.uID2 = unitId2;
-			ratio.ratio = ( *it ).ratio;
+			UnitRatio ratio(unitId1, unitId2, ( *it ).ratio());
 			db->saveUnitRatio( &ratio );
 		}
 	}

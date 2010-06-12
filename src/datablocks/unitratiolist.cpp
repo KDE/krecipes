@@ -23,10 +23,10 @@ double UnitRatioList::getRatio( int uid1, int uid2 )
 		return ( 1.0 );
 	else {
 		for ( UnitRatioList::const_iterator ur_it = begin();ur_it != end(); ++ur_it ) {
-			if ( ( *ur_it ).uID1 == uid1 && ( *ur_it ).uID2 == uid2 )
-				return ( ( *ur_it ).ratio );
-			else if ( ( *ur_it ).uID1 == uid2 && ( *ur_it ).uID2 == uid1 )
-				return ( 1.0 / ( *ur_it ).ratio );
+			if ( ( *ur_it ).unitId1() == uid1 && ( *ur_it ).unitId2() == uid2 )
+				return ( ( *ur_it ).ratio() );
+			else if ( ( *ur_it ).unitId1() == uid2 && ( *ur_it ).unitId2() == uid1 )
+				return ( 1.0 / ( *ur_it ).ratio() );
 		}
 		return ( -1.0 );
 	}

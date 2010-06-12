@@ -1752,11 +1752,8 @@ void RecipeInputDialog::statusLinkClicked( const QUrl &link )
 		}
 		QPointer<CreateUnitConversionDialog> dlg = new CreateUnitConversionDialog( Element(database->unitName(unitFrom).name()), toUnits, this );
 		if ( dlg->exec() == QDialog::Accepted ) {
-			UnitRatio ratio;
-			ratio.uID1 = dlg->toUnitID();
-			ratio.uID2 = unitFrom;
-			ratio.ratio = dlg->ratio();
-			if (ratio.ratio >= 0 ) {
+			UnitRatio ratio(dlg->toUnitID(), unitFrom, dlg->ratio());
+			if (ratio.ratio() >= 0 ) {
 				database->saveUnitRatio(&ratio);
 			}
 		}

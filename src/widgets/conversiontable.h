@@ -34,7 +34,7 @@ public:
 	void setRatio( int ingID1, int ingID2, double ratio );
 	void setRatio( const UnitRatio &r )
 	{
-		setRatio( r.uID1, r.uID2, r.ratio );
+		setRatio( r.unitId1(), r.unitId2(), r.ratio() );
 	}
 	int getUnitID( int rc );
 	QString text( int r, int c ) const; //Reimplement, otherwise it won't work this way

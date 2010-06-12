@@ -149,24 +149,19 @@ void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
 	UnitRatioList ratioList;
 	database->loadUnitRatios( &ratioList, type );
 	for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ++ratio_it ) {
-		table->setRatio( ( *ratio_it ).uID1, ( *ratio_it ).uID2, ( *ratio_it ).ratio );
+		table->setRatio( ( *ratio_it ).unitId1(), ( *ratio_it ).unitId1(), ( *ratio_it ).ratio() );
 	}
 }
 
 void UnitsDialog::saveRatio( int r, int c, double value )
 {
 	ConversionTable *conversionTable = (ConversionTable*)sender();
-	UnitRatio ratio;
-
-	ratio.uID1 = conversionTable->getUnitID( r );
-	ratio.uID2 = conversionTable->getUnitID( c );
-	ratio.ratio = value;
+	UnitRatio ratio(conversionTable->getUnitID( r ),
+	                conversionTable->getUnitID( c ),
+	                value);
 	database->saveUnitRatio( &ratio );
 
-	UnitRatio reverse_ratio;
-	reverse_ratio.uID1 = ratio.uID2;
-	reverse_ratio.uID2 = ratio.uID1;
-	reverse_ratio.ratio = 1.0 / ratio.ratio;
+	UnitRatio reverse_ratio(ratio.reverse());
 	database->saveUnitRatio( &reverse_ratio );
 	conversionTable->setRatio( reverse_ratio );
 
