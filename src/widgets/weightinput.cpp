@@ -32,8 +32,8 @@ void WeightInput::emitValueChanged()
 	w.perAmount = amount().toDouble();
 
 	Unit u = unit();
-	w.perAmountUnitID = u.id;
-	w.perAmountUnit = (w.perAmount>1)?u.plural:u.name;
+	w.perAmountUnitID = u.id();
+	w.perAmountUnit = u.determineName(w.perAmount, /*useAbbrev=*/false);
 
 	Element prep;
 	w.prepMethod = prep.name;

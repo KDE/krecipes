@@ -103,10 +103,10 @@ void IngListViewItem::setAmount( double amount, double amount_offset )
 void IngListViewItem::setUnit( const Unit &unit )
 {
 	//### This shouldn't be necessary... the db backend should ensure this doesn't happen
-	if ( !unit.name.isEmpty() )
-		m_ing.units.name = unit.name;
-	if ( !unit.plural.isEmpty() )
-		m_ing.units.plural = unit.plural;
+	if ( !unit.name().isEmpty() )
+		m_ing.units.setName(unit.name());
+	if ( !unit.plural().isEmpty() )
+		m_ing.units.setPlural(unit.plural());
 }
 
 void IngListViewItem::setPrepMethod( const QString &prepMethod )
@@ -149,7 +149,7 @@ QString IngListViewItem::text( int column ) const
 		return amount_str;
 		break;
 	case 2:
-		return ( m_ing.amount+m_ing.amount_offset > 1 ) ? m_ing.units.plural : m_ing.units.name;
+		return m_ing.units.determineName(m_ing.amount+m_ing.amount_offset, /*useAbbrev=*/ false );
 		break;
 	case 3:
 		return m_ing.prepMethodList.join(",");

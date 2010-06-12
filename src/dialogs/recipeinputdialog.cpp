@@ -1017,7 +1017,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 				break;
 			}
 
-			QString approp_unit = new_ing.amount > 1 ? new_ing.units.plural : new_ing.units.name;
+			QString approp_unit = new_ing.units.determineName(new_ing.amount, /*useAbbrev=*/false);
 			if ( approp_unit != new_text.trimmed() )
 			{
 				Unit new_unit;
@@ -1025,7 +1025,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 
 				if ( new_id != -1 ) {
 					new_ing.units = new_unit;
-					new_ing.units.id = new_id;
+					new_ing.units.setId(new_id);
 
 					ing_item->setUnit( new_ing.units );
 
@@ -1357,7 +1357,7 @@ void RecipeInputDialog::slotIngredientParser()
 				usedGroups << (*it).group;
 			}
 			(*it).ingredientID = IngredientInputWidget::createNewIngredientIfNecessary((*it).name,database);
-			(*it).units.id = IngredientInputWidget::createNewUnitIfNecessary((*it).units.name,false,(*it).ingredientID,(*it).units,database);
+			(*it).units.setId(IngredientInputWidget::createNewUnitIfNecessary((*it).units.name(),false,(*it).ingredientID,(*it).units,database));
 
 			QList<int> prepIDs = IngredientInputWidget::createNewPrepIfNecessary((*it).prepMethodList,database);
 			QList<int>::const_iterator prep_id_it = prepIDs.constBegin();
@@ -1557,19 +1557,19 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 	for ( prop_it = ingPropertyList.begin(); prop_it != ingPropertyList.end(); ++prop_it ) {
 		Ingredient result;
 
-		QMap<int,bool>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id);
+		QMap<int,bool>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id());
 		if ( cache_it == ratioCache.constEnd() ) {
 			RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
-			ratioCache.insert((*prop_it).perUnit.id,status==RecipeDB::Success||status==RecipeDB::MismatchedPrepMethod);
+			ratioCache.insert((*prop_it).perUnit.id(),status==RecipeDB::Success||status==RecipeDB::MismatchedPrepMethod);
 
 			switch ( status ) {
 			case RecipeDB::Success: break;
 			case RecipeDB::MissingUnitConversion: {
-				if ( ing.units.type != Unit::Other && ing.units.type == (*prop_it).perUnit.type ) {
+				if ( ing.units.type() != Unit::Other && ing.units.type() == (*prop_it).perUnit.type() ) {
 					propertyStatusMapRed.insert(ing.ingredientID,
 						i18nc( "@info", "<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
-						,(ing.units.name.isEmpty()?i18n("-No unit-"):ing.units.name)
-						,((*prop_it).perUnit.name)
+						,(ing.units.name().isEmpty()?i18n("-No unit-"):ing.units.name())
+						,((*prop_it).perUnit.name())
 						,ing.name));
 				} else {
 					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
@@ -1581,16 +1581,16 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 						if ( usedIds.find(usedPair) != usedIds.end() )
 							continue;
 
-						QString toUnit = database->unitName((*weight_it).perAmountUnitID).name;
+						QString toUnit = database->unitName((*weight_it).perAmountUnitID).name();
 						if ( toUnit.isEmpty() ) toUnit = i18nc( "@info", "-No unit-");
 
-						QString fromUnit = database->unitName((*weight_it).weightUnitID).name;
+						QString fromUnit = database->unitName((*weight_it).weightUnitID).name();
 						if ( fromUnit.isEmpty() ) fromUnit = i18nc( "@info", "-No unit-");
 
-						QString ingUnit = ing.units.name;
+						QString ingUnit = ing.units.name();
 						if ( ingUnit.isEmpty() ) ingUnit = i18nc( "@info", "-No unit-");
 
-						QString propUnit = (*prop_it).perUnit.name;
+						QString propUnit = (*prop_it).perUnit.name();
 						if ( propUnit.isEmpty() ) propUnit = i18nc( "@info", "-No unit-");
 
 						missingConversions << conversionPath( ingUnit, toUnit, fromUnit, propUnit);
@@ -1746,11 +1746,11 @@ void RecipeInputDialog::statusLinkClicked( const QUrl &link )
 		for (int i = 1; i < idList.count(); ++i ) {
 			int id = idList[i].toInt();
 			if ( id != lastUnit ) {
-				toUnits << Element(database->unitName(id).name,id);
+				toUnits << Element(database->unitName(id).name(),id);
 				lastUnit = id;
 			}
 		}
-		QPointer<CreateUnitConversionDialog> dlg = new CreateUnitConversionDialog( Element(database->unitName(unitFrom).name), toUnits, this );
+		QPointer<CreateUnitConversionDialog> dlg = new CreateUnitConversionDialog( Element(database->unitName(unitFrom).name()), toUnits, this );
 		if ( dlg->exec() == QDialog::Accepted ) {
 			UnitRatio ratio;
 			ratio.uID1 = dlg->toUnitID();

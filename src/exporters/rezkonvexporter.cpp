@@ -246,7 +246,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 	//columns 9-19
 	bool found_translation = false;
 	for ( int i = 0; translate_units[ i ].english; i++ ) {
-		if ( translate_units[ i ].english == ing.units.name ||  translate_units[ i ].english_plural == ing.units.plural ||  translate_units[ i ].german == ing.units.name ||  translate_units[ i ].german_plural == ing.units.plural ) {
+		if ( translate_units[ i ].english == ing.units.name() ||  translate_units[ i ].english_plural == ing.units.plural() ||  translate_units[ i ].german == ing.units.name() ||  translate_units[ i ].german_plural == ing.units.plural() ) {
 			found_translation = true;
 			QString unit;
 			if ( ing.amount > 1 )
@@ -258,7 +258,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 		}
 	}
 	if ( !found_translation ) {
-		kDebug() << "Warning: unable to find German translation for: " << ing.units.name ;
+		kDebug() << "Warning: unable to find German translation for: " << ing.units.name() ;
 		kDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" ;
 		content += QString().fill(' ',9+1);
 	}
@@ -272,7 +272,7 @@ void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientD
 		ing_name += ", or"; //FIXME: what's 'or' in German?
 
 	if ( !found_translation )
-		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + ' ' );
+		ing_name.prepend( ing.units.determineName(ing.amount, /*useAbbrev=*/false) + ' ' );
 
 	//try and split the ingredient on a word boundary
 	int split_index;

@@ -61,8 +61,8 @@ public:
 	void setAmountUnit( double amount, const Unit &unit, const Element &prepMethod )
 	{
 		m_weight.perAmount = amount;
-		m_weight.perAmountUnitID = unit.id;
-		m_weight.perAmountUnit = (m_weight.perAmount>1)?unit.plural:unit.name;
+		m_weight.perAmountUnitID = unit.id();
+		m_weight.perAmountUnit = unit.determineName(m_weight.perAmount, /*useAbbrev=*/false);
 		m_weight.prepMethodID = prepMethod.id;
 		m_weight.prepMethod = prepMethod.name;
 	}
@@ -70,8 +70,8 @@ public:
 	void setWeightUnit( double weight, const Unit &unit )
 	{
 		m_weight.weight = weight;
-		m_weight.weightUnitID = unit.id;
-		m_weight.weightUnit = (m_weight.weight>1)?unit.plural:unit.name;
+		m_weight.weightUnitID = unit.id();
+		m_weight.weightUnit = unit.determineName(m_weight.weight, /*useAbbrev=*/false);
 	}
 
 	virtual QString text( int c ) const
@@ -373,11 +373,11 @@ void EditPropertiesDialog:: reloadPropertyList( void )
 	for ( IngredientPropertyList::const_iterator prop_it = propertiesList.begin(); prop_it != propertiesList.end(); ++prop_it ) {
 		Q3ListViewItem * lastElement = propertyListView ->lastItem();
 		//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
-		( void ) new Q3ListViewItem( propertyListView, lastElement, (*prop_it).name, QString::number( (*prop_it).amount ), (*prop_it).units + QString( "/" ) + (*prop_it).perUnit.name, QString::number( (*prop_it).id ) );
+		( void ) new Q3ListViewItem( propertyListView, lastElement, (*prop_it).name, QString::number( (*prop_it).amount ), (*prop_it).units + QString( "/" ) + (*prop_it).perUnit.name(), QString::number( (*prop_it).id ) );
 		// Store the perUnits with the ID for using later
 		Element perUnitEl;
-		perUnitEl.id = (*prop_it).perUnit.id;
-		perUnitEl.name = (*prop_it).perUnit.name;
+		perUnitEl.id = (*prop_it).perUnit.id();
+		perUnitEl.name = (*prop_it).perUnit.name();
 		perUnitListBack->append( perUnitEl );
 
 	}
@@ -543,14 +543,14 @@ void EditPropertiesDialog::loadUSDAData()
 		if ( grams_id == -1 ) {
 			//FIXME: take advantage of abbreviations
 			Unit unit("g","g");
-			unit.type = Unit::Mass;
+			unit.setType(Unit::Mass);
 			db->createNewUnit( unit );
 			grams_id = db->lastInsertID();
 		}
 		else {
 			Unit unit = db->unitName(grams_id);
-			if ( unit.type != Unit::Mass ) {
-				unit.type = Unit::Mass;
+			if ( unit.type() != Unit::Mass ) {
+				unit.setType(Unit::Mass);
 				db->modUnit( unit );
 			}
 		}

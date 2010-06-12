@@ -74,15 +74,15 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			Ingredient result;
 
 			bool converted;
-			QMap<int,double>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id);
+			QMap<int,double>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id());
 			if ( cache_it == ratioCache.constEnd() ) {
 				RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
 				converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethodUsingApprox;
 
 				if ( converted )
-					ratioCache.insert((*prop_it).perUnit.id,result.amount / ing.amount);
+					ratioCache.insert((*prop_it).perUnit.id(),result.amount / ing.amount);
 				else
-					ratioCache.insert((*prop_it).perUnit.id,-1);
+					ratioCache.insert((*prop_it).perUnit.id(),-1);
 			}
 			else {
 				result.units = (*prop_it).perUnit;
@@ -98,20 +98,20 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 			IngredientProperty property;
 			property.id = (*prop_it).id;
 			property.name = (*prop_it).name;
-			property.perUnit.id = -1; // It's not per unit, it's total sum of the recipe
-			property.perUnit.name.clear(); // "
+			property.perUnit.setId(-1); // It's not per unit, it's total sum of the recipe
+			property.perUnit.setName(QString()); // "
 			property.units = (*prop_it).units;
 
 			Ingredient result;
 			bool converted;
-			QMap<int,double>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id);
+			QMap<int,double>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id());
 			if ( cache_it == ratioCache.constEnd() ) {
 				RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
 				converted = status == RecipeDB::Success || status == RecipeDB::MismatchedPrepMethodUsingApprox;
 				if ( converted )
-					ratioCache.insert((*prop_it).perUnit.id,result.amount / ing.amount);
+					ratioCache.insert((*prop_it).perUnit.id(),result.amount / ing.amount);
 				else
-					ratioCache.insert((*prop_it).perUnit.id,-1);
+					ratioCache.insert((*prop_it).perUnit.id(),-1);
 			}
 			else {
 				result.units = (*prop_it).perUnit;

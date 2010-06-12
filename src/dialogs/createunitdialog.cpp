@@ -101,10 +101,10 @@ Unit CreateUnitDialog::newUnit( void )
 		plural = name;
 
 	Unit new_unit = Unit( name, plural );
-	new_unit.name_abbrev = nameAbbrevEdit->text();
-	new_unit.plural_abbrev = pluralAbbrevEdit->text();
+	new_unit.setNameAbbrev(nameAbbrevEdit->text());
+	new_unit.setPluralAbbrev(pluralAbbrevEdit->text());
 
-	new_unit.type = (Unit::Type)typeComboBox->currentIndex();
+	new_unit.setType((Unit::Type)typeComboBox->currentIndex());
 
 	return new_unit;
 }

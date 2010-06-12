@@ -44,14 +44,14 @@ void UnitListView::load( int limit, int offset )
 	database->loadUnits( &unitList, Unit::All, limit, offset );
 
 	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {
-		if ( !( *it ).name.isEmpty() || !( *it ).plural.isEmpty() )
+		if ( !( *it ).name().isEmpty() || !( *it ).plural().isEmpty() )
 			createUnit( *it );
 	}
 }
 
 void UnitListView::checkCreateUnit( const Unit &el )
 {
-	if ( handleElement(el.name) ) { //only create this unit if the base class okays it
+	if ( handleElement(el.name()) ) { //only create this unit if the base class okays it
 		createUnit(el);
 	}
 }
@@ -101,7 +101,7 @@ void StdUnitListView::insertTypeComboBox( Q3ListViewItem* it )
 	typeComboBox->setGeometry( r );
 
 	UnitListViewItem *unit_it = (UnitListViewItem*)it;
-	typeComboBox->setCurrentIndex( unit_it->unit().type );
+	typeComboBox->setCurrentIndex( unit_it->unit().type() );
 
 	typeComboBox->show();
 }

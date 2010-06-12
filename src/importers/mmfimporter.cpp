@@ -223,9 +223,9 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 		}
 
 		if ( int(new_ingredient.amount) > 1 )
-			new_ingredient.units.plural = unit;
+			new_ingredient.units.setPlural(unit);
 		else
-			new_ingredient.units.name = unit;
+			new_ingredient.units.setName(unit);
 	}
 
 	//unit/name separator

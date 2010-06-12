@@ -278,25 +278,25 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 						if ( items & IngredientAmounts ) {
 							ing.amount = ingredientQuery.value( 3 ).toString().toDouble();
 							ing.amount_offset = ingredientQuery.value( 4 ).toString().toDouble();
-							ing.units.id = ingredientQuery.value( 5 ).toInt();
-							ing.units.type = (Unit::Type)ingredientQuery.value( 6 ).toInt();
+							ing.units.setId(ingredientQuery.value( 5 ).toInt());;
+							ing.units.setType((Unit::Type)ingredientQuery.value( 6 ).toInt());
 						}
 					}
 					else  {
 						ing.amount = ingredientQuery.value( 3 ).toString().toDouble();
 						ing.amount_offset = ingredientQuery.value( 4 ).toString().toDouble();
-						ing.units.id = ingredientQuery.value( 5 ).toInt();
-						ing.units.name = unescapeAndDecode( ingredientQuery.value( 6 ).toByteArray() );
-						ing.units.plural = unescapeAndDecode( ingredientQuery.value( 7 ).toByteArray() );
-						ing.units.name_abbrev = unescapeAndDecode( ingredientQuery.value( 8 ).toByteArray() );
-						ing.units.plural_abbrev = unescapeAndDecode( ingredientQuery.value( 9 ).toByteArray() );
-						ing.units.type = (Unit::Type)ingredientQuery.value( 10 ).toInt();
+						ing.units.setId(ingredientQuery.value( 5 ).toInt());
+						ing.units.setName(unescapeAndDecode( ingredientQuery.value( 6 ).toByteArray() ));
+						ing.units.setPlural(unescapeAndDecode( ingredientQuery.value( 7 ).toByteArray() ));
+						ing.units.setNameAbbrev(unescapeAndDecode( ingredientQuery.value( 8 ).toByteArray() ));
+						ing.units.setPluralAbbrev(unescapeAndDecode( ingredientQuery.value( 9 ).toByteArray() ));
+						ing.units.setType((Unit::Type)ingredientQuery.value( 10 ).toInt());
 
 						//if we don't have both name and plural, use what we have as both
-						if ( ing.units.name.isEmpty() )
-							ing.units.name = ing.units.plural;
-						else if ( ing.units.plural.isEmpty() )
-							ing.units.plural = ing.units.name;
+						if ( ing.units.name().isEmpty() )
+							ing.units.setName(ing.units.plural());
+						else if ( ing.units.plural().isEmpty() )
+							ing.units.setPlural(ing.units.name());
 
 						ing.groupID = ingredientQuery.value( 11 ).toInt();
 						if ( ing.groupID != -1 ) {
@@ -534,12 +534,12 @@ void QSqlRecipeDB::loadPossibleUnits( int ingredientID, UnitList *list )
 	if ( unitToLoad.isActive() ) {
 		while ( unitToLoad.next() ) {
 			Unit unit;
-			unit.id = unitToLoad.value( 0 ).toInt();
-			unit.name = unescapeAndDecode( unitToLoad.value( 1 ).toByteArray() );
-			unit.plural = unescapeAndDecode( unitToLoad.value( 2 ).toByteArray() );
-			unit.name_abbrev = unescapeAndDecode( unitToLoad.value( 3 ).toByteArray() );
-			unit.plural_abbrev = unescapeAndDecode( unitToLoad.value( 4 ).toByteArray() );
-			unit.type = (Unit::Type) unitToLoad.value( 5 ).toInt();
+			unit.setId(unitToLoad.value( 0 ).toInt());
+			unit.setName(unescapeAndDecode( unitToLoad.value( 1 ).toByteArray() ));
+			unit.setPlural(unescapeAndDecode( unitToLoad.value( 2 ).toByteArray() ));
+			unit.setNameAbbrev(unescapeAndDecode( unitToLoad.value( 3 ).toByteArray() ));
+			unit.setPluralAbbrev(unescapeAndDecode( unitToLoad.value( 4 ).toByteArray() ));
+			unit.setType((Unit::Type) unitToLoad.value( 5 ).toInt());
 
 			list->append( unit );
 		}
@@ -697,7 +697,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		          .arg( ( *ing_it ).ingredientID )
 		          .arg( ( *ing_it ).amount )
 		          .arg( ( *ing_it ).amount_offset )
-		          .arg( ( *ing_it ).units.id )
+		          .arg( ( *ing_it ).units.id() )
 		          .arg( order_index )
 		          .arg( ( *ing_it ).groupID );
 		recipeToSave.exec( command );
@@ -722,7 +722,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 				.arg( ( *sub_it ).ingredientID )
 				.arg( ( *sub_it ).amount )
 				.arg( ( *sub_it ).amount_offset )
-				.arg( ( *sub_it ).units.id )
+				.arg( ( *sub_it ).units.id() )
 				.arg( order_index )
 				.arg( ( *sub_it ).groupID )
 				.arg( (*ing_it).ingredientID );
@@ -1039,12 +1039,12 @@ void QSqlRecipeDB::loadUnits( UnitList *list, Unit::Type type, int limit, int of
 	if ( unitToLoad.isActive() ) {
 		while ( unitToLoad.next() ) {
 			Unit unit;
-			unit.id = unitToLoad.value( 0 ).toInt();
-			unit.name = unescapeAndDecode( unitToLoad.value( 1 ).toByteArray() );
-			unit.name_abbrev = unescapeAndDecode( unitToLoad.value( 2 ).toByteArray() );
-			unit.plural = unescapeAndDecode( unitToLoad.value( 3 ).toByteArray() );
-			unit.plural_abbrev = unescapeAndDecode( unitToLoad.value( 4 ).toByteArray() );
-			unit.type = (Unit::Type)unitToLoad.value( 5 ).toInt();
+			unit.setId(unitToLoad.value( 0 ).toInt());
+			unit.setName(unescapeAndDecode( unitToLoad.value( 1 ).toByteArray() ));
+			unit.setNameAbbrev(unescapeAndDecode( unitToLoad.value( 2 ).toByteArray() ));
+			unit.setPlural(unescapeAndDecode( unitToLoad.value( 3 ).toByteArray() ));
+			unit.setPluralAbbrev(unescapeAndDecode( unitToLoad.value( 4 ).toByteArray() ));
+			unit.setType((Unit::Type)unitToLoad.value( 5 ).toInt());
 			list->append( unit );
 		}
 	}
@@ -1276,9 +1276,9 @@ void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 			prop.name = unescapeAndDecode( propertiesToLoad.value( 1 ).toByteArray() );
 			prop.units = unescapeAndDecode( propertiesToLoad.value( 2 ).toByteArray() );
 			if ( usePerUnit ) {
-				prop.perUnit.id = propertiesToLoad.value( 3 ).toInt();
-				prop.perUnit.name = unescapeAndDecode( propertiesToLoad.value( 4 ).toByteArray() );
-				prop.perUnit.type = (Unit::Type)propertiesToLoad.value( 5 ).toInt();
+				prop.perUnit.setId(propertiesToLoad.value( 3 ).toInt());
+				prop.perUnit.setName(unescapeAndDecode( propertiesToLoad.value( 4 ).toByteArray() ));
+				prop.perUnit.setType((Unit::Type)propertiesToLoad.value( 5 ).toInt());
 			}
 
 			if ( ingredientID >= -1 )
@@ -1467,15 +1467,15 @@ void QSqlRecipeDB::removePrepMethod( int prepMethodID )
 
 void QSqlRecipeDB::createNewUnit( const Unit &unit )
 {
-	QString real_name = unit.name.left( maxUnitNameLength() ).trimmed();
-	QString real_plural = unit.plural.left( maxUnitNameLength() ).trimmed();
-	QString real_name_abbrev = unit.name_abbrev.left( maxUnitNameLength() ).trimmed();
-	QString real_plural_abbrev = unit.plural_abbrev.left( maxUnitNameLength() ).trimmed();
+	QString real_name = unit.name().left( maxUnitNameLength() ).trimmed();
+	QString real_plural = unit.plural().left( maxUnitNameLength() ).trimmed();
+	QString real_name_abbrev = unit.nameAbbrev().left( maxUnitNameLength() ).trimmed();
+	QString real_plural_abbrev = unit.pluralAbbrev().left( maxUnitNameLength() ).trimmed();
 
 	Unit new_unit( real_name, real_plural );
-	new_unit.name_abbrev = real_name_abbrev;
-	new_unit.plural_abbrev = real_plural_abbrev;
-	new_unit.type = unit.type;
+	new_unit.setNameAbbrev(real_name_abbrev);
+	new_unit.setPluralAbbrev(real_plural_abbrev);
+	new_unit.setType(unit.type());
 
 	if ( real_name.isEmpty() )
 		real_name = real_plural;
@@ -1497,12 +1497,12 @@ void QSqlRecipeDB::createNewUnit( const Unit &unit )
 	   + "'," + real_name_abbrev
 	   + ",'" + escapeAndEncode( real_plural )
 	   + "'," + real_plural_abbrev
-	   + ',' + QString::number(unit.type)
+	   + ',' + QString::number(unit.type())
 	   + ");";
 
 	QSqlQuery unitToCreate( command, *database);
 
-	new_unit.id = lastInsertID();
+	new_unit.setId(lastInsertID());
 	emit unitCreated( new_unit );
 }
 
@@ -1511,15 +1511,15 @@ void QSqlRecipeDB::modUnit( const Unit &unit )
 {
 	QSqlQuery unitQuery( QString(), *database);
 
-	QString real_name = unit.name.left( maxUnitNameLength() ).trimmed();
-	QString real_plural = unit.plural.left( maxUnitNameLength() ).trimmed();
-	QString real_name_abbrev = unit.name_abbrev.left( maxUnitNameLength() ).trimmed();
-	QString real_plural_abbrev = unit.plural_abbrev.left( maxUnitNameLength() ).trimmed();
+	QString real_name = unit.name().left( maxUnitNameLength() ).trimmed();
+	QString real_plural = unit.plural().left( maxUnitNameLength() ).trimmed();
+	QString real_name_abbrev = unit.nameAbbrev().left( maxUnitNameLength() ).trimmed();
+	QString real_plural_abbrev = unit.pluralAbbrev().left( maxUnitNameLength() ).trimmed();
 
-	Unit newUnit( real_name, real_plural, unit.id );
-	newUnit.type = unit.type;
-	newUnit.name_abbrev = real_name_abbrev;
-	newUnit.plural_abbrev = real_plural_abbrev;
+	Unit newUnit( real_name, real_plural, unit.id() );
+	newUnit.setType(unit.type());
+	newUnit.setNameAbbrev(real_name_abbrev);
+	newUnit.setPluralAbbrev(real_plural_abbrev);
 
 	if ( real_name_abbrev.isEmpty() )
 		real_name_abbrev = "NULL";
@@ -1535,11 +1535,11 @@ void QSqlRecipeDB::modUnit( const Unit &unit )
 	  .arg(real_name_abbrev)
 	  .arg(escapeAndEncode(real_plural))
 	  .arg(real_plural_abbrev)
-	  .arg(unit.id)
-	  .arg(unit.type);
+	  .arg(unit.id())
+	  .arg(unit.type());
 	unitQuery.exec( command );
 
-	emit unitRemoved( unit.id );
+	emit unitRemoved( unit.id() );
 	emit unitCreated( newUnit );
 }
 
@@ -1665,7 +1665,7 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 {
 	QString command = QString( "SELECT amount,weight,prep_method_id,unit_id FROM ingredient_weights WHERE ingredient_id=%1 AND (unit_id=%2 OR weight_unit_id=%3)" )
 	   .arg( ing.ingredientID )
-	   .arg( ing.units.id ).arg( ing.units.id );
+	   .arg( ing.units.id() ).arg( ing.units.id() );
 
 	QSqlQuery query( command, *database);
 
@@ -1681,7 +1681,7 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 				double amount = query.value( 0 ).toString().toDouble();
 
 				//'per_amount' -> 'weight' conversion
-				if ( query.value( 3 ).toInt() == ing.units.id )
+				if ( query.value( 3 ).toInt() == ing.units.id() )
 					convertedAmount = query.value( 1 ).toString().toDouble() * ing.amount / amount;
 				//'weight' -> 'per_amount' conversion
 				else
@@ -1691,7 +1691,7 @@ double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproxima
 			}
 			if ( prepMethodID == -1 ) {
 				//'per_amount' -> 'weight' conversion
-				if ( query.value( 3 ).toInt() == ing.units.id )
+				if ( query.value( 3 ).toInt() == ing.units.id() )
 					convertedAmount = query.value( 1 ).toString().toDouble() * ing.amount / query.value( 0 ).toString().toDouble();
 				//'weight' -> 'per_amount' conversion
 				else
@@ -1939,15 +1939,15 @@ Unit QSqlRecipeDB::unitName( int ID )
 		Unit unit( unescapeAndDecode( toLoad.value( 0 ).toByteArray() ), unescapeAndDecode( toLoad.value( 1 ).toByteArray() ) );
 
 		//if we don't have both name and plural, use what we have as both
-		if ( unit.name.isEmpty() )
-			unit.name = unit.plural;
-		else if ( unit.plural.isEmpty() )
-			unit.plural = unit.name;
+		if ( unit.name().isEmpty() )
+			unit.setName(unit.plural());
+		else if ( unit.plural().isEmpty() )
+			unit.setPlural(unit.name());
 
-		unit.name_abbrev = unescapeAndDecode( toLoad.value( 2 ).toByteArray() );
-		unit.plural_abbrev = unescapeAndDecode( toLoad.value( 3 ).toByteArray() );
-		unit.type = (Unit::Type) toLoad.value( 4 ).toInt();
-		unit.id = ID;
+		unit.setNameAbbrev(unescapeAndDecode( toLoad.value( 2 ).toByteArray() ));
+		unit.setPluralAbbrev(unescapeAndDecode( toLoad.value( 3 ).toByteArray() ));
+		unit.setType((Unit::Type) toLoad.value( 4 ).toInt());
+		unit.setId(ID);
 
 		return unit;
 	}

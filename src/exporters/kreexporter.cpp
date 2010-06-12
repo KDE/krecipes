@@ -92,7 +92,6 @@ QString KreExporter::generateIngredient( const IngredientData &ing )
 		xml += "<max>"+MixedNumber( ing.amount + ing.amount_offset ).toString( m_number_format, m_locale_aware_numbers )+"</max>";
 	}
 	xml += "</amount>\n";
-	QString unit_str = ( ing.amount+ing.amount_offset > 1 ) ? ing.units.plural : ing.units.name;
 
 	KConfigGroup config(KGlobal::config(),"Formatting");
 

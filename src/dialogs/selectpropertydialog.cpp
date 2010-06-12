@@ -107,7 +107,7 @@ int SelectPropertyDialog::perUnitsID()
 	int comboCount = perUnitsBox->count();
 	for (int i = 0; i < comboCount; ++i) {
 		if (perUnitsBox->currentText() == perUnitsBox->itemText(i))
-			return unitListBack->at( i ).id;
+			return unitListBack->at( i ).id();
 	}
 
 	//new unit, add it to the database
@@ -138,7 +138,7 @@ void SelectPropertyDialog::loadProperties( IngredientPropertyList *propertyList 
 void SelectPropertyDialog::loadUnits( UnitList *unitList )
 {
 	for ( UnitList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it ) {
-		QString unitName = ( *unit_it ).name;
+		QString unitName = ( *unit_it ).name();
 		if ( unitName.isEmpty() ) {
 			if ( m_showEmpty == ShowEmptyUnit )
 				unitName = ' '+i18nc("@item", "-No unit-");
@@ -151,7 +151,7 @@ void SelectPropertyDialog::loadUnits( UnitList *unitList )
 
 		// Store with index for using later
 		Unit newUnit( *unit_it );
-		newUnit.name = unitName;
+		newUnit.setName(unitName);
 		unitListBack->append( newUnit );
 	}
 }

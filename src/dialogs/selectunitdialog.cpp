@@ -67,7 +67,7 @@ int SelectUnitDialog::unitID( void )
 void SelectUnitDialog::loadUnits( const UnitList &unitList )
 {
 	for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it ) {
-		QString unitName = ( *unit_it ).name;
+		QString unitName = ( *unit_it ).name();
 		if ( unitName.isEmpty() ) {
 			if ( m_showEmpty == ShowEmptyUnit )
 				unitName = ' '+i18nc("@item", "-No unit-");
@@ -75,7 +75,7 @@ void SelectUnitDialog::loadUnits( const UnitList &unitList )
 				continue;
 		}
 
-		( void ) new Q3ListViewItem( unitChooseView, QString::number( ( *unit_it ).id ), unitName );
+		( void ) new Q3ListViewItem( unitChooseView, QString::number( ( *unit_it ).id() ), unitName );
 	}
 }
 

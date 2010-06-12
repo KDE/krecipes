@@ -35,8 +35,8 @@ void UnitComboBox::popup()
 Unit UnitComboBox::unit() const
 {
 	Unit u;
-	u.name = currentText();
-	u.id = id(currentIndex());
+	u.setName(currentText());
+	u.setId(id(currentIndex()));
 	return u;
 }
 
@@ -62,8 +62,8 @@ void UnitComboBox::loadUnits( const UnitList &unitList )
 {
 	int row = 0;
 	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {
-		insertItem( count(), (*it).name );
-		unitComboRows.insert( row, (*it).id ); // store unit id's in the combobox position to obtain the unit id later
+		insertItem( count(), (*it).name() );
+		unitComboRows.insert( row, (*it).id() ); // store unit id's in the combobox position to obtain the unit id later
 		row++;
 	}
 }
@@ -88,9 +88,9 @@ int UnitComboBox::id( int row ) const
 
 void UnitComboBox::createUnit( const Unit &element )
 {
-	int row = findInsertionPoint( element.name );
+	int row = findInsertionPoint( element.name() );
 
-	insertItem( row, element.name );
+	insertItem( row, element.name() );
 
 	//now update the map by pushing everything after this item down
 	QMap<int, int> new_map;
@@ -102,7 +102,7 @@ void UnitComboBox::createUnit( const Unit &element )
 			new_map.insert( it.key(), it.value() );
 	}
 	unitComboRows = new_map;
-	unitComboRows.insert( row, element.id );
+	unitComboRows.insert( row, element.id() );
 }
 
 void UnitComboBox::removeUnit( int id )

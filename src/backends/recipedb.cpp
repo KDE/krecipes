@@ -176,11 +176,11 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 {
 	result = from;
 
-	if ( from.units.id == to.id )
+	if ( from.units.id() == to.id() )
 		return Success;
 
-	if ( from.units.type == to.type && to.type != Unit::Other ) {
-		double ratio = unitRatio( from.units.id, to.id );
+	if ( from.units.type() == to.type() && to.type() != Unit::Other ) {
+		double ratio = unitRatio( from.units.id(), to.id() );
 		if ( ratio > 0 ) {
 			result.amount = from.amount * ratio;
 			result.units = to;
@@ -189,11 +189,11 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 		}
 		else {
 			kDebug()<<"Unit conversion failed, you should probably update your unit conversion table.";
-			kDebug()<<from.units.id<<" to "<<to.id;
+			kDebug()<<from.units.id()<<" to "<<to.id();
 			return MissingUnitConversion;
 		}
 	}
-	else if ( to.type == Unit::Mass || from.units.type == Unit::Mass ) {
+	else if ( to.type() == Unit::Mass || from.units.type() == Unit::Mass ) {
 		if ( from.ingredientID == -1 )
 			return MissingIngredient;
 
@@ -208,11 +208,11 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 
 		for ( WeightList::const_iterator it = idList.begin(); it != idList.end(); ++it ) {
 			//get conversion order correct (i.e., Mass -> Volume instead of Volume -> Mass, depending on unit type)
-			int first   = (to.type == Unit::Mass)?(*it).perAmountUnitID:(*it).weightUnitID;
-			int second  = (to.type == Unit::Mass)?(*it).weightUnitID:(*it).perAmountUnitID;
-			double tryFromToWeightRatio = unitRatio( from.units.id, first );
+			int first   = (to.type() == Unit::Mass)?(*it).perAmountUnitID:(*it).weightUnitID;
+			int second  = (to.type() == Unit::Mass)?(*it).weightUnitID:(*it).perAmountUnitID;
+			double tryFromToWeightRatio = unitRatio( from.units.id(), first );
 			if ( tryFromToWeightRatio > 0 ) {
-				weightToToRatio = unitRatio( second, to.id );
+				weightToToRatio = unitRatio( second, to.id() );
 				fromToWeightRatio = tryFromToWeightRatio;
 				unitID = first;
 
@@ -229,7 +229,7 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 
 		Ingredient i;
 		i.ingredientID = from.ingredientID;
-		i.units.id = unitID;
+		i.units.setId(unitID);
 		i.amount = from.amount * fromToWeightRatio;
 		i.prepMethodList = from.prepMethodList;
 		result.amount = ingredientWeight( i, &wasApproximated ) * weightToToRatio;
@@ -244,20 +244,20 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 	}
 	else {
 		QString to_str;
-		switch ( to.type ) {
+		switch ( to.type() ) {
 		case Unit::Other: to_str = "Other"; break;
 		case Unit::Mass: to_str = "Mass"; break;
 		case Unit::Volume: to_str = "Volume"; break;
 		case Unit::All: kDebug()<<"Code error: trying to convert to unit of type 'All'"; return InvalidTypes;
 		}
 		QString from_str;
-		switch ( from.units.type ) {
+		switch ( from.units.type() ) {
 		case Unit::Other: from_str = "Other"; break;
 		case Unit::Mass: from_str = "Mass"; break;
 		case Unit::Volume: from_str = "Volume"; break;
 		case Unit::All: kDebug()<<"Code error: trying to convert from unit of type 'All'"; return InvalidTypes;
 		}
-		kDebug()<<"Can't handle conversion from "<<from_str<<'('<<from.units.id<<") to "<<to_str<<'('<<to.id<<')';
+		kDebug()<<"Can't handle conversion from "<<from_str<<'('<<from.units.id()<<") to "<<to_str<<'('<<to.id()<<')';
 
 		return InvalidTypes;
 	}
@@ -1024,15 +1024,15 @@ int createUnit( const QString &name, Unit::Type type, RecipeDB *database )
 	if ( assigned_id == -1 )  //create unit since it doesn't exist
 	{
 		Unit unit(name, name);
-		unit.type = type;
+		unit.setType(type);
 		database->createNewUnit( unit );
 		assigned_id = database->lastInsertID();
 	}
 	//keep what the user specified if the type here is Other
 	else if ( type != Unit::Other ) {
 		Unit unit = database->unitName(assigned_id);
-		if ( unit.type != type ) {
-			unit.type = type;
+		if ( unit.type() != type ) {
+			unit.setType(type);
 			database->modUnit( unit );
 		}
 	}

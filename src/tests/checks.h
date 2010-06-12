@@ -98,8 +98,8 @@ void check( const IngredientData &ing, const IngredientData &base_ing, int ing_n
 	check( QString::number(ing_num)+": Ingredient name", ing.name, base_ing.name );
 	check( QString::number(ing_num)+": Ingredient amount", ing.amount,base_ing.amount );
 	check( QString::number(ing_num)+": Ingredient amount_offset", ing.amount_offset,base_ing.amount_offset );
-	check( QString::number(ing_num)+": Ingredient singular unit", ing.units.name, base_ing.units.name );
-	check( QString::number(ing_num)+": Ingredient plural unit", ing.units.plural, base_ing.units.plural );
+	check( QString::number(ing_num)+": Ingredient singular unit", ing.units.name(), base_ing.units.name() );
+	check( QString::number(ing_num)+": Ingredient plural unit", ing.units.plural(), base_ing.units.plural() );
 	check( QString::number(ing_num)+": Ingredient group", ing.group, base_ing.group );
 
 	ElementList::const_iterator prep_it = ing.prepMethodList.begin();

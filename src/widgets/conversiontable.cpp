@@ -76,9 +76,9 @@ void ConversionTable::unitCreated( const Unit &unit )
 {
 	insertColumns( numCols() );
 	insertRows( numRows() );
-	unitIDs.append( unit.id );
-	horizontalHeader() ->setLabel( numRows() - 1, unit.name );
-	verticalHeader() ->setLabel( numCols() - 1, unit.name );
+	unitIDs.append( unit.id() );
+	horizontalHeader() ->setLabel( numRows() - 1, unit.name() );
+	verticalHeader() ->setLabel( numCols() - 1, unit.name() );
 }
 
 Q3TableItem* ConversionTable::item( int r, int c ) const

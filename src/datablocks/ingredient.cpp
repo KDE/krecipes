@@ -28,7 +28,7 @@ IngredientData::IngredientData( const QString &_name, double _amount, const Unit
 		units( _units ),
 		groupID( -1 )
 {
-units.id=_unitID;
+    units.setId(_unitID);
 }
 
 //compare also using the group id because there may be the same ingredient in a list multiple times, but each in a different group

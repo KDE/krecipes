@@ -67,7 +67,7 @@ void RecipeMLExporter::createIngredient( QDomElement &ing_tag, const IngredientD
 
 	QDomElement unit_tag = doc.createElement( "unit" );
 	amt_tag.appendChild( unit_tag );
-	unit_tag.appendChild( doc.createTextNode( ( ing.amount > 1 ) ? ing.units.plural : ing.units.name ) );
+	unit_tag.appendChild( doc.createTextNode( ing.units.determineName(ing.amount, /*useAbbrev=*/false ) ) );
 
 	QDomElement item_tag = doc.createElement( "item" );
 	item_tag.appendChild( doc.createTextNode( ing.name ) );

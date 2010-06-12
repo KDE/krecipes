@@ -98,7 +98,7 @@ QString CookMLExporter::createContent( const RecipeList& recipes )
 		for ( IngredientList::const_iterator ing_it = ( *recipe_it ).ingList.begin(); ing_it != ( *recipe_it ).ingList.end(); ++ing_it ) {
 			QDomElement ingredient_tag = doc.createElement( "ingredient" );
 			ingredient_tag.setAttribute( "qty", QString::number( ( *ing_it ).amount ) );
-			ingredient_tag.setAttribute( "unit", ( ( *ing_it ).amount > 1 ) ? ( *ing_it ).units.plural : ( *ing_it ).units.name );
+			ingredient_tag.setAttribute( "unit", (*ing_it).units.determineName(( *ing_it ).amount, /*useAbbrev=*/false) );
 			ingredient_tag.setAttribute( "item", ( *ing_it ).name );
 			ingredient_tag.setAttribute( "preparation", ( *ing_it ).prepMethodList.join(",") );
 			part_tag.appendChild( ingredient_tag );

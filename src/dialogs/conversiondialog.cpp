@@ -133,11 +133,11 @@ void ConversionDialog::convert()
 	switch ( m_database->convertIngredientUnits( ing, unit, result ) ) {
 	case RecipeDB::Success:
 		resultLabel->setText( i18nc( "@label:textbox", "<b>Result:</b>" ) );
-		resultText->setText(QString::number(result.amount)+' '+((result.amount>1)?result.units.plural:result.units.name));
+		resultText->setText(QString::number(result.amount)+' '+result.units.determineName(result.amount, /*useAbbrev=*/false));
 		break;
 	case RecipeDB::MismatchedPrepMethodUsingApprox:
 		resultLabel->setText( i18nc( "@label:textbox",  "<b>Approximated result:</b>" ) );
-		resultText->setText(QString::number(result.amount)+' '+((result.amount>1)?result.units.plural:result.units.name));
+		resultText->setText(QString::number(result.amount)+' '+result.units.determineName(result.amount, /*useAbbrev=*/false));
 		break;
 	case RecipeDB::MissingUnitConversion:
 		resultLabel->setText( i18nc( "@label:textbox", "<b>Error:</b>" ) );

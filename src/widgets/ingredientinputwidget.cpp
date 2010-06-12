@@ -306,21 +306,21 @@ void IngredientInput::loadUnitListCombo()
 
 		//Populate this data into the ComboBox
 		for ( UnitList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it ) {
-			unitBox->insertItem( unitBox->count(), ( *unit_it ).name );
-			unitBox->completionObject() ->addItem( ( *unit_it ).name );
-			if ( ( *unit_it ).name != (*unit_it ).plural ) {
-				unitBox->insertItem( unitBox->count(), ( *unit_it ).plural );
-				unitBox->completionObject() ->addItem( ( *unit_it ).plural );
+			unitBox->insertItem( unitBox->count(), ( *unit_it ).name() );
+			unitBox->completionObject() ->addItem( ( *unit_it ).name() );
+			if ( ( *unit_it ).name() != (*unit_it ).plural() ) {
+				unitBox->insertItem( unitBox->count(), ( *unit_it ).plural() );
+				unitBox->completionObject() ->addItem( ( *unit_it ).plural() );
 			}
 
-			if ( !( *unit_it ).name_abbrev.isEmpty() ) {
-				unitBox->insertItem( unitBox->count(), ( *unit_it ).name_abbrev );
-				unitBox->completionObject() ->addItem( ( *unit_it ).name_abbrev );
+			if ( !( *unit_it ).nameAbbrev().isEmpty() ) {
+				unitBox->insertItem( unitBox->count(), ( *unit_it ).nameAbbrev() );
+				unitBox->completionObject() ->addItem( ( *unit_it ).nameAbbrev() );
 			}
-			if ( !(*unit_it ).plural_abbrev.isEmpty() &&
-				( *unit_it ).name_abbrev != (*unit_it ).plural_abbrev ) {
-				unitBox->insertItem( unitBox->count(), ( *unit_it ).plural_abbrev );
-				unitBox->completionObject() ->addItem( ( *unit_it ).plural_abbrev );
+			if ( !(*unit_it ).pluralAbbrev().isEmpty() &&
+				( *unit_it ).nameAbbrev() != (*unit_it ).pluralAbbrev() ) {
+				unitBox->insertItem( unitBox->count(), ( *unit_it ).pluralAbbrev() );
+				unitBox->completionObject() ->addItem( ( *unit_it ).pluralAbbrev() );
 			}
 
 		}
@@ -442,8 +442,8 @@ void IngredientInputWidget::addIngredient()
 			ing.ingredientID = createNewIngredientIfNecessary(ing.name,database);
 
 			bool plural = ing.amount+ing.amount_offset > 1;
-			ing.units.id = createNewUnitIfNecessary( (plural)?ing.units.plural:ing.units.name, plural, ing.ingredientID, ing.units,database );
-			if ( ing.units.id == -1 )  // this will happen if the dialog to create a unit was cancelled
+			ing.units.setId(createNewUnitIfNecessary( ing.units.determineName(ing.amount+ing.amount_offset, false), plural, ing.ingredientID, ing.units,database ));
+			if ( ing.units.id() == -1 )  // this will happen if the dialog to create a unit was cancelled
 				return ;
 
 			QList<int> prepIDs = createNewPrepIfNecessary( ing.prepMethodList,database );

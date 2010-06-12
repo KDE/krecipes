@@ -132,8 +132,8 @@ void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
 	IDList unitIDs; // We need to store these in the table, so rows and cols are identified by unitID, not name.
 	table->clear();
 	for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it ) {
-		unitNames.append( ( *unit_it ).name );
-		unitIDs.append( ( *unit_it ).id ); // append the element
+		unitNames.append( ( *unit_it ).name() );
+		unitIDs.append( ( *unit_it ).id() ); // append the element
 	}
 
 	// Resize the table

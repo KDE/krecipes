@@ -149,7 +149,7 @@ void RefineShoppingListDialog::loadData()
 				amount_str = beautify( KGlobal::locale() ->formatNumber( ( *it ).amount, 5 ) );
 		}
 
-		Q3ListViewItem *new_item = new Q3ListViewItem( ingListView->listView(), ( *it ).name, amount_str, ( *it ).amount > 1 ? ( *it ).units.plural : ( *it ).units.name );
+		Q3ListViewItem *new_item = new Q3ListViewItem( ingListView->listView(), ( *it ).name, amount_str, ( *it ).units.determineName( (*it ).amount, false ) );
 		item_ing_map.insert( new_item, it );
 	}
 }
@@ -211,9 +211,9 @@ void RefineShoppingListDialog::itemRenamed( Q3ListViewItem* item, const QString 
 		IngredientList::iterator found_it = *item_ing_map.find( item );
 
 		if ( ( *found_it ).amount > 1 )
-			( *found_it ).units.plural = new_text;
+			( *found_it ).units.setPlural(new_text);
 		else
-			( *found_it ).units.name = new_text;
+			( *found_it ).units.setName(new_text);
 	}
 }
 

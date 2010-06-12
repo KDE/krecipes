@@ -158,12 +158,12 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 		if ( !item->text(1).isEmpty() ) {
 			amountEdit->setAmount( MixedNumber::fromString(item->text(2)) );
 			Unit u;
-			u.id = item->text(3).toInt();
+			u.setId(item->text(3).toInt());
 			amountEdit->setUnit( u );
 		} else {
 			amountEdit->setAmount( MixedNumber(-1) );
 			Unit u;
-			u.id = -1;
+			u.setId(-1);
 			amountEdit->setUnit( u );
 		}
 
@@ -178,15 +178,15 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 
 			if ( amount.toDouble() <= 1e-5 ) {
 				amount = MixedNumber(-1);
-				unit.id = -1;
+				unit.setId(-1);
 
 				item->setText(1,QString());
 			} else {
-				item->setText(1,amount.toString()+' '+((amount.toDouble()>1)?unit.plural:unit.name));
+				item->setText(1,amount.toString()+' '+unit.determineName(amount.toDouble(), /*useAbbrev=*/false));
 			}
 
 			item->setText(2,amount.toString());
-			item->setText(3,QString::number(unit.id));
+			item->setText(3,QString::number(unit.id()));
 
 			IngredientList::iterator ing_it = m_item_ing_map[item];
 			(*ing_it).amount = amount.toDouble();

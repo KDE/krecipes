@@ -62,7 +62,7 @@ main(int argc, char *argv[])
 	ing.name = "granulated sugar";
 	ing.amount = 0.75;
 	ing.amount_offset = 0.25;
-	ing.units.name = "c.";
+	ing.units.setName("c.");
 	ing.groupID = 0; ing.group = "Dry Ingredients";
 	recipe.ingList.append( ing );
 
@@ -70,14 +70,14 @@ main(int argc, char *argv[])
 	ing2.name = "brown sugar";
 	ing2.amount = 1;
 	ing2.amount_offset = 0;
-	ing2.units.name = "c.";
+	ing2.units.setName("c.");
 	ing2.groupID = 0; ing2.group = "Dry Ingredients";
 	recipe.ingList.append( ing2 );
 
 	Ingredient ing3;
 	ing3.name = "all-purpose flour";
 	ing3.amount = 2;
-	ing3.units.plural = "c.";
+	ing3.units.setPlural("c.");
 	ing3.groupID = 0; ing3.group = "Dry Ingredients";
 	recipe.ingList.append( ing3 );
 
@@ -85,7 +85,7 @@ main(int argc, char *argv[])
 	ing4.name = "baking soda";
 	ing4.amount = 1;
 	ing4.amount_offset = 0;
-	ing4.units.name = "tsp.";
+	ing4.units.setName("tsp.");
 	ing4.groupID = 0; ing4.group = "Dry Ingredients";
 	recipe.ingList.append( ing4 );
 
@@ -93,7 +93,7 @@ main(int argc, char *argv[])
 	ing8.name = "shortening";
 	ing8.amount = 1;
 	ing8.amount_offset = 0;
-	ing8.units.name = "c.";
+	ing8.units.setName("c.");
 	ing8.prepMethodList.append( Element("softened") );
 	ing8.prepMethodList.append( Element("at room temperature") );
 	ing8.groupID = 1; ing8.group = "Fat & Liquids";
@@ -103,7 +103,7 @@ main(int argc, char *argv[])
 	ing6.name = "peanut butter";
 	ing6.amount = 1;
 	ing6.amount_offset = 0;
-	ing6.units.name = "c.";
+	ing6.units.setName("c.");
 	ing6.groupID = 1; ing6.group = "Fat & Liquids";
 	recipe.ingList.append( ing6 );
 
@@ -111,7 +111,7 @@ main(int argc, char *argv[])
 	ing5.name = "eggs";
 	ing5.amount = 2;
 	ing5.amount_offset = 0;
-	ing5.units.plural = "";
+	ing5.units.setPlural("");
 	ing5.groupID = 1; ing5.group = "Fat & Liquids";
 	recipe.ingList.append( ing5 );
 
@@ -119,7 +119,7 @@ main(int argc, char *argv[])
 	ing7.name = "vanilla extract";
 	ing7.amount = 1;
 	ing7.amount_offset = 0;
-	ing7.units.name = "tsp.";
+	ing7.units.setName("tsp.");
 	ing7.groupID = 1; ing7.group = "Fat & Liquids";
 	recipe.ingList.append( ing7 );
 
@@ -127,17 +127,17 @@ main(int argc, char *argv[])
 	ing9.name = "a";
 	ing9.amount = 1;
 	ing9.amount_offset = 0;
-	ing9.units.name = "cup";
+	ing9.units.setName("cup");
 	IngredientData ing9_1;
 	ing9_1.name = "b";
 	ing9_1.amount = 2;
 	ing9_1.amount_offset = 0;
-	ing9_1.units.plural = "cups";
+	ing9_1.units.setPlural("cups");
 	IngredientData ing9_2;
 	ing9_2.name = "c";
 	ing9_2.amount = 3;
 	ing9_2.amount_offset = 0;
-	ing9_2.units.plural = "cups";
+	ing9_2.units.setPlural("cups");
 	ing9.substitutes.append(ing9_1);
 	ing9.substitutes.append(ing9_2);
 	recipe.ingList.append( ing9 );

@@ -66,24 +66,24 @@ class UnitListViewItem : public Q3ListViewItem
 public:
 	UnitListViewItem( Q3ListView* qlv, const Unit &u ) : Q3ListViewItem( qlv ), m_unit(u)
 	{
-		updateType(m_unit.type);
+		updateType(m_unit.type());
 	}
 
 	virtual QString text( int column ) const
 	{
 		switch ( column ) {
-		case 0: return m_unit.name;
-		case 1: return m_unit.name_abbrev;
-		case 2: return m_unit.plural;
-		case 3: return m_unit.plural_abbrev;
+		case 0: return m_unit.name();
+		case 1: return m_unit.nameAbbrev();
+		case 2: return m_unit.plural();
+		case 3: return m_unit.pluralAbbrev();
 		case 4: return m_type;
-		case 5: return QString::number(m_unit.id);
+		case 5: return QString::number(m_unit.id());
 		default: return QString();
 		}
 	}
 
-	void setType( Unit::Type type ){ m_unit.type = type; updateType(type); }
-	Unit::Type type(){ return m_unit.type; }
+	void setType( Unit::Type type ){ m_unit.setType(type); updateType(type); }
+	Unit::Type type(){ return m_unit.type(); }
 
 	Unit unit() const { return m_unit; };
 	void setUnit( const Unit &u ) { m_unit = u; }
@@ -91,10 +91,10 @@ public:
 protected:
 	virtual void setText( int column, const QString &text ) {
 		switch ( column ) {
-		case 0: m_unit.name = text; break;
-		case 1: m_unit.name_abbrev = text; break;
-		case 2: m_unit.plural = text; break;
-		case 3: m_unit.plural_abbrev = text; break;
+		case 0: m_unit.setName(text); break;
+		case 1: m_unit.setNameAbbrev(text); break;
+		case 2: m_unit.setPlural(text); break;
+		case 3: m_unit.setPluralAbbrev(text); break;
 		}
 	}
 

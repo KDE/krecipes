@@ -169,15 +169,15 @@ void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgres
 		kapp->processEvents();
 	}
 
-	Unit real_unit( ing.units.name.left( max_units_length ), ing.units.plural.left( max_units_length ) );
-	if ( real_unit.name.isEmpty() )
-		real_unit.name = real_unit.plural;
-	else if ( real_unit.plural.isEmpty() )
-		real_unit.plural = real_unit.name;
+	Unit real_unit( ing.units.name().left( max_units_length ), ing.units.plural().left( max_units_length ) );
+	if ( real_unit.name().isEmpty() )
+		real_unit.setName(real_unit.plural());
+	else if ( real_unit.plural().isEmpty() )
+		real_unit.setPlural(real_unit.name());
 
-	int new_unit_id = db->findExistingUnitByName(real_unit.name);
+	int new_unit_id = db->findExistingUnitByName(real_unit.name());
 	if ( new_unit_id == -1 ) {
-		db->createNewUnit( Unit(real_unit.name, real_unit.plural) );
+		db->createNewUnit( Unit(real_unit.name(), real_unit.plural()) );
 		new_unit_id = db->lastInsertID();
 	}
 
@@ -197,7 +197,7 @@ void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgres
 		}
 	}
 
-	ing.units.id = new_unit_id;
+	ing.units.setId(new_unit_id);
 	ing.ingredientID = new_ing_id;
 
 	if ( !db->ingredientContainsUnit( new_ing_id, new_unit_id ) )
@@ -351,13 +351,13 @@ void BaseImporter::importUnitRatios( RecipeDB *db )
 	for ( UnitRatioList::const_iterator it = m_ratioList.begin(); it != m_ratioList.end(); ++it ) {
 		QString unitName1, unitName2;
 		for ( UnitList::const_iterator unit_it = m_unitList.begin(); unit_it != m_unitList.end(); ++unit_it ) {
-			if ( ( *it ).uID1 == ( *unit_it ).id ) {
-				unitName1 = ( *unit_it ).name;
+			if ( ( *it ).uID1 == ( *unit_it ).id() ) {
+				unitName1 = ( *unit_it ).name();
 				if ( !unitName2.isEmpty() )
 					break;
 			}
-			else if ( ( *it ).uID2 == ( *unit_it ).id ) {
-				unitName2 = ( *unit_it ).name;
+			else if ( ( *it ).uID2 == ( *unit_it ).id() ) {
+				unitName2 = ( *unit_it ).name();
 				if ( !unitName1.isEmpty() )
 					break;
 			}

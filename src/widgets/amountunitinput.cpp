@@ -47,10 +47,10 @@ void AmountUnitInput::setAmount( const MixedNumber &amount )
 
 void AmountUnitInput::setUnit( const Unit &unit )
 {
-	if ( unit.id == -1 )
+	if ( unit.id() == -1 )
 		unitBox->setCurrentItem(0);
 	else
-		unitBox->setSelected( unit.id );
+		unitBox->setSelected( unit.id() );
 
 }
 

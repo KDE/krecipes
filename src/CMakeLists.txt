@@ -222,6 +222,7 @@ set(UNIT_TESTS
     test_rating
     test_ratingcriteria
     test_yield
+    test_unit
     )
 
 macro(add_import_export_test _TEST)

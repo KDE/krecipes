@@ -148,16 +148,16 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 	//columns 9-10
 	bool found_short_form = false;
 	for ( int i = 0; unit_info[ i ].short_form; i++ ) {
-		if ( unit_info[ i ].expanded_form == ing.units.name ||
-		        unit_info[ i ].plural_expanded_form == ing.units.plural ||
-		        unit_info[ i ].short_form == ing.units.name ) {
+		if ( unit_info[ i ].expanded_form == ing.units.name() ||
+		        unit_info[ i ].plural_expanded_form == ing.units.plural() ||
+		        unit_info[ i ].short_form == ing.units.name() ) {
 			found_short_form = true;
 			content += QString( unit_info[ i ].short_form ).leftJustified( 2 ) + ' ';
 			break;
 		}
 	}
 	if ( !found_short_form ) {
-		kDebug() << "Warning: unable to find Meal-Master abbreviation for: " << ing.units.name ;
+		kDebug() << "Warning: unable to find Meal-Master abbreviation for: " << ing.units.name() ;
 		kDebug() << "         This ingredient (" << ing.name << ") will be exported without a unit" ;
 		content += "   ";
 	}
@@ -171,7 +171,7 @@ void MMFExporter::writeSingleIngredient( QString &content, const Ingredient &ing
 		ing_name += ", or";
 
 	if ( !found_short_form )
-		ing_name.prepend( ( ing.amount > 1 ? ing.units.plural : ing.units.name ) + ' ' );
+		ing_name.prepend( ing.units.determineName(ing.amount, /*useAbbrev=*/false) + ' ' );
 
 	//try and split the ingredient on a word boundary
 	int split_index;

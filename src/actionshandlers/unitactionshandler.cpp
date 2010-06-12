@@ -49,8 +49,8 @@ void UnitActionsHandler::createNew()
 
 		//check bounds first
 		if ( checkBounds( result )
-		  && database->findExistingUnitByName( result.name ) == -1
-		  && database->findExistingUnitByName( result.plural ) == -1
+		  && database->findExistingUnitByName( result.name() ) == -1
+		  && database->findExistingUnitByName( result.plural() ) == -1
 		) {
 			database->createNewUnit( result );
 		}
@@ -77,36 +77,36 @@ void UnitActionsHandler::rename()
 
 			Unit unit = origUnit;
 
-			if ( newUnit.name != origUnit.name ) {
-				unit.name = newUnit.name;
+			if ( newUnit.name() != origUnit.name() ) {
+				unit.setName(newUnit.name());
 				unit_item->setUnit( unit );
-				saveUnit( unit_item, newUnit.name, 0 );
+				saveUnit( unit_item, newUnit.name(), 0 );
 
 				//saveUnit will call database->modUnit which deletes the list item we were using
-				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id), 5 );
+				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id()), 5 );
 			}
 
-			if ( newUnit.plural != origUnit.plural ) {
-				unit.plural = newUnit.plural;
+			if ( newUnit.plural() != origUnit.plural() ) {
+				unit.setPlural(newUnit.plural());
 				unit_item->setUnit( unit );
-				saveUnit( unit_item, newUnit.plural, 2 );
-				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id), 5 );
+				saveUnit( unit_item, newUnit.plural(), 2 );
+				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id()), 5 );
 			}
 
-			if ( !newUnit.name_abbrev.trimmed().isEmpty() && newUnit.name_abbrev != origUnit.name_abbrev ) {
-				unit.name_abbrev = newUnit.name_abbrev;
+			if ( !newUnit.nameAbbrev().trimmed().isEmpty() && newUnit.nameAbbrev() != origUnit.nameAbbrev() ) {
+				unit.setNameAbbrev(newUnit.nameAbbrev());
 				unit_item->setUnit( unit );
-				saveUnit( unit_item, newUnit.name_abbrev, 1 );
-				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id), 5 );
+				saveUnit( unit_item, newUnit.nameAbbrev(), 1 );
+				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id()), 5 );
 			}
-			if ( !newUnit.plural_abbrev.trimmed().isEmpty() && newUnit.plural_abbrev != origUnit.plural_abbrev ) {
-				unit.plural_abbrev = newUnit.plural_abbrev;
+			if ( !newUnit.pluralAbbrev().trimmed().isEmpty() && newUnit.pluralAbbrev() != origUnit.pluralAbbrev() ) {
+				unit.setPluralAbbrev(newUnit.pluralAbbrev());
 				unit_item->setUnit( unit );
-				saveUnit( unit_item, newUnit.plural_abbrev, 3 );
-				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id), 5 );
+				saveUnit( unit_item, newUnit.pluralAbbrev(), 3 );
+				unit_item = (UnitListViewItem*) parentListView->findItem( QString::number(unit.id()), 5 );
 			}
-			if ( newUnit.type != unit.type ) {
-				unit.type = newUnit.type;
+			if ( newUnit.type() != unit.type() ) {
+				unit.setType(newUnit.type());
 				unit_item->setUnit( unit );
 				saveUnit( unit_item, unit_item->text(4), 5 );
 			}
@@ -121,7 +121,7 @@ void UnitActionsHandler::remove()
 	UnitListViewItem* it = (UnitListViewItem*) parentListView->currentItem();
 
 	if ( it ) {
-		int unitID = it->unit().id;
+		int unitID = it->unit().id();
 
 		ElementList recipeDependancies, propertyDependancies, weightDependancies;
 		database->findUnitDependancies( unitID, &propertyDependancies, &recipeDependancies, &weightDependancies );
@@ -161,15 +161,15 @@ void UnitActionsHandler::remove()
 
 bool UnitActionsHandler::checkBounds( const Unit &unit )
 {
-	if ( unit.name.length() > int(database->maxUnitNameLength()) ||
-	unit.plural.length() > int(database->maxUnitNameLength()) ) {
+	if ( unit.name().length() > int(database->maxUnitNameLength()) ||
+	unit.plural().length() > int(database->maxUnitNameLength()) ) {
 		KMessageBox::error( parentListView,
 		i18np( "Unit name cannot be longer than 1 character.",
 		"Unit name cannot be longer than %1 characters.",
 		database->maxUnitNameLength() ) );
 		return false;
 	}
-	else if ( unit.name.trimmed().isEmpty() || unit.plural.trimmed().isEmpty() )
+	else if ( unit.name().trimmed().isEmpty() || unit.plural().trimmed().isEmpty() )
 		return false;
 
 	return true;
@@ -199,7 +199,7 @@ void UnitActionsHandler::saveUnit( Q3ListViewItem* i, const QString &text, int c
 	int existing_id = database->findExistingUnitByName( text );
 
 	UnitListViewItem *unit_it = (UnitListViewItem*)i;
-	int unit_id = unit_it->unit().id;
+	int unit_id = unit_it->unit().id();
 	if ( existing_id != -1 && existing_id != unit_id && !text.trimmed().isEmpty() ) { //unit already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( parentListView,
 		i18n( "This unit already exists.  Continuing will merge these two units into one.  Are you sure?" ) ) ) {
