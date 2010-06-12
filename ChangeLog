@@ -8,6 +8,8 @@ Changes from 2.0-alpha6 to svn:
   * Porting of datablock classes to Qt4
   * Renamed internal library libkrecipescommon to avoid double lib in filename
   * Execute tests via CTest. To run them use "make test"
+  * Made data of some datablock classes private, added get/set methods and unit
+    tests
   * Fixes for bugs:
     + Right pane header, diet helper title and list titles follow theme colour
       settings rather than set absolute colours. Thanks to Mike Ferguson for the
