@@ -25,13 +25,21 @@ main(int argc, char *argv[])
 {
 	KAboutData about("nyctest", 0, ki18n("Nyctest"), "1");
 	KCmdLineArgs::init(argc, argv, &about);
+    KCmdLineOptions options;
+    options.add("+[file]");
+    KCmdLineArgs::addCmdLineOptions(options);
 	KApplication app;
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QString file("nyctest.txt");
+    if(args->count() >= 1)
+        file = args->arg(0);
 
 	printf("Creating NYCGenericImporter.\n");
 	NYCGenericImporter importer;
 
 	printf("Parsing nyctest.txt.\n");
-	QStringList files; files << "nyctest.txt";
+	QStringList files; files << file;
 	importer.parseFiles(files);
 
 	Recipe recipe;

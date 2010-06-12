@@ -27,13 +27,21 @@ main(int argc, char *argv[])
 {
 	KAboutData about("mmftest", 0, ki18n("Mmftest"), "1");
 	KCmdLineArgs::init(argc, argv, &about);
+    KCmdLineOptions options;
+    options.add("+[file]");
+    KCmdLineArgs::addCmdLineOptions(options);
 	KApplication app;
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QString file("mmftest.txt");
+    if(args->count() >= 1)
+        file = args->arg(0);
 
 	printf("Creating MMFImporter.\n");
 	MMFImporter importer;
 
 	printf("Parsing mmftest.txt.\n");
-	QStringList files; files << "mmftest.txt";
+	QStringList files; files << file;
 	importer.parseFiles(files);
 
 	Recipe recipe;

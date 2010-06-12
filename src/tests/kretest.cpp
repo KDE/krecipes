@@ -25,12 +25,29 @@ main(int argc, char *argv[])
 {
         KAboutData about("kretest", 0, ki18n("Kretest"), "1");
         KCmdLineArgs::init(argc, argv, &about);
+        KCmdLineOptions options;
+        options.add("+[file]");
+        options.add("+[photo]");
+        KCmdLineArgs::addCmdLineOptions(options);
+
         KApplication app;
+
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+
+        QString file("kretest.txt");
+        QString photo("test_photo.jpg");
+        if(args->count() >= 1)
+            file = args->arg(0);
+
+        if(args->count() >= 2)
+            photo = args->arg(1);
+
 	printf("Creating KreImporter.\n");
 	KreImporter importer;
 
 	printf("Parsing kretest.txt.\n");
-	QStringList files; files << "kretest.txt";
+	QStringList files; files << file;
 	importer.parseFiles(files);
 
 	Recipe recipe;
@@ -43,7 +60,7 @@ main(int argc, char *argv[])
 	recipe.instructions = 
 		"Drop by spoonful on greased cookie sheet.  Bake in moderate oven.";
 	recipe.prepTime = QTime(0,30);
-	if ( !recipe.photo.load( "test_photo.jpg", "JPEG" ) ) {
+	if ( !recipe.photo.load( photo, "JPEG" ) ) {
 		printf("Unable to load test_photo.jpg\n");
 		exit(1);
 	}
