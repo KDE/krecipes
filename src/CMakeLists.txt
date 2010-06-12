@@ -217,6 +217,7 @@ set(IMPORT_EXPORT_TESTS
     )
 
 set(UNIT_TESTS
+    test_rating
     test_ratingcriteria
     )
 

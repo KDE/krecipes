@@ -403,30 +403,30 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	int rating_total = 0;
 	double rating_sum = 0;
 	for ( RatingList::const_iterator rating_it = recipe.ratingList.begin(); rating_it != recipe.ratingList.end(); ++rating_it ) {
+        rating_total += rating_it->numberOfRatingCriterias();
+        rating_sum += rating_it->sum();
+
 		ratings_html += "<hr />";
 
-		if ( !( *rating_it ).rater.isEmpty() )
-			ratings_html += "<p><b>"+( *rating_it ).rater+"</b></p>";
+		if ( !( *rating_it ).rater().isEmpty() )
+			ratings_html += "<p><b>"+( *rating_it ).rater()+"</b></p>";
 
-		if ( (*rating_it).ratingCriteriaList.count() > 0 )
+		if ( (*rating_it).hasRatingCriterias() )
 			ratings_html += "<table>";
-		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars()) + "-stars.png";
-			ratings_html +=  "<tr><td>"+(*rc_it).name()+":</td><td><img src=\""+image_url+"\" /></td></tr>";
+		foreach ( RatingCriteria rc, (*rating_it).ratingCriterias() ) {
+			QString image_url = fi.baseName() + "_photos/" + QString::number(rc.stars()) + "-stars.png";
+			ratings_html +=  "<tr><td>"+rc.name()+":</td><td><img src=\""+image_url+"\" /></td></tr>";
 			if ( !QFile::exists( fi.absolutePath() + '/' + image_url ) ) {
-				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars());
+				QPixmap starPixmap = Rating::starsPixmap(rc.stars());
 				starPixmap.save( fi.absolutePath() + '/' + image_url, "PNG" );
 				kDebug() << "saving: " << fi.absolutePath() + '/' + image_url ;
 			}
-
-			rating_total++;
-			rating_sum += (*rc_it).stars();
 		}
-		if ( (*rating_it).ratingCriteriaList.count() > 0 )
+		if ( (*rating_it).hasRatingCriterias() )
 			ratings_html += "</table>";
 
-		if ( !( *rating_it ).comment.isEmpty() )
-			ratings_html += "<p><i>"+( *rating_it ).comment+"</i></p>";
+		if ( !( *rating_it ).comment().isEmpty() )
+			ratings_html += "<p><i>"+( *rating_it ).comment()+"</i></p>";
 	}
 	content = content.replace( "**RATINGS**", ratings_html );
 

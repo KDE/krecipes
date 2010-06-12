@@ -141,27 +141,27 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 			content += "----------"+i18n("Ratings")+"----------\n";
 
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
-			if ( !( *rating_it ).rater.isEmpty() )
-				content += "  "+( *rating_it ).rater+'\n';
+			if ( !( *rating_it ).rater().isEmpty() )
+				content += "  "+( *rating_it ).rater()+'\n';
 
-			if ( (*rating_it).ratingCriteriaList.size() > 0 )
+			if ( (*rating_it).hasRatingCriterias() )
 				content += '\n';
 
-			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+			foreach ( RatingCriteria rc, (*rating_it).ratingCriterias() ) {
 				//FIXME: This is an ugly hack, but I don't know how else to be i18n friendly (if this is even that)
 				// and still be able to display the amount as a fraction
 				//KDE$ port
-				QString starsTrans = i18np("1 star","%1 stars",qRound((*rc_it).stars()));
-				starsTrans.replace(QString::number(qRound((*rc_it).stars())),MixedNumber((*rc_it).stars()).toString());
+				QString starsTrans = i18np("1 star","%1 stars",qRound(rc.stars()));
+				starsTrans.replace(QString::number(qRound(rc.stars())),MixedNumber(rc.stars()).toString());
 
-				content +=  "  "+(*rc_it).name()+": "+starsTrans+'\n';
+				content +=  "  "+rc.name()+": "+starsTrans+'\n';
 			}
 
-			if ( (*rating_it).ratingCriteriaList.size() > 0 )
+			if ( (*rating_it).hasRatingCriterias() )
 				content += '\n';
 
-			if ( !( *rating_it ).comment.isEmpty() )
-				content += "  "+( *rating_it ).comment+'\n';
+			if ( !( *rating_it ).comment().isEmpty() )
+				content += "  "+( *rating_it ).comment()+'\n';
 
 			content += '\n';
 		}

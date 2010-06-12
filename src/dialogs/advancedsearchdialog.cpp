@@ -872,15 +872,15 @@ void AdvancedSearchDialog::search()
 			QMap< int, int > idCountMap;
 
 			for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.constBegin(); rating_it != (*recipe_it).ratingList.constEnd(); ++rating_it ) {
-				for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.constBegin(); rc_it != (*rating_it).ratingCriteriaList.constEnd(); ++rc_it ) {
-					QMap< int, double >::iterator sum_it = idSumMap.find((*rc_it).id());
+				foreach ( RatingCriteria rc, (*rating_it).ratingCriterias() ) {
+					QMap< int, double >::iterator sum_it = idSumMap.find(rc.id());
 					if ( sum_it == idSumMap.end() )
-						sum_it = idSumMap.insert((*rc_it).id(),0);
-					(*sum_it) += (*rc_it).stars();
+						sum_it = idSumMap.insert(rc.id(),0);
+					(*sum_it) += rc.stars();
 
-					QMap< int, int >::iterator count_it = idCountMap.find((*rc_it).id());
+					QMap< int, int >::iterator count_it = idCountMap.find(rc.id());
 					if ( count_it == idCountMap.end() )
-						count_it = idCountMap.insert((*rc_it).id(),0);
+						count_it = idCountMap.insert(rc.id(),0);
 					(*count_it)++;
 				}
 			}

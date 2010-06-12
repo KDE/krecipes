@@ -50,7 +50,7 @@ void BaseImporter::add( const RecipeList &recipe_list )
 		Recipe copy = *it;
 		copy.recipeID = -1; //make sure an importer didn't give this a value
 		for ( RatingList::iterator rating_it = copy.ratingList.begin(); rating_it != copy.ratingList.end(); ++rating_it ) {
-			(*rating_it).id = -1;
+			(*rating_it).setId(-1);
 		}
 		m_recipe_list->append( copy );
 	}
@@ -286,14 +286,14 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 				kapp->processEvents();
 			}
 
-			for ( RatingCriteriaList::iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-				int new_criteria_id = db->findExistingRatingByName(( *rc_it ).name());
-				if ( new_criteria_id == -1 && !( *rc_it ).name().isEmpty() ) {
-					db->createNewRating( ( *rc_it ).name() );
+			foreach (RatingCriteria rc, (*rating_it).ratingCriterias()) {
+				int new_criteria_id = db->findExistingRatingByName(rc.name());
+				if ( new_criteria_id == -1 && !rc.name().isEmpty() ) {
+					db->createNewRating( rc.name() );
 					new_criteria_id = db->lastInsertID();
 				}
 	
-				( *rc_it ).setId( new_criteria_id );
+				rc.setId( new_criteria_id );
 			}
 		}
 

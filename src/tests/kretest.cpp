@@ -158,16 +158,16 @@ main(int argc, char *argv[])
 
 	RatingCriteria rc;
 	Rating rating1;
-	rating1.rater = "George McFry";
-	rating1.comment = "Good enough";
+	rating1.setRater("George McFry");
+	rating1.setComment("Good enough");
 
 	rc.setName("Taste");
 	rc.setStars(5.0);
 	rating1.append(rc);
 
 	Rating rating2;
-	rating2.rater = "Me";
-	rating2.comment = "Yuck, don't eat!";
+	rating2.setRater("Me");
+	rating2.setComment("Yuck, don't eat!");
 
 	rc.setName("Overall");
 	rc.setStars(2.0);

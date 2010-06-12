@@ -270,13 +270,13 @@ void KreImporter::readRatings( const QDomNodeList& l, Recipe *recipe )
 			for ( int j = 0; j < ratingChildren.count(); j++ ) {
 				QDomElement ratingChild = ratingChildren.item( j ).toElement();
 				if ( ratingChild.tagName() == "comment" ) {
-					r.comment = ratingChild.text();
+					r.setComment(ratingChild.text());
 				}
 				else if ( ratingChild.tagName() == "rater" ) {
-					r.rater = ratingChild.text();
+					r.setRater(ratingChild.text());
 				}
 				else if ( ratingChild.tagName() == "criterion" ) {
-					readCriterion(ratingChild.childNodes(),r.ratingCriteriaList);
+					readCriterion(ratingChild.childNodes(),r);
 				}
 			}
 			recipe->ratingList.append(r);
@@ -284,7 +284,7 @@ void KreImporter::readRatings( const QDomNodeList& l, Recipe *recipe )
 	}
 }
 
-void KreImporter::readCriterion( const QDomNodeList& l, RatingCriteriaList &rc_list )
+void KreImporter::readCriterion( const QDomNodeList& l, Rating & r )
 {
 	for ( int i = 0; i < l.count(); i++ ) {
 		QDomElement child = l.item( i ).toElement();
@@ -303,7 +303,7 @@ void KreImporter::readCriterion( const QDomNodeList& l, RatingCriteriaList &rc_l
 					rc.setStars( criteriaChild.text().toDouble() );
 				}
 			}
-			rc_list.append(rc);
+			r.append(rc);
 		}
 	}
 }

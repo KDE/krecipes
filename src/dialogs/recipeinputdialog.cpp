@@ -1383,13 +1383,13 @@ void RecipeInputDialog::slotAddRating()
 	if ( ratingDlg->exec() == QDialog::Accepted ) {
 		Rating r = ratingDlg->rating();
 
-		for ( RatingCriteriaList::iterator rc_it = r.ratingCriteriaList.begin(); rc_it != r.ratingCriteriaList.end(); ++rc_it ) {
-			int criteria_id = database->findExistingRatingByName((*rc_it).name());
+		foreach( RatingCriteria rc, r.ratingCriterias() ) {
+			int criteria_id = database->findExistingRatingByName(rc.name());
 			if ( criteria_id == -1 ) {
-				database->createNewRating((*rc_it).name());
+				database->createNewRating(rc.name());
 				criteria_id = database->lastInsertID();
 			}
-			(*rc_it).setId(criteria_id);
+			r.setIdOfRatingCriteria(rc.name(), criteria_id);
 		}
 
 		RatingDisplayWidget *item = new RatingDisplayWidget( this );
@@ -1411,13 +1411,13 @@ void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *it
 	else //no rating criteria, therefore no average (we don't want to automatically assume a zero average)
 		item->iconLabel->clear();
 
-	item->raterName->setText(rating.rater);
-	item->comment->setText(rating.comment);
+	item->raterName->setText(rating.rater());
+	item->comment->setText(rating.comment());
 
 	item->criteriaListView->clear();
-	for ( RatingCriteriaList::const_iterator rc_it = rating.ratingCriteriaList.begin(); rc_it != rating.ratingCriteriaList.end(); ++rc_it ) {
-		Q3ListViewItem * it = new Q3ListViewItem(item->criteriaListView,(*rc_it).name());
-		it->setPixmap( 1, Rating::starsPixmap( (*rc_it).stars() ) );
+	foreach ( RatingCriteria rc, rating.ratingCriterias() ) {
+		Q3ListViewItem * it = new Q3ListViewItem(item->criteriaListView,rc.name());
+		it->setPixmap( 1, Rating::starsPixmap( rc.stars() ) );
 	}
 
 	item->buttonEdit->disconnect();
@@ -1439,13 +1439,13 @@ void RecipeInputDialog::slotEditRating()
 	if ( ratingDlg->exec() == QDialog::Accepted ) {
 		Rating r = ratingDlg->rating();
 
-		for ( RatingCriteriaList::iterator rc_it = r.ratingCriteriaList.begin(); rc_it != r.ratingCriteriaList.end(); ++rc_it ) {
-			int criteria_id = database->findExistingRatingByName((*rc_it).name());
+		foreach ( RatingCriteria rc, r.ratingCriterias() ) {
+			int criteria_id = database->findExistingRatingByName(rc.name());
 			if ( criteria_id == -1 ) {
-				database->createNewRating((*rc_it).name());
+				database->createNewRating(rc.name());
 				criteria_id = database->lastInsertID();
 			}
-			(*rc_it).setId(criteria_id);
+			r.setIdOfRatingCriteria(rc.name(), criteria_id);
 		}
 
 		(*sender->rating_it) = r;

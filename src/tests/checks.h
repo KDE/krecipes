@@ -181,16 +181,18 @@ void check( const RatingList &rating, const RatingList &base )
 	RatingList::const_iterator rating_it = rating.begin();
 	RatingList::const_iterator base_rating_it = base.begin();
 	for ( ; rating_it != rating.end() || base_rating_it != base.end(); ++rating_it, ++base_rating_it ) {
-		check("checking rater",(*rating_it).rater,(*base_rating_it).rater);
-		check("checking comment",(*rating_it).comment,(*base_rating_it).comment);
+		check("checking rater",(*rating_it).rater(),(*base_rating_it).rater());
+		check("checking comment",(*rating_it).comment(),(*base_rating_it).comment());
 
-		RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin();
-		RatingCriteriaList::const_iterator base_rc_it = (*base_rating_it).ratingCriteriaList.begin();
-		for ( ; rc_it != (*rating_it).ratingCriteriaList.end() || base_rc_it != (*base_rating_it).ratingCriteriaList.end(); ++rc_it, ++base_rc_it ) {
+        RatingCriteriaList rating_rcs( (*rating_it).ratingCriterias() );
+        RatingCriteriaList base_rcs( (*base_rating_it).ratingCriterias() );
+		RatingCriteriaList::const_iterator rc_it = rating_rcs.begin();
+		RatingCriteriaList::const_iterator base_rc_it = base_rcs.begin();
+		for ( ; rc_it != rating_rcs.end() || base_rc_it != base_rcs.end(); ++rc_it, ++base_rc_it ) {
 			check("checking criteria name",(*rc_it).name(),(*base_rc_it).name());
 			check("checking stars",(*rc_it).stars(),(*base_rc_it).stars());
 		}
-		check( "criteria count", int((*rating_it).ratingCriteriaList.count()), int((*base_rating_it).ratingCriteriaList.count()) );
+		check( "criteria count", int(rating_rcs.count()), int(base_rcs.count()) );
 	}
 	check( "rating count", int(rating.count()), int(base.count()) );
 }

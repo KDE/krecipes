@@ -240,14 +240,14 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += "<krecipes-ratings>";
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
 			xml += "<rating>";
-			xml += "<comment>"+Qt::escape( ( *rating_it ).comment )+"</comment>";
-			xml += "<rater>"+Qt::escape( ( *rating_it ).rater )+"</rater>";
+			xml += "<comment>"+Qt::escape( ( *rating_it ).comment() )+"</comment>";
+			xml += "<rater>"+Qt::escape( ( *rating_it ).rater() )+"</rater>";
 
 			xml += "<criterion>";
-			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+			foreach ( RatingCriteria rc, (*rating_it).ratingCriterias() ) {
 				xml += "<criteria>";
-				xml += "<name>"+(*rc_it).name()+"</name>";
-				xml += "<stars>"+QString::number((*rc_it).stars())+"</stars>";
+				xml += "<name>"+rc.name()+"</name>";
+				xml += "<stars>"+QString::number(rc.stars())+"</stars>";
 				xml += "</criteria>";
 			}
 			xml += "</criterion>";

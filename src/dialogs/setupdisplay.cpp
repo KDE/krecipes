@@ -89,8 +89,8 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 
 		RatingCriteria rc;
 		Rating rating1;
-		rating1.rater = i18n("Rater");
-		rating1.comment = i18n("Comment");
+		rating1.setRater(i18n("Rater"));
+		rating1.setComment(i18n("Comment"));
 
 		rc.setName(i18n("Criteria 1"));
 		rc.setStars(5.0);

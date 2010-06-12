@@ -383,11 +383,11 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 			if ( query.isActive() ) {
 				while ( query.next() ) {
 					Rating r;
-					r.id = query.value( 0 ).toInt();
-					r.comment = unescapeAndDecode( query.value( 1 ).toByteArray() );
-					r.rater = unescapeAndDecode( query.value( 2 ).toByteArray() );
+					r.setId(query.value( 0 ).toInt());
+					r.setComment(unescapeAndDecode( query.value( 1 ).toByteArray() ));
+					r.setRater(unescapeAndDecode( query.value( 2 ).toByteArray() ));
 
-					command = QString( "SELECT rc.id,rc.name,rl.stars FROM rating_criteria rc, rating_criterion_list rl WHERE rating_id=%1 AND rl.rating_criterion_id=rc.id" ).arg(r.id);
+					command = QString( "SELECT rc.id,rc.name,rl.stars FROM rating_criteria rc, rating_criterion_list rl WHERE rating_id=%1 AND rl.rating_criterion_id=rc.id" ).arg(r.id());
 					QSqlQuery criterionQuery( command, *database);
 					if ( criterionQuery.isActive() ) {
 						while ( criterionQuery.next() ) {
@@ -796,26 +796,26 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 	for ( RatingList::iterator rating_it = recipe->ratingList.begin(); rating_it != recipe->ratingList.end(); ++rating_it ) {
 		//double average = (*rating_it).average();
-		if ( (*rating_it).id == -1 ) //new rating
-			command ="INSERT INTO ratings VALUES("+QString(getNextInsertIDStr("ratings","id"))+','+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment))+"','"+QString(escapeAndEncode((*rating_it).rater))+/*"','"+QString::number(average)+*/"','"+current_timestamp+"')";
+		if ( (*rating_it).id() == -1 ) //new rating
+			command ="INSERT INTO ratings VALUES("+QString(getNextInsertIDStr("ratings","id"))+','+QString::number(recipeID)+",'"+QString(escapeAndEncode((*rating_it).comment()))+"','"+QString(escapeAndEncode((*rating_it).rater()))+/*"','"+QString::number(average)+*/"','"+current_timestamp+"')";
 		else //existing rating
 			command = "UPDATE ratings SET "
-			  "comment='"+QString(escapeAndEncode((*rating_it).comment))+"',"
-			  "rater='"+QString(escapeAndEncode((*rating_it).rater))+"',"
+			  "comment='"+QString(escapeAndEncode((*rating_it).comment()))+"',"
+			  "rater='"+QString(escapeAndEncode((*rating_it).rater()))+"',"
 			  "created=created "
-			  "WHERE id="+QString::number((*rating_it).id);
+			  "WHERE id="+QString::number((*rating_it).id());
 
 		recipeToSave.exec( command );
 
-		if ( (*rating_it).id == -1 )
-			(*rating_it).id = lastInsertID();
+		if ( (*rating_it).id() == -1 )
+			(*rating_it).setId(lastInsertID());
 
-		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.constBegin(); rc_it != (*rating_it).ratingCriteriaList.constEnd(); ++rc_it ) {
-			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+','+QString::number((*rc_it).id())+','+QString::number((*rc_it).stars())+')' );
+		foreach(RatingCriteria rc, (*rating_it).ratingCriterias()) {
+			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id())+','+QString::number(rc.id())+','+QString::number(rc.stars())+')' );
 			recipeToSave.exec( command );
 		}
 
-		ids << QString::number((*rating_it).id);
+		ids << QString::number((*rating_it).id());
 	}
 
 	// only delete those ratings that don't exist anymore

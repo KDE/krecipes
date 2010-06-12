@@ -204,24 +204,24 @@ Rating EditRatingDialog::rating() const
 		r.append( rc );
 	}
 
-	r.comment = commentsEdit->text();
-	r.rater = raterEdit->text();
+	r.setComment(commentsEdit->text());
+	r.setRater(raterEdit->text());
 
-	r.id = ratingID;
+	r.setId(ratingID);
 
 	return r;
 }
 
 void EditRatingDialog::loadRating( const Rating &rating )
 {
-	for ( RatingCriteriaList::const_iterator rc_it = rating.ratingCriteriaList.begin(); rc_it != rating.ratingCriteriaList.end(); ++rc_it ) {
-		addRatingCriteria(*rc_it);
+	foreach ( RatingCriteria rc, rating.ratingCriterias() ) {
+		addRatingCriteria(rc);
 	}
 
-	raterEdit->setText(rating.rater);
-	commentsEdit->setText(rating.comment);
+	raterEdit->setText(rating.rater());
+	commentsEdit->setText(rating.comment());
 
-	ratingID = rating.id;
+	ratingID = rating.id();
 }
 
 void EditRatingDialog::slotAddRatingCriteria()

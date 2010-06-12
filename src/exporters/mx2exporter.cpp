@@ -157,18 +157,17 @@ QString mx2Exporter::createContent( const RecipeList& recipes )
 		if ( (*recipe_it).ratingList.count() > 0 )  {	// if there are any ratings...
 			QDomElement rats_tag = doc.createElement("RatS");
 			RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin();
-			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); 
-				rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
+			foreach( RatingCriteria rc, (*rating_it).ratingCriterias()) {
 				QDomElement rate_tag = doc.createElement("RatE");
-				rate_tag.setAttribute("name", (*rc_it).name());
-				rate_tag.setAttribute("value", 2.0 * (*rc_it).stars()); // 2X because MasterCook uses 1 - 10 scale
+				rate_tag.setAttribute("name", rc.name());
+				rate_tag.setAttribute("value", 2.0 * rc.stars()); // 2X because MasterCook uses 1 - 10 scale
 				rats_tag.appendChild(rate_tag);
 			} // for elements of the rating
 			recipe_tag.appendChild(rats_tag);
 // If the rating had a note, include it...
-			if ( !( *rating_it ).comment.isEmpty()) {
+			if ( !( *rating_it ).comment().isEmpty()) {
 				QDomElement note_tag = doc.createElement("Note");
-				note_tag.appendChild( doc.createTextNode(( *rating_it ).comment));
+				note_tag.appendChild( doc.createTextNode(( *rating_it ).comment()));
 				recipe_tag.appendChild(note_tag);
 			} // if there was a comment
 		}  // if ratings

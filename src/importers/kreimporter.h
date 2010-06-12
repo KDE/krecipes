@@ -45,7 +45,7 @@ private:
 	void readIngredients( const QDomNodeList& l, Recipe*, const QString &header = QString(), Ingredient *ing = 0 );
 	void readAmount( const QDomElement& amountDom, double &amount, double &amount_offset );
 	void readRatings( const QDomNodeList&, Recipe * );
-	void readCriterion( const QDomNodeList&, RatingCriteriaList &r );
+	void readCriterion( const QDomNodeList&, Rating &r );
 };
 
 #endif
