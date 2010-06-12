@@ -225,6 +225,7 @@ set(UNIT_TESTS
     test_unit
     test_unitratio
     test_unitratiolist
+    test_weight
     )
 
 macro(add_import_export_test _TEST)

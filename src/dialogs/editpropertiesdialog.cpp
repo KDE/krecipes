@@ -60,28 +60,28 @@ public:
 
 	void setAmountUnit( double amount, const Unit &unit, const Element &prepMethod )
 	{
-		m_weight.perAmount = amount;
-		m_weight.perAmountUnitID = unit.id();
-		m_weight.perAmountUnit = unit.determineName(m_weight.perAmount, /*useAbbrev=*/false);
-		m_weight.prepMethodID = prepMethod.id;
-		m_weight.prepMethod = prepMethod.name;
+		m_weight.setPerAmount(amount);
+		m_weight.setPerAmountUnitId(unit.id());
+		m_weight.setPerAmountUnit(unit.determineName(m_weight.perAmount(), /*useAbbrev=*/false));
+		m_weight.setPrepMethodId(prepMethod.id);
+		m_weight.setPrepMethod(prepMethod.name);
 	}
 
 	void setWeightUnit( double weight, const Unit &unit )
 	{
-		m_weight.weight = weight;
-		m_weight.weightUnitID = unit.id();
-		m_weight.weightUnit = unit.determineName(m_weight.weight, /*useAbbrev=*/false);
+		m_weight.setWeight(weight);
+		m_weight.setWeightUnitId(unit.id());
+		m_weight.setWeightUnit(unit.determineName(m_weight.weight(), /*useAbbrev=*/false));
 	}
 
 	virtual QString text( int c ) const
 	{
 		if ( c == 0 )
-			return QString::number(m_weight.weight)+' '+m_weight.weightUnit;
+			return QString::number(m_weight.weight())+' '+m_weight.weightUnit();
 		else if ( c == 1 )
-			return QString::number(m_weight.perAmount)+' '
-			  +m_weight.perAmountUnit
-			  +((m_weight.prepMethodID!=-1)?", "+m_weight.prepMethod:QString());
+			return QString::number(m_weight.perAmount())+' '
+			  +m_weight.perAmountUnit()
+			  +((m_weight.prepMethodId()!=-1)?", "+m_weight.prepMethod():QString());
 		else
 			return QString();
 	}
@@ -263,16 +263,16 @@ void EditPropertiesDialog::addWeight()
 	QPointer<CreateIngredientWeightDialog> weightDialog = new CreateIngredientWeightDialog( this, db );
 	if ( weightDialog->exec() == QDialog::Accepted ) {
 		Weight w = weightDialog->weight();
-		w.ingredientID = ingredientID;
+		w.setIngredientId(ingredientID);
 		db->addIngredientWeight( w );
 
 		Q3ListViewItem * lastElement = weightListView->lastItem();
 
 		WeightListItem *weight_it = new WeightListItem( weightListView, lastElement, w );
-		weight_it->setAmountUnit( w.perAmount, db->unitName(w.perAmountUnitID),
-			Element(w.prepMethod,w.prepMethodID)
+		weight_it->setAmountUnit( w.perAmount(), db->unitName(w.perAmountUnitId()),
+			Element(w.prepMethod(),w.prepMethodId())
 		);
-		weight_it->setWeightUnit( w.weight, db->unitName(w.weightUnitID) );
+		weight_it->setWeightUnit( w.weight(), db->unitName(w.weightUnitId()) );
 	}
 	delete weightDialog;
 }
@@ -283,7 +283,7 @@ void EditPropertiesDialog::removeWeight()
 	if ( it ) {
 		     switch ( KMessageBox::warningContinueCancel(this, i18nc("@info", "Recipes may require this information for nutrient analysis. Are you sure you want to delete this entry?"), QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "DeleteIngredientWeight") ) {
 		case KMessageBox::Continue:
-			db->removeIngredientWeight( ((WeightListItem*)it)->weight().id );
+			db->removeIngredientWeight( ((WeightListItem*)it)->weight().id() );
 			delete it;
 			break;
 		default: break;
@@ -310,8 +310,8 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		WeightListItem *it = (WeightListItem*)item;
 		Weight w = it->weight();
 
-		amountEdit->setAmount( MixedNumber(w.weight) );
-		amountEdit->setUnit( Unit(w.weightUnit,w.weightUnit,w.weightUnitID) );
+		amountEdit->setAmount( MixedNumber(w.weight()) );
+		amountEdit->setUnit( Unit(w.weightUnit(),w.weightUnit(),w.weightUnitId()) );
 
 		amountEditDialog->setMainWidget(box);
 		amountEditDialog->adjustSize();
@@ -341,9 +341,9 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		WeightListItem *it = (WeightListItem*)item;
 		Weight w = it->weight();
 
-		amountEdit->setAmount( MixedNumber(w.perAmount) );
-		amountEdit->setUnit( Unit(w.perAmountUnit,w.perAmountUnit,w.perAmountUnitID) );
-		amountEdit->setPrepMethod( Element(w.prepMethod,w.prepMethodID) );
+		amountEdit->setAmount( MixedNumber(w.perAmount()) );
+		amountEdit->setUnit( Unit(w.perAmountUnit(),w.perAmountUnit(),w.perAmountUnitId()) );
+		amountEdit->setPrepMethod( Element(w.prepMethod(),w.prepMethodId()) );
 
 		amountEditDialog->setMainWidget(box);
 		amountEditDialog->adjustSize();
@@ -393,11 +393,11 @@ void EditPropertiesDialog::reloadWeightList( void )
 
 		Weight w = *weight_it;
 		WeightListItem *weight = new WeightListItem( weightListView, lastElement, w );
-		weight->setAmountUnit( w.perAmount,
-			db->unitName(w.perAmountUnitID),
-			Element((w.prepMethodID==-1)?QString():db->prepMethodName(w.prepMethodID),w.prepMethodID)
+		weight->setAmountUnit( w.perAmount(),
+			db->unitName(w.perAmountUnitId()),
+			Element((w.prepMethodId()==-1)?QString():db->prepMethodName(w.prepMethodId()),w.prepMethodId())
 		);
-		weight->setWeightUnit( w.weight, db->unitName(w.weightUnitID) );
+		weight->setWeightUnit( w.weight(), db->unitName(w.weightUnitId()) );
 	}
 }
 
@@ -586,43 +586,47 @@ void EditPropertiesDialog::loadUSDAData()
 		WeightList weights = db->ingredientWeightUnits( ingredientID );
 		for ( ; i < i_initial+3; ++i ) {
 			Weight w;
-			w.weight = data[i].toDouble();
+			w.setWeight(data[i].toDouble());
 
 			i++;
 
 			QString amountAndWeight = data[i].mid( 1, data[i].length() - 2 );
 			if ( !amountAndWeight.isEmpty() ) {
 				int spaceIndex = amountAndWeight.indexOf(" ");
-				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
+				w.setPerAmount(amountAndWeight.left(spaceIndex).toDouble());
 
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
-				if ( !USDA::parseUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod, unit_data_list, prep_data_list ) )
-					continue;
 
-				int unitID = db->findExistingUnitByName( w.perAmountUnit );
+                QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
+				if ( !USDA::parseUnitAndPrep( perAmountUnit, w_perAmountUnit, w_prepMethod, unit_data_list, prep_data_list ) ) 
+					continue;
+                w.setPerAmountUnit(w_perAmountUnit);
+                w.setPrepMethod(w_prepMethod);
+
+				int unitID = db->findExistingUnitByName( w.perAmountUnit() );
 				if ( unitID == -1 ) {
 					for ( USDA::UnitDataList::const_iterator it = unit_data_list.begin(); it != unit_data_list.end(); ++it ) {
-						if ( w.perAmountUnit == (*it).translation || w.perAmountUnit == (*it).translationPlural ) {
+						if ( w.perAmountUnit() == (*it).translation || w.perAmountUnit() == (*it).translationPlural ) {
 							db->createNewUnit( Unit((*it).translation,(*it).translationPlural) );
 						}
 					}
 
 					unitID = db->lastInsertID();
 				}
-				w.perAmountUnitID = unitID;
+				w.setPerAmountUnitId(unitID);
 
-				if ( !w.prepMethod.isEmpty() ) {
-					int prepID = db->findExistingPrepByName( w.prepMethod );
+				if ( !w.prepMethod().isEmpty() ) {
+					int prepID = db->findExistingPrepByName( w.prepMethod() );
 					if ( prepID == -1 ) {
-						db->createNewPrepMethod( w.prepMethod );
+						db->createNewPrepMethod( w.prepMethod() );
 						prepID = db->lastInsertID();
 					}
-					w.prepMethodID = prepID;
+					w.setPrepMethodId(prepID);
 				}
 
 				bool exists = false;
 				for ( WeightList::const_iterator it = weights.begin(); it != weights.end(); ++it ) {
-					if ( (*it).perAmountUnitID == w.perAmountUnitID && (*it).prepMethodID == w.prepMethodID ) {
+					if ( (*it).perAmountUnitId() == w.perAmountUnitId() && (*it).prepMethodId() == w.prepMethodId() ) {
 						exists = true;
 						break;
 					}
@@ -630,8 +634,8 @@ void EditPropertiesDialog::loadUSDAData()
 				if ( exists )
 					continue;
 
-				w.weightUnitID = grams_id;
-				w.ingredientID = ingredientID;
+				w.setWeightUnitId(grams_id);
+				w.setIngredientId(ingredientID);
 				db->addIngredientWeight( w );
 			}
 		}

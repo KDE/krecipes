@@ -208,16 +208,16 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 
 		for ( WeightList::const_iterator it = idList.begin(); it != idList.end(); ++it ) {
 			//get conversion order correct (i.e., Mass -> Volume instead of Volume -> Mass, depending on unit type)
-			int first   = (to.type() == Unit::Mass)?(*it).perAmountUnitID:(*it).weightUnitID;
-			int second  = (to.type() == Unit::Mass)?(*it).weightUnitID:(*it).perAmountUnitID;
+			int first   = (to.type() == Unit::Mass)?(*it).perAmountUnitId():(*it).weightUnitId();
+			int second  = (to.type() == Unit::Mass)?(*it).weightUnitId():(*it).perAmountUnitId();
 			double tryFromToWeightRatio = unitRatio( from.units.id(), first );
 			if ( tryFromToWeightRatio > 0 ) {
 				weightToToRatio = unitRatio( second, to.id() );
 				fromToWeightRatio = tryFromToWeightRatio;
 				unitID = first;
 
-				if ( from.prepMethodList.containsId( (*it).prepMethodID ) ) {
-					prepID = (*it).prepMethodID;
+				if ( from.prepMethodList.containsId( (*it).prepMethodId() ) ) {
+					prepID = (*it).prepMethodId();
 					break;
 				}
 			}
@@ -874,29 +874,37 @@ void RecipeDB::importUSDADatabase()
 				current_ing.data << fields[ i ].toDouble();
 
 			Weight w;
-			w.weight = fields[ TOTAL_USDA_PROPERTIES + 2 ].toDouble();
+			w.setWeight(fields[ TOTAL_USDA_PROPERTIES + 2 ].toDouble());
 
 			QString amountAndWeight = fields[ TOTAL_USDA_PROPERTIES + 3 ].mid( 1, fields[ TOTAL_USDA_PROPERTIES + 3 ].length() - 2 );
 			if ( !amountAndWeight.isEmpty() ) {
 				int spaceIndex = amountAndWeight.indexOf(" ");
-				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
+				w.setPerAmount(amountAndWeight.left(spaceIndex).toDouble());
 
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 
-				if ( USDA::parseUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod, unit_data_list, prep_data_list ) )
+                QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
+				if ( USDA::parseUnitAndPrep( perAmountUnit, w_perAmountUnit, w_prepMethod, unit_data_list, prep_data_list ) ) {
+                    w.setPerAmountUnit(w_perAmountUnit);
+                    w.setPrepMethod(w_prepMethod);
 					current_ing.weights << w;
+                }
 			}
 
 			w = Weight();
-			w.weight = fields[ TOTAL_USDA_PROPERTIES + 4 ].toDouble();
+			w.setWeight(fields[ TOTAL_USDA_PROPERTIES + 4 ].toDouble());
 			amountAndWeight = fields[ TOTAL_USDA_PROPERTIES + 5 ].mid( 1, fields[ TOTAL_USDA_PROPERTIES + 5 ].length() - 2 );
 			if ( !amountAndWeight.isEmpty() ) {
 				int spaceIndex = amountAndWeight.indexOf(" ");
-				w.perAmount = amountAndWeight.left(spaceIndex).toDouble();
+				w.setPerAmount(amountAndWeight.left(spaceIndex).toDouble());
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 
-				if ( USDA::parseUnitAndPrep( perAmountUnit, w.perAmountUnit, w.prepMethod, unit_data_list, prep_data_list ) )
+                QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
+				if ( USDA::parseUnitAndPrep( perAmountUnit, w_perAmountUnit, w_prepMethod, unit_data_list, prep_data_list ) ) {
+                    w.setPerAmountUnit(w_perAmountUnit);
+                    w.setPrepMethod(w_prepMethod);
 					current_ing.weights << w;
+                }
 			}
 
 			current_ing.usda_id = id;
@@ -958,23 +966,23 @@ void RecipeDB::importUSDADatabase()
 		const WeightList weights = (*it).weights;
 		for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
 			Weight w = *weight_it;
-			w.perAmountUnitID = createUnit( w.perAmountUnit, Unit::Other, this );
-			w.weightUnitID = unit_g_id;
-			w.ingredientID = assigned_id;
+			w.setPerAmountUnitId(createUnit( w.perAmountUnit(), Unit::Other, this ));
+			w.setWeightUnitId(unit_g_id);
+			w.setIngredientId(assigned_id);
 
 			//TODO optimze by creating all prep methods and storing them for faster non-db access
-			if ( !w.prepMethod.isEmpty() ) {
-				int prepID = findExistingPrepByName( w.prepMethod );
+			if ( !w.prepMethod().isEmpty() ) {
+				int prepID = findExistingPrepByName( w.prepMethod() );
 				if ( prepID == -1 ) {
-					createNewPrepMethod( w.prepMethod );
+					createNewPrepMethod( w.prepMethod() );
 					prepID = lastInsertID();
 				}
-				w.prepMethodID = prepID;
+				w.setPrepMethodId(prepID);
 			}
 
 			bool exists = false;
 			for ( WeightList::const_iterator it = existingWeights.begin(); it != existingWeights.end(); ++it ) {
-				if ( (*it).perAmountUnitID == w.perAmountUnitID && (*it).prepMethodID == w.prepMethodID ) {
+				if ( (*it).perAmountUnitId() == w.perAmountUnitId() && (*it).prepMethodId() == w.prepMethodId() ) {
 					exists = true;
 					break;
 				}

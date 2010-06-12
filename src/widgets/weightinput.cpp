@@ -29,15 +29,16 @@ WeightInput::WeightInput( QWidget *parent, RecipeDB *database, Unit::Type type, 
 void WeightInput::emitValueChanged()
 {
 	Weight w;
-	w.perAmount = amount().toDouble();
+	w.setPerAmount(amount().toDouble());
 
 	Unit u = unit();
-	w.perAmountUnitID = u.id();
-	w.perAmountUnit = u.determineName(w.perAmount, /*useAbbrev=*/false);
+	w.setPerAmountUnitId(u.id());
+	w.setPerAmountUnit(u.determineName(w.perAmount(), /*useAbbrev=*/false));
 
+    // FIXME: What happens here? Both name and id are not defined!
 	Element prep;
-	w.prepMethod = prep.name;
-	w.prepMethodID = prep.id;
+	w.setPrepMethod(prep.name);
+	w.setPrepMethodId(prep.id);
 	emit valueChanged( w );
 }
 

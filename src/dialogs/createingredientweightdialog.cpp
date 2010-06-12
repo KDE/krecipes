@@ -120,12 +120,12 @@ void CreateIngredientWeightDialog::slotOk()
 Weight CreateIngredientWeightDialog::weight() const
 {
 	Weight w;
-	w.perAmount = perAmountEdit->value().toDouble();
-	w.perAmountUnitID = perAmountUnitBox->id( perAmountUnitBox->currentIndex() );
-	w.weight = weightEdit->value().toDouble();
-	w.weightUnitID = weightUnitBox->id( weightUnitBox->currentIndex() );
-	w.prepMethodID = prepMethodBox->id( prepMethodBox->currentIndex() );
-	w.prepMethod = prepMethodBox->currentText();
+	w.setPerAmount(perAmountEdit->value().toDouble());
+	w.setPerAmountUnitId(perAmountUnitBox->id( perAmountUnitBox->currentIndex() ));
+	w.setWeight(weightEdit->value().toDouble());
+	w.setWeightUnitId(weightUnitBox->id( weightUnitBox->currentIndex() ));
+	w.setPrepMethodId(prepMethodBox->id( prepMethodBox->currentIndex() ));
+	w.setPrepMethod(prepMethodBox->currentText());
 
 	return w;
 }

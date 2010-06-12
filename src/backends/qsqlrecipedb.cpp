@@ -1209,25 +1209,25 @@ void QSqlRecipeDB::removeIngredientWeight( int id )
 void QSqlRecipeDB::addIngredientWeight( const Weight &w )
 {
 	QString command;
-	if ( w.id != -1 ) {
+	if ( w.id() != -1 ) {
 		command = QString( "UPDATE ingredient_weights SET ingredient_id=%1,amount=%2,unit_id=%3,weight=%4,weight_unit_id=%5,prep_method_id=%7 WHERE id=%6" )
-		  .arg(w.ingredientID)
-		  .arg(w.perAmount)
-		  .arg(w.perAmountUnitID)
-		  .arg(w.weight)
-		  .arg(w.weightUnitID)
-		  .arg(w.id)
-		  .arg(w.prepMethodID);
+		  .arg(w.ingredientId())
+		  .arg(w.perAmount())
+		  .arg(w.perAmountUnitId())
+		  .arg(w.weight())
+		  .arg(w.weightUnitId())
+		  .arg(w.id())
+		  .arg(w.prepMethodId());
 	}
 	else {
 		command = QString( "INSERT INTO ingredient_weights VALUES(%6,%1,%2,%3,%4,%5,%7)" )
-		  .arg(w.ingredientID)
-		  .arg(w.perAmount)
-		  .arg(w.perAmountUnitID)
-		  .arg(w.weight)
-		  .arg(w.weightUnitID)
+		  .arg(w.ingredientId())
+		  .arg(w.perAmount())
+		  .arg(w.perAmountUnitId())
+		  .arg(w.weight())
+		  .arg(w.weightUnitId())
 		  .arg(getNextInsertIDStr( "ingredient_weights", "id" ))
-		  .arg(w.prepMethodID);
+		  .arg(w.prepMethodId());
 	}
 	QSqlQuery query( command, *database);
 }
@@ -1717,13 +1717,13 @@ WeightList QSqlRecipeDB::ingredientWeightUnits( int ingID )
 	if ( query.isActive() ) {
 		while ( query.next() ) {
 			Weight w;
-			w.id = query.value(0).toInt();
-			w.perAmount = query.value(1).toString().toDouble();
-			w.perAmountUnitID = query.value(2).toInt();
-			w.weight = query.value(3).toString().toDouble();
-			w.weightUnitID = query.value(4).toInt();
-			w.prepMethodID = query.value(5).toInt();
-			w.ingredientID = ingID;
+			w.setId(query.value(0).toInt());
+			w.setPerAmount(query.value(1).toString().toDouble());
+			w.setPerAmountUnitId(query.value(2).toInt());
+			w.setWeight(query.value(3).toString().toDouble());
+			w.setWeightUnitId(query.value(4).toInt());
+			w.setPrepMethodId(query.value(5).toInt());
+			w.setIngredientId(ingID);
 			list.append(w);
 		}
 	}

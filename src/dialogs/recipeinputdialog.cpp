@@ -1577,14 +1577,14 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 					QStringList missingConversions;
 					for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
 						//skip entries that only differ in how it's prepared
-						QPair<int,int> usedPair((*weight_it).perAmountUnitID,(*weight_it).weightUnitID);
+						QPair<int,int> usedPair((*weight_it).perAmountUnitId(),(*weight_it).weightUnitId());
 						if ( usedIds.find(usedPair) != usedIds.end() )
 							continue;
 
-						QString toUnit = database->unitName((*weight_it).perAmountUnitID).name();
+						QString toUnit = database->unitName((*weight_it).perAmountUnitId()).name();
 						if ( toUnit.isEmpty() ) toUnit = i18nc( "@info", "-No unit-");
 
-						QString fromUnit = database->unitName((*weight_it).weightUnitID).name();
+						QString fromUnit = database->unitName((*weight_it).weightUnitId()).name();
 						if ( fromUnit.isEmpty() ) fromUnit = i18nc( "@info", "-No unit-");
 
 						QString ingUnit = ing.units.name();
