@@ -210,40 +210,49 @@ target_link_libraries(krecipescommon
 
 ############### tests ################
 
-if(KDE4_BUILD_TESTS)
 
-set(TESTS kretest mmftest mx2test mxptest nyctest recipemltest rezkonvtest)
+set(IMPORT_EXPORT_TESTS
+    kretest mmftest mx2test mxptest nyctest recipemltest rezkonvtest
+    )
 
-foreach(TEST ${TESTS})
+set(UNIT_TESTS
+    )
 
-set(TEST_SRCS tests/${TEST}.cpp)
+macro(add_import_export_test _TEST)
+    if(KDE4_BUILD_TESTS)
+        kde4_add_executable(krecipes-${_TEST} tests/${_TEST}.cpp)
+        target_link_libraries(krecipes-${_TEST} ${UNIT_TEST_LIBRARIES})
 
-kde4_add_executable(${TEST} ${TEST_SRCS})
+        set(_TEST_DATA
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/${_TEST}.txt
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_photo.jpg)
 
-target_link_libraries(${TEST} krecipescommon
-   ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
-   ${QT_QTSQL_LIBRARY} ${NEPOMUK_LIBRARIES} 
-   ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}) 
+        add_test(NAME krecipes-${_TEST} COMMAND $<TARGET_FILE:krecipes-${_TEST}> ${_TEST_DATA})
+    endif(KDE4_BUILD_TESTS)
+endmacro(add_import_export_test)
 
+macro(add_unit_test _TEST)
+    kde4_add_unit_test(krecipes-${_TEST} tests/${_TEST}.cpp)
+    target_link_libraries(krecipes-${_TEST} ${UNIT_TEST_LIBRARIES})
+endmacro(add_unit_test)
+
+set(UNIT_TEST_LIBRARIES krecipescommon
+    ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QTSQL_LIBRARY}  ${QT_QTTEST_LIBRARY} ${NEPOMUK_LIBRARIES}
+    ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}
+    )
 if ( SQLITE_FOUND )
-   target_link_libraries(${TEST} ${SQLITE_LIBRARIES})
+   list(APPEND UNIT_TEST_LIBRARIES ${SQLITE_LIBRARIES})
 elseif ( SQLITE2_FOUND )
-   target_link_libraries(${TEST} ${SQLITE2_LIBRARIES})
+   list(APPEND UNIT_TEST_LIBRARIES ${SQLITE2_LIBRARIES})
 endif ( SQLITE_FOUND )
 
-install(TARGETS ${TEST}
-   DESTINATION ${DATA_INSTALL_DIR}/krecipes/tests)
-
-install(FILES
-   tests/${TEST}.txt
-   DESTINATION ${DATA_INSTALL_DIR}/krecipes/tests)
-
-endforeach(TEST)
-
-install(FILES tests/test_photo.jpg
-   DESTINATION ${DATA_INSTALL_DIR}/krecipes/tests)
-
-endif(KDE4_BUILD_TESTS)
+foreach(_TEST ${IMPORT_EXPORT_TESTS})
+    add_import_export_test(${_TEST})
+endforeach(_TEST)
+foreach(_TEST ${UNIT_TESTS})
+    add_unit_test(${_TEST})
+endforeach(_TEST)
 
 ############# Main  #################
 
