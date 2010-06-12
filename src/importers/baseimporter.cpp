@@ -287,13 +287,13 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			}
 
 			for ( RatingCriteriaList::iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-				int new_criteria_id = db->findExistingRatingByName(( *rc_it ).name);
-				if ( new_criteria_id == -1 && !( *rc_it ).name.isEmpty() ) {
-					db->createNewRating( ( *rc_it ).name );
+				int new_criteria_id = db->findExistingRatingByName(( *rc_it ).name());
+				if ( new_criteria_id == -1 && !( *rc_it ).name().isEmpty() ) {
+					db->createNewRating( ( *rc_it ).name() );
 					new_criteria_id = db->lastInsertID();
 				}
 	
-				( *rc_it ).id = new_criteria_id;
+				( *rc_it ).setId( new_criteria_id );
 			}
 		}
 

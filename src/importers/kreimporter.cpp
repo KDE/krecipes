@@ -297,10 +297,10 @@ void KreImporter::readCriterion( const QDomNodeList& l, RatingCriteriaList &rc_l
 				QDomElement criteriaChild = criteriaChildren.item( j ).toElement();
 		
 				if ( criteriaChild.tagName() == "name" ) {
-					rc.name = criteriaChild.text();
+					rc.setName( criteriaChild.text() );
 				}
 				else if ( criteriaChild.tagName() == "stars" ) {
-					rc.stars = criteriaChild.text().toDouble();
+					rc.setStars( criteriaChild.text().toDouble() );
 				}
 			}
 			rc_list.append(rc);

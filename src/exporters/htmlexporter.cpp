@@ -411,16 +411,16 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
 			ratings_html += "<table>";
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
-			ratings_html +=  "<tr><td>"+(*rc_it).name+":</td><td><img src=\""+image_url+"\" /></td></tr>";
+			QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars()) + "-stars.png";
+			ratings_html +=  "<tr><td>"+(*rc_it).name()+":</td><td><img src=\""+image_url+"\" /></td></tr>";
 			if ( !QFile::exists( fi.absolutePath() + '/' + image_url ) ) {
-				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars);
+				QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars());
 				starPixmap.save( fi.absolutePath() + '/' + image_url, "PNG" );
 				kDebug() << "saving: " << fi.absolutePath() + '/' + image_url ;
 			}
 
 			rating_total++;
-			rating_sum += (*rc_it).stars;
+			rating_sum += (*rc_it).stars();
 		}
 		if ( (*rating_it).ratingCriteriaList.count() > 0 )
 			ratings_html += "</table>";

@@ -199,8 +199,8 @@ Rating EditRatingDialog::rating() const
 
 	for ( Q3ListViewItem *it = criteriaListView->firstChild(); it; it = it->nextSibling() ) {
 		RatingCriteria rc;
-		rc.name = it->text(0);
-		rc.stars = it->text(2).toDouble();
+		rc.setName(it->text(0));
+		rc.setStars(it->text(2).toDouble());
 		r.append( rc );
 	}
 
@@ -227,11 +227,11 @@ void EditRatingDialog::loadRating( const Rating &rating )
 void EditRatingDialog::slotAddRatingCriteria()
 {
 	RatingCriteria r;
-	r.name = criteriaComboBox->lineEdit()->text().trimmed();
-	if ( r.name.isEmpty() )
+	r.setName(criteriaComboBox->lineEdit()->text().trimmed());
+	if ( r.name().isEmpty() )
 		return;
 
-	r.stars = starsWidget->rating() / 2;
+	r.setStars(starsWidget->rating() / 2);
 
 	addRatingCriteria(r);
 
@@ -243,13 +243,13 @@ void EditRatingDialog::slotAddRatingCriteria()
 
 void EditRatingDialog::addRatingCriteria( const RatingCriteria &rc )
 {
-	Q3ListViewItem * it = new Q3ListViewItem(criteriaListView,rc.name);
+	Q3ListViewItem * it = new Q3ListViewItem(criteriaListView,rc.name());
 
-	QPixmap stars = Rating::starsPixmap(rc.stars);
+	QPixmap stars = Rating::starsPixmap(rc.stars());
 	if ( !stars.isNull() ) //there aren't zero stars
 		it->setPixmap(1,stars);
 
-	it->setText(2,QString::number(rc.stars));
+	it->setText(2,QString::number(rc.stars()));
 }
 
 void EditRatingDialog::slotRemoveRatingCriteria()

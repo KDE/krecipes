@@ -160,8 +160,8 @@ QString mx2Exporter::createContent( const RecipeList& recipes )
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); 
 				rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 				QDomElement rate_tag = doc.createElement("RatE");
-				rate_tag.setAttribute("name", (*rc_it).name);
-				rate_tag.setAttribute("value", 2.0 * (*rc_it).stars); // 2X because MasterCook uses 1 - 10 scale
+				rate_tag.setAttribute("name", (*rc_it).name());
+				rate_tag.setAttribute("value", 2.0 * (*rc_it).stars()); // 2X because MasterCook uses 1 - 10 scale
 				rats_tag.appendChild(rate_tag);
 			} // for elements of the rating
 			recipe_tag.appendChild(rats_tag);

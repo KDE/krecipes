@@ -191,6 +191,7 @@ set(datablocks_SRCS
    datablocks/unitratiolist.cpp
    datablocks/mixednumber.cpp
    datablocks/rating.cpp
+   datablocks/ratingcriteria.cpp
    datablocks/weight.cpp)
 
 ############### common library ################
@@ -216,6 +217,7 @@ set(IMPORT_EXPORT_TESTS
     )
 
 set(UNIT_TESTS
+    test_ratingcriteria
     )
 
 macro(add_import_export_test _TEST)

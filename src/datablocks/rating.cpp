@@ -47,7 +47,7 @@ double Rating::average() const
 	int count = 0;
 	for ( RatingCriteriaList::const_iterator rc_it = ratingCriteriaList.begin(); rc_it != ratingCriteriaList.end(); ++rc_it ) {
 		count++;
-		sum += (*rc_it).stars;
+		sum += (*rc_it).stars();
 	}
 
 	if ( count > 0 )
@@ -64,7 +64,7 @@ double RatingList::average()
 	for ( RatingList::const_iterator rating_it = begin(); rating_it != end(); ++rating_it ) {
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 			rating_total++;
-			rating_sum += (*rc_it).stars;
+			rating_sum += (*rc_it).stars();
 		}
 	}
 

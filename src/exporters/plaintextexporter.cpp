@@ -151,10 +151,10 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 				//FIXME: This is an ugly hack, but I don't know how else to be i18n friendly (if this is even that)
 				// and still be able to display the amount as a fraction
 				//KDE$ port
-				QString starsTrans = i18np("1 star","%1 stars",qRound((*rc_it).stars));
-				starsTrans.replace(QString::number(qRound((*rc_it).stars)),MixedNumber((*rc_it).stars).toString());
+				QString starsTrans = i18np("1 star","%1 stars",qRound((*rc_it).stars()));
+				starsTrans.replace(QString::number(qRound((*rc_it).stars())),MixedNumber((*rc_it).stars()).toString());
 
-				content +=  "  "+(*rc_it).name+": "+starsTrans+'\n';
+				content +=  "  "+(*rc_it).name()+": "+starsTrans+'\n';
 			}
 
 			if ( (*rating_it).ratingCriteriaList.size() > 0 )

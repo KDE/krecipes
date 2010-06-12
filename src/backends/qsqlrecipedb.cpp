@@ -392,9 +392,9 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 					if ( criterionQuery.isActive() ) {
 						while ( criterionQuery.next() ) {
 							RatingCriteria rc;
-							rc.id = criterionQuery.value( 0 ).toInt();
-							rc.name = unescapeAndDecode( criterionQuery.value( 1 ).toByteArray() );
-							rc.stars = criterionQuery.value( 2 ).toString().toDouble();
+							rc.setId( criterionQuery.value( 0 ).toInt() );
+							rc.setName( unescapeAndDecode( criterionQuery.value( 1 ).toByteArray() ) );
+							rc.setStars( criterionQuery.value( 2 ).toString().toDouble() );
 							r.append( rc );
 						}
 					}
@@ -811,7 +811,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 			(*rating_it).id = lastInsertID();
 
 		for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.constBegin(); rc_it != (*rating_it).ratingCriteriaList.constEnd(); ++rc_it ) {
-			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+','+QString::number((*rc_it).id)+','+QString::number((*rc_it).stars)+')' );
+			command = QString( "INSERT INTO rating_criterion_list VALUES("+QString::number((*rating_it).id)+','+QString::number((*rc_it).id())+','+QString::number((*rc_it).stars())+')' );
 			recipeToSave.exec( command );
 		}
 

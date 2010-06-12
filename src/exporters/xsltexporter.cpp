@@ -176,13 +176,13 @@ QString XSLTExporter::createContent( const RecipeList &recipes )
 		double rating_sum = 0;
 		for ( RatingList::const_iterator rating_it = (*recipe_it).ratingList.begin(); rating_it != (*recipe_it).ratingList.end(); ++rating_it ) {
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
-				QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars) + "-stars.png";
+				QString image_url = fi.baseName() + "_photos/" + QString::number((*rc_it).stars()) + "-stars.png";
 				if ( !QFile::exists( fi.absolutePath() + '/' + image_url ) ) {
-					QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars);
+					QPixmap starPixmap = Rating::starsPixmap((*rc_it).stars());
 					starPixmap.save( fi.absolutePath() + '/' + image_url, "PNG" );
 				}
 				rating_total++;
-				rating_sum += (*rc_it).stars;
+				rating_sum += (*rc_it).stars();
 			}
 		}
 

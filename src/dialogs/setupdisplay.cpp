@@ -92,12 +92,12 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		rating1.rater = i18n("Rater");
 		rating1.comment = i18n("Comment");
 
-		rc.name = i18n("Criteria 1");
-		rc.stars = 5.0;
+		rc.setName(i18n("Criteria 1"));
+		rc.setStars(5.0);
 		rating1.append(rc);
 
-		rc.name = i18n("Criteria 2");
-		rc.stars = 2.5;
+		rc.setName(i18n("Criteria 2"));
+		rc.setStars(2.5);
 		rating1.append(rc);
 
 		IngredientProperty prop;

@@ -15,17 +15,7 @@
 
 #include <QPixmap>
 
-class RatingCriteria
-{
-public:
-	RatingCriteria() : id(-1), stars(0.0){}
-
-	int id;
-	QString name;
-	double stars;
-};
-
-typedef QList< RatingCriteria > RatingCriteriaList;
+#include "ratingcriteria.h"
 
 class Rating
 {

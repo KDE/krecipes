@@ -187,8 +187,8 @@ void check( const RatingList &rating, const RatingList &base )
 		RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin();
 		RatingCriteriaList::const_iterator base_rc_it = (*base_rating_it).ratingCriteriaList.begin();
 		for ( ; rc_it != (*rating_it).ratingCriteriaList.end() || base_rc_it != (*base_rating_it).ratingCriteriaList.end(); ++rc_it, ++base_rc_it ) {
-			check("checking criteria name",(*rc_it).name,(*base_rc_it).name);
-			check("checking stars",(*rc_it).stars,(*base_rc_it).stars);
+			check("checking criteria name",(*rc_it).name(),(*base_rc_it).name());
+			check("checking stars",(*rc_it).stars(),(*base_rc_it).stars());
 		}
 		check( "criteria count", int((*rating_it).ratingCriteriaList.count()), int((*base_rating_it).ratingCriteriaList.count()) );
 	}

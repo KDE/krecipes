@@ -1384,12 +1384,12 @@ void RecipeInputDialog::slotAddRating()
 		Rating r = ratingDlg->rating();
 
 		for ( RatingCriteriaList::iterator rc_it = r.ratingCriteriaList.begin(); rc_it != r.ratingCriteriaList.end(); ++rc_it ) {
-			int criteria_id = database->findExistingRatingByName((*rc_it).name);
+			int criteria_id = database->findExistingRatingByName((*rc_it).name());
 			if ( criteria_id == -1 ) {
-				database->createNewRating((*rc_it).name);
+				database->createNewRating((*rc_it).name());
 				criteria_id = database->lastInsertID();
 			}
-			(*rc_it).id = criteria_id;
+			(*rc_it).setId(criteria_id);
 		}
 
 		RatingDisplayWidget *item = new RatingDisplayWidget( this );
@@ -1416,8 +1416,8 @@ void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *it
 
 	item->criteriaListView->clear();
 	for ( RatingCriteriaList::const_iterator rc_it = rating.ratingCriteriaList.begin(); rc_it != rating.ratingCriteriaList.end(); ++rc_it ) {
-		Q3ListViewItem * it = new Q3ListViewItem(item->criteriaListView,(*rc_it).name);
-		it->setPixmap( 1, Rating::starsPixmap( (*rc_it).stars ) );
+		Q3ListViewItem * it = new Q3ListViewItem(item->criteriaListView,(*rc_it).name());
+		it->setPixmap( 1, Rating::starsPixmap( (*rc_it).stars() ) );
 	}
 
 	item->buttonEdit->disconnect();
@@ -1440,12 +1440,12 @@ void RecipeInputDialog::slotEditRating()
 		Rating r = ratingDlg->rating();
 
 		for ( RatingCriteriaList::iterator rc_it = r.ratingCriteriaList.begin(); rc_it != r.ratingCriteriaList.end(); ++rc_it ) {
-			int criteria_id = database->findExistingRatingByName((*rc_it).name);
+			int criteria_id = database->findExistingRatingByName((*rc_it).name());
 			if ( criteria_id == -1 ) {
-				database->createNewRating((*rc_it).name);
+				database->createNewRating((*rc_it).name());
 				criteria_id = database->lastInsertID();
 			}
-			(*rc_it).id = criteria_id;
+			(*rc_it).setId(criteria_id);
 		}
 
 		(*sender->rating_it) = r;

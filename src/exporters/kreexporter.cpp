@@ -246,8 +246,8 @@ QString KreExporter::createContent( const RecipeList& recipes )
 			xml += "<criterion>";
 			for ( RatingCriteriaList::const_iterator rc_it = (*rating_it).ratingCriteriaList.begin(); rc_it != (*rating_it).ratingCriteriaList.end(); ++rc_it ) {
 				xml += "<criteria>";
-				xml += "<name>"+(*rc_it).name+"</name>";
-				xml += "<stars>"+QString::number((*rc_it).stars)+"</stars>";
+				xml += "<name>"+(*rc_it).name()+"</name>";
+				xml += "<stars>"+QString::number((*rc_it).stars())+"</stars>";
 				xml += "</criteria>";
 			}
 			xml += "</criterion>";

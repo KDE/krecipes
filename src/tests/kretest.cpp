@@ -161,20 +161,20 @@ main(int argc, char *argv[])
 	rating1.rater = "George McFry";
 	rating1.comment = "Good enough";
 
-	rc.name = "Taste";
-	rc.stars = 5.0;
+	rc.setName("Taste");
+	rc.setStars(5.0);
 	rating1.append(rc);
 
 	Rating rating2;
 	rating2.rater = "Me";
 	rating2.comment = "Yuck, don't eat!";
 
-	rc.name = "Overall";
-	rc.stars = 2.0;
+	rc.setName("Overall");
+	rc.setStars(2.0);
 	rating2.append(rc);
 
-	rc.name = "Taste";
-	rc.stars = 1.5;
+	rc.setName("Taste");
+	rc.setStars(1.5);
 	rating2.append(rc);
 
 	recipe.ratingList.append(rating1);
