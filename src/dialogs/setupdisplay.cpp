@@ -185,7 +185,7 @@ void SetupDisplay::loadTemplate( const QString &filename )
 {
 	bool storeChangedState = has_changes;
 	KTemporaryFile tmpFile;
-	tmpFile.autoRemove();
+	tmpFile.setAutoRemove( true );
 	tmpFile.open();
 	saveLayout(tmpFile.fileName());
 	has_changes = storeChangedState; //saveLayout() sets changes to false
