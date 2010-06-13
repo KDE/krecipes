@@ -6,7 +6,6 @@ Planned for the next release in 2.0 branch:
  * Use WebKit instead of KHTML for printing recipes. Probably this would fix
    sourceforge #2990118 and #2960140.
  * There are still some dialogs that don't follow HIG.
- * Some dialogs are too small by default.
  * Using a QSplitter on the ingredient matcher dialog.
  * Support ranges when resizing a recipe.
  * Fix bugs.
