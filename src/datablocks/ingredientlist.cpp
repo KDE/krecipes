@@ -241,6 +241,9 @@ IngredientList IngredientList::firstGroup()
 {
 	usedGroups.clear();
 
+	if ( isEmpty() )
+		return IngredientList();
+
 	Q3ValueList<IngredientList::const_iterator> members = _groupMembers( ( *begin() ).groupID, begin() );
 
 	for ( Q3ValueList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
