@@ -125,12 +125,12 @@ void RecipeMLImporter::readRecipemlHead( const QDomElement& head )
 				QDomElement y = yieldChildren.item( j ).toElement();
 				QString tagName = y.tagName();
 				if ( tagName == "range" ) {
-                    double amount = 0.0;
-                    double amountOffset = 0.0;
+					double amount = 0.0;
+					double amountOffset = 0.0;
 					readRecipemlRange( y, amount, amountOffset );
-                    recipe.yield.setAmount(amount);
-                    recipe.yield.setAmountOffset(amountOffset);
-                }
+					recipe.yield.setAmount(amount);
+					recipe.yield.setAmountOffset(amountOffset);
+				}
 				else if ( tagName == "unit" )
 					recipe.yield.setType(y.text());
 				else

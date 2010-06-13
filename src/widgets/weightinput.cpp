@@ -35,7 +35,7 @@ void WeightInput::emitValueChanged()
 	w.setPerAmountUnitId(u.id());
 	w.setPerAmountUnit(u.determineName(w.perAmount(), /*useAbbrev=*/false));
 
-    // FIXME: What happens here? Both name and id are not defined!
+	// FIXME: What happens here? Both name and id are not defined!
 	Element prep;
 	w.setPrepMethod(prep.name);
 	w.setPrepMethodId(prep.id);

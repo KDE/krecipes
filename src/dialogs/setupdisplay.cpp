@@ -185,8 +185,8 @@ void SetupDisplay::loadTemplate( const QString &filename )
 {
 	bool storeChangedState = has_changes;
 	KTemporaryFile tmpFile;
-        tmpFile.autoRemove ();
-        tmpFile.open();
+	tmpFile.autoRemove();
+	tmpFile.open();
 	saveLayout(tmpFile.fileName());
 	has_changes = storeChangedState; //saveLayout() sets changes to false
 
@@ -224,7 +224,7 @@ void SetupDisplay::loadLayout( const QString &filename )
 		int line;
 		int column;
 		if ( !doc.setContent( &input, &error, &line, &column ) ) {
-                    kDebug() << i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file." , error , line, column ) ;
+			kDebug() << i18n( "\"%1\" at line %2, column %3.  This may not be a Krecipes layout file." , error , line, column ) ;
 			return ;
 		}
 
@@ -455,11 +455,11 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 		QActionGroup *alignment_actions = new QActionGroup( this );
 
 		QAction *c_action = new QAction( i18nc( "Align center", "Center" ), this );
-                alignment_actions->addAction( c_action );
+		alignment_actions->addAction( c_action );
 		QAction *l_action = new QAction( i18nc( "Align left", "Left" ),this );
-                alignment_actions->addAction( l_action );
+		alignment_actions->addAction( l_action );
 		QAction *r_action = new QAction( i18nc( "Align right", "Right" ), this );
-                alignment_actions->addAction( r_action );
+		alignment_actions->addAction( r_action );
 
 		int align = item->alignment;
 		if ( align & Qt::AlignHCenter )
@@ -548,9 +548,9 @@ void SetupDisplay::setTextColor()
 void SetupDisplay::setShown( int id )
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-        kDebug()<<" item :"<<item;
-        kDebug()<<" !popup->isItemChecked( id ) :"<<popup->isItemChecked( id );
-        bool visibility = popup->isItemChecked( id );
+	kDebug()<<" item :"<<item;
+	kDebug()<<" !popup->isItemChecked( id ) :"<<popup->isItemChecked( id );
+	bool visibility = popup->isItemChecked( id );
 	emit itemVisibilityChanged( item, visibility );
 
 	m_currentItem = item;

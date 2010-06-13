@@ -35,7 +35,7 @@ public slots:
 	void paste();
 	void pasteAsSub();
 	void changeCategoryParent(Q3ListViewItem *item,
-        	Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ );
+		Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ );
 	void remove();
 
 private:

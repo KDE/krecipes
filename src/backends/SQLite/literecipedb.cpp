@@ -36,7 +36,7 @@ QString escape( const QString &s );
 
 LiteRecipeDB::LiteRecipeDB( const QString &_dbFile ) : QSqlRecipeDB( QString(), QString(), QString(), _dbFile )
 {
-    kDebug();
+	kDebug();
 /*	KConfig * config = KGlobal::config();
 	config->setGroup( "Server" );
 
@@ -51,7 +51,7 @@ LiteRecipeDB::~LiteRecipeDB()
 
 int LiteRecipeDB::lastInsertID()
 {
-    kDebug();
+	kDebug();
 	int lastID = -1;
 	QSqlQuery query( "SELECT lastInsertID()", *database );
 	if ( query.isActive() && query.first() )
@@ -85,7 +85,7 @@ QStringList LiteRecipeDB::restoreCommand() const
 #elif HAVE_SQLITE3
 	QString binary = "sqlite3";
 #endif
-        kDebug()<<" binary: "<<binary;
+	kDebug()<<" binary: "<<binary;
 	KConfigGroup config( KGlobal::config(), "Server" );
 	binary = config.readEntry( "SQLitePath", binary );
 
@@ -101,7 +101,7 @@ void LiteRecipeDB::createDB()
 
 void LiteRecipeDB::createTable( const QString &tableName )
 {
-    kDebug()<<" tableName :"<<tableName;
+	kDebug()<<" tableName :"<<tableName;
 	QStringList commands;
 
 	if ( tableName == "recipes" )
@@ -700,7 +700,7 @@ void LiteRecipeDB::portOldDatabases( float version )
 				QBuffer buffer( &ba );
 				buffer.open( QIODevice::WriteOnly );
 				QImageWriter iio( &buffer, "JPEG" );
-                                iio.write( photo );
+				iio.write( photo );
 				//recipe->photo.save( &buffer, "JPEG" ); don't need QImageIO in QT 3.2
 				storePhoto( query.value(0).toInt(), ba );
 

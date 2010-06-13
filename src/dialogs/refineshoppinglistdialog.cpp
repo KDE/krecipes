@@ -59,7 +59,7 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 	allIngListView = new KreListView( layout2Widget, QString(), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
 	list_view->reload();
- 	allIngListView->setListView(list_view);
+	allIngListView->setListView(list_view);
 	allIngListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	allIngListView->listView()->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	layout2->addWidget( allIngListView );
@@ -167,7 +167,7 @@ void RefineShoppingListDialog::addIngredient()
 		ingListView->listView() ->ensureItemVisible( new_item );
 		allIngListView->listView() ->setSelected( item, false );
 
-        ingredientList.append( Ingredient( item->text( 0 ), 0, Unit() ) );
+		ingredientList.append( Ingredient( item->text( 0 ), 0, Unit() ) );
 		item_ing_map.insert( new_item, ingredientList.end()-- );
 	}
 }

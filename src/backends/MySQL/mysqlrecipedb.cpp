@@ -51,7 +51,7 @@ void MySQLRecipeDB::createDB()
 
 QStringList MySQLRecipeDB::backupCommand() const
 {
-    KConfigGroup config( KGlobal::config(), "Server");
+	KConfigGroup config( KGlobal::config(), "Server");
 
 	QStringList command;
 	command<<config.readEntry( "MySQLDumpPath", "mysqldump" )<<"-q";
@@ -63,11 +63,11 @@ QStringList MySQLRecipeDB::backupCommand() const
 	QString user = config.readEntry("Username", QString());
 	command<<"-u"+user;
 
-        command<<"-h"+config.readEntry("Host", "localhost");
+	command<<"-h"+config.readEntry("Host", "localhost");
 
 	int port = config.readEntry("Port", 0);
 	if ( port > 0 )
-        	command<<"-P"+QString::number(port);
+		command<<"-P"+QString::number(port);
 
 	command<<database->databaseName();
 	return command;
@@ -89,9 +89,9 @@ QStringList MySQLRecipeDB::restoreCommand() const
 
 	int port = config.readEntry("Port", 0);
 	if ( port > 0 )
-        	command<<"-P"+QString::number(port);
+		command<<"-P"+QString::number(port);
 
-        command<<"-h"+config.readEntry("Host", "localhost");
+	command<<"-h"+config.readEntry("Host", "localhost");
 
 	command<<database->databaseName();
 	return command;
@@ -370,7 +370,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				QSqlQuery query(QString(),*database);
- 				query.prepare( "INSERT INTO ingredient_list VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)" );
+				query.prepare( "INSERT INTO ingredient_list VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)" );
 				query.addBindValue( copyQuery.value( 0 ) );
 				query.addBindValue( copyQuery.value( 1 ) );
 				query.addBindValue( copyQuery.value( 2 ) );

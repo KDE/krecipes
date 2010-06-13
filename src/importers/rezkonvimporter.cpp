@@ -71,10 +71,10 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	//categories (Kategorien):
 	text_it++;
 	QStringList categories;
-   if ( ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ).isEmpty() )
-      categories = QStringList();
-   else
-      categories = ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ).split( ',', QString::SkipEmptyParts );
+	if ( ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ).isEmpty() )
+		categories = QStringList();
+	else
+		categories = ( *text_it ).mid( ( *text_it ).indexOf( ":" ) + 1, ( *text_it ).length() ).split( ',', QString::SkipEmptyParts );
 
 	for ( QStringList::const_iterator it = categories.constBegin(); it != categories.constEnd(); ++it ) {
 		Element new_cat;
@@ -91,10 +91,10 @@ void RezkonvImporter::readRecipe( const QStringList &raw_recipe )
 	int sep_index = yield_str.indexOf( ' ' );
 	if ( sep_index != -1 )
 		recipe.yield.setType(yield_str.mid( sep_index+1 ));
-    double amount = 0.0, amountOffset = 0.0;
+	double amount = 0.0, amountOffset = 0.0;
 	readRange( yield_str.mid( 0, sep_index ), amount, amountOffset );
-    recipe.yield.setAmount(amount);
-    recipe.yield.setAmountOffset(amountOffset);
+	recipe.yield.setAmount(amount);
+	recipe.yield.setAmountOffset(amountOffset);
 	kDebug() << "Found yield: " << recipe.yield.amount();
 
 	bool is_sub = false;

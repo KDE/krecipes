@@ -71,8 +71,8 @@ struct ingredient_nutrient_data
 RecipeDB::RecipeDB() :
 	QObject(), m_categoryCache(0), haltOperation(false), process(NULL)
 {
-    new KrecipesdbAdaptor( this );
-    QDBusConnection::sessionBus().registerObject("/KrecipesDB", this);
+	new KrecipesdbAdaptor( this );
+	QDBusConnection::sessionBus().registerObject("/KrecipesDB", this);
 	dbOK = false;
 	dbErr = "";
 }
@@ -105,7 +105,7 @@ void RecipeDB::cancelOperation()
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 {
-    kDebug()<<" type :"<<dbType<<" file :"<<file;
+	kDebug()<<" type :"<<dbType<<" file :"<<file;
 	KConfigGroup config = KGlobal::config()->group( "Server" );
 	QString host = config.readEntry( "Host", "localhost" );
 	QString user = config.readEntry( "Username", QString() );
@@ -116,13 +116,13 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 	QString f = file;
 	if ( f.isEmpty() )
 		f = config.readEntry( "DBFile", KStandardDirs::locateLocal ( "appdata", DB_FILENAME ) );
-        kDebug()<<" f :"<<f;
+	kDebug()<<" f :"<<f;
 	return createDatabase( dbType, host, user, pass, dbname, port, f );
 }
 
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, const QString &user, const QString &pass, const QString &dbname, int port, const QString &file )
 {
-    kDebug();
+	kDebug();
 	RecipeDB * database = 0;
 
 	if ( 0 )
@@ -142,7 +142,7 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	else {
 		kDebug() << "No database support included (or available) for the " << dbType << " database." ;
 	}
-        kDebug()<<" database :"<<database;
+	kDebug()<<" database :"<<database;
 	return database;
 }
 
@@ -411,7 +411,7 @@ void RecipeDB::processError(QProcess::ProcessError)
 
 void RecipeDB::initializeData( void )
 {
-    kDebug();
+	kDebug();
 	// Populate with data
 
 	// Read the commands form the data file
@@ -435,7 +435,7 @@ void RecipeDB::initializeData( void )
 
 bool RecipeDB::restore( const QString &file, QString *errMsg )
 {
-    kDebug();
+	kDebug();
 	m_dumpFile = KFilterDev::deviceForFile(file,"application/x-gzip");
 	if ( m_dumpFile->open( QIODevice::ReadOnly ) ) {
 
@@ -577,7 +577,7 @@ void RecipeDB::processReadDump()
 
 void RecipeDB::execSQL( QTextStream &stream )
 {
-    kDebug();
+	kDebug();
 	QString line, command;
 	while ( (line = stream.readLine()) != QString() ) {
 		command += ' '+line;
@@ -593,8 +593,8 @@ void RecipeDB::execSQL( QTextStream &stream )
 
 void RecipeDB::loadRecipe( Recipe *recipe, int items, int id )
 {
-    kDebug();
-    	RecipeList rlist;
+	kDebug();
+	RecipeList rlist;
 	QList<int> ids; ids << id;
 	loadRecipes( &rlist, items, ids );
 
@@ -628,7 +628,7 @@ int RecipeDB::unitCount()
 
 void RecipeDB::importSamples()
 {
-    kDebug();
+	kDebug();
 	QString sample_recipes =  KStandardDirs::locate( "appdata", "data/samples-" +  KGlobal::locale() ->language() + ".kreml" );
 	if ( sample_recipes.isEmpty() ) {
 		//TODO: Make this a KMessageBox??
@@ -660,7 +660,7 @@ void RecipeDB::getIDList( const CategoryTree *categoryTree, QStringList &ids )
 QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 {
 	//FIXME: Move this method to QSqlRecipeDB
-    kDebug();
+	kDebug();
 	QStringList queryList, conditionList, tableList;
 
 	if ( p.ingsOr.count() != 0 ) {
@@ -828,7 +828,7 @@ void create_properties( RecipeDB*, Q3ValueList<USDA::PropertyData> & );
 
 void RecipeDB::importUSDADatabase()
 {
-    kDebug();
+	kDebug();
 	//check if the data file even exists before we do anything
 	QString abbrev_file =  KStandardDirs::locate( "appdata", "data/abbrev.txt" );
 	if ( abbrev_file.isEmpty() ) {
@@ -883,12 +883,12 @@ void RecipeDB::importUSDADatabase()
 
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 
-                QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
+				QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
 				if ( USDA::parseUnitAndPrep( perAmountUnit, w_perAmountUnit, w_prepMethod, unit_data_list, prep_data_list ) ) {
-                    w.setPerAmountUnit(w_perAmountUnit);
-                    w.setPrepMethod(w_prepMethod);
+					w.setPerAmountUnit(w_perAmountUnit);
+					w.setPrepMethod(w_prepMethod);
 					current_ing.weights << w;
-                }
+				}
 			}
 
 			w = Weight();
@@ -899,12 +899,12 @@ void RecipeDB::importUSDADatabase()
 				w.setPerAmount(amountAndWeight.left(spaceIndex).toDouble());
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 
-                QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
+				QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
 				if ( USDA::parseUnitAndPrep( perAmountUnit, w_perAmountUnit, w_prepMethod, unit_data_list, prep_data_list ) ) {
-                    w.setPerAmountUnit(w_perAmountUnit);
-                    w.setPrepMethod(w_prepMethod);
+					w.setPerAmountUnit(w_perAmountUnit);
+					w.setPrepMethod(w_prepMethod);
 					current_ing.weights << w;
-                }
+				}
 			}
 
 			current_ing.usda_id = id;
@@ -1066,7 +1066,7 @@ void create_properties( RecipeDB *database, Q3ValueList<USDA::PropertyData> &pro
 //Fix property units from databases <= 0.95
 void RecipeDB::fixUSDAPropertyUnits()
 {
-    kDebug();
+	kDebug();
 	IngredientPropertyList property_list;
 	loadProperties( &property_list );
 

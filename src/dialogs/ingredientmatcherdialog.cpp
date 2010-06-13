@@ -60,7 +60,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	allIngListView = new KreListView( this, QString(), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
 	list_view->setSelectionMode( Q3ListView::Multi );
- 	allIngListView->setListView(list_view);
+	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
 
 	QVBoxLayout *layout1 = new QVBoxLayout();
@@ -217,7 +217,7 @@ void IngredientMatcherDialog::addIngredient()
 				ingListView->listView() ->ensureItemVisible( new_item );
 				allIngListView->listView() ->setSelected( items[i], false );
 
-                m_ingredientList.append( Ingredient( items[i]->text( 0 ), 0, Unit(), -1, items[i]->text( 1 ).toInt() ) );
+				m_ingredientList.append( Ingredient( items[i]->text( 0 ), 0, Unit(), -1, items[i]->text( 1 ).toInt() ) );
 				m_item_ing_map.insert( new_item, m_ingredientList.end()-- );
 			}
 		}

@@ -44,8 +44,7 @@ void AuthorActionsHandler::createNew()
 		if ( checkBounds( result ) )
 			database->createNewAuthor( result ); // Create the new author in the database
 	}
-        delete elementDialog;
-
+	delete elementDialog;
 }
 
 void AuthorActionsHandler::remove()

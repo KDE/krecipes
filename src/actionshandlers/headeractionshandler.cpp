@@ -45,8 +45,7 @@ void HeaderActionsHandler::createNew()
 		if ( checkBounds( result ) )
 			database->createNewIngGroup( result ); // Create the new header in the database
 	}
-        delete elementDialog;
-
+	delete elementDialog;
 }
 
 void HeaderActionsHandler::remove()

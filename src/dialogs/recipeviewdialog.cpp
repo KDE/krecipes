@@ -120,7 +120,7 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 
 	XSLTExporter html_generator( tmp_filename, "html" );
 	if ( layoutConfig != QString() ) {
-            KConfigGroup config(KGlobal::config(), "Page Setup" );
+		KConfigGroup config(KGlobal::config(), "Page Setup" );
 		QString styleFile = config.readEntry( layoutConfig+"Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
 		if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )
 			html_generator.setStyle( styleFile );

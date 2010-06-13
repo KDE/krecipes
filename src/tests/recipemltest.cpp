@@ -27,15 +27,15 @@ main(int argc, char *argv[])
 {
 	KAboutData about("recipemltest", 0, ki18n("Recipemltest"), "1");
 	KCmdLineArgs::init(argc, argv, &about);
-    KCmdLineOptions options;
-    options.add("+[file]");
-    KCmdLineArgs::addCmdLineOptions(options);
+	KCmdLineOptions options;
+	options.add("+[file]");
+	KCmdLineArgs::addCmdLineOptions(options);
 	KApplication app;
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    QString file("recipemltest.txt");
-    if(args->count() >= 1)
-        file = args->arg(0);
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	QString file("recipemltest.txt");
+	if(args->count() >= 1)
+		file = args->arg(0);
 
 	printf("Creating RecipeMLImporter.\n");
 	RecipeMLImporter importer;

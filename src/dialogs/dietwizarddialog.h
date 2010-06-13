@@ -151,7 +151,7 @@ private:
 	KPushButton *buttonPrev;
 
 	// Settings for the dish
-        QStackedWidget *dishStack;
+	QStackedWidget *dishStack;
 
 public slots:
 	void nextDish( void );

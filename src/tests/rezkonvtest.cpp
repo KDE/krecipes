@@ -27,15 +27,15 @@ main(int argc, char *argv[])
 {
 	KAboutData about("rezkonvtest", 0, ki18n("Rezkonvtest"), "1");
 	KCmdLineArgs::init(argc, argv, &about);
-    KCmdLineOptions options;
-    options.add("+[file]");
-    KCmdLineArgs::addCmdLineOptions(options);
+	KCmdLineOptions options;
+	options.add("+[file]");
+	KCmdLineArgs::addCmdLineOptions(options);
 	KApplication app;
 
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    QString file("rezkonvtest.txt");
-    if(args->count() >= 1)
-        file = args->arg(0);
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	QString file("rezkonvtest.txt");
+	if(args->count() >= 1)
+		file = args->arg(0);
 
 	printf("Creating RezkonvImporter.\n");
 	RezkonvImporter importer;

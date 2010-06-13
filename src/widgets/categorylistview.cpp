@@ -264,7 +264,7 @@ void CategoryListView::modifyCategory( int id, int parent_id )
 		else {
 			QMap<int,Q3ListViewItem*>::iterator parent_item_it = items_map.find(parent_id);
 			if ( parent_item_it != items_map.end() &&
- 			dynamic_cast<CategoryItemInfo*>(*parent_item_it)->isPopulated() ) {
+			dynamic_cast<CategoryItemInfo*>(*parent_item_it)->isPopulated() ) {
 				(*parent_item_it)->insertItem( item );
 				createElement(item);
 			}
@@ -312,7 +312,7 @@ StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool ed
 	addColumn( i18n( "Category" ) );
 
 	//FIXME: for some reason when I have "ShowID=true" this code results in
-        //krecipes eating 100% of my cpu time.
+	//krecipes eating 100% of my cpu time.
 	//KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	//bool show_id = config.readEntry( "ShowID", false );
 	//addColumn( "Id" , show_id ? -1 : 0 );

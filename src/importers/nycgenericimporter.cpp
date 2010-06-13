@@ -145,10 +145,10 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	QString prep;
 
 	QStringList ingredient_line;
-   if (current.isEmpty())
-      ingredient_line = QStringList();
-   else
-      ingredient_line = current.split( ' ', QString::SkipEmptyParts);
+	if (current.isEmpty())
+		ingredient_line = QStringList();
+	else
+		ingredient_line = current.split( ' ', QString::SkipEmptyParts);
 
 	bool found_amount = false;
 

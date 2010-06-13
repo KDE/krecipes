@@ -93,8 +93,7 @@ private:
 
 
 EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, RecipeDB *database, QWidget* parent )
-		: KDialog( parent ),
-  ingredientID(ingID), ingredientName(ingName)
+	: KDialog( parent ), ingredientID(ingID), ingredientName(ingName)
 {
 	this->setObjectName( "EditPropertiesDialog" );
 	this->setModal( true );
@@ -596,11 +595,11 @@ void EditPropertiesDialog::loadUSDAData()
 
 				QString perAmountUnit = amountAndWeight.right(amountAndWeight.length()-spaceIndex-1);
 
-                QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
+				QString w_perAmountUnit(w.perAmountUnit()), w_prepMethod(w.prepMethod());
 				if ( !USDA::parseUnitAndPrep( perAmountUnit, w_perAmountUnit, w_prepMethod, unit_data_list, prep_data_list ) ) 
 					continue;
-                w.setPerAmountUnit(w_perAmountUnit);
-                w.setPrepMethod(w_prepMethod);
+				w.setPerAmountUnit(w_perAmountUnit);
+				w.setPrepMethod(w_prepMethod);
 
 				int unitID = db->findExistingUnitByName( w.perAmountUnit() );
 				if ( unitID == -1 ) {

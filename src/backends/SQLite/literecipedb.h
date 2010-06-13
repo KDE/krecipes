@@ -40,7 +40,7 @@ public:
 protected:
 	virtual QSqlDriver *qsqlDriver() const
 	{
-            kDebug();
+		kDebug();
 		return new KreSQLiteDriver();
 	}
 

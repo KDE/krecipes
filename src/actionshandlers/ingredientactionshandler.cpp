@@ -44,8 +44,7 @@ void IngredientActionsHandler::createNew()
 		if ( checkBounds( result ) )
 			database->createNewIngredient( result ); // Create the new ingredient in the database
 	}
-        delete elementDialog;
-
+	delete elementDialog;
 }
 
 void IngredientActionsHandler::remove()

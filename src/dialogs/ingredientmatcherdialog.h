@@ -51,7 +51,7 @@ public:
 				QStringList subs;
 				subs << ( *ili ).name;
 				for ( Ingredient::SubstitutesList::const_iterator it = (*ili).substitutes.begin(); it != (*ili).substitutes.end(); ++it ) {
- 					subs << (*it).name;
+					subs << (*it).name;
 				}
 				ingredientListStored->append( subs.join(QString(" %1 ").arg(i18n("OR"))) );
 			}

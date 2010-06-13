@@ -70,7 +70,7 @@ QString IngredientCheckListItem::text( int column ) const
 	}
 }
 
- void IngredientCheckListItem::stateChange( bool on )
+void IngredientCheckListItem::stateChange( bool on )
 {
 	m_listview->stateChange(this,on);
 }

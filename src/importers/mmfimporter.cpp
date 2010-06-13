@@ -94,11 +94,11 @@ void MMFImporter::importMMF( QTextStream &stream )
 	stream.skipWhiteSpace();
 	current = stream.readLine().trimmed();
 	const char separator = ( version == FromDatabase ) ? ' ' : ',';
-   QStringList categories;
-   if ( current.mid( current.indexOf( ":" ) + 1, current.length() ).isEmpty() )
-	   categories = QStringList();
-   else
-      categories = current.mid( current.indexOf( ":" ) + 1, current.length() ).split( separator, QString::SkipEmptyParts);
+	QStringList categories;
+	if ( current.mid( current.indexOf( ":" ) + 1, current.length() ).isEmpty() )
+		categories = QStringList();
+	else
+		categories = current.mid( current.indexOf( ":" ) + 1, current.length() ).split( separator, QString::SkipEmptyParts);
 
 	for ( QStringList::const_iterator it = categories.constBegin(); it != categories.constEnd(); ++it ) {
 		Element new_cat;

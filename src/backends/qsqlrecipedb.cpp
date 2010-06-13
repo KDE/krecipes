@@ -35,7 +35,7 @@ int QSqlRecipeDB::m_refCount = 0;
 QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &name, int port ) : RecipeDB(),
 	connectionName("connection" + QString::number( m_refCount+1 ))
 {
-    kDebug();
+	kDebug();
 	DBuser = user;
 	DBpass = pass;
 	DBhost = host;
@@ -50,9 +50,9 @@ QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QStr
 
 QSqlRecipeDB::~QSqlRecipeDB()
 {
-    kDebug();
+	kDebug();
 	if ( dbOK ) {
-            kDebug()<<" close :"<<*database;
+		kDebug()<<" close :"<<*database;
 		database->close();
 	}
 	
@@ -88,24 +88,22 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	}
 
 	//we need to have a unique connection name for each QSqlRecipeDB class as multiple db's may be open at once (db to db transfer)
-	if ( qsqlDriver() )
-        {
-            kDebug()<<" qsqlDriver() :"<<qsqlDriver()<< " connectionName "<<connectionName;
+	if ( qsqlDriver() ) {
+		kDebug()<<" qsqlDriver() :"<<qsqlDriver()<< " connectionName "<<connectionName;
 		database = new QSqlDatabase;
 		*database = QSqlDatabase::addDatabase( qsqlDriver(), connectionName );
-                kDebug()<<" database :"<<*database;
-        }
-	else if ( !qsqlDriverPlugin().isEmpty() )
-        {
-            kDebug()<<" qsqlDriverPlugin() :"<<qsqlDriverPlugin()<<" connectionName :"<<connectionName;
+		kDebug()<<" database :"<<*database;
+	}
+	else if ( !qsqlDriverPlugin().isEmpty() ) {
+		kDebug()<<" qsqlDriverPlugin() :"<<qsqlDriverPlugin()<<" connectionName :"<<connectionName;
 		database = new QSqlDatabase;
 		*database = QSqlDatabase::addDatabase( qsqlDriverPlugin(), connectionName );
-                kDebug()<<"database :"<<*database;
-        }
+		kDebug()<<"database :"<<*database;
+	}
 	else
 		kDebug()<<"Fatal internal error!  Backend incorrectly written!";
 
-        kDebug()<<" DBname :"<<DBname;
+	kDebug()<<" DBname :"<<DBname;
 	database->setDatabaseName( DBname );
 	if ( !( DBuser.isEmpty() ) )
 		database->setUserName( DBuser );
@@ -113,12 +111,12 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 		database->setPassword( DBpass );
 	database->setHostName( DBhost );
 	if ( DBport > 0 )
-        	database->setPort(DBport);
+		database->setPort(DBport);
 
 	kDebug() << i18n( "Parameters set. Calling db->open()" ) ;
 
 	if ( !database->open() ) {
-                kDebug()<<" database.open false : create_db ? :"<<create_db;
+		kDebug()<<" database.open false : create_db ? :"<<create_db;
 		//Try to create the database
 		if ( create_db ) {
 			kDebug() << i18n( "Failing to open database. Trying to create it" ) ;
@@ -176,7 +174,7 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 
 void QSqlRecipeDB::execSQL( const QString &command )
 {
-    kDebug();
+	kDebug();
 	database->exec( command );
 }
 
@@ -197,7 +195,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 		ids_str << number_str;
 
 		if ( !(items & RecipeDB::Noatime) )
- 			database->exec( "UPDATE recipes SET ctime=ctime,mtime=mtime,atime='"+current_timestamp+"' WHERE id="+number_str );
+			database->exec( "UPDATE recipes SET ctime=ctime,mtime=mtime,atime='"+current_timestamp+"' WHERE id="+number_str );
 	}
 
 	// Read title, author, yield, and instructions as specified
@@ -570,7 +568,7 @@ void QSqlRecipeDB::loadPhoto( int recipeID, QPixmap &photo )
 
 		if ( len > 0 ) {
 			QByteArray picData;
-         picData.resize( len );
+			picData.resize( len );
 			memcpy( picData.data(), decodedPic.data(), len );
 
 			bool ok = pix.loadFromData( picData, "JPEG" );
@@ -1978,7 +1976,7 @@ int QSqlRecipeDB::categoryTopLevelCount()
 
 bool QSqlRecipeDB::checkIntegrity( void )
 {
-    kDebug();
+	kDebug();
 	// Check existence of the necessary tables (the database may be created, but empty)
 	QStringList tables;
 	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredient_weights" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "db_info" << "prep_methods" << "ingredient_groups" << "yield_types" << "prep_method_list" << "ratings" << "rating_criteria" << "rating_criterion_list";
@@ -2034,29 +2032,27 @@ bool QSqlRecipeDB::checkIntegrity( void )
 
 void QSqlRecipeDB::splitCommands( QString& s, QStringList& sl )
 {
-   if (s.isEmpty())
-       sl = QStringList();
-   else
-      sl = s.split( QRegExp( ";{1}(?!@)" ), QString::SkipEmptyParts);
+	if (s.isEmpty())
+		sl = QStringList();
+	else
+		sl = s.split( QRegExp( ";{1}(?!@)" ), QString::SkipEmptyParts);
 }
 
 float QSqlRecipeDB::databaseVersion( void )
 {
-    kDebug();
+	kDebug();
 	QString command = "SELECT ver FROM db_info";
 	QSqlQuery dbVersion( command, *database);
-        kDebug()<<"  dbVersion.isActive() :"<< dbVersion.isActive()<<" database :"<<database;
-        kDebug()<<" dbVersion.isSelect() :"<<dbVersion.isSelect();
-	if ( dbVersion.isActive() && dbVersion.isSelect() && dbVersion.next() )
-        {
-            kDebug()<<" dbVersion.value( 0 ).toString().toDouble( :"<<dbVersion.value( 0 ).toString().toDouble();
+	kDebug()<<"  dbVersion.isActive() :"<< dbVersion.isActive()<<" database :"<<database;
+	kDebug()<<" dbVersion.isSelect() :"<<dbVersion.isSelect();
+	if ( dbVersion.isActive() && dbVersion.isSelect() && dbVersion.next() ) {
+		kDebug()<<" dbVersion.value( 0 ).toString().toDouble( :"<<dbVersion.value( 0 ).toString().toDouble();
 		return ( dbVersion.value( 0 ).toString().toDouble() ); // There should be only one (or none for old DB) element, so go to first
-        }
-        else
-        {
-            kDebug()<<" old version";
+	}
+	else {
+		kDebug()<<" old version";
 		return ( 0.2 ); // if table is empty, assume oldest (0.2), and port
-        }
+	}
 }
 
 void QSqlRecipeDB::loadRatingCriterion( ElementList *list, int limit, int offset )
@@ -2064,7 +2060,7 @@ void QSqlRecipeDB::loadRatingCriterion( ElementList *list, int limit, int offset
 	list->clear();
 
 	QString command = "SELECT id,name FROM rating_criteria ORDER BY name"
-	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
+		+((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
 	QSqlQuery toLoad( command, *database);
 	if ( toLoad.isActive() ) {
 		while ( toLoad.next() ) {
@@ -2777,7 +2773,7 @@ QString QSqlRecipeDB::recipeTitle( int recipeID )
 
 void QSqlRecipeDB::emptyData( void )
 {
-    kDebug();
+	kDebug();
 	QStringList tables;
 	tables << "ingredient_info" << "ingredient_list" << "ingredient_properties" << "ingredients" << "recipes" << "unit_list" << "units" << "units_conversion" << "categories" << "category_list" << "authors" << "author_list" << "prep_methods" << "ingredient_groups" << "yield_types" << "ratings" << "rating_criteria" << "rating_criterion_list";
 	QSqlQuery tablesToEmpty( QString(), *database);
@@ -2789,7 +2785,7 @@ void QSqlRecipeDB::emptyData( void )
 
 void QSqlRecipeDB::empty( void )
 {
-    kDebug();
+	kDebug();
 	QSqlQuery tablesToEmpty( QString(), *database);
 
 	QStringList list = database->tables();
@@ -2820,7 +2816,7 @@ QString QSqlRecipeDB::getNextInsertIDStr( const QString &table, const QString &c
 
 void QSqlRecipeDB::search( RecipeList *list, int items, const RecipeSearchParameters &parameters )
 {
-    kDebug();
+	kDebug();
 
 	QString query = buildSearchQuery(parameters);
 

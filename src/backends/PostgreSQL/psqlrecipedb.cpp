@@ -188,18 +188,17 @@ float PSqlRecipeDB::databaseVersion( void )
 	kDebug();
 	QString command = "SELECT cast(ver as varchar) FROM db_info";
 	QSqlQuery dbVersion( command, *database);
-        kDebug()<<"  dbVersion.isActive() :"<< dbVersion.isActive()<<" database :"<<database;
-        kDebug()<<" dbVersion.isSelect() :"<<dbVersion.isSelect();
+	kDebug()<<"dbVersion.isActive():"<< dbVersion.isActive()<<"database:"<<database;
+	kDebug()<<"dbVersion.isSelect():"<<dbVersion.isSelect();
 	if ( dbVersion.isActive() && dbVersion.isSelect() && dbVersion.next() )
-        {
-            kDebug()<<" dbVersion.value( 0 ).toString().toDouble( :"<<dbVersion.value( 0 ).toString().toDouble();
+	{
+		kDebug()<<"dbVersion.value( 0 ).toString().toDouble() :"<<dbVersion.value( 0 ).toString().toDouble();
 		return ( dbVersion.value( 0 ).toString().toDouble() ); // There should be only one (or none for old DB) element, so go to first
-        }
-        else
-        {
-            kDebug()<<" old version";
+	}
+	else {
+		kDebug()<<" old version";
 		return ( 0.2 ); // if table is empty, assume oldest (0.2), and port
-        }
+	}
 }
 
 void PSqlRecipeDB::portOldDatabases( float version )
@@ -253,7 +252,7 @@ void PSqlRecipeDB::portOldDatabases( float version )
 		if ( copyQuery.isActive() ) {
 			while ( copyQuery.next() ) {
 				QSqlQuery query( QString(), *database );
- 				query.prepare( "INSERT INTO recipes VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
+				query.prepare( "INSERT INTO recipes VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
 				query.addBindValue( copyQuery.value( 0 ) ); //id
 				query.addBindValue( copyQuery.value( 1 ) ); //title
 				query.addBindValue( copyQuery.value( 2 ) ); //persons, now yield_amount

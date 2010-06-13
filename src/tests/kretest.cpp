@@ -23,25 +23,25 @@
 int
 main(int argc, char *argv[])
 {
-        KAboutData about("kretest", 0, ki18n("Kretest"), "1");
-        KCmdLineArgs::init(argc, argv, &about);
-        KCmdLineOptions options;
-        options.add("+[file]");
-        options.add("+[photo]");
-        KCmdLineArgs::addCmdLineOptions(options);
+	KAboutData about("kretest", 0, ki18n("Kretest"), "1");
+	KCmdLineArgs::init(argc, argv, &about);
+	KCmdLineOptions options;
+	options.add("+[file]");
+	options.add("+[photo]");
+	KCmdLineArgs::addCmdLineOptions(options);
 
-        KApplication app;
+	KApplication app;
 
-        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
 
-        QString file("kretest.txt");
-        QString photo("test_photo.jpg");
-        if(args->count() >= 1)
-            file = args->arg(0);
+	QString file("kretest.txt");
+	QString photo("test_photo.jpg");
+	if(args->count() >= 1)
+		file = args->arg(0);
 
-        if(args->count() >= 2)
-            photo = args->arg(1);
+	if(args->count() >= 2)
+		photo = args->arg(1);
 
 	printf("Creating KreImporter.\n");
 	KreImporter importer;

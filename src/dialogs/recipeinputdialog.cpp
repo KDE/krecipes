@@ -730,14 +730,14 @@ void RecipeInputDialog::savePhotoAs( void )
 	if ( url.isEmpty() )
 		return;
 	QString filename = url.path();
-       	QFile outputFile (filename);
-        if (outputFile.exists()) {
-               	int r = KMessageBox::warningYesNo(this,
-       	                i18nc("@info", "The file already exists, do you want to overwrite it?")
-                );
-               	if (r == KMessageBox::No)
-       	                return;
-        }
+	QFile outputFile (filename);
+	if (outputFile.exists()) {
+		int r = KMessageBox::warningYesNo(this,
+			i18nc("@info", "The file already exists, do you want to overwrite it?")
+		);
+		if (r == KMessageBox::No)
+			return;
+	}
 
 	if ( !loadedRecipe->photo.save( filename, "JPEG" ) )
 		KMessageBox::error(this, i18nc("@info", "The photo cannot be saved in %1", filename) );
@@ -1001,7 +1001,7 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 			else
 			{
 				if ( !new_text.isEmpty() )
- 					ing_item->setAmount( new_ing.amount, new_ing.amount_offset );
+					ing_item->setAmount( new_ing.amount, new_ing.amount_offset );
 			}
 
 			break;
@@ -1120,10 +1120,10 @@ void RecipeInputDialog::saveRecipe( void )
 	loadedRecipe->photo = sourcePhoto;
 	loadedRecipe->instructions = instructionsEdit->text();
 	loadedRecipe->title = titleEdit->text();
-    double amount = 0.0, amountOffset = 0.0;
+	double amount = 0.0, amountOffset = 0.0;
 	yieldNumInput->value(amount, amountOffset);
-    loadedRecipe->yield.setAmount(amount);
-    loadedRecipe->yield.setAmountOffset(amountOffset);
+	loadedRecipe->yield.setAmount(amount);
+	loadedRecipe->yield.setAmountOffset(amountOffset);
 	loadedRecipe->yield.setTypeId(createNewYieldIfNecessary(yieldTypeEdit->text()));
 	loadedRecipe->prepTime = prepTimeEdit->time();
 
@@ -1303,10 +1303,10 @@ void RecipeInputDialog::showRecipe( void )
 
 void RecipeInputDialog::resizeRecipe( void )
 {
-    double amount = 0.0, amountOffset = 0.0;
+	double amount = 0.0, amountOffset = 0.0;
 	yieldNumInput->value(amount, amountOffset);
-    loadedRecipe->yield.setAmount(amount);
-    loadedRecipe->yield.setAmountOffset(amountOffset);
+	loadedRecipe->yield.setAmount(amount);
+	loadedRecipe->yield.setAmountOffset(amountOffset);
 	loadedRecipe->yield.setType(yieldTypeEdit->text());
 	QPointer<ResizeRecipeDialog> dlg = new ResizeRecipeDialog( this, loadedRecipe );
 

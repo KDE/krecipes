@@ -141,7 +141,7 @@ QString RecipeListView::tooltip(Q3ListViewItem *item, int /*column*/) const
 		RecipeListItem *recipe_it = (RecipeListItem*)item;
 
 		Recipe r;
- 		database->loadRecipe(&r,RecipeDB::Meta|RecipeDB::Noatime,recipe_it->recipeID() );
+		database->loadRecipe(&r,RecipeDB::Meta|RecipeDB::Noatime,recipe_it->recipeID() );
 
 		KLocale *locale = KGlobal::locale();
 

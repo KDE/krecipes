@@ -156,11 +156,11 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 			for ( int j = 0; j < yield_children.count(); j++ ) {
 				QDomElement y = yield_children.item( j ).toElement();
 				if ( y.tagName() == "amount" ) {
-                    double amount = 0.0, amountOffset = 0.0;
+					double amount = 0.0, amountOffset = 0.0;
 					readAmount(y, amount, amountOffset);
-                    recipe->yield.setAmount(amount);
-                    recipe->yield.setAmountOffset(amountOffset);
-                }
+					recipe->yield.setAmount(amount);
+					recipe->yield.setAmountOffset(amountOffset);
+				}
 				else if ( y.tagName() == "type" )
 					recipe->yield.setType(y.text());
 			}
@@ -191,7 +191,7 @@ void KreImporter::readDescription( const QDomNodeList& l, Recipe *recipe )
 					KCodecs::base64Decode( QByteArray( pic.text().toLatin1() ), decodedPic );
 					int len = decodedPic.size();
 					QByteArray picData;
-               picData.resize( len );
+					picData.resize( len );
 					memcpy( picData.data(), decodedPic.data(), len );
 					bool ok = pix.loadFromData( picData, "JPEG" );
 					if ( ok ) {
