@@ -11,7 +11,7 @@
 #ifndef INGREDIENTLIST_H
 #define INGREDIENTLIST_H
 
-#include <QtCore/QList>
+#include <q3valuelist.h>
 #include <QRegExp>
 
 #include "datablocks/ingredient.h"
@@ -21,7 +21,7 @@ class RecipeDB;
 /**
 @author Unai Garro
 */
-class IngredientList: public QList<Ingredient>
+class IngredientList: public Q3ValueList <Ingredient>
 {
 public:
 	IngredientList();
@@ -40,7 +40,6 @@ public:
 	Ingredient findByName( const QRegExp & ) const;
 	IngredientList::const_iterator find( IngredientList::const_iterator, int id ) const;
 	IngredientList::iterator find( IngredientList::iterator, int id );
-    int indexOf(int pos, int id) const;
 
 	/** Warning, returns an invalid reference if no ingredient is found.  Must check prior
 	  * to calling this function if the ingredient exists.
@@ -52,8 +51,8 @@ public:
 	IngredientList nextGroup();
 
 private:
-	QList<IngredientList::const_iterator> _groupMembers( int id, IngredientList::const_iterator begin ) const;
-	QList<IngredientList::const_iterator> usedGroups;
+	Q3ValueList<IngredientList::const_iterator> _groupMembers( int id, IngredientList::const_iterator begin ) const;
+	Q3ValueList<IngredientList::const_iterator> usedGroups;
 };
 
 #endif
