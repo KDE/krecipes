@@ -292,7 +292,7 @@ kde4_add_executable(krecipes
    ${krecipesdialogs_SRCS}
    ${krecipesactionshandlers_SRCS})
 
-target_link_libraries(krecipes krecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${NEPOMUK_LIBRARIES})
+target_link_libraries(krecipes krecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${NEPOMUK_LIBRARIES} ${QT_QTWEBKIT_LIBRARY} ${KDE4_KDEWEBKIT_LIBS})
 
 if ( SQLITE_FOUND )
    target_link_libraries(krecipes ${SQLITE_LIBRARIES})

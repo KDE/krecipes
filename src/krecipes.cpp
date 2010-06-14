@@ -488,7 +488,7 @@ void Krecipes::fileToClipboard()
 
 void Krecipes::filePrint()
 {
-	m_view->print();
+	m_view->printRequested();
 }
 
 void Krecipes::import()

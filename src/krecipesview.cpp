@@ -22,6 +22,11 @@
 #include <kglobal.h>
 #include <kvbox.h>
 #include <QFrame>
+#include <QWebFrame>
+#include <KWebPage>
+#include <QPrintPreviewDialog>
+#include <QPrinter>
+#include <KTempDir>
 
 #include "actionshandlers/recipeactionshandler.h"
 #include "actionshandlers/unitactionshandler.h"
@@ -29,6 +34,7 @@
 #include "setupassistant.h"
 #include "convert_sqlite3.h"
 #include "kstartuplogo.h"
+#include "exporters/xsltexporter.h"
 
 #include "dialogs/recipeinputdialog.h"
 #include "dialogs/recipeviewdialog.h"
@@ -380,9 +386,44 @@ void KrecipesView::translate()
 	button8->setTitle( i18n( "Ingredient Matcher" ) );
 }
 
-void KrecipesView::print()
+void KrecipesView::printRequested()
 {
-	viewPanel->print();
+	QWidget * vis_panel = rightPanel->visiblePanel();
+	if ( vis_panel == viewPanel ) {
+		//Create the temporary directory.
+		m_tempdir = new KTempDir(KStandardDirs::locateLocal("tmp", "krecipes-data-print"));
+		QString tmp_filename = m_tempdir->name() + "krecipes_recipe_view.html";
+		//Export to HTML in the temporary directory.
+		XSLTExporter html_generator( tmp_filename, "html" );
+		KConfigGroup config(KGlobal::config(), "Page Setup" );
+		QString styleFile = config.readEntry( "PrintLayout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
+		if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )
+			html_generator.setStyle( styleFile );
+
+		QString templateFile = config.readEntry( "PrintTemplate", KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
+		if ( !templateFile.isEmpty() && QFile::exists( templateFile ) )
+			html_generator.setTemplate( templateFile );
+		html_generator.exporter( viewPanel->currentRecipes(), database );
+		//Load the generated HTML. When loaded, KrecipesView::print(...) will be called.
+		m_printPage = new KWebPage;
+		connect(m_printPage, SIGNAL(loadFinished(bool)), this, SLOT(print(bool)));
+		m_printPage->mainFrame()->load( KUrl(tmp_filename) );
+	}
+}
+
+void KrecipesView::print(bool ok)
+{
+	QPrinter printer;
+	QPointer<QPrintPreviewDialog> previewdlg = new QPrintPreviewDialog(&printer, this);
+	//Show the print preview dialog.
+	connect(previewdlg, SIGNAL(paintRequested(QPrinter *)),
+		m_printPage->mainFrame(), SLOT(print(QPrinter *)));
+	previewdlg->exec();
+	delete previewdlg;
+	//Remove the temporary directory which stores the HTML and free memory.
+	m_tempdir->unlink();
+	delete m_tempdir;
+	delete m_printPage;
 }
 
 void KrecipesView::cut()

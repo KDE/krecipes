@@ -50,6 +50,8 @@ class UnitsDialog;
 class QFrame;
 class KAction;
 typedef Q3ValueList <Menu>::Iterator MenuId;
+class KTempDir;
+class KWebPage;
 
 
 /**
@@ -94,7 +96,7 @@ public:
 	/**
 	 * Print this view to any medium -- paper or not
 	 */
-	void print();
+	void printRequested();
 
 	virtual void show ( void ); //Needed to make sure that the raise() is done after the construction of all the widgets, otherwise childEvent in the PanelDeco is called only _after_ the raise(), and can't be shown.
 
@@ -188,6 +190,9 @@ private:
 
 	QMap<QWidget*, KrePanel> panelMap;
 
+	KTempDir * m_tempdir;
+	KWebPage * m_printPage;
+
 	// i18n
 	void translate();
 
@@ -207,6 +212,7 @@ public slots:
 	void paste();
 	void pasteAsSubcategory();
 	void enableSaveOptionSlot( bool enabled );
+	void print(bool ok);
 
 private slots:
 	void actionRecipe( int recipeID, int action );

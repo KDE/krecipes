@@ -17,6 +17,8 @@ Changes from 2.0-alpha6 to svn:
     + When you click on a recipe in the advanced search dialog results, the
       recipe actions (i.e. edit, export...) are updated properly.
     + You can rename the properties (in data -> properties).
+    + Use WebKit instead of KHTML for printing recipes, fixes sourceforge
+      #2990118 and #2960140.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:

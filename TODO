@@ -3,8 +3,8 @@ Note that this is only a draft, to get a rough idea about what will be done.
 Planned for the next release in 2.0 branch:
 
  [Mandatory]
- * Use WebKit instead of KHTML for printing recipes. Probably this would fix
-   sourceforge #2990118 and #2960140.
+ * Remove RecipePrintPreview, it's not useful anymore, remove as well the
+   'layoutConfig' parameter from RecipeViewDialog methods.
  * There are still some dialogs that don't follow HIG.
  * Using a QSplitter on the ingredient matcher dialog.
  * Support ranges when resizing a recipe.
@@ -12,6 +12,8 @@ Planned for the next release in 2.0 branch:
  * Update user manual.
  
  [Brainstorming]
+ * When you print recipes, they are printed in no particular order, I guess they
+   should be in alphabetical order.
  * D-BUS interface and service menus to import recipes and restore databases.
 
 Planned for the 2.1 branch:
