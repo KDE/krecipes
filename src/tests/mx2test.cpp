@@ -12,13 +12,16 @@
 #include <KAboutData>
 
 #include <QString>
+#include <QFile>
 
 #include <iostream>
 using std::cout;
 using std::endl;
 
 #include "mx2importer.h"
+#include "mx2exporter.h"
 #include "importertest.h"
+#include "exportertest.h"
 
 int
 main(int argc, char *argv[])
@@ -123,6 +126,27 @@ main(int argc, char *argv[])
 	recipe.ingList.append( ing7 );
 		
 	check( importer, recipe );
+
+	RecipeList recipeList;
+	recipeList.append(recipe);
+	recipeList.append(recipe);
+
+	printf("Creating MX2Exporter.\n");
+	mx2Exporter exporter("not needed",".mx2");
+	check( exporter, recipeList );
+	printf("Successfully exported recipes to test.txt.\n");
+
+	printf("Creating MX2Importer to test exported recipes.\n");
+	MX2Importer importer2;
+
+	printf("Parsing test.txt.\n");
+	QStringList files2; files2 << "test.txt";
+	importer2.parseFiles(files2);
+	QFile::remove("test.txt");
+	check( importer2, recipe );
+	printf("Recipe export successful.\n");
+
+	printf("*** mx2 importer and exporter passed the tests :-) ***\n");
 
 	printf("Done.\n");
 }
