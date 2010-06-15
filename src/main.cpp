@@ -47,10 +47,10 @@ int main( int argc, char **argv )
 	about.addCredit( ki18n("Warren Severin"), ki18n("Code to export recipes to *.mx2 files"), "", 0 );
 	
 	about.addCredit( ki18n("Eduardo Robles Elvira"),
-		ki18n("He adviced using WebKit to fix printing support during Akademy-es 2010."),
+		ki18n("He advised using WebKit to fix printing support during Akademy-es 2010."),
 		"edulix@gmail.com", 0 );
 	about.addCredit( ki18n("José Millán Soto"),
-		ki18n("He adviced using WebKit to fix printing support during Akademy-es 2010."),
+		ki18n("He advised using WebKit to fix printing support during Akademy-es 2010."),
 		"", 0 );
 
 	about.setTranslator( ki18n( "INSERT YOUR NAME HERE" ), ki18n( "INSERT YOUR EMAIL ADDRESS" ) );
