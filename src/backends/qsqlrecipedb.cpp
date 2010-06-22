@@ -223,7 +223,10 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 			}
 
 			if ( items & RecipeDB::PrepTime ) {
-				 recipe.prepTime = recipeQuery.value( row_at ).toTime(); ++row_at;
+				recipe.prepTime = QTime::fromString(
+					(recipeQuery.value( row_at ).toString()),
+					"hh:mm:ss" );
+				++row_at;
 			}
 
 			if ( items & RecipeDB::Yield ) {
