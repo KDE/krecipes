@@ -33,6 +33,7 @@
 #include <kvbox.h>
 
 #include "backends/usda_ingredient_data.h"
+#include "widgets/clickablelabel.h"
 
 SetupAssistant::SetupAssistant( QWidget *parent, Qt::WFlags f ) : KAssistantDialog(parent, f )
 {
@@ -196,10 +197,11 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	noSetupCheckBox = new QCheckBox( noSetupContainer );
 	noSetupCheckBox->setObjectName( "noSetupCheckBox" );
 	noSetupCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	QLabel * noSetupLabel = new QLabel(
+	ClickableLabel * noSetupLabel = new ClickableLabel(
 		i18n( "I have already set the necessary permissions" ),
 		noSetupContainer );
 	noSetupLabel->setWordWrap( true );
+	connect( noSetupLabel, SIGNAL(clicked()), noSetupCheckBox, SLOT(click()) );
 	layout->addWidget( noSetupContainer, 3, 3 );
 
 	QSpacerItem *checkBoxSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -212,10 +214,11 @@ PermissionsSetupPage::PermissionsSetupPage( QWidget *parent ) : QWidget( parent 
 	rootCheckBox = new QCheckBox( rootContainer );
 	rootCheckBox->setObjectName( "rootCheckBox" );
 	rootCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	QLabel * rootLabel = new QLabel(
+	ClickableLabel * rootLabel = new ClickableLabel(
 		i18n( "I have already set a MySQL root/admin account" ),
 		rootContainer );
 	rootLabel->setWordWrap( true );
+	connect( rootLabel, SIGNAL(clicked()), rootCheckBox, SLOT(click()) );
 	layout->addWidget( rootContainer, 5, 3 );
 
 	QSpacerItem *rootInfoSpacer = new QSpacerItem( 10, 20, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -321,10 +324,11 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	noSetupCheckBox = new QCheckBox( noSetupContainer );
 	noSetupCheckBox->setObjectName( "noSetupCheckBox" );
 	noSetupCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	QLabel * noSetupLabel = new QLabel(
+	ClickableLabel * noSetupLabel = new ClickableLabel(
 		i18n( "I have already set the necessary permissions" ),
 		noSetupContainer );
 	noSetupLabel->setWordWrap( true );
+	connect( noSetupLabel, SIGNAL(clicked()), noSetupCheckBox, SLOT(click()) );
 	layout->addWidget( noSetupContainer, 3, 3 );
 
 	QSpacerItem *checkBoxSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -337,10 +341,11 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 	rootCheckBox = new QCheckBox( rootContainer );
 	rootCheckBox->setObjectName( "rootCheckBox" );
 	rootCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	QLabel * rootLabel = new QLabel(
+	ClickableLabel * rootLabel = new ClickableLabel(
 		i18n( "I have already set a superuser or privileged account" ),
 		rootContainer );
 	rootLabel->setWordWrap( true );
+	connect( rootLabel, SIGNAL(clicked()), rootCheckBox, SLOT(click()) );
 	layout->addWidget( rootContainer, 5, 3 );
 
 
@@ -787,10 +792,11 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	initializeCheckBox = new QCheckBox( initializeContainer );
 	initializeCheckBox->setObjectName( "initializeCheckBox" );
 	initializeCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	QLabel * initializeLabel = new QLabel(
+	ClickableLabel * initializeLabel = new ClickableLabel(
 		i18n( "Yes please, initialize the database with the examples" ),
 		initializeContainer );
 	initializeLabel->setWordWrap( true );
+	connect( initializeLabel, SIGNAL(clicked()), initializeCheckBox, SLOT(click()) );
 	layout->addWidget( initializeContainer, 3, 3 );
 
 	QSpacerItem *textInfoSpacer = new QSpacerItem( 0, 50, QSizePolicy::Minimum, QSizePolicy::Fixed );
@@ -809,10 +815,11 @@ DataInitializePage::DataInitializePage( QWidget *parent ) : QWidget( parent )
 	USDAImportCheckBox = new QCheckBox( USDAImportContainer );
 	USDAImportCheckBox->setObjectName( "USDAImportCheckBox" );
 	USDAImportCheckBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-	QLabel * USDAImportLabel = new QLabel(
+	ClickableLabel * USDAImportLabel = new ClickableLabel(
 		i18n("Yes please, load the database with nutrient data for 400+ foods."),
 		USDAImportContainer );
 	USDAImportLabel->setWordWrap( true );
+	connect( USDAImportLabel, SIGNAL(clicked()), USDAImportCheckBox, SLOT(click()) );
 	layout->addWidget( USDAImportContainer, 7, 3 );
 }
 

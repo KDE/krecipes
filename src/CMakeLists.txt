@@ -79,6 +79,7 @@ set(krecipesactionshandlers_SRCS
 ############### widgets ##############
 
 set(krecipeswidgets_SRCS
+   widgets/clickablelabel.cpp
    widgets/krelistview.cpp
    widgets/kremenu.cpp
    widgets/paneldeco.cpp
