@@ -22,6 +22,8 @@ Changes from 2.0-alpha6 to svn:
     + Convert preparation times to QString before reading them from the
       database. Fixes sourceforge #2960133, note that I think that this bug is
       not reproducible.
+    + Don't show the help button in the setup assistant dialog, it's not useful
+      at the moment.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:
