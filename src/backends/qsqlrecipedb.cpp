@@ -224,7 +224,7 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 
 			if ( items & RecipeDB::PrepTime ) {
 				recipe.prepTime = QTime::fromString(
-					(recipeQuery.value( row_at ).toString()),
+					recipeQuery.value( row_at ).toString(),
 					"hh:mm:ss" );
 				++row_at;
 			}
