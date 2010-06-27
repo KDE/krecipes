@@ -10,6 +10,7 @@ Changes from 2.0-alpha6 to svn:
   * Execute tests via CTest. To run them use "make test"
   * Made data of some datablock classes private, added get/set methods and unit
     tests
+  * Don't ask x times to delete x recipes.
   * Fixes for bugs:
     + Right pane header, diet helper title and list titles follow theme colour
       settings rather than set absolute colours. Thanks to Mike Ferguson for the

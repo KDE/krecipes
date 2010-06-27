@@ -29,8 +29,6 @@ Planned for the 2.1 branch:
  [Brainstorming]
  * Make configurable the length of VARCHAR(%n) fields, for instance, the
    preparation method name.
- * When deleting various recipes, ask once. Also provide "Don't ask again"
-   option.
  * Probably most of SQL queries are not using the word "join", so slow.
  * Replace PanelDeco with KTitleWidget?, see what KPageView can do for you.
 

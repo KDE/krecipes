@@ -314,15 +314,17 @@ void RecipeActionsHandler::remove()
 {
 	QList<Q3ListViewItem *> items = parentListView->selectedItems();
 	if ( items.count() > 0 ) {
+		QList<int> recipe_ids;
 		QListIterator<Q3ListViewItem*> it(items);
 		Q3ListViewItem *item;
 		while ( it.hasNext() ) {
 			item = it.next();
 			if ( item->rtti() == RECIPELISTITEM_RTTI ) {
 				RecipeListItem * recipe_it = ( RecipeListItem* ) item;
-				emit recipeSelected( recipe_it->recipeID(), 2 );
+				recipe_ids.append( recipe_it->recipeID() );
 			}
 		}
+		emit recipesSelected( recipe_ids, 2 );
 	}
 }
 
