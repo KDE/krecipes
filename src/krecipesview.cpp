@@ -386,6 +386,13 @@ void KrecipesView::printRequested()
 	if ( vis_panel == viewPanel ) {
 		m_actionshandler.printRecipes( viewPanel->currentRecipes(), database );
 	}
+	else if ( vis_panel == selectPanel ) {
+		selectPanel->getActionsHandler()->recipePrint();
+	}
+	else if ( vis_panel == ingredientMatcherPanel ) {
+		ingredientMatcherPanel->getActionsHandler()->recipePrint();
+	}
+
 }
 
 void KrecipesView::cut()

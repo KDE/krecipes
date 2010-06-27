@@ -151,11 +151,13 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 			break;
 		}
 	case RecipeEdit: {
+			printAction->setEnabled( show );
 			exportAction->setEnabled( false );
 			showRecipeAction->setEnabled( show );
 			break;
 		}
 	case SelectP: {
+			printAction->setEnabled( show );
 			exportAction->setEnabled( show );
 			if (show)
 				m_view->selectPanel->haveSelectedItems();
@@ -164,6 +166,7 @@ void Krecipes::updateActions( KrePanel panel, bool show )
 			break;
 		}
 	case MatcherP: {
+			printAction->setEnabled( show );
 			exportAction->setEnabled( show );
 			if (show) 
 				m_view->ingredientMatcherPanel->haveSelectedItems();
@@ -411,6 +414,7 @@ void Krecipes::setupActions()
 	updateActions( SelectP, true );
 	updateActions( RecipeView, false );
 	exportAction->setEnabled( true );
+	printAction->setEnabled( true );
 
 	createGUI();
 }
