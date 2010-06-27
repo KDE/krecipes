@@ -12,7 +12,6 @@
 #include "recipeviewdialog.h"
 
 #include <QFile>
-#include <QPointer>
 //Added by qt3to4:
 
 #include <kapplication.h>
@@ -37,7 +36,6 @@
 #include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"
 #include "exporters/xsltexporter.h"
-#include "recipeprintpreview.h"
 
 RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID ) : KVBox( parent ),
 	database(db)
@@ -155,22 +153,6 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 
 	delete progress_dialog;
 	return true;
-}
-
-void RecipeViewDialog::print()
-{
-	if ( recipe_loaded ) {
-		QPointer<RecipePrintPreview> preview = new RecipePrintPreview( this, database, ids_loaded );
-		preview->exec();
-		delete preview;
-	}
-}
-
-void RecipeViewDialog::printNoPreview( void )
-{
-	if ( recipe_loaded ) {
-		recipeView->view() ->print();
-	}
 }
 
 

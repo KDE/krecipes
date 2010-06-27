@@ -151,7 +151,6 @@ set(krecipesdialogs_SRCS
    dialogs/similarcategoriesdialog.cpp
    dialogs/conversiondialog.cpp
    dialogs/createingredientweightdialog.cpp
-   dialogs/recipeprintpreview.cpp
    dialogs/editpropertiesdialog.cpp
    dialogs/createunitconversiondialog.cpp)
 

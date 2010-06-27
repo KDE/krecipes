@@ -3,8 +3,7 @@ Note that this is only a draft, to get a rough idea about what will be done.
 Planned for the next release in 2.0 branch:
 
  [Mandatory]
- * Remove RecipePrintPreview, it's not useful anymore, remove as well the
-   'layoutConfig' parameter from RecipeViewDialog methods.
+ * Remove 'layoutConfig' parameter from RecipeViewDialog methods.
  * There are still some dialogs that don't follow HIG.
  * Using a QSplitter on the ingredient matcher dialog.
  * Support ranges when resizing a recipe.

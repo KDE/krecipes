@@ -57,8 +57,6 @@ public:
 	void hideButtons();
 
 public slots:
-	void printNoPreview( void );
-	void print( void );
 	void close( void );
 
 signals:
