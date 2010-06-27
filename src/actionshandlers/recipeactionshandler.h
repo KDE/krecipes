@@ -22,6 +22,8 @@ class K3ListView;
 class KMenu;
 class RecipeDB;
 class KAction;
+class KTempDir;
+class KWebPage;
 
 /** @brief A class that centralizes common actions for recipes such as saving and editing.
   * 
@@ -77,6 +79,12 @@ public slots:
 	  */
 	void recipeExport();
 
+	/** Prints the recipe(s) currently selected in the list view, showing a dialog to preview */
+	void recipePrint();
+	
+	/** Prints the given recipes, showing a dialog to preview the result */
+	void printRecipes( const QList<int> &ids, RecipeDB *db );
+
 	/** Removes the recipe(s) currently selected in the list view from its current category */
 	void removeFromCategory();
 
@@ -99,6 +107,9 @@ public slots:
 
 	void selectionChangedSlot();
 
+private slots:
+	void print( bool ok );
+
 private:
 	KMenu *kpop;
 	KMenu *catPop;
@@ -111,6 +122,9 @@ private:
 
 	QList<int> getAllVisibleItems();
 	QList<int> recipeIDs( const QList<Q3ListViewItem *> &items ) const;
+
+	KTempDir * m_tempdir;
+	KWebPage * m_printPage;
 };
 
 #endif //RECIPEACTIONSHANDLER_H

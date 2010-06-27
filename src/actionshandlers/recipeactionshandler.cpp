@@ -25,6 +25,12 @@
 #include <kmenu.h>
 #include <KAction>
 #include <kprogressdialog.h>
+#include <QWebFrame>
+#include <KWebPage>
+#include <QPrintPreviewDialog>
+#include <QPrinter>
+#include <KTempDir>
+#include <KStandardDirs>
 
 #include "dialogs/selectcategoriesdialog.h"
 
@@ -259,6 +265,32 @@ void RecipeActionsHandler::recipeExport()
 	}
 }
 
+void RecipeActionsHandler::recipePrint()
+{
+	QList<Q3ListViewItem *> items = parentListView->selectedItems();
+	if ( !items.isEmpty() ) {
+		QList<int> ids = recipeIDs( items );
+		printRecipes( ids, database );
+	}
+	else //if nothing selected, print all visible recipes
+	{
+		QList<int> ids = getAllVisibleItems();
+		if ( !ids.isEmpty() ) {
+			switch ( KMessageBox::questionYesNo( kapp->mainWidget(),
+			i18n("No recipes are currently selected.\n"
+			"Would you like to print all recipes in the current view?")) )
+			{
+			case KMessageBox::Yes:
+				printRecipes( ids, database );
+				break;
+			default: break;
+			}
+		}
+		else
+			KMessageBox::sorry( kapp->mainWidget(), i18n("No recipes selected."), i18n("Print") );
+	}
+}
+
 void RecipeActionsHandler::removeFromCategory()
 {
 	QList<Q3ListViewItem *> items = parentListView->selectedItems();
@@ -407,6 +439,44 @@ void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString &
 		}
 	}
 	delete fd;
+}
+
+void RecipeActionsHandler::printRecipes( const QList<int> &ids, RecipeDB *database )
+{
+	//Create the temporary directory.
+	m_tempdir = new KTempDir(KStandardDirs::locateLocal("tmp", "krecipes-data-print"));
+	QString tmp_filename = m_tempdir->name() + "krecipes_recipe_view.html";
+	//Export to HTML in the temporary directory.
+	XSLTExporter html_generator( tmp_filename, "html" );
+	KConfigGroup config(KGlobal::config(), "Page Setup" );
+	QString styleFile = config.readEntry( "PrintLayout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
+	if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )
+		html_generator.setStyle( styleFile );
+
+	QString templateFile = config.readEntry( "PrintTemplate", KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
+	if ( !templateFile.isEmpty() && QFile::exists( templateFile ) )
+		html_generator.setTemplate( templateFile );
+	html_generator.exporter( ids, database );
+	//Load the generated HTML. When loaded, RecipeActionsHandlerView::print(...) will be called.
+	m_printPage = new KWebPage;
+	connect(m_printPage, SIGNAL(loadFinished(bool)), SLOT(print(bool)));
+	m_printPage->mainFrame()->load( KUrl(tmp_filename) );
+}
+
+void RecipeActionsHandler::print(bool ok)
+{
+	Q_UNUSED(ok)
+	QPrinter printer;
+	QPointer<QPrintPreviewDialog> previewdlg = new QPrintPreviewDialog(&printer);
+	//Show the print preview dialog.
+	connect(previewdlg, SIGNAL(paintRequested(QPrinter *)),
+		m_printPage->mainFrame(), SLOT(print(QPrinter *)));
+	previewdlg->exec();
+	delete previewdlg;
+	//Remove the temporary directory which stores the HTML and free memory.
+	m_tempdir->unlink();
+	delete m_tempdir;
+	delete m_printPage;
 }
 
 void RecipeActionsHandler::recipesToClipboard( const QList<int> &ids, RecipeDB *db )

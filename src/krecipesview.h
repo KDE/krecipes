@@ -30,6 +30,7 @@
 
 #include "importers/baseimporter.h"
 #include "backends/recipedb.h"
+#include "actionshandlers/recipeactionshandler.h"
 
 class AuthorsDialog;
 class PrepMethodsDialog;
@@ -50,8 +51,6 @@ class UnitsDialog;
 class QFrame;
 class KAction;
 typedef Q3ValueList <Menu>::Iterator MenuId;
-class KTempDir;
-class KWebPage;
 
 
 /**
@@ -190,8 +189,10 @@ private:
 
 	QMap<QWidget*, KrePanel> panelMap;
 
-	KTempDir * m_tempdir;
-	KWebPage * m_printPage;
+	// We need this dummy actions handler instance to call
+        // RecipeActionsHandler::print(...)
+        // which can't be static for technical reasons.
+	RecipeActionsHandler m_actionshandler;
 
 	// i18n
 	void translate();
@@ -212,7 +213,6 @@ public slots:
 	void paste();
 	void pasteAsSubcategory();
 	void enableSaveOptionSlot( bool enabled );
-	void print(bool ok);
 
 private slots:
 	void actionRecipe( int recipeID, int action );
