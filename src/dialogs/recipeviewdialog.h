@@ -40,7 +40,7 @@ public:
 	bool loadRecipe( int recipeID );
 
 	/** @return Boolean indicating whether or not the recipes were successfully loaded */
-	bool loadRecipes( const QList<int> &ids, const QString &layoutConfig = QString() );
+	bool loadRecipes( const QList<int> &ids );
 
 	int recipesLoaded() const
 	{
@@ -51,7 +51,7 @@ public:
 		return ids_loaded;
 	}
 
-	void reload( const QString &layoutConfig = QString() );
+	void reload();
 
 	void showButtons();
 	void hideButtons();
@@ -77,7 +77,7 @@ private:
 	KTempDir * m_tempdir;
 
 	// Internal Methods
-	bool showRecipes( const QList<int> &ids, const QString &layoutConfig );
+	bool showRecipes( const QList<int> &ids );
 
 private slots:
 	void recipeRemoved(int);

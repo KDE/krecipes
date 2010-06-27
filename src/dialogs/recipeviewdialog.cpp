@@ -86,7 +86,7 @@ bool RecipeViewDialog::loadRecipe( int recipeID )
 	return loadRecipes( ids );
 }
 
-bool RecipeViewDialog::loadRecipes( const QList<int> &ids, const QString &layoutConfig )
+bool RecipeViewDialog::loadRecipes( const QList<int> &ids )
 {
 	KApplication::setOverrideCursor( Qt::WaitCursor );
 
@@ -98,13 +98,13 @@ bool RecipeViewDialog::loadRecipes( const QList<int> &ids, const QString &layout
 	ids_loaded = ids; //need to save these ids in order to delete the html files later...make sure this comes after the call to removeOldFiles()
 	recipe_loaded = ( ids.count() > 0 && ids[ 0 ] >= 0 );
 
-	bool success = showRecipes( ids, layoutConfig );
+	bool success = showRecipes( ids );
 
 	KApplication::restoreOverrideCursor();
 	return success;
 }
 
-bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layoutConfig )
+bool RecipeViewDialog::showRecipes( const QList<int> &ids )
 {
 	KProgressDialog * progress_dialog = 0;
 
@@ -117,16 +117,6 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids, const QString &layout
 	}
 
 	XSLTExporter html_generator( tmp_filename, "html" );
-	if ( layoutConfig != QString() ) {
-		KConfigGroup config(KGlobal::config(), "Page Setup" );
-		QString styleFile = config.readEntry( layoutConfig+"Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
-		if ( !styleFile.isEmpty() && QFile::exists( styleFile ) )
-			html_generator.setStyle( styleFile );
-
-		QString templateFile = config.readEntry( layoutConfig+"Template", KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
-		if ( !templateFile.isEmpty() && QFile::exists( templateFile ) )
-			html_generator.setTemplate( templateFile );
-	}
 
 	html_generator.exporter( ids, database, progress_dialog ); //writes the generated HTML to 'tmp_filename'
 	if ( progress_dialog && progress_dialog->wasCancelled() ) {
@@ -162,9 +152,9 @@ void RecipeViewDialog::close( void )
 }
 
 
-void RecipeViewDialog::reload( const QString &layoutConfig )
+void RecipeViewDialog::reload()
 {
-	loadRecipes( ids_loaded, layoutConfig );
+	loadRecipes( ids_loaded );
 }
 
 void RecipeViewDialog::showButtons()
@@ -182,8 +172,7 @@ void RecipeViewDialog::recipeRemoved( int id )
 	//if the deleted recipe is loaded, clean the view up
 	if ( ids_loaded.indexOf(id) != -1 ) {
 		ids_loaded.removeAll(id);
-		reload(); //FIXME: This is wrong because we don't know
-			// here the proper value for 'layoutConfig' param
+		reload();
 	}
 }
 
