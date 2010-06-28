@@ -60,11 +60,11 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 	KIconLoader *il = KIconLoader::global();
 
         m_pageServer = new ServerPrefs( this );
-        KPageWidgetItem * page = new KPageWidgetItem( m_pageServer , i18n( "Server Settings" ) );
+        KPageWidgetItem * page = new KPageWidgetItem( m_pageServer , i18n( "Database System" ) );
         page->setObjectName("server" );
-	page->setHeader( i18n( "Database Server Options (%1)" , config.readEntry( "Type" )));
+	page->setHeader( i18n( "Database Management System Options (%1)" , config.readEntry( "Type" )));
 	il->loadIcon( "network-server", KIconLoader::NoGroup, 32 );
-	page->setIcon( KIcon( "network-server", il ) );
+	page->setIcon( KIcon( "server-database", il ) );
         m_helpMap.insert(page->objectName(),"configure-server-settings");
         addPage( page );
 

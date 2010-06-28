@@ -50,7 +50,7 @@ SetupAssistant::SetupAssistant( QWidget *parent, Qt::WFlags f ) : KAssistantDial
 	addPage( dbTypeSetupPageItem );
 
 	sqliteSetupPage = new SQLiteSetupPage( this );
-	sqliteSetupPageItem = new KPageWidgetItem( sqliteSetupPage, i18n( "Server Settings" ) );
+	sqliteSetupPageItem = new KPageWidgetItem( sqliteSetupPage, i18n( "Database Management System Settings" ) );
 	addPage( sqliteSetupPageItem );
 
 	permissionsSetupPage = new PermissionsSetupPage( this );
