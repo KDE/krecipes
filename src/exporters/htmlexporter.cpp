@@ -15,9 +15,6 @@
 #include <QImage>
 #include <QFileInfo>
 #include <QDir>
-#include <q3stylesheet.h> //for QStyleSheet::escape() to escape for HTML
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QPixmap>
 #include <QTextDocument>
 #include <dom/dom_element.h>

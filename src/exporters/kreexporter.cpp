@@ -10,7 +10,6 @@
 
 #include "kreexporter.h"
 
-#include <q3stylesheet.h>
 #include <QBuffer>
 #include <QImage>
 #include <QImageWriter>

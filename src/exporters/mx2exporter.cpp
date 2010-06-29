@@ -13,8 +13,6 @@
 #include <klocale.h>
 
 #include "backends/recipedb.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 MX2Exporter::MX2Exporter( const QString& filename, const QString& format ) :
 		BaseExporter( filename, format )

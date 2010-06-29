@@ -15,7 +15,6 @@
 #include <QImage>
 #include <QFileInfo>
 #include <QDir>
-#include <q3stylesheet.h>
 #include <QList>
 #include <QPixmap>
 

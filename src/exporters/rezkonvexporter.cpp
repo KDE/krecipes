@@ -10,8 +10,6 @@
 #include "rezkonvexporter.h"
 
 #include <QRegExp>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <kconfig.h>
 #include <kdebug.h>
