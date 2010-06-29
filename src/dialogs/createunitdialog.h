@@ -2,6 +2,7 @@
 *   Copyright © 2003-2004 Unai Garro <ugarro@gmail.com>                   *
 *   Copyright © 2003-2004 Cyril Bosselut <bosselut@b1project.com>         *
 *   Copyright © 2003-2004 Jason Kivlighn <jkivlighn@gmail.com>            *
+*   Copyright © 2010 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -13,10 +14,6 @@
 #define CREATEUNITDIALOG_H
 
 #include <kdialog.h>
-#include <QPushButton>
-#include <q3groupbox.h>
-#include <kvbox.h>
-
 
 #include "datablocks/unit.h"
 
@@ -40,7 +37,6 @@ protected slots:
 
 private:
 	//Widgets
-	Q3GroupBox *box;
 	KLineEdit *nameEdit;
 	KLineEdit *pluralEdit;
 	KLineEdit *nameAbbrevEdit;

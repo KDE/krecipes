@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2010 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -16,9 +17,7 @@
 #include <kvbox.h>
 #include <q3buttongroup.h>
 #include <qframe.h>
-#include <QLabel>
-#include <QGridLayout>
-#include <QHBoxLayout>
+#include <QFormLayout>
 #include <QVBoxLayout>
 #include <knuminput.h>
 #include <klineedit.h>
@@ -60,26 +59,17 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 
 	yieldFrame = new QFrame( buttonGroup );
 	yieldFrame->setFrameStyle( QFrame::StyledPanel|QFrame::Raised );
-	yieldFrameLayout = new QGridLayout( yieldFrame );
-	yieldFrameLayout->cellRect( 1, 1 );
-	yieldFrameLayout->setMargin( 11 );
-	yieldFrameLayout->setSpacing( 6 );
-
-	currentYieldLabel = new QLabel( yieldFrame );
-
-	yieldFrameLayout->addWidget( currentYieldLabel, 0, 0 );
-
-	newYieldLabel = new QLabel( yieldFrame );
-
-	yieldFrameLayout->addWidget( newYieldLabel, 1, 0);
+	yieldFrameLayout = new QFormLayout( yieldFrame );
 
 	currentYieldInput = new KLineEdit( yieldFrame );
 	currentYieldInput->setReadOnly( true );
 	currentYieldInput->setAlignment( Qt::AlignRight );
-	yieldFrameLayout->addWidget( currentYieldInput, 0,1 );
+	yieldFrameLayout->addRow( i18nc( "@label:textbox",
+		"Current yield:" ), currentYieldInput );
 
 	newYieldInput = new FractionInput( yieldFrame );
-	yieldFrameLayout->addWidget( newYieldInput, 1, 1 );
+	yieldFrameLayout->addRow( i18nc( "@label:textbox",
+		"New yield:" ), newYieldInput );
 
 	buttonGroupLayout->addWidget( yieldFrame );
 
@@ -89,16 +79,12 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 
 	factorFrame = new QFrame( buttonGroup );
 	factorFrame->setFrameStyle( QFrame::StyledPanel|QFrame::Raised );
-	factorFrameLayout = new QHBoxLayout( factorFrame );
-	factorFrameLayout->setMargin( 11 );
-	factorFrameLayout->setSpacing( 6 );
-
-	factorLabel = new QLabel( factorFrame );
-	factorFrameLayout->addWidget( factorLabel );
+	factorFrameLayout = new QFormLayout( factorFrame );
 
 	factorInput = new FractionInput( factorFrame );
-	factorInput->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 7, ( QSizePolicy::SizeType ) 5, 0, 0, factorInput->sizePolicy().hasHeightForWidth() ) );
-	factorFrameLayout->addWidget( factorInput );
+	factorFrameLayout->addRow( i18nc( "@label:textbox",
+		"Factor (e.g. 1/2 to half, 3 to triple):" ), factorInput );
+
 	buttonGroupLayout->addWidget( factorFrame );
 
 	languageChange();
@@ -123,12 +109,11 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 
 void ResizeRecipeDialog::languageChange()
 {
+	// Warning: This is not useful at all since were putting strings in QFormLayout's
+	// in the constructor.
 	buttonGroup->setTitle( QString() );
 	yieldRadioButton->setText( i18nc( "@option:radio", "Scale by yield" ) );
-	newYieldLabel->setText( i18nc( "@label:textbox", "New yield:" ) );
-	currentYieldLabel->setText( i18nc( "@label:textbox", "Current yield:" ) );
 	factorRadioButton->setText( i18nc( "@option:radio", "Scale by factor" ) );
-	factorLabel->setText( i18nc( "@label:textbox", "Factor (e.g. 1/2 to half, 3 to triple):" ) );
 }
 
 void ResizeRecipeDialog::activateCurrentOption( int button_id )

@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2010 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -11,11 +12,8 @@
 
 #include "createcategorydialog.h"
 
-#include <QPushButton>
 #include <QGroupBox>
-#include <QLabel>
-#include <kvbox.h>
-#include <QVBoxLayout>
+#include <QFormLayout>
 
 #include <kcombobox.h>
 #include <klineedit.h>
@@ -29,22 +27,20 @@ CreateCategoryDialog::CreateCategoryDialog( QWidget *parent, const ElementList& 
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
 
-	KVBox *page = new KVBox( this );
-	setMainWidget( page );
+	box = new QGroupBox;
+	setMainWidget( box );
 
-	box = new QGroupBox( page );
-	QVBoxLayout *boxLayout = new QVBoxLayout;
+	QFormLayout *boxLayout = new QFormLayout;
 	box->setLayout( boxLayout );
-	boxLayout->setAlignment( Qt::AlignTop );
+	
 	box->setTitle( i18nc("@title:group", "New Category" ) );
 
-	elementEdit = new KLineEdit( box );
-	boxLayout->addWidget( elementEdit );
+	elementEdit = new KLineEdit;
+	boxLayout->addRow( i18nc( "@label:textbox Category name", "Name:" ), elementEdit );
 
-	KHBox *subcatHBox = new KHBox( box );
-	( void ) new QLabel( i18nc("@label:textbox", "Subcategory of:" ), subcatHBox );
-	categoryComboBox = new KComboBox( subcatHBox );
-	boxLayout->addWidget( subcatHBox );
+	categoryComboBox = new KComboBox;
+	boxLayout->addRow( i18nc("@label:textbox", "Subcategory of:" ), categoryComboBox );
+	categoryComboBox->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 	loadCategories( categories );
 
 	adjustSize();

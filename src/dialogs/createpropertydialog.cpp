@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2010 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -12,9 +13,8 @@
 #include "createpropertydialog.h"
 
 #include <klocale.h>
-#include <QGridLayout>
-#include <QLabel>
-#include <KVBox>
+#include <QGroupBox>
+#include <QFormLayout>
 
 CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 		: KDialog( parent )
@@ -27,27 +27,19 @@ CreatePropertyDialog::CreatePropertyDialog( QWidget *parent, UnitList* list )
 	unitList = list; // Store the pointer to the unitList;
 
 	// Initialize widgets
-	KVBox *page = new KVBox( this );
-	setMainWidget( page );
-	box = new Q3GroupBox( page );
-	box->setColumnLayout( 0, Qt::Vertical );
-	box->layout() ->setSpacing( 6 );
-	box->layout() ->setMargin( 11 );
-	QGridLayout *gridLayout = new QGridLayout( box->layout() );
-	gridLayout->setAlignment( Qt::AlignTop );
+	QGroupBox * box = new QGroupBox;
+	setMainWidget( box );
+	QFormLayout * layout = new QFormLayout;
+	box->setLayout( layout );
 	box->setTitle( i18nc( "@title:group", "New Property" ) );
 
-	nameEditText = new QLabel( i18nc( "@label:textbox", "Property name:" ), box );
 	propertyNameEdit = new KLineEdit( box );
 	propertyNameEdit->setMinimumWidth( 150 );
-	gridLayout->addWidget( nameEditText, 0, 0 );
-	gridLayout->addWidget( propertyNameEdit, 0, 1 );
+	layout->addRow( i18nc( "@label:textbox", "Property name:" ), propertyNameEdit );
 
-	unitsText = new QLabel( i18nc( "@label:textbox", "Units:" ), box );
 	propertyUnits = new KLineEdit( box );
 	propertyUnits->setMinimumWidth( 150 );
-	gridLayout->addWidget( unitsText, 1, 0 );
-	gridLayout->addWidget( propertyUnits, 1, 1 );
+	layout->addRow( i18nc( "@label:textbox", "Units:" ), propertyUnits );
 
 	adjustSize();
 	resize( 400, size().height() );

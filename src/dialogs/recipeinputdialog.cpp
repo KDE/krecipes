@@ -31,6 +31,7 @@
 #include <QVBoxLayout>
 #include <QFrame>
 #include <QDropEvent>
+#include <QGroupBox>
 
 #include <kapplication.h>
 #include <kcompletionbox.h>

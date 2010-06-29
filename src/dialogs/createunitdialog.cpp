@@ -2,6 +2,7 @@
 *   Copyright © 2003-2004 Unai Garro <ugarro@gmail.com>                   *
 *   Copyright © 2003-2004 Cyril Bosselut <bosselut@b1project.com>         *
 *   Copyright © 2003-2004 Jason Kivlighn <jkivlighn@gmail.com>            *
+*   Copyright © 2010 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -11,8 +12,8 @@
 
 #include "createunitdialog.h"
 
-#include <QLabel>
-#include <QGridLayout>
+#include <QFormLayout>
+#include <QGroupBox>
 
 #include <klocale.h>
 #include <klineedit.h>
@@ -28,43 +29,29 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
 
-	KVBox *page = new KVBox( this );
-	setMainWidget( page );
-
-	box = new Q3GroupBox( page );
-	box->setColumnLayout( 0, Qt::Vertical );
-	box->layout() ->setSpacing( 6 );
-	box->layout() ->setMargin( 11 );
-	QGridLayout *gridLayout = new QGridLayout( box->layout() );
-	gridLayout->setAlignment( Qt::AlignTop );
+	QGroupBox * box = new QGroupBox;
+	QFormLayout * layout = new QFormLayout;
+	box->setLayout( layout );
+	setMainWidget( box );
 
 	box->setTitle( (newUnit)?i18nc( "@title:group", "New Unit" ):i18nc("@title:group", "Unit") );
-
-	QLabel *nameLabel = new QLabel( i18nc("@label:textbox Single unit name",  "Singular:" ), box );
+	
 	nameEdit = new KLineEdit( name, box );
-
-	gridLayout->addWidget( nameLabel, 0, 0 );
-	gridLayout->addWidget( nameEdit, 0, 1 );
-
-	QLabel *nameAbbrevLabel = new QLabel( i18nc( "@label:textbox Single unit abbreviation", "Abbreviation:" ), box );
+	layout->addRow( i18nc("@label:textbox Single unit name",
+		"Singular:" ), nameEdit );
+	
 	nameAbbrevEdit = new KLineEdit( name_abbrev, box );
+	layout->addRow( i18nc( "@label:textbox Single unit abbreviation",
+		"Singular Abbreviation:" ), nameAbbrevEdit );
 
-	gridLayout->addWidget( nameAbbrevLabel, 0, 2 );
-	gridLayout->addWidget( nameAbbrevEdit, 0, 3 );
-
-	QLabel *pluralLabel = new QLabel( i18nc("@label:textbox Plural unit name", "Plural:" ), box );
 	pluralEdit = new KLineEdit( plural, box );
+	layout->addRow( i18nc("@label:textbox Plural unit name",
+		"Plural:" ), pluralEdit );
 
-	gridLayout->addWidget( pluralLabel, 1, 0 );
-	gridLayout->addWidget( pluralEdit, 1, 1 );
-
-	QLabel *pluralAbbrevLabel = new QLabel( i18nc( "@label:textbox Plural unit abbreviation", "Abbreviation:" ), box );
 	pluralAbbrevEdit = new KLineEdit( plural_abbrev, box );
+	layout->addRow( i18nc( "@label:textbox Plural unit abbreviation",
+		"Plural Abbreviation:" ), pluralAbbrevEdit );
 
-	gridLayout->addWidget( pluralAbbrevLabel, 1, 2 );
-	gridLayout->addWidget( pluralAbbrevEdit, 1, 3 );
-
-	QLabel *typeLabel = new QLabel( i18nc("@label:textbox Unit Type", "Type:" ), box );
 	typeComboBox = new KComboBox( false, box );
 	typeComboBox->insertItem( typeComboBox->count(), i18nc("@item:inlistbox Unit type other", "Other") );
 	typeComboBox->insertItem( typeComboBox->count(), i18nc("@item:inlistbox Unit type mass", "Mass") );
@@ -72,10 +59,10 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 
 	typeComboBox->setCurrentIndex( type );
 
-	gridLayout->addWidget( typeLabel, 2, 0 );
-	gridLayout->addWidget( typeComboBox, 2, 1, 1, 3, 0 );
+	layout->addRow( i18nc("@label:textbox Unit Type", "Type:" ), typeComboBox );
 
 	adjustSize();
+	resize( 400, size().height() );
 	setFixedHeight( size().height() );
 
 	connect( nameAbbrevEdit, SIGNAL(textChanged(const QString&)), SLOT(nameAbbrevTextChanged(const QString &)) );
