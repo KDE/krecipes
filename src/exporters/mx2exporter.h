@@ -25,11 +25,11 @@ class IngredientData;
   *       Data lost in export to this format include:
   *           -Recipe photo
   */
-class mx2Exporter : public BaseExporter
+class MX2Exporter : public BaseExporter
 {
 public:
-	mx2Exporter( const QString&, const QString& );
-	virtual ~mx2Exporter();
+	MX2Exporter( const QString&, const QString& );
+	virtual ~MX2Exporter();
 
 	virtual int supportedItems() const;
 

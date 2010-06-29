@@ -132,7 +132,7 @@ main(int argc, char *argv[])
 	recipeList.append(recipe);
 
 	printf("Creating MX2Exporter.\n");
-	mx2Exporter exporter("not needed",".mx2");
+	MX2Exporter exporter("not needed",".mx2");
 	check( exporter, recipeList );
 	printf("Successfully exported recipes to test.txt.\n");
 

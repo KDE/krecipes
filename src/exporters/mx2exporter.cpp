@@ -16,20 +16,20 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-mx2Exporter::mx2Exporter( const QString& filename, const QString& format ) :
+MX2Exporter::MX2Exporter( const QString& filename, const QString& format ) :
 		BaseExporter( filename, format )
 {}
 
-mx2Exporter::~mx2Exporter()
+MX2Exporter::~MX2Exporter()
 {}
 
-int mx2Exporter::supportedItems() const
+int MX2Exporter::supportedItems() const
 {
 //	return RecipeDB::All ^ RecipeDB::Photo ^ RecipeDB::Ratings;
 	return RecipeDB::All ^ RecipeDB::Photo;
 }
 
-QString mx2Exporter::createHeader( const RecipeList& )
+QString MX2Exporter::createHeader( const RecipeList& )
 {
 	QString xml = "<?xml version=\"1.0\" standalone=\"yes\" encoding=\"UTF-8\" ?>\n";
 	xml += "<!DOCTYPE mx2 SYSTEM \"mx2.dtd\">\n";
@@ -37,12 +37,12 @@ QString mx2Exporter::createHeader( const RecipeList& )
 	return xml;
 }
 
-QString mx2Exporter::createFooter()
+QString MX2Exporter::createFooter()
 {
 	return "</mx2>";
 }
 
-QString mx2Exporter::createContent( const RecipeList& recipes )
+QString MX2Exporter::createContent( const RecipeList& recipes )
 {
 	QDomDocument doc;
 

@@ -403,7 +403,7 @@ void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString &
 			if ( fd->currentFilter() == "*.xml" )
 				exporter = new RecipeMLExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.mx2" )
-			    exporter = new mx2Exporter( fileName, fd->currentFilter() );
+			    exporter = new MX2Exporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*.mmf" )
 				exporter = new MMFExporter( fileName, fd->currentFilter() );
 			else if ( fd->currentFilter() == "*" ) {
@@ -490,7 +490,7 @@ void RecipeActionsHandler::recipesToClipboard( const QList<int> &ids, RecipeDB *
 	if ( formatFilter == "*.xml" )
 		exporter = new RecipeMLExporter( QString(), formatFilter );
 	else if ( formatFilter == "*.mx2" )
-		exporter = new mx2Exporter( QString(), formatFilter );
+		exporter = new MX2Exporter( QString(), formatFilter );
 	else if ( formatFilter == "*.mmf" )
 		exporter = new MMFExporter( QString(), formatFilter );
 	else if ( formatFilter == "*.cml" )
