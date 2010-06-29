@@ -29,6 +29,10 @@ Changes from 2.0-alpha6 to svn:
       not reproducible.
     + Don't show the help button in the setup assistant dialog, it's not useful
       at the moment.
+    + When configuring the page or print layout the program warns that you are
+      using the same layout for printing and viewing only when you're really
+      using the same layout, in previous releases the warning was shown always
+      (unless you check "Do not show this message again").
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:

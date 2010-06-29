@@ -644,8 +644,10 @@ void Krecipes::pageSetupSlot()
 	m_view->selectPanel->getCurrentRecipe( &recipe );
 
 	KConfigGroup grp(KGlobal::config(),"Page Setup");
-	QString layout = grp.readEntry( "Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
-	QString printLayout = grp.readEntry( "PrintLayout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
+	QString layout = grp.readEntry( "Template",
+		KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
+	QString printLayout = grp.readEntry( "PrintTemplate",
+		KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
 
 	if ( layout == printLayout ) {
 		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
@@ -663,8 +665,10 @@ void Krecipes::printSetupSlot()
 	m_view->selectPanel->getCurrentRecipe( &recipe );
 
         KConfigGroup grp(KGlobal::config(),"Page Setup");
-	QString layout = grp.readEntry( "Layout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
-	QString printLayout = grp.readEntry( "PrintLayout", KStandardDirs::locate( "appdata", "layouts/None.klo" ) );
+	QString layout = grp.readEntry( "Template",
+		KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
+	QString printLayout = grp.readEntry( "PrintTemplate",
+		KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
 
 	if ( layout == printLayout ) {
 		KMessageBox::information( this, i18n("The recipe print and view layouts use the same file for their style, meaning changing one view's look changes them both.  If this is not the behavior you desire, load one style and save it under a different name."),
