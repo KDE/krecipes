@@ -35,6 +35,8 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kvbox.h>
+#include <KDoubleValidator>
+#include <KLineEdit>
 
 #include "widgets/weightinput.h"
 #include "widgets/krelistview.h"
@@ -212,8 +214,10 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	//KDE4 port
 	//clearWState( WState_Polished );
 
-	inputBox = new KDoubleNumInput( propertyListView ->viewport() );
+	KDoubleValidator * doubleValidator = new KDoubleValidator(this);
+	inputBox = new KLineEdit( propertyListView ->viewport() );
 	propertyListView ->addChild( inputBox );
+	inputBox->setValidator( doubleValidator );
 	inputBox->hide();
 
 	connect( weightAddButton, SIGNAL( clicked() ), this, SLOT( addWeight() ) );
@@ -222,7 +226,12 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	connect( propertyRemoveButton, SIGNAL( clicked() ), this, SLOT( removePropertyFromIngredient() ) );
 	connect( propertyListView, SIGNAL( executed( Q3ListViewItem* ) ), this, SLOT( insertPropertyEditBox( Q3ListViewItem* ) ) );
 	connect( propertyListView, SIGNAL( selectionChanged() ), inputBox, SLOT( hide() ) );
-	connect( inputBox, SIGNAL( valueChanged( double ) ), this, SLOT( setPropertyAmount( double ) ) );
+
+	removeEventFilter( inputBox );
+	connect( inputBox, SIGNAL( returnPressed( const QString & ) ),
+		this, SLOT( setPropertyAmount( const QString &) ) );
+	connect( inputBox, SIGNAL( returnPressed( const QString & ) ),
+		inputBox, SLOT( hide() ) );
 
 	connect( weightListView, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( Q3ListViewItem*, const QPoint &, int ) ) );
 
@@ -459,8 +468,13 @@ void EditPropertiesDialog::insertPropertyEditBox( Q3ListViewItem* it )
 	r.setHeight( it->height() ); // Set the item's height
 
 	inputBox->setGeometry( r );
-	inputBox->setValue( it->text( 1 ).toDouble() );
+	inputBox->setText( it->text( 1 ) );
 	inputBox->show();
+}
+
+void EditPropertiesDialog::setPropertyAmount( const QString & amount )
+{
+	setPropertyAmount( amount.toDouble() );
 }
 
 void EditPropertiesDialog::setPropertyAmount( double amount )

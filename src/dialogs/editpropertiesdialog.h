@@ -31,7 +31,7 @@ class QSplitter;
 class QGroupBox;
 
 class RecipeDB;
-class KDoubleNumInput;
+class KLineEdit;
 class ElementList;
 class KreListView;
 
@@ -73,6 +73,7 @@ private slots:
 	void addPropertyToIngredient( void );
 	void removePropertyFromIngredient( void );
 	void insertPropertyEditBox( Q3ListViewItem* it );
+	void setPropertyAmount( const QString & amount );
 	void setPropertyAmount( double amount );
 	void loadUSDAData( void );
 	void itemRenamed( Q3ListViewItem*, const QPoint &, int col );
@@ -83,7 +84,7 @@ private:
 	void reloadWeightList( void );
 	int findPropertyNo( Q3ListViewItem *it );
 
-	KDoubleNumInput* inputBox;
+	KLineEdit* inputBox;
 
 	ElementList *perUnitListBack;
 	RecipeDB *db;

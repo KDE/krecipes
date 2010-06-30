@@ -33,6 +33,9 @@ Changes from 2.0-alpha6 to svn:
       using the same layout for printing and viewing only when you're really
       using the same layout, in previous releases the warning was shown always
       (unless you check "Do not show this message again").
+    + When you edit the amount for a property of an ingredient (click data ->
+      ingredients in the left panel, select an ingredient, click "Property
+      Information") you can type more than 2 decimal numbers.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:
