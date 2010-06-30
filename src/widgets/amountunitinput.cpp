@@ -65,4 +65,9 @@ Unit AmountUnitInput::unit() const
 	return m_database->unitName( unitBox->id( unitBox->currentIndex() ) );
 }
 
+bool AmountUnitInput::isInputValid() const
+{
+	return amountInput->isInputValid();
+}
+
 #include "amountunitinput.moc"

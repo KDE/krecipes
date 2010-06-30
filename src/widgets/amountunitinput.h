@@ -38,6 +38,8 @@ public:
 	void setItem( Q3ListViewItem *it ){ m_item = it; }
 
 	void insertIntoListview( Q3ListViewItem *it, int col );
+	
+	bool isInputValid() const;
 
 public slots:
 	void emitValueChanged();

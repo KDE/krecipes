@@ -325,7 +325,8 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		amountEditDialog->resize( 400, amountEditDialog->size().height() );
 		amountEditDialog->setFixedHeight( amountEditDialog->size().height() );
 
-		if ( amountEditDialog->exec() == QDialog::Accepted ) {
+		if ( amountEditDialog->exec() == QDialog::Accepted
+		&& amountEdit->isInputValid() ) {
 			MixedNumber amount = amountEdit->amount();
 			Unit unit = amountEdit->unit();
 
@@ -357,7 +358,8 @@ void EditPropertiesDialog::itemRenamed( Q3ListViewItem* item, const QPoint &, in
 		amountEditDialog->resize( 400, amountEditDialog->size().height() );
 		amountEditDialog->setFixedHeight( amountEditDialog->size().height() );
 
-		if ( amountEditDialog->exec() == QDialog::Accepted ) {
+		if ( amountEditDialog->exec() == QDialog::Accepted
+		&& amountEdit->isInputValid() ) {
 			MixedNumber amount = amountEdit->amount();
 			Unit unit = amountEdit->unit();
 
