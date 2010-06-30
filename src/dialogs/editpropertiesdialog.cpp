@@ -210,7 +210,8 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	splitter->setCollapsible( 1, false );
 
 	languageChange();
-	//adjustSize();
+	adjustSize();
+	resize( 630, size().height() );
 	//KDE4 port
 	//clearWState( WState_Polished );
 
