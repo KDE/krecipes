@@ -45,7 +45,7 @@ void WeightInput::emitValueChanged()
 void WeightInput::setPrepMethod( const Element &prep )
 {
 	if ( prep.id == -1 )
-		prepMethodBox->setCurrentItem(0);
+		prepMethodBox->setSelected(0);
 	else
 		prepMethodBox->setSelected( prep.id );
 

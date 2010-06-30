@@ -38,6 +38,10 @@ Changes from 2.0-alpha6 to svn:
       Information") you can type more than 2 decimal numbers.
     + When you edit amounts for a weight of an ingredient, if you type a wrong
       number/fraction the program will reject the change.
+    + When you edit the "Per Amount"  field for a weight of an ingredient, the
+      combobox in the dialog asking for the new data shows always
+      "-No Preparation-" (as it should be), however, in previous releases
+      sometimes the combobox was showing an empty string.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:
