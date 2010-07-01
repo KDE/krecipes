@@ -32,8 +32,7 @@
 #include "datablocks/rating.h"
 #include "datablocks/elementlist.h"
 #include "datablocks/mixednumber.h"
-
-#include <nepomuk/kratingwidget.h>
+#include "widgets/kratingwidget.h"
 
 class RatingCriteriaListView : public K3ListView
 {

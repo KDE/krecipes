@@ -5,7 +5,6 @@ include(FindQImageBlitz)
 find_package(Sqlite2)
 find_package(Sqlite)
 find_package(QImageBlitz)
-find_package(Nepomuk)
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
    ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${QIMAGEBLITZ_INCLUDES}
    ${CMAKE_CURRENT_SOURCE_DIR}/backends/
@@ -108,7 +107,9 @@ set(krecipeswidgets_SRCS
    widgets/unitcombobox.cpp
    widgets/amountunitinput.cpp
    widgets/weightinput.cpp
-   widgets/thumbbar.cpp)
+   widgets/thumbbar.cpp
+   widgets/kratingwidget.cpp
+   widgets/kratingpainter.cpp)
 
 
 ############## dialogs ###############
@@ -204,11 +205,11 @@ set(datablocks_SRCS
 kde4_add_library(krecipescommon STATIC
    ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
-   ${datablocks_SRCS} klomanager.cpp propertycalculator.cpp)
+   ${datablocks_SRCS} klomanager.cpp propertycalculator.cpp widgets/kratingpainter.cpp)
 
 target_link_libraries(krecipescommon
    ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
-   ${QT_QTSQL_LIBRARY} ${NEPOMUK_LIBRARIES} 
+   ${QT_QTSQL_LIBRARY} 
    ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}) 
 
 ############### tests ################
@@ -248,7 +249,7 @@ endmacro(add_unit_test)
 
 set(UNIT_TEST_LIBRARIES krecipescommon
     ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
-    ${QT_QTSQL_LIBRARY}  ${QT_QTTEST_LIBRARY} ${NEPOMUK_LIBRARIES}
+    ${QT_QTSQL_LIBRARY}  ${QT_QTTEST_LIBRARY}
     ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}
     )
 if ( SQLITE_FOUND )
@@ -292,7 +293,7 @@ kde4_add_executable(krecipes
    ${krecipesdialogs_SRCS}
    ${krecipesactionshandlers_SRCS})
 
-target_link_libraries(krecipes krecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${NEPOMUK_LIBRARIES} ${QT_QTWEBKIT_LIBRARY} ${KDE4_KDEWEBKIT_LIBS})
+target_link_libraries(krecipes krecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${QT_QTWEBKIT_LIBRARY} ${KDE4_KDEWEBKIT_LIBS})
 
 if ( SQLITE_FOUND )
    target_link_libraries(krecipes ${SQLITE_LIBRARIES})

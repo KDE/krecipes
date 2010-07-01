@@ -15,6 +15,10 @@ Changes from 2.0-alpha6 to svn:
     reports.
   * Some strings calling SQLite "server" replaced with more appropiate ones.
     Fixes sourceforge #2943981.
+  * Provide a copy of KRatingPainter and KRatingWidget to not link against
+    Nepomuk, this would prevent the need of rebuilding other packages just to
+    install Krecipes for gentoo users with semantic-desktop disabled. Thanks to
+    Samuli Suominen for noticing the problem.
   * Fixes for bugs:
     + Right pane header, diet helper title and list titles follow theme colour
       settings rather than set absolute colours. Thanks to Mike Ferguson for the
