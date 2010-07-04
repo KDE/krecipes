@@ -162,7 +162,6 @@ void ResizeRecipeDialog::accept()
 	QDialog::accept();
 }
 
-//TODO YIELD: handle ranges
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
 	m_recipe->yield.setAmount(MixedNumber::fromString(currentYieldInput->text()).toDouble() * factor);
