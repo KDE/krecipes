@@ -29,6 +29,7 @@ public:
 
 	Ingredient ingredient() const;
 
+	void setGroup( int groupID );
 	void setAmount( double amount, double amount_offset );
 	void setUnit( const Unit &unit );
 	void setPrepMethod( const QString &prepMethod );

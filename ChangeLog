@@ -47,6 +47,9 @@ Changes from 2.0-alpha6 to svn:
       combobox in the dialog asking for the new data shows always
       "-No Preparation-" (as it should be), however, in previous releases
       sometimes the combobox was showing an empty string.
+    + In earlier releases when you edit a recipe, move an ingredient up or down
+      changing the ingredient group (aka "header") of the ingredient and you
+      delete it, the application will crash.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:

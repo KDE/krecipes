@@ -81,6 +81,11 @@ Ingredient IngListViewItem::ingredient() const
 	return m_ing;
 }
 
+void IngListViewItem::setGroup( int groupID )
+{
+	m_ing.groupID = groupID;
+}
+
 void IngListViewItem::setAmount( double amount, double amount_offset )
 {
 	amount_str.clear();

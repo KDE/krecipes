@@ -798,10 +798,15 @@ void RecipeInputDialog::moveIngredientUp( void )
 				loadedRecipe->ingList.move( it_index, iabove_index );
 			}
 
-			if ( it->parent() )
-				loadedRecipe->ingList[it_index].groupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
-			else
-				loadedRecipe->ingList[it_index].groupID = -1;
+			IngListViewItem *ing_item = (IngListViewItem*)it;
+			int newGroupID;
+			if ( it->parent() ) {
+				newGroupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
+			} else {
+				newGroupID = -1;
+			}
+			loadedRecipe->ingList[it_index].groupID = newGroupID;
+			ing_item->setGroup( newGroupID );
 		}
 
 		emit changed();
@@ -863,10 +868,15 @@ void RecipeInputDialog::moveIngredientDown( void )
 				loadedRecipe->ingList.move( it_index, ibelow_index );
 			}
 
-			if ( it->parent() )
-				loadedRecipe->ingList[it_index].groupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
-			else
-				loadedRecipe->ingList[it_index].groupID = -1;
+			IngListViewItem *ing_item = (IngListViewItem*)it;
+			int newGroupID;
+			if ( it->parent() ) {
+				newGroupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
+			} else {
+				newGroupID = -1;
+			}
+			loadedRecipe->ingList[it_index].groupID = newGroupID;
+			ing_item->setGroup( newGroupID );
 		}
 
 		emit changed();
@@ -879,7 +889,9 @@ void RecipeInputDialog::moveIngredientDown( void )
 
 		int it_index = ingItemIndex( ingredientList, it );
 		//IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
+		IngListViewItem *ing_item = (IngListViewItem*)it;
 		loadedRecipe->ingList[it_index].groupID = -1;
+		ing_item->setGroup( -1 );
 
 		emit changed();
 	}
