@@ -19,6 +19,7 @@ Changes from 2.0-alpha6 to svn:
     Nepomuk, this would prevent the need of rebuilding other packages just to
     install Krecipes for gentoo users with semantic-desktop disabled. Thanks to
     Samuli Suominen for noticing the problem.
+  * Using a QSplitter on the ingredient matcher dialog.
   * Fixes for bugs:
     + Right pane header, diet helper title and list titles follow theme colour
       settings rather than set absolute colours. Thanks to Mike Ferguson for the

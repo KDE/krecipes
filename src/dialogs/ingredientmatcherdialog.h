@@ -17,6 +17,7 @@
 #include "widgets/recipelistview.h"
 #include "widgets/dblistviewbase.h"
 
+#include <QSplitter>
 #include <QLabel>
 #include <q3listview.h>
 #include <KPushButton>
@@ -110,7 +111,7 @@ public:
 			return ( QString() );
 	}
 };
-class IngredientMatcherDialog: public QWidget
+class IngredientMatcherDialog: public QSplitter
 {
 
 	Q_OBJECT

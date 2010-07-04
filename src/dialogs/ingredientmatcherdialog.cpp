@@ -39,41 +39,44 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kvbox.h>
+#include <KHBox>
 
 #include "profiling.h"
 
-IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
+IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db ) : QSplitter( parent )
 {
 	// Initialize internal variables
 	database = db;
 
 	//Design the dialog
 
-	QVBoxLayout *dialogLayout = new QVBoxLayout( this );
+	setOrientation( Qt::Vertical );
+	setChildrenCollapsible( false );
+	
+	QWidget * upperBox = new QWidget( this );
 
 	// Ingredient list
-	QHBoxLayout *layout2 = new QHBoxLayout();
+	QHBoxLayout *layout2 = new QHBoxLayout;
 	layout2->setObjectName( "layout2" );
-	layout2->setMargin( 0 );
-	layout2->setSpacing( 6 );
 
 	allIngListView = new KreListView( this, QString(), true, 0 );
 	StdIngredientListView *list_view = new StdIngredientListView(allIngListView,database);
 	list_view->setSelectionMode( Q3ListView::Multi );
 	allIngListView->setListView(list_view);
 	layout2->addWidget( allIngListView );
+	allIngListView->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
 
-	QVBoxLayout *layout1 = new QVBoxLayout();
+	QVBoxLayout *layout1 = new QVBoxLayout;
 	layout1->addStretch();
 	layout1->setObjectName( "layout1" );
 
-	addButton = new KPushButton( this );
+	addButton = new KPushButton;
 	addButton->setObjectName( "addButton" );
 	addButton->setIcon( KIcon( "arrow-right" ) );
 	addButton->setFixedSize( QSize( 32, 32 ) );
 	layout1->addWidget( addButton );
 
-	removeButton = new KPushButton( this );
+	removeButton = new KPushButton;
 	removeButton->setObjectName( "removeButton" );
 	removeButton->setIcon( KIcon( "arrow-left" ) );
 	removeButton->setFixedSize( QSize( 32, 32 ) );
@@ -85,10 +88,14 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	ingListView->listView() ->addColumn( i18nc( "@title:column", "Ingredient (required?)" ) );
 	ingListView->listView() ->addColumn( i18nc( "@title:column", "Amount Available" ) );
 	layout2->addWidget( ingListView );
-	dialogLayout->addLayout( layout2 );
+	upperBox->setLayout( layout2 );
+	addWidget( upperBox );
+	ingListView->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
+
+	KVBox * lowerBox = new KVBox( this );
 
 	// Box to select allowed number of missing ingredients
-	missingBox = new KHBox( this );
+	missingBox = new KHBox( lowerBox );
 	missingNumberLabel = new QLabel( missingBox );
 	missingNumberLabel->setText( i18nc(
 		"@label:spinbox Number of missing ingredients allowed when doing a search by ingredients",
@@ -99,7 +106,7 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 		"@item Any amount of ingredients missing when doing a search by ingredients", "Any" ) );
 
 	// Found recipe list
-	recipeListView = new KreListView( this, i18nc( "@title", "Matching Recipes" ), false, 1, missingBox );
+	recipeListView = new KreListView( lowerBox, i18nc( "@title", "Matching Recipes" ), false, 1, missingBox );
 	recipeListView->listView() ->setAllColumnsShowFocus( true );
 
 	recipeListView->listView() ->addColumn( i18nc( "@title:column Recipe Title", "Title" ) );
@@ -112,11 +119,11 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 		"Missing Ingredients" ) );
 
 	recipeListView->listView() ->setSorting( -1 );
-	dialogLayout->addWidget(recipeListView);
+	recipeListView->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
 
 	actionHandler = new RecipeActionsHandler( recipeListView->listView(), database );
 
-	KHBox *buttonBox = new KHBox( this );
+	KHBox *buttonBox = new KHBox( lowerBox );
 
 	okButton = new KPushButton( buttonBox );
 	okButton->setIcon( KIcon( "dialog-ok" ) );
@@ -127,7 +134,8 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	clearButton = new KPushButton( buttonBox );
 	clearButton->setIcon( KIcon( "edit-clear" ) );
 	clearButton->setText( i18nc( "@action:button Clear search criteria", "Clear" ) );
-	dialogLayout->addWidget(buttonBox);
+
+	addWidget( lowerBox );
 
 	// Connect signals & slots
 	connect ( okButton, SIGNAL( clicked() ), this, SLOT( findRecipes() ) );
