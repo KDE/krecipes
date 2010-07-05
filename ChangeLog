@@ -50,6 +50,8 @@ Changes from 2.0-alpha6 to svn:
     + In earlier releases when you edit a recipe, move an ingredient up or down
       changing the ingredient group (aka "header") of the ingredient and you
       delete it, the application will crash.
+    + Shopping list addition now works properly even if you have the same
+      ingredient in different ingredient groups. Fixes sourceforge #1880424.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:

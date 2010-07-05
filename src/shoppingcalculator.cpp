@@ -32,6 +32,7 @@ void calculateShopping( const ElementList &recipeList, IngredientList *ingredien
 
 void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList, RecipeDB *db )
 {
+	Ingredient result;
 	for ( IngredientList::const_iterator ing_it = newIngredientList->begin(); ing_it != newIngredientList->end(); ++ing_it ) {
 		IngredientList::iterator pos_it;
 
@@ -43,7 +44,6 @@ void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList
 			pos_it = totalIngredientList->at( pos );
 
 			// Variables to store the new total
-			Ingredient result;
 			bool converted;
 
 			// Do the conversion
@@ -61,17 +61,22 @@ void sum( IngredientList *totalIngredientList, IngredientList *newIngredientList
 
 			// If the conversion was succesfull, Set the New Values
 			if ( converted ) {
+				result.groupID = -1;
 				*lastpos_it = result;
 			}
 			else // Otherwise append this ingredient at the end of the list
 			{
 				// Insert ingredient ID in the list
-				totalIngredientList->append( *ing_it );
+				result = *ing_it;
+				result.groupID = -1;
+				totalIngredientList->append( result );
 			}
 		}
 		else // The ingredient is not in the list, just append
 		{
-			totalIngredientList->append( *ing_it );
+			result = *ing_it;
+			result.groupID = -1;
+			totalIngredientList->append( result );
 		}
 	}
 }
