@@ -142,7 +142,7 @@ QString MX2Exporter::createContent( const RecipeList& recipes )
 				// The mx2 format doesn't seem to know about ingredient substitutions so we'll let that sleeping dog lie.
 			} // for all ingredients in the group
 		} // for all groups
-		// Now for directions... MasterCook has mutiple sections for directions whereas krecipes has only one. So we just use the one.
+		// Now for directions... MasterCook has multiple sections for directions whereas krecipes has only one. So we just use the one.
 		QDomElement directions_tag = doc.createElement( "DirS" );
 		QDomElement step_tag = doc.createElement( "DirT" ); //we've just got everything in one step
 		step_tag.appendChild( doc.createTextNode( ( *recipe_it ).instructions ) );
