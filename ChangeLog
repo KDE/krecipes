@@ -11,8 +11,7 @@ Changes from 2.0-alpha6 to svn:
   * Made data of some datablock classes private, added get/set methods and unit
     tests
   * Don't ask x times to delete x recipes.
-  * Set krecipes-devel@lists.sourceforge.net as mail address to send bug
-    reports.
+  * Switch to bugs.kde.org to manage bug reports.
   * Some strings calling SQLite "server" replaced with more appropiate ones.
     Fixes sourceforge #2943981.
   * Provide a copy of KRatingPainter and KRatingWidget to not link against
