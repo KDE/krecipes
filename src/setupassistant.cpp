@@ -91,7 +91,7 @@ SetupAssistant::~SetupAssistant()
 
 void SetupAssistant::next()
 {
-	if ( dataInitializePage->doUSDAImport() ) {
+	if ( (currentPage() == dataInitializePageItem) && dataInitializePage->doUSDAImport() ) {
 		if ( !USDA::localizedIngredientsAvailable() ) {
 			switch ( KMessageBox::warningYesNo( this, i18n("There is currently no localized ingredient data for this locale.\nWould you like to load the English ingredients instead?") ) ) {
 			case KMessageBox::No: dataInitializePage->setUSDAImport(false);

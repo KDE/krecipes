@@ -52,6 +52,10 @@ Changes from 2.0-alpha6 to svn:
       delete it, the application will crash.
     + Shopping list addition now works properly even if you have the same
       ingredient in different ingredient groups. Fixes sourceforge #1880424.
+    + In earlier versions, when you choose import USDA data in the
+      corresponding assistant page, if you click back and next again and there
+      are no translations of the USDA data for your current locale you will be
+      asked if you want to import the data in English.
 
 Changes from 2.0-alpha5 to 2.0-alpha6:
   * Removed unnecesary build dependencies, so you don't need to link against:
