@@ -16,6 +16,9 @@ Planned for the 2.1 branch:
  [Mandatory]
  * The database version number should be a string instead of a float.
  * Remove the internal SQLite backend, Qt 4 supports SQLite.
+ * Replace left panel with something better, check what Kontact is using, its
+   left panel is superior (it can use small icons without text, which would be
+   very appropiate for netbooks) and seems easier to maintain.
  * Solve the issues reported by krazy.
  * Recheck TODOs and FIXMEs in source code.
  * Remove compiler warnings.
@@ -37,7 +40,6 @@ Planned for the 2.2 branch:
  [Brainstorming]
  * Allow the user to select the encoding for mmf importer/exporter, note that
    usually mmf export files use iso8859-1, but may use another encoding.
- * Preferences dialog allow the removal of gradients in the left panel.
  * Test with large databases.
  * Concurrent database access.
  * Support for unit names in languages with various plural forms.
@@ -63,17 +65,12 @@ Planned for 2.3 branch:
  * Nepomuk support?
  * GHNS for recipes layout?
  * Tags for recipes?
- * Check ratings widget. Check what uses dolphin for those stars to rate files.
  * Trash folder to store removed recipes?
  * Something to manage money cost in shopping list.
  * Step-by-Step recipe instructions with photos?
  * There is something called eurofir out there.
 _______________________________________________________________________________
 Old stuff from previous maintainers:
-
-1.0:
- -An awesome new layout
- -Notice of Qt >= 3.2 and < 4.0
 
 jkivlighn:
 

@@ -1,15 +1,15 @@
-Changes from 2.0-alpha6 to svn:
+Changes from 2.0-alpha6 to 2.0-beta1:
   * Various changes to make the windows able to be smaller than 800x600.
   * The setup assistant, preferences dialog and advanced search dialog follow
     the HIG about form label alignment, we are using QFormLayout. Thank you to
     Mike Ferguson for doing the advanced search dialog.
   * Added an exporter for MasterCook *.mx2 files. Thank you to Warren Severin
     for writing it.
-  * Porting of datablock classes to Qt4
+  * Porting of datablock classes to Qt4.
   * Renamed internal library libkrecipescommon to avoid double lib in filename
-  * Execute tests via CTest. To run them use "make test"
+  * Execute tests via CTest. To run them use "make test".
   * Made data of some datablock classes private, added get/set methods and unit
-    tests
+    tests.
   * Don't ask x times to delete x recipes.
   * Switch to bugs.kde.org to manage bug reports.
   * Some strings calling SQLite "server" replaced with more appropiate ones.

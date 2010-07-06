@@ -1,5 +1,5 @@
-Krecipes is a Recipe Book for KDE. It requires KDE 4.2 or greater (and Qt 4).
-Developed and tested on Debian GNU/Linux sid (KDE 4.3.4 and Qt 4.5.3).
+Krecipes is a Recipe Book for KDE. It requires KDE 4.4 or greater (and Qt 4).
+Developed and tested on Debian GNU/Linux sid (KDE 4.4.4 and Qt 4.6.2).
 
 
 ** Dependencies
@@ -19,15 +19,15 @@ to use the Krecipes backup feature. If you want to use "krecipes
   - libxml2-dev
   - libxslt1-dev
  
-** Building The Latest (2.0-alpha6) Release
+** Building The Latest (2.0-beta1) Release
  
  Just untar the package first:
  
- tar -zxf krecipes-2.0-alpha6.tar.gz
+ tar -zxf krecipes-2.0-beta1.tar.gz
  
  And compile:
  
- cd krecipes-2.0-alpha6
+ cd krecipes-2.0-beta1
  mkdir build && cd build
  cmake ..
  make
@@ -71,16 +71,7 @@ to use the Krecipes backup feature. If you want to use "krecipes
  importers and exporters. You can build it adding "-DKDE4_BUILD_TESTS=ON" when
  you execute cmake.
 
- The test programs are installed inside a "tests" folder located in the data
- directory, which will be "/usr/local/share/apps/krecipes/tests" if you're using
- /usr/local/ as install prefix.
-
- Names for the programs are ${foo}test where ${foo} is on of the following: kre,
- mmf, mx2, mxp, nyc,recipeml, rezkonv. Also, located in the same directory than
- the test programs you can find the input data files for each program, named
- ${foo}test.txt. IMPORTANT: to execute the test programs you should do it
- inside that "tests" directory, otherwise the test programs will not find the
- input data files.
+ You can execute the tests just typing 'make test'.
 
 
 ** Hidden features

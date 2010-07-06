@@ -2,10 +2,10 @@
 krazy2 Analysis
 
 Checkers Run = 46
-Files Processed = 295
-Total Issues = 501 ...as of January 22 2010 19:17:58 CET
+Files Processed = 319
+Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 
-==>For File Type c++<==
+== c++: For File Type c++ ==
 1. Check for TRUE and FALSE macros [captruefalse]... Ok!
 
 2. Check for methods that return 'const' refs in public classes [constref]... Ok!
@@ -26,7 +26,7 @@ Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 	<joe.hacker@kde.org>"
 
 4. Check for cpp macros and usage [cpp]... 20 issues found
-	./src/pref.cpp: Unknown HAVE_FOO macro line#373[HAVE_SQLITE3] (1)
+	./src/pref.cpp: Unknown HAVE_FOO macro line#284[HAVE_SQLITE3] (1)
 	./src/backends/recipedb.cpp: Unknown HAVE_FOO macro line#46[HAVE_SQLITE3],130[HAVE_SQLITE3] (2)
 	./src/backends/SQLite/literecipedb.cpp: Unknown HAVE_FOO macro line#27[HAVE_SQLITE3],69[HAVE_SQLITE3],85[HAVE_SQLITE3],1023[HAVE_SQLITE3],1029[HAVE_SQLITE3] (5)
 	./src/backends/SQLite/qsql_sqlite.cpp: Unknown HAVE_FOO macro line#31[HAVE_SQLITE3],451[HAVE_SQLITE3] (2)
@@ -39,61 +39,12 @@ Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 
 5. Check for code that should be considered crashy. [crashy]... Ok!
 
-6. Check single-char QString operations for efficiency [doublequote_chars]... 193 issues found
-	./src/krecipesview.cpp: line#329,351 (2)
-	./src/importers/mmfimporter.cpp: line#152,176 (2)
-	./src/importers/rezkonvimporter.cpp: line#148 (1)
-	./src/importers/rezkonvimporter.cpp: section issues line#252,255,258 (3)
-	./src/importers/nycgenericimporter.cpp: line#112 (1)
-	./src/importers/mxpimporter.cpp: line#265,325,376 (3)
-	./src/importers/mx2importer.cpp: split issues line#119 (1)
-	./src/importers/recipemlimporter.cpp: line#217 (1)
-	./src/tests/mmftest.cpp: line#51,56,61 (3)
-	./src/tests/kretest.cpp: line#120,125,130 (3)
-	./src/tests/rezkonvtest.cpp: line#53,58,63 (3)
-	./src/tests/recipemltest.cpp: line#119,124,129 (3)
-	./src/datablocks/recipe.cpp: line#45,52 (2)
-	./src/datablocks/mixednumber.cpp: line#242,246 (2)
-	./src/widgets/inglistviewitem.cpp: line#94,194 (2)
-	./src/widgets/fractioninput.cpp: line#44 (1)
-	./src/widgets/conversiontable.cpp: line#43 (1)
-	./src/widgets/prepmethodcombobox.cpp: line#47 (1)
-	./src/widgets/krelistview.cpp: line#57 (1)
-	./src/widgets/thumbbar.cpp: line#552 (1)
-	./src/widgets/ingredientinputwidget.cpp: split issues line#263 (1)
-	./src/backends/qsqlrecipedb.cpp: line#209,799,813,1487,1491,1499,1526,1530,1819,2330 (10)
-	./src/backends/qsqlrecipedb.cpp: replace issues line#1860,1861 (2)
-	./src/backends/recipedb.cpp: line#583,670,677,686,693,702,704,709,717,724,731,738,769,770,775,776,779,785,786,791,792,795,801,802,807,808,811,816,820 (29)
-	./src/backends/recipedb.cpp: starts/endsWith issues line#587 (1)
-	./src/backends/recipedb.cpp: split issues line#860 (1)
-	./src/backends/PostgreSQL/psqlrecipedb.cpp: line#487,496,505,506,518,562 (6)
-	./src/backends/SQLite/literecipedb.cpp: line#798,854,932,942,956,958 (6)
-	./src/dialogs/editpropertiesdialog.cpp: line#80,82 (2)
-	./src/dialogs/editpropertiesdialog.cpp: split issues line#524 (1)
-	./src/dialogs/dependanciesdialog.cpp: line#86 (1)
-	./src/dialogs/ingredientmatcherdialog.cpp: line#185 (1)
-	./src/dialogs/advancedsearchdialog.cpp: line#1051 (1)
-	./src/dialogs/advancedsearchdialog.cpp: replace issues line#1031,1032,1034,1035 (4)
-	./src/dialogs/selectpropertydialog.cpp: line#144 (1)
-	./src/dialogs/recipeinputdialog.cpp: line#1711,1715,1719,1723 (4)
-	./src/dialogs/recipeinputdialog.cpp: split issues line#1054,1740 (2)
-	./src/dialogs/ingredientparserdialog.cpp: split issues line#240 (1)
-	./src/dialogs/selectunitdialog.cpp: line#73 (1)
-	./src/dialogs/conversiondialog.cpp: line#136,140 (2)
-	./src/dialogs/pagesetupdialog.cpp: line#79,206 (2)
-	./src/exporters/kreexporter.cpp: line#220 (1)
-	./src/exporters/xsltexporter.cpp: line#169,180,182,192,194,204,205,244,250,276,336 (11)
-	./src/exporters/htmlexporter.cpp: line#126,187,299,321,381,416,418,419,439,441 (10)
-	./src/exporters/htmlexporter.cpp: replace issues line#200 (1)
-	./src/exporters/mmfexporter.cpp: line#46,48,50,70,83,85,121,144,155,174,186,189,201 (13)
-	./src/exporters/mmfexporter.cpp: replace issues line#217 (1)
-	./src/exporters/mmfexporter.cpp: split issues line#198 (1)
-	./src/exporters/htmlbookexporter.cpp: line#91 (1)
-	./src/exporters/baseexporter.cpp: line#37 (1)
-	./src/exporters/rezkonvexporter.cpp: line#113,116,136,149,151,187,205,209,212,226,234,241,256,275,287,290,303 (17)
-	./src/exporters/rezkonvexporter.cpp: replace issues line#319 (1)
-	./src/exporters/rezkonvexporter.cpp: split issues line#299 (1)
-	./src/exporters/plaintextexporter.cpp: line#42,48,54,80,86,92,98,101,117,127,132,145,148,157,161,164,166,170 (18)
+6. Check single-char QString operations for efficiency [doublequote_chars]... 13 issues found
+	./src/tests/mmftest.cpp: line#59,64,69 (3)
+	./src/tests/kretest.cpp: line#137,142,147 (3)
+	./src/tests/rezkonvtest.cpp: line#61,66,71 (3)
+	./src/tests/recipemltest.cpp: line#127,132,137 (3)
+	./src/exporters/mx2exporter.cpp: line#54 (1)
 	Adding single characters to a QString is faster if the characters
 	are QChars and not QStrings.  For example: QString path = oldpath +
 	"/" + base is better written as QString path = oldpath + '/' +
@@ -110,49 +61,35 @@ Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 
 10. Check that file ends with a newline [endswithnewline]... Ok!
 
-11. Check for C++ ctors that should be declared 'explicit' [explicit]... 30 issues found
-	./src/setupassistant.h: line#43 (1)
-	./src/kstartuplogo.h: line#32 (1)
-	./src/importers/kredbimporter.h: line#24 (1)
-	./src/datablocks/kreborder.h: line#21 (1)
-	./src/datablocks/mixednumber.h: line#33 (1)
-	./src/datablocks/element.h: line#22 (1)
-	./src/widgets/krelistview.h: line#30 (1)
-	./src/widgets/kwidgetlistbox.h: line#41 (1)
-	./src/widgets/fractioninput.h: line#28 (1)
-	./src/widgets/paneldeco.h: line#37,60 (2)
-	./src/widgets/kremenu.h: line#69,114 (2)
-	./src/widgets/recipelistview.h: line#120 (1)
-	./src/widgets/thumbbar.h: line#54 (1)
-	./src/backends/qsqlrecipedb.h: line#68 (1)
-	./src/backends/PostgreSQL/psqlrecipedb.h: line#32 (1)
-	./src/backends/MySQL/mysqlrecipedb.h: line#32 (1)
-	./src/backends/SQLite/qsql_sqlite.h: line#27,28 (2)
-	./src/backends/SQLite/libqsqlite/krecqsqlitedb.h: line#39 (1)
-	./src/backends/SQLite/libqsqlite/krecqsqliteresult.h: line#47,98 (2)
-	./src/dialogs/borderdialog.h: line#40 (1)
-	./src/dialogs/recipeimportdialog.h: line#35 (1)
-	./src/dialogs/dbimportdialog.h: line#39 (1)
-	./src/dialogs/createunitdialog.h: line#34 (1)
-	./src/dialogs/editratingdialog.h: line#43 (1)
-	./src/dialogs/similarcategoriesdialog.h: line#40 (1)
-	./src/dialogs/ingredientparserdialog.h: line#37 (1)
-	Make all C++ class constructors that can be used with only one
-	required argument 'explicit' to minimize wrong use of the class. Do
-	this to avoid mistaken implicit constructor ambiguities. Copy
-	constructors should not be explicit.
+11. Check for C++ ctors that should be declared 'explicit' [explicit]... Ok!
 
-12. Check for foreach loop issues [foreach]... Ok!
+12. Check for foreach loop issues [foreach]... 13 issues found
+	./src/importers/baseimporter.cpp: non-const ref iterator line#289 (1)
+	./src/datablocks/rating.cpp: non-const ref iterator line#128 (1)
+	./src/backends/qsqlrecipedb.cpp: non-const ref iterator line#814 (1)
+	./src/dialogs/advancedsearchdialog.cpp: non-const ref iterator line#875 (1)
+	./src/dialogs/recipeinputdialog.cpp: non-const ref iterator line#1405,1437,1461 (3)
+	./src/dialogs/editratingdialog.cpp: non-const ref iterator line#216 (1)
+	./src/exporters/kreexporter.cpp: non-const ref iterator line#245 (1)
+	./src/exporters/xsltexporter.cpp: non-const ref iterator line#177 (1)
+	./src/exporters/htmlexporter.cpp: non-const ref iterator line#413 (1)
+	./src/exporters/plaintextexporter.cpp: non-const ref iterator line#148 (1)
+	./src/exporters/mx2exporter.cpp: non-const ref iterator line#162 (1)
+	When not using POD types (int, double, pointer, ...) you should use
+	const & for your foreach variables. There are two reasons for this:
+	1) Prevents you from the mistake of writing foreach loops that
+	modify the list, that is 'foreach(Foo f, list) f.a = f.b = f.c =
+	0;' compiles but does not modify the contents of list 2) Saves a
+	copy constructor call for each of the list elements
 
-13. Check validity of i18n calls [i18ncheckarg]... 47 issues found
+13. Check validity of i18n calls [i18ncheckarg]... 46 issues found
 	./src/dialogs/dietviewdialog.cpp: missing KUIT context marker line#59,78,98
-	./src/dialogs/editpropertiesdialog.cpp: HTML tag 'b' is not advised with KUIT markup line#244
-	./src/dialogs/dietwizarddialog.cpp: missing KUIT context marker line#165,187,191,375,378,381,416
-	./src/dialogs/advancedsearchdialog.cpp: missing KUIT context marker line#685
-	./src/dialogs/recipeinputdialog.cpp: use of QString::number() on an argument line#1547,1597,1609,1616,1622,1631
-	./src/dialogs/recipeinputdialog.cpp: missing KUIT context marker line#177,689,731,1109,1568
-	./src/dialogs/recipeinputdialog.cpp: HTML tag 'a' is not advised with KUIT markup line#1547,1597,1609,1616,1622,1631
-	./src/dialogs/recipeinputdialog.cpp: HTML tag 'b' is not advised with KUIT markup line#1547,1568,1597,1609,1616,1622,1631
+	./src/dialogs/editpropertiesdialog.cpp: HTML tag 'b' is not advised with KUIT markup line#252
+	./src/dialogs/dietwizarddialog.cpp: missing KUIT context marker line#165,187,191,359,362,365,400
+	./src/dialogs/recipeinputdialog.cpp: use of QString::number() on an argument line#1562,1612,1624,1631,1637,1646
+	./src/dialogs/recipeinputdialog.cpp: missing KUIT context marker line#176,685,727,1117,1583
+	./src/dialogs/recipeinputdialog.cpp: HTML tag 'a' is not advised with KUIT markup line#1562,1612,1624,1631,1637,1646
+	./src/dialogs/recipeinputdialog.cpp: HTML tag 'b' is not advised with KUIT markup line#1562,1583,1612,1624,1631,1637,1646
 	./src/dialogs/shoppinglistviewdialog.cpp: missing KUIT context marker line#67,69
 	./src/dialogs/borderdialog.cpp: missing KUIT context marker line#229
 	./src/dialogs/conversiondialog.cpp: HTML tag 'b' is not advised with KUIT markup line#99,135,139,143,147,151,155,159
@@ -164,7 +101,14 @@ Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 
 14. Check for invalid icon names [iconnames]... Ok!
 
-15. Check for proper include directives [includes]... Ok!
+15. Check for proper include directives [includes]... 1 issue found
+	./src/widgets/kratingpainter.h: using leading or trailing underscores on include guard in header
+	Use <..> to include installed headers; <QtModule/QClass> to include
+	Qt headers from installed headers; cpp file should include their
+	own headers first (but below config.h); other rules apply, see
+	<http://techbase.kde.org/Policies/Library_Code_Policy#Getting_.23in
+	cludes_right>. Use include guards in headers with appropriatedly
+	encoded macro names.
 
 16. Check for inline methods in public classes [inline]... Ok!
 
@@ -175,93 +119,23 @@ Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 	and redistributed.  For details regarding KDE's licensing policy
 	please visit <http://techbase.kde.org/Policies/Licensing_Policy>.
 
-18. Check for assignments to QString::null [nullstrassign]... 167 issues found
-	./src/klomanager.h: line#44 (1)
-	./src/krepagelayout.cpp: line#64,65,66,70,71,72,73 (7)
-	./src/propertycalculator.cpp: line#103 (1)
-	./src/krecipesview.h: line#154 (1)
-	./src/convert_sqlite3.h: line#26 (1)
-	./src/krecipes.cpp: line#648,667,709 (3)
-	./src/setupassistant.cpp: line#607 (1)
-	./src/krecipesview.cpp: line#887,959 (2)
-	./src/importers/mmfimporter.cpp: line#336,337,339 (3)
-	./src/importers/rezkonvimporter.cpp: line#134 (1)
-	./src/importers/recipemlimporter.h: line#38 (1)
-	./src/importers/kredbimporter.h: line#24 (1)
-	./src/importers/kreimporter.h: line#45 (1)
-	./src/importers/baseimporter.cpp: line#99,122 (2)
-	./src/actionshandlers/recipeactionshandler.cpp: line#398,415,417,419,421,425,428 (7)
-	./src/datablocks/recipe.h: line#25 (1)
-	./src/datablocks/recipe.cpp: line#28,30,31 (3)
-	./src/widgets/recipelistview.cpp: line#163,236 (2)
-	./src/widgets/inglistviewitem.cpp: line#86,158,197 (3)
-	./src/widgets/krelistview.h: line#30 (1)
-	./src/widgets/authorlistview.cpp: line#76,82,101 (3)
-	./src/widgets/propertylistview.cpp: line#23,29,50 (3)
-	./src/widgets/propertylistview.h: line#59,121 (2)
-	./src/widgets/paneldeco.cpp: line#82 (1)
-	./src/widgets/ingredientlistview.cpp: line#26,35,69 (3)
-	./src/widgets/paneldeco.h: line#37,52,60,65 (4)
-	./src/widgets/kremenu.cpp: line#296 (1)
-	./src/widgets/categorylistview.cpp: line#30,38,46 (3)
-	./src/widgets/dblistviewbase.cpp: line#36,52 (2)
-	./src/widgets/conversiontable.cpp: line#127,166,183 (3)
-	./src/widgets/unitlistview.h: line#81 (1)
-	./src/widgets/recipelistview.h: line#102 (1)
-	./src/widgets/krelistview.cpp: line#143 (1)
-	./src/widgets/prepmethodcombobox.h: line#26 (1)
-	./src/widgets/ingredientcombobox.h: line#28 (1)
-	./src/widgets/ingredientinputwidget.cpp: line#236 (1)
-	./src/backends/recipedb.h: line#105,197,269 (3)
-	./src/backends/qsqlrecipedb.cpp: line#552,603,1511,1899,1909,1919,1930,2023,2385,2507,2628,2649,2775,2783,2793 (15)
-	./src/backends/qsqlrecipedb.h: line#38,68,161 (3)
-	./src/backends/usda_ingredient_data.cpp: line#47 (1)
-	./src/backends/recipedb.cpp: line#95,309,481,582,585,589 (6)
-	./src/backends/progressinterface.h: line#61 (1)
-	./src/backends/usda_unit_data.cpp: line#39,83,139 (3)
-	./src/backends/usda_property_data.cpp: line#44 (1)
-	./src/backends/PostgreSQL/psqlrecipedb.cpp: line#219,237,255,291,425,483,578 (7)
-	./src/backends/PostgreSQL/psqlrecipedb.h: line#32 (1)
-	./src/backends/MySQL/mysqlrecipedb.h: line#32,38 (2)
-	./src/backends/MySQL/mysqlrecipedb.cpp: line#174,230,372 (3)
-	./src/backends/SQLite/literecipedb.cpp: line#37,916,1039 (3)
-	./src/dialogs/selectauthorsdialog.cpp: line#81 (1)
-	./src/dialogs/editpropertiesdialog.cpp: line#84,86,126 (3)
-	./src/dialogs/recipeviewdialog.h: line#42,53 (2)
-	./src/dialogs/dependanciesdialog.cpp: line#96 (1)
-	./src/dialogs/ingredientmatcherdialog.h: line#110 (1)
-	./src/dialogs/ingredientmatcherdialog.cpp: line#60,84,183 (3)
-	./src/dialogs/setupdisplay.cpp: line#141,310,518 (3)
-	./src/dialogs/setupdisplay.h: line#129 (1)
-	./src/dialogs/refineshoppinglistdialog.cpp: line#59,87 (2)
-	./src/dialogs/selectpropertydialog.cpp: line#118 (1)
-	./src/dialogs/similarcategoriesdialog.cpp: line#382 (1)
-	./src/dialogs/resizerecipedialog.cpp: line#126 (1)
-	./src/dialogs/createunitdialog.h: line#34 (1)
-	./src/dialogs/recipeviewdialog.cpp: line#112,119 (2)
-	./src/dialogs/editratingdialog.cpp: line#192 (1)
-	./src/dialogs/createunitconversiondialog.cpp: line#77 (1)
-	./src/dialogs/pagesetupdialog.h: line#31 (1)
-	./src/dialogs/dbimportdialog.cpp: line#210 (1)
-	./src/dialogs/ingredientsdialog.cpp: line#54,136 (2)
-	./src/dialogs/ingredientgroupsdialog.cpp: line#31 (1)
-	./src/dialogs/conversiondialog.cpp: line#101,112,131 (3)
-	./src/dialogs/selectrecipedialog.cpp: line#167,168 (2)
-	./src/dialogs/pagesetupdialog.cpp: line#257,306,307 (3)
-	./src/exporters/xsltexporter.cpp: line#145,159,218 (3)
-	./src/exporters/htmlexporter.cpp: line#166 (1)
-	./src/exporters/htmlbookexporter.cpp: line#50 (1)
-	./src/exporters/baseexporter.cpp: line#170 (1)
+18. Check for assignments to QString::null [nullstrassign]... 1 issue found
+	./src/actionshandlers/recipeactionshandler.cpp: line#503 (1)
 	Do not assign QString::null or QString() to a QString.	Instead use
 	the .clear() method.  For example, "str = QString::null" becomes
 	"str.clear()". When returning an empty string from a method use
 	"return QString()"  When passing an empty string use "QString()".
 
-19. Check for compares to QString::null or QString() [nullstrcompare]... Ok!
+19. Check for compares to QString::null or QString() [nullstrcompare]... 5 issues found
+	./src/backends/recipedb.cpp: line#582 (1)
+	./src/backends/usda_unit_data.cpp: line#39,83 (2)
+	./src/backends/usda_property_data.cpp: line#44 (1)
+	./src/dialogs/setupdisplay.cpp: line#146 (1)
+	Do not compare a QString to QString::null or QString().  Instead
+	use the .isEmpty() method.  For example, if(str == QString::null)
+	becomes if(str.isEmpty())
 
-20. Check for C++ operators that should be 'const' [operators]... 2 issues found
-	./src/datablocks/mixednumber.h: line#42,43 (2)
-	Make sure all public C++ class comparison operators are const.
+20. Check for C++ operators that should be 'const' [operators]... Ok!
 
 21. Check for inappropriate pass-by-value function args [passbyvalue]... Ok!
 
@@ -305,14 +179,14 @@ Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 	show up later in API documentation, handbooks, etc.  Misspelled
 	strings make the translator's job harder. Please use US English.
 
-30. Check for strings used improperly or should be i18n. [strings]... 24 issues found
+30. Check for strings used improperly or should be i18n. [strings]... 23 issues found
 	./src/importers/mmfimporter.cpp: QLatin1String issues line#48,56,60,113,119,179,242,260 (8)
 	./src/importers/nycgenericimporter.cpp: QLatin1String issues line#38,89,90,95,98,105,108,111 (8)
 	./src/importers/mx2importer.cpp: QLatin1String issues line#46 (1)
-	./src/backends/recipedb.cpp: QLatin1String issues line#455,584,587 (3)
-	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1732,1738 (2)
-	./src/dialogs/pagesetupdialog.cpp: QLatin1String issues line#196 (1)
-	./src/exporters/xsltexporter.cpp: QLatin1String issues line#74 (1)
+	./src/backends/recipedb.cpp: QLatin1String issues line#455,584 (2)
+	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1747,1753 (2)
+	./src/dialogs/pagesetupdialog.cpp: QLatin1String issues line#197 (1)
+	./src/exporters/xsltexporter.cpp: QLatin1String issues line#73 (1)
 	Some QString methods (like startsWith() and endsWith()) are more
 	efficient if they are passed a QLatin1String, avoiding an implicit
 	conversion from const char *.
@@ -321,19 +195,23 @@ Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 
 32. Check for typedefs that should be replaced by Qt typedefs [typedefs]... Ok!
 
-==>For File Type desktop<==
+== desktop: For File Type desktop ==
 1. Check that file ends with a newline [endswithnewline]... Ok!
 
 2. Check for invalid icon names [iconnames]... Ok!
 
 3. Check for spelling errors [spelling]... Ok!
 
-4. Validates desktop files using 'desktop-file-validate' [validate]... Ok!
+4. Validates desktop files using 'desktop-file-validate' [validate]... 1 issue found
+	./src/krecipes.desktop: (will be fatal in the future): value "Database" in key "Categories" in group "Desktop Entry" requires another category to be present among the following categories: Office, or Development, or AudioVideo
+	Please make sure your .desktop files conform to the freedesktop.org
+	standard. See the spec at
+	<http://standards.freedesktop.org/desktop-entry-spec/latest>
 
-==>For File Type messages<==
+== messages: For File Type messages ==
 1. Check for appending to rc.cpp [rcappend]... Ok!
 
-==>For File Type kpartgui<==
+== kpartgui: For File Type kpartgui ==
 1. Check that file ends with a newline [endswithnewline]... Ok!
 
 2. Check validity of i18n calls [i18ncheckarg]... Ok!
@@ -342,7 +220,7 @@ Total Issues = 501 ...as of January 22 2010 19:17:58 CET
 
 4. Validates kpartgui files using 'xmllint' [validate]... Ok!
 
-==>For File Type designer<==
+== designer: For File Type designer ==
 1. Check that file ends with a newline [endswithnewline]... Ok!
 
 2. Check for files that need to be fixed by 'fixuifiles' [fixuifiles]... Ok!

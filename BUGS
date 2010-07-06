@@ -5,3 +5,23 @@
 
 * In conversion tables, it seems there was a tooltip displaying something, not
   anymore.
+
+* The mx2 exporter doesn't pass the tests because of amount ranges. According
+  to Warren Severin (the guy who wrote the exporter) Mastercook doesn't manage
+  ranges, see the comments in src/exporters/mx2exporter.cpp
+  However I have downloaded a file from the Internet which contains ranges.
+  The most likely is that programs which imports mx2 files may or may not manage
+  ranges, therefore might be good idea to make the importers' behaviour
+  configurable where the user could choose between:
+  - Use the lower quantity.
+  - Use the higher quantity.
+  - Use the average of the amount range as the new amount in the output file.
+  - Use ranges.
+  Note that this may be applicable to other formats. This will not be
+  implemented in 2.0.x series.
+
+* When you are accessing a remote database and that remote database shutdowns,
+  the program beahoviour is not predictable, the most likely is that you will
+  get a crash sooner or later.
+
+* Remote access is supported, however, concurrent access is not.
