@@ -38,6 +38,13 @@ as Authors, publish date, the abstract, and Keywords -->
 <address><email>jkivlighn&#064;gmail.com</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>José Manuel</firstname>
+<surname>Santamaría Lema</surname>
+<affiliation>
+<address><email>panfaust&#064;gmail.com</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
@@ -65,8 +72,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2010-01-09</date>
-<releaseinfo>2.0.alpha6</releaseinfo>
+<date>2010-07-06</date>
+<releaseinfo>2.0.beta1</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
