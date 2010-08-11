@@ -5585,30 +5585,46 @@ distribution. -->
 <title>Credits and License</title>
 
 <para>
-&krecipes;. Program copyright 2003, 2004, 2005, 2006 by the &krecipes;
-developer team.
+&krecipes; program copyright 2003-2010 by the &krecipes; developers.
 </para>
 
 <variablelist>
-<title>The &krecipes; team:</title>
+<title>The &krecipes; developers:</title>
 <varlistentry>
-<term>Unai Garro <email>ugarro&#064;users.sourceforge.net</email></term>
-<listitem><para>Creator &amp; Core Developer</para></listitem>
+<term>Unai Garro <email>ugarro&#064;gmail.com</email></term>
+<listitem><para>Creator &amp; Former Core Developer</para></listitem>
 </varlistentry>
 <varlistentry>
 <term>Jason Kivlighn <email>jkivlighn&#064;gmail.com</email></term>
-<listitem><para>Project Maintainer &amp; Core Developer</para></listitem>
+<listitem><para>Former Project Maintainer &amp; Former Core Developer</para></listitem>
 </varlistentry>
 <varlistentry>
 <term>Cyril Bosselut <email>bosselut&#064;b1project.com</email></term>
-<listitem><para>Core Developer</para></listitem>
+<listitem><para>Former Core Developer</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Daniel Sauvé <email>megametres&#064;gmail.com</email></term>
+<listitem><para>Porting to &kde; 4 Platform</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Laurent Montel <email>montel&#064;kde.org</email></term>
+<listitem><para>Porting to &kde; 4 Platform</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>José Manuel Santamaría Lema <email>panfaust&#064;gmail.com</email></term>
+<listitem><para>Porting to &kde; 4 Platform &amp; Project Maintainer</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Martin Engelmann <email>murphi.oss&#064;googlemail.com</email></term>
+<listitem><para>Porting to &kde; 4 Platform &amp; Core Developer</para></listitem>
 </varlistentry>
 </variablelist>
 
 <para>
-Documentation copyright 2004-2006 Colleen Beamer
-<email>colleen.beamer&#064;gmail.com</email> and Jason Kivlighn
-<email>jkivlighn&#064;gmail.com</email>
+Documentation copyright 2004-2010
+Colleen Beamer <email>colleen.beamer&#064;gmail.com</email>,
+Jason Kivlighn <email>jkivlighn&#064;gmail.com</email> and
+José Manuel Santamaría Lema <email>panfaust&#064;gmail.com</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
