@@ -2006,14 +2006,13 @@ as they were in <link linkend="krecipes-page-setup">Page Setup</link>.
 The trick for having a separate definition for printing is to ensure that
 you have saved your settings with a new file name.</para>
 
+<sect2 id="print-recipe">
+<title>Printing Your Recipe</title>
+
 <para>When you select <guimenu>File</guimenu> and
 <guimenuitem>Print</guimenuitem> from the <emphasis>&krecipes;</emphasis>
 menu bar, the <interface>Print Preview</interface> screen appears, as depicted
-in the following screenshot.  However, it should be noted that your recipe
-must be opened in order for it to be printed.</para>
-
-<sect2 id="print-recipe">
-<title>Printing Your Recipe</title>
+in the following screenshot.</para>
 
 <para>
 <screenshot>
@@ -2030,94 +2029,16 @@ must be opened in order for it to be printed.</para>
 </screenshot>
 </para>
 
-<para>As you will note from the above graphic, the page has been modified
-to depict a <quote>blueberry</quote> theme.  There is absolutely no reason
-why you cannot have multiple print layout files to use for different recipes.
-<emphasis>&krecipes;</emphasis> names its layout files with a .klo extension,
-so you could have a blueberry.klo file for all your blueberry recipes, or a
-christmas.klo file for all those Christmas goodies.  You will also observe
-that <emphasis>Properties</emphasis> (your nutrients) have been deselected
-for printing purposes.</para>
-
-<para>From the screenshot, you will see that there are four buttons at the
-bottom of the screen.  Their usage is as follows: &mdash;</para>
-
-<itemizedlist>
-<listitem><para><guibutton>Help</guibutton> &ndash; clicking on this button
-will refer you to this section of the Handbook</para></listitem>
-<listitem><para><guibutton>Edit</guibutton> &ndash; is used to access the
-<interface>Print Setup</interface> interface so that you can make any desired
-changes to the way your recipe will print</para>
-<note><para>As previously stated, modifications to your print setup are done in
-exactly the manner as they are done in <link linkend="krecipes-page-setup">Page
-Setup</link>.</para></note></listitem>
-<listitem><para><guibutton>Print</guibutton> &ndash; will open the print
-dialog window for whatever print program you are using, for example,
-&kprinter;</para></listitem>
-<listitem><para><guibutton>Cancel</guibutton> &ndash; will close the
-<interface>Print Preview</interface> window and return you to your open
-recipe</para></listitem>
-</itemizedlist>
-
-<para>When the print dialog box opens, there are some selections that you
-might want to pay particular attention to.  These include: &mdash;</para>
-
-<itemizedlist>
-<listitem><para>The <emphasis><guibutton>Properties</guibutton></emphasis>
-button &ndash; when you click this button, a dialog will open where you can
-set paper size.</para></listitem>
-
-<listitem><para>A tickbox beside the label <guilabel>Preview</guilabel>.
-You might want to select to preview the recipe from within the print interface
-to ensure that it prints exactly as you want.  The <emphasis><interface>Print
-Preview</interface></emphasis> screen in &krecipes; will preview the selections
-made in the <emphasis><interface>Print Setup</interface></emphasis> interface
-within &krecipes;.  However, how the recipe actually prints is controlled
-by settings from within the printer dialog.</para></listitem>
-
-<listitem><para>An <guibutton>Options&gt;&gt;</guibutton> button at the
-bottom of the printer dialog window. Clicking on this button will expand
-this particular dialog.</para>
-
-<para>When the <guibutton>Options&gt;&gt;</guibutton> is expanded, two tabs
-are of particular interest.  These are: &mdash;</para>
-
-<itemizedlist>
-<listitem><para><emphasis><guilabel>Copies</guilabel></emphasis> &ndash;
-within this tab, you can set the number of copies of your recipe to print,
-assuming that you might want more than one.</para></listitem>
-
-<listitem><para><emphasis><guilabel>HTML Settings</guilabel></emphasis>
-&ndash; this tab is particularly important because it is the selections
-from within this tab that ensure your recipe will print exactly as previewed
-within &krecipes;.</para>
-<para>There are three tickboxes within this tab: &mdash;</para>
-
-<orderedlist><listitem><para><emphasis><guilabel>Printer friendly mode (black
-text, no background)</guilabel></emphasis> &ndash; if you want your recipe
-to print with the backgrounds that you have selected, <emphasis>deselect
-this tickbox</emphasis>!</para>
-<note><para>This tickbox is the important one!</para></note>
-</listitem>
-<listitem><para><emphasis><guilabel>Print images</guilabel></emphasis>
-&ndash; deselect this tickbox only if you do not want your recipe printed
-with the associated photo.</para></listitem>
-<listitem><para><emphasis><guilabel>Print header</guilabel></emphasis> &ndash;
-selecting this text box will cause a header to be printed on your page showing
-the date, the file name and its path and the copy number.</para></listitem>
-</orderedlist>
-
-
-</listitem>
-</itemizedlist>
-
-</listitem>
-</itemizedlist>
-
-<note><para>It is beyond the scope of this document to detail all
-print settings.  If you should need assistance with this, click the
-<emphasis><guibutton>Help</guibutton></emphasis> button from within the
-print dialog interface.</para></note>
+<para>From the screenshot, you will see that there are various buttons to tune
+the preview, if you're happy with the result click the
+<guiicon>
+  <inlinemediaobject>
+    <imageobject>
+      <imagedata fileref="document-print.png" format="PNG"/>
+    </imageobject>
+  </inlinemediaobject>
+</guiicon> 
+button, otherwise just close the preview window to cancel the print.</para>
 
 </sect2>
 
