@@ -35,7 +35,7 @@ void CriteriaComboBox::reload()
 
 	clear();
 
-	for ( ElementList::const_iterator it = criteriaList.begin(); it != criteriaList.end(); ++it ) {
+	for ( ElementList::const_iterator it = criteriaList.constBegin(); it != criteriaList.constEnd(); ++it ) {
 		addCriteria((*it));
 	}
 }

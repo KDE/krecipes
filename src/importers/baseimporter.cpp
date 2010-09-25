@@ -348,9 +348,9 @@ void BaseImporter::setUnitRatioInfo( UnitRatioList &ratioList, UnitList &unitLis
 
 void BaseImporter::importUnitRatios( RecipeDB *db )
 {
-	for ( UnitRatioList::const_iterator it = m_ratioList.begin(); it != m_ratioList.end(); ++it ) {
+	for ( UnitRatioList::const_iterator it = m_ratioList.constBegin(); it != m_ratioList.constEnd(); ++it ) {
 		QString unitName1, unitName2;
-		for ( UnitList::const_iterator unit_it = m_unitList.begin(); unit_it != m_unitList.end(); ++unit_it ) {
+		for ( UnitList::const_iterator unit_it = m_unitList.constBegin(); unit_it != m_unitList.constEnd(); ++unit_it ) {
 			if ( ( *it ).unitId1() == ( *unit_it ).id() ) {
 				unitName1 = ( *unit_it ).name();
 				if ( !unitName2.isEmpty() )

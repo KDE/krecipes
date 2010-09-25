@@ -295,7 +295,7 @@ int DietWizardDialog::getNecessaryFlags() const
 			if ( !need_ingredients ) {
 				ConstraintList constraints;
 				loadConstraints( meal, dish, &constraints );
-				for ( ConstraintList::const_iterator ct_it = constraints.begin(); ct_it != constraints.end(); ++ct_it ) {
+				for ( ConstraintList::const_iterator ct_it = constraints.constBegin(); ct_it != constraints.constEnd(); ++ct_it ) {
 					if ( (*ct_it).enabled ) {
 						need_ingredients = true;
 						break;
@@ -681,7 +681,7 @@ bool DietWizardDialog::checkCategories( Recipe &rec, int meal, int dish )
 	loadEnabledCategories( meal, dish, &categoryList );
 
 
-	for ( ElementList::const_iterator cat_it = rec.categoryList.begin(); cat_it != rec.categoryList.end(); ++cat_it ) {
+	for ( ElementList::const_iterator cat_it = rec.categoryList.constBegin(); cat_it != rec.categoryList.constEnd(); ++cat_it ) {
 		if ( categoryList.containsId( ( *cat_it ).id ) )
 			return true;
 	}
@@ -700,7 +700,7 @@ bool DietWizardDialog::checkConstraints( Recipe &rec, int meal, int dish )
 	loadConstraints( meal, dish, &constraints ); //load the constraints
 
 	bool any_enabled = false;
-	for ( ConstraintList::const_iterator ct_it = constraints.begin(); ct_it != constraints.end(); ++ct_it ) {
+	for ( ConstraintList::const_iterator ct_it = constraints.constBegin(); ct_it != constraints.constEnd(); ++ct_it ) {
 		if ( (*ct_it).enabled ) {
 			any_enabled = true;
 			break;
@@ -740,9 +740,9 @@ bool DietWizardDialog::categoryFiltering( int meal, int dish ) const
 
 bool DietWizardDialog::checkLimits( IngredientPropertyList &properties, ConstraintList &constraints )
 {
-	for ( ConstraintList::const_iterator ct_it = constraints.begin(); ct_it != constraints.end(); ++ct_it ) {
+	for ( ConstraintList::const_iterator ct_it = constraints.constBegin(); ct_it != constraints.constEnd(); ++ct_it ) {
 		if ( (*ct_it).enabled ) {
-			IngredientPropertyList::const_iterator ip_it = properties.find( (*ct_it).id );
+			IngredientPropertyList::iterator ip_it = properties.find( (*ct_it).id );
 			if ( ip_it != properties.end() ) {
 				if ( ( (*ip_it).amount > (*ct_it).max ) || ( (*ip_it).amount < (*ct_it).min ) )
 					return false;

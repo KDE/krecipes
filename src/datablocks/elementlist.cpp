@@ -61,10 +61,10 @@ bool ElementList::containsId( int id ) const // Search by id (which uses search 
 
 bool ElementList::containsSubSet( ElementList &el )
 {
-	ElementList::const_iterator it_end = el.end();
+	ElementList::const_iterator it_end = el.constEnd();
 	ElementList::const_iterator it;
 
-	for ( it = el.begin(); it != it_end; ++it ) {
+	for ( it = el.constBegin(); it != it_end; ++it ) {
 		if ( !containsId( ( *it ).id ) )
 			return false;
 	}

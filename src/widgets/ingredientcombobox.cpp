@@ -46,7 +46,7 @@ void IngredientComboBox::reload()
 		ingredientComboRows.insert( row, -1 );
 		row++;
 	}
-	for ( ElementList::const_iterator it = ingredientList.begin(); it != ingredientList.end(); ++it, ++row ) {
+	for ( ElementList::const_iterator it = ingredientList.constBegin(); it != ingredientList.constEnd(); ++it, ++row ) {
 		insertItem( count(), (*it).name );
 		completionObject()->addItem((*it).name);
 		ingredientComboRows.insert( row, (*it).id );
@@ -70,7 +70,7 @@ void IngredientComboBox::loadMore()
 	ElementList ingredientList;
 	database->loadIngredients( &ingredientList, load_limit, loading_at );
 
-	for ( ElementList::const_iterator it = ingredientList.begin(); it != ingredientList.end(); ++it, ++loading_at ) {
+	for ( ElementList::const_iterator it = ingredientList.constBegin(); it != ingredientList.constEnd(); ++it, ++loading_at ) {
 		insertItem( count(), (*it).name );
 		completionObject()->addItem((*it).name);
 		ingredientComboRows.insert( loading_at, (*it).id );

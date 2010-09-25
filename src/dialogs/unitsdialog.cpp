@@ -131,7 +131,7 @@ void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
 	QStringList unitNames;
 	IDList unitIDs; // We need to store these in the table, so rows and cols are identified by unitID, not name.
 	table->clear();
-	for ( UnitList::const_iterator unit_it = unitList.begin(); unit_it != unitList.end(); ++unit_it ) {
+	for ( UnitList::const_iterator unit_it = unitList.constBegin(); unit_it != unitList.constEnd(); ++unit_it ) {
 		unitNames.append( ( *unit_it ).name() );
 		unitIDs.append( ( *unit_it ).id() ); // append the element
 	}
@@ -148,7 +148,7 @@ void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
 	// Load and Populate the data into the table
 	UnitRatioList ratioList;
 	database->loadUnitRatios( &ratioList, type );
-	for ( UnitRatioList::const_iterator ratio_it = ratioList.begin(); ratio_it != ratioList.end(); ++ratio_it ) {
+	for ( UnitRatioList::const_iterator ratio_it = ratioList.constBegin(); ratio_it != ratioList.constEnd(); ++ratio_it ) {
 		table->setRatio( ( *ratio_it ).unitId1(), ( *ratio_it ).unitId1(), ( *ratio_it ).ratio() );
 	}
 }

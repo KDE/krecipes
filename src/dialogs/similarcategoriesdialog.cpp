@@ -360,7 +360,7 @@ void SimilarCategoriesDialog::findMatches()
 	const double threshold = (100 - thresholdSlider->value())/100.0;
 	const QString name = categoriesBox->text();
 
-	for ( ElementList::const_iterator it = m_elementList.begin(); it != m_elementList.end(); ++it ) {
+	for ( ElementList::const_iterator it = m_elementList.constBegin(); it != m_elementList.constEnd(); ++it ) {
 		//kDebug()<<(*it).name<<" (result/threshold): "<<compareStrings(name,(*it).name)<<"/"<<threshold;
 		#if 0
 		if ( levenshtein_distance(name.toLatin1(),(*it).name.toLatin1())/double(qMax(length,(*it).name.length())) >= max_allowed_distance ) {

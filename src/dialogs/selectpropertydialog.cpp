@@ -131,13 +131,13 @@ int SelectPropertyDialog::perUnitsID()
 
 void SelectPropertyDialog::loadProperties( IngredientPropertyList *propertyList )
 {
-	for ( IngredientPropertyList::const_iterator prop_it = propertyList->begin(); prop_it != propertyList->end(); ++prop_it ) {
+	for ( IngredientPropertyList::const_iterator prop_it = propertyList->constBegin(); prop_it != propertyList->constEnd(); ++prop_it ) {
 		( void ) new Q3ListViewItem( propertyChooseView, QString::number( (*prop_it).id ), (*prop_it).name );
 	}
 }
 void SelectPropertyDialog::loadUnits( UnitList *unitList )
 {
-	for ( UnitList::const_iterator unit_it = unitList->begin(); unit_it != unitList->end(); ++unit_it ) {
+	for ( UnitList::const_iterator unit_it = unitList->constBegin(); unit_it != unitList->constEnd(); ++unit_it ) {
 		QString unitName = ( *unit_it ).name();
 		if ( unitName.isEmpty() ) {
 			if ( m_showEmpty == ShowEmptyUnit )

@@ -37,7 +37,7 @@ void HeaderListView::load( int /*limit*/, int /*offset*/ )
 
 	setTotalItems(headerList.count());
 
-	for ( ElementList::const_iterator it = headerList.begin(); it != headerList.end(); ++it ) {
+	for ( ElementList::const_iterator it = headerList.constBegin(); it != headerList.constEnd(); ++it ) {
 		createHeader( *it );
 	}
 }

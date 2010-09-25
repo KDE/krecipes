@@ -174,7 +174,7 @@ void SelectAuthorsDialog::reloadAuthorsCombo( void )
 	authorsCombo->clear();
 	authorsCombo->completionObject() ->clear();
 
-	for ( ElementList::const_iterator author_it = authorList.begin(); author_it != authorList.end(); ++author_it ) {
+	for ( ElementList::const_iterator author_it = authorList.constBegin(); author_it != authorList.constEnd(); ++author_it ) {
 		authorsCombo->insertItem( authorsCombo->count(), ( *author_it ).name );
 		authorsCombo->completionObject() ->addItem( ( *author_it ).name );
 	}

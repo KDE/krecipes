@@ -160,7 +160,7 @@ double RatingList::average()
 {
     int rating_total = 0;
     double rating_sum = 0;
-    for (RatingList::const_iterator rating_it = begin(); rating_it != end(); ++rating_it) {
+    for (RatingList::const_iterator rating_it = constBegin(); rating_it != constEnd(); ++rating_it) {
         rating_total += rating_it->numberOfRatingCriterias();
         rating_sum += rating_it->sum();
     }

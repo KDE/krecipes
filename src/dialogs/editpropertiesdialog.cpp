@@ -380,7 +380,7 @@ void EditPropertiesDialog:: reloadPropertyList( void )
 
 	IngredientPropertyList propertiesList;
 	db->loadProperties( &propertiesList, ingredientID ); // load the list for this ingredient
-	for ( IngredientPropertyList::const_iterator prop_it = propertiesList.begin(); prop_it != propertiesList.end(); ++prop_it ) {
+	for ( IngredientPropertyList::const_iterator prop_it = propertiesList.constBegin(); prop_it != propertiesList.constEnd(); ++prop_it ) {
 		Q3ListViewItem * lastElement = propertyListView ->lastItem();
 		//Insert property after the last one (it's important to keep the order in the case of the properties to be able to identify the per_units ID later on).
 		( void ) new Q3ListViewItem( propertyListView, lastElement, (*prop_it).name, QString::number( (*prop_it).amount ), (*prop_it).units + QString( "/" ) + (*prop_it).perUnit.name(), QString::number( (*prop_it).id ) );
@@ -398,7 +398,7 @@ void EditPropertiesDialog::reloadWeightList( void )
 	weightListView ->clear();
 
 	WeightList list = db->ingredientWeightUnits( ingredientID ); // load the list for this ingredient
-	for ( WeightList::const_iterator weight_it = list.begin(); weight_it != list.end(); ++weight_it ) {
+	for ( WeightList::const_iterator weight_it = list.constBegin(); weight_it != list.constEnd(); ++weight_it ) {
 		Q3ListViewItem * lastElement = weightListView ->lastItem();
 
 		Weight w = *weight_it;
@@ -620,7 +620,7 @@ void EditPropertiesDialog::loadUSDAData()
 
 				int unitID = db->findExistingUnitByName( w.perAmountUnit() );
 				if ( unitID == -1 ) {
-					for ( USDA::UnitDataList::const_iterator it = unit_data_list.begin(); it != unit_data_list.end(); ++it ) {
+					for ( USDA::UnitDataList::const_iterator it = unit_data_list.constBegin(); it != unit_data_list.constEnd(); ++it ) {
 						if ( w.perAmountUnit() == (*it).translation || w.perAmountUnit() == (*it).translationPlural ) {
 							db->createNewUnit( Unit((*it).translation,(*it).translationPlural) );
 						}
@@ -640,7 +640,7 @@ void EditPropertiesDialog::loadUSDAData()
 				}
 
 				bool exists = false;
-				for ( WeightList::const_iterator it = weights.begin(); it != weights.end(); ++it ) {
+				for ( WeightList::const_iterator it = weights.constBegin(); it != weights.constEnd(); ++it ) {
 					if ( (*it).perAmountUnitId() == w.perAmountUnitId() && (*it).prepMethodId() == w.prepMethodId() ) {
 						exists = true;
 						break;

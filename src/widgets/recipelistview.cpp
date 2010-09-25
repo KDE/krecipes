@@ -172,7 +172,7 @@ void RecipeListView::load(int limit, int offset)
 		database->loadRecipeList( &recipeList );
 
 		ElementList::const_iterator recipe_it;
-		for ( recipe_it = recipeList.begin();recipe_it != recipeList.end();++recipe_it ) {
+		for ( recipe_it = recipeList.constBegin();recipe_it != recipeList.constEnd();++recipe_it ) {
 			Recipe recipe;
 			recipe.recipeID = ( *recipe_it ).id;
 			recipe.title = ( *recipe_it ).name;
@@ -187,7 +187,7 @@ void RecipeListView::load(int limit, int offset)
 			database->loadUncategorizedRecipes( &recipeList );
 
 			ElementList::const_iterator recipe_it;
-			for ( recipe_it = recipeList.begin();recipe_it != recipeList.end();++recipe_it ) {
+			for ( recipe_it = recipeList.constBegin();recipe_it != recipeList.constEnd();++recipe_it ) {
 				Recipe recipe;
 				recipe.recipeID = ( *recipe_it ).id;
 				recipe.title = ( *recipe_it ).name;
@@ -219,7 +219,7 @@ void RecipeListView::populate( Q3ListViewItem *item )
 		database->loadRecipeList( &recipeList, id );
 
 		ElementList::const_iterator recipe_it;
-		for ( recipe_it = recipeList.begin(); recipe_it != recipeList.end(); ++recipe_it ) {
+		for ( recipe_it = recipeList.constBegin(); recipe_it != recipeList.constEnd(); ++recipe_it ) {
 			Recipe recipe;
 			recipe.recipeID = ( *recipe_it ).id;
 			recipe.title = ( *recipe_it ).name;

@@ -76,7 +76,7 @@ void PrepMethodComboBox::reload()
 		prepMethodComboRows.insert( row, -1 );
 		row++;
 	}
-	for ( ElementList::const_iterator it = prepMethodList.begin(); it != prepMethodList.end(); ++it, ++row ) {
+	for ( ElementList::const_iterator it = prepMethodList.constBegin(); it != prepMethodList.constEnd(); ++it, ++row ) {
 		insertItem( count(), (*it).name );
 		completionObject()->addItem((*it).name);
 		prepMethodComboRows.insert( row,(*it).id );

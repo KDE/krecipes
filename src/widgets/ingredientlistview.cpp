@@ -90,7 +90,7 @@ void IngredientListView::load( int limit, int offset )
 
 	setTotalItems(ingredientList.count());
 
-	for ( ElementList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it )
+	for ( ElementList::const_iterator ing_it = ingredientList.constBegin(); ing_it != ingredientList.constEnd(); ++ing_it )
 		createIngredient( *ing_it );
 }
 

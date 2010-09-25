@@ -113,7 +113,7 @@ void PropertyListView::reload()
 
 	//Populate this data into the K3ListView
 	IngredientPropertyList::const_iterator prop_it;
-	for ( prop_it = propertyList.begin(); prop_it != propertyList.end(); ++prop_it )
+	for ( prop_it = propertyList.constBegin(); prop_it != propertyList.constEnd(); ++prop_it )
 		createProperty( *prop_it );
 
 	m_loading = false;

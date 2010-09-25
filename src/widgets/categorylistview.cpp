@@ -438,7 +438,7 @@ void CategoryCheckListView::load( int limit, int offset )
 
 	populateAll();
 
-	for ( ElementList::const_iterator it = m_selections.begin(); it != m_selections.end(); ++it ) {
+	for ( ElementList::const_iterator it = m_selections.constBegin(); it != m_selections.constEnd(); ++it ) {
 		Q3CheckListItem * item = ( Q3CheckListItem* ) findItem( QString::number( (*it).id ), 1 );
 		if ( item ) {
 			item->setOn(true);

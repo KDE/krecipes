@@ -16,7 +16,7 @@ IngredientPropertyList::IngredientPropertyList()
 IngredientPropertyList::~IngredientPropertyList()
 {}
 
-IngredientPropertyList::const_iterator IngredientPropertyList::find( int id )
+IngredientPropertyList::iterator IngredientPropertyList::find( int id )
 {
 	IngredientProperty ip;
 	ip.id = id;
@@ -26,7 +26,7 @@ IngredientPropertyList::const_iterator IngredientPropertyList::find( int id )
 int IngredientPropertyList::findByName( const QString &name )
 {
 	IngredientPropertyList::const_iterator prop_it;
-	for ( prop_it = begin(); prop_it != end(); ++prop_it ) {
+	for ( prop_it = constBegin(); prop_it != constEnd(); ++prop_it ) {
 		if ( (*prop_it).name == name )
 			return (*prop_it).id;
 	}
@@ -45,7 +45,7 @@ void IngredientPropertyList::filter( int ingredientID, IngredientPropertyList *f
 {
 	filteredList->clear();
 	IngredientPropertyList::const_iterator prop_it;
-	for ( prop_it = begin(); prop_it != end(); ++prop_it ) {
+	for ( prop_it = constBegin(); prop_it != constEnd(); ++prop_it ) {
 		if ( (*prop_it).ingredientID == ingredientID )
 			filteredList->append( *prop_it );
 	}

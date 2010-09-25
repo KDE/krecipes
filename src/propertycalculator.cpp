@@ -66,7 +66,7 @@ void addPropertyToList( RecipeDB *database, IngredientPropertyList *recipeProper
 	QMap<int,double> ratioCache; //unit->ratio
 
 	IngredientPropertyList::const_iterator prop_it;
-	for ( prop_it = ingPropertyList.begin(); prop_it != ingPropertyList.end(); ++prop_it ) {
+	for ( prop_it = ingPropertyList.constBegin(); prop_it != ingPropertyList.constEnd(); ++prop_it ) {
 		// Find if property was listed before
 		int pos = recipePropertyList->findIndex( *prop_it );
 		if ( pos >= 0 )  //Exists. Add to it

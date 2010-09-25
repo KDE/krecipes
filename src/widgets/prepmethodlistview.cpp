@@ -35,7 +35,7 @@ void PrepMethodListView::load( int limit, int offset )
 
 	setTotalItems(prepMethodList.count());
 
-	for ( ElementList::const_iterator ing_it = prepMethodList.begin(); ing_it != prepMethodList.end(); ++ing_it )
+	for ( ElementList::const_iterator ing_it = prepMethodList.constBegin(); ing_it != prepMethodList.constEnd(); ++ing_it )
 		createPrepMethod( *ing_it );
 }
 

@@ -674,7 +674,7 @@ void RecipeInputDialog::reload( void )
 	completion->clear();
 	ElementList yieldList;
 	database->loadYieldTypes( &yieldList );
-	for ( ElementList::const_iterator it = yieldList.begin(); it != yieldList.end(); ++it ) {
+	for ( ElementList::const_iterator it = yieldList.constBegin(); it != yieldList.constEnd(); ++it ) {
 		completion->addItem( (*it).name );
 	}
 }
@@ -1215,7 +1215,7 @@ void RecipeInputDialog::addCategory( void )
 void RecipeInputDialog::showCategories( void )
 {
 	QString categories;
-	for ( ElementList::const_iterator cat_it = loadedRecipe->categoryList.begin(); cat_it != loadedRecipe->categoryList.end(); ++cat_it ) {
+	for ( ElementList::const_iterator cat_it = loadedRecipe->categoryList.constBegin(); cat_it != loadedRecipe->categoryList.constEnd(); ++cat_it ) {
 		if ( !categories.isEmpty() )
 			categories += ',';
 		categories += ( *cat_it ).name;
@@ -1243,7 +1243,7 @@ void RecipeInputDialog::addAuthor( void )
 void RecipeInputDialog::showAuthors( void )
 {
 	QString authors;
-	for ( ElementList::const_iterator author_it = loadedRecipe->authorList.begin(); author_it != loadedRecipe->authorList.end(); ++author_it ) {
+	for ( ElementList::const_iterator author_it = loadedRecipe->authorList.constBegin(); author_it != loadedRecipe->authorList.constEnd(); ++author_it ) {
 		if ( !authors.isEmpty() )
 			authors += ',';
 		authors += ( *author_it ).name;
@@ -1506,14 +1506,14 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing, bool noHeader )
 		ingCopy.groupID = header->id();
 
 		lastElement = new IngListViewItem( header, lastElement, ingCopy );
-		for ( Ingredient::SubstitutesList::const_iterator it = ingCopy.substitutes.begin(); it != ingCopy.substitutes.end(); ++it ) {
+		for ( Ingredient::SubstitutesList::const_iterator it = ingCopy.substitutes.constBegin(); it != ingCopy.substitutes.constEnd(); ++it ) {
 			new IngSubListViewItem( lastElement, *it );
 		}
 		lastElement->setOpen(true);
 	}
 	else {
 		lastElement = new IngListViewItem( ingredientList, lastElement, ingCopy );
-		for ( Ingredient::SubstitutesList::const_iterator it = ing.substitutes.begin(); it != ing.substitutes.end(); ++it ) {
+		for ( Ingredient::SubstitutesList::const_iterator it = ing.substitutes.constBegin(); it != ing.substitutes.constEnd(); ++it ) {
 			new IngSubListViewItem( lastElement, *it );
 		}
 		lastElement->setOpen(true);
@@ -1567,7 +1567,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 
 	QMap<int,bool> ratioCache; //unit->conversion possible
 	IngredientPropertyList::const_iterator prop_it;
-	for ( prop_it = ingPropertyList.begin(); prop_it != ingPropertyList.end(); ++prop_it ) {
+	for ( prop_it = ingPropertyList.constBegin(); prop_it != ingPropertyList.constEnd(); ++prop_it ) {
 		Ingredient result;
 
 		QMap<int,bool>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id());
@@ -1588,7 +1588,7 @@ void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool update
 					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
 					Q3ValueList< QPair<int,int> > usedIds;
 					QStringList missingConversions;
-					for ( WeightList::const_iterator weight_it = weights.begin(); weight_it != weights.end(); ++weight_it ) {
+					for ( WeightList::const_iterator weight_it = weights.constBegin(); weight_it != weights.constEnd(); ++weight_it ) {
 						//skip entries that only differ in how it's prepared
 						QPair<int,int> usedPair((*weight_it).perAmountUnitId(),(*weight_it).weightUnitId());
 						if ( usedIds.find(usedPair) != usedIds.end() )

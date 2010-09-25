@@ -305,7 +305,7 @@ void IngredientInput::loadUnitListCombo()
 		database->loadPossibleUnits( selectedIngredient, unitComboList );
 
 		//Populate this data into the ComboBox
-		for ( UnitList::const_iterator unit_it = unitComboList->begin(); unit_it != unitComboList->end(); ++unit_it ) {
+		for ( UnitList::const_iterator unit_it = unitComboList->constBegin(); unit_it != unitComboList->constEnd(); ++unit_it ) {
 			unitBox->insertItem( unitBox->count(), ( *unit_it ).name() );
 			unitBox->completionObject() ->addItem( ( *unit_it ).name() );
 			if ( ( *unit_it ).name() != (*unit_it ).plural() ) {

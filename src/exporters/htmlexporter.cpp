@@ -361,7 +361,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 		per_col++;
 
 	count = 0;
-	for ( IngredientPropertyList::const_iterator prop_it = visibleProperties.begin(); prop_it != visibleProperties.end(); ++prop_it ) {
+	for ( IngredientPropertyList::const_iterator prop_it = visibleProperties.constBegin(); prop_it != visibleProperties.constEnd(); ++prop_it ) {
 		if ( count != 0 && count % per_col == 0 )
 			properties_html.append("</ul></td><td valign=\"top\"><ul>");
 

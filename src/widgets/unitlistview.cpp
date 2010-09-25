@@ -43,7 +43,7 @@ void UnitListView::load( int limit, int offset )
 	UnitList unitList;
 	database->loadUnits( &unitList, Unit::All, limit, offset );
 
-	for ( UnitList::const_iterator it = unitList.begin(); it != unitList.end(); ++it ) {
+	for ( UnitList::const_iterator it = unitList.constBegin(); it != unitList.constEnd(); ++it ) {
 		if ( !( *it ).name().isEmpty() || !( *it ).plural().isEmpty() )
 			createUnit( *it );
 	}

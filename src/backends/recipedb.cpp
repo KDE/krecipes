@@ -206,7 +206,7 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 		if ( idList.count() == 0 )
 			return MissingIngredientWeight;
 
-		for ( WeightList::const_iterator it = idList.begin(); it != idList.end(); ++it ) {
+		for ( WeightList::const_iterator it = idList.constBegin(); it != idList.constEnd(); ++it ) {
 			//get conversion order correct (i.e., Mass -> Volume instead of Volume -> Mass, depending on unit type)
 			int first   = (to.type() == Unit::Mass)?(*it).perAmountUnitId():(*it).weightUnitId();
 			int second  = (to.type() == Unit::Mass)?(*it).weightUnitId():(*it).perAmountUnitId();
@@ -981,7 +981,7 @@ void RecipeDB::importUSDADatabase()
 			}
 
 			bool exists = false;
-			for ( WeightList::const_iterator it = existingWeights.begin(); it != existingWeights.end(); ++it ) {
+			for ( WeightList::const_iterator it = existingWeights.constBegin(); it != existingWeights.constEnd(); ++it ) {
 				if ( (*it).perAmountUnitId() == w.perAmountUnitId() && (*it).prepMethodId() == w.prepMethodId() ) {
 					exists = true;
 					break;

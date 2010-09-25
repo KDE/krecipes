@@ -34,7 +34,7 @@ void HeaderComboBox::reload()
 
 	clear();
 
-	for ( ElementList::const_iterator it = headerList.begin(); it != headerList.end(); ++it ) {
+	for ( ElementList::const_iterator it = headerList.constBegin(); it != headerList.constEnd(); ++it ) {
 		addItem( it->name, it->id );
 		completionObject()->addItem((*it).name);
 	}

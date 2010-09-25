@@ -57,7 +57,7 @@ CreateUnitConversionDialog::CreateUnitConversionDialog( const Element &fromUnit,
 
 	//clearWState( WState_Polished );
 
-	for ( ElementList::const_iterator it = m_toUnits.begin(); it != m_toUnits.end(); ++it ) {
+	for ( ElementList::const_iterator it = m_toUnits.constBegin(); it != m_toUnits.constEnd(); ++it ) {
 		toUnitComboBox->insertItem( toUnitComboBox->count(), (*it).name );
 	}
 

@@ -36,7 +36,7 @@ void AuthorListView::load( int limit, int offset )
 
 	setTotalItems(authorList.count());
 
-	for ( ElementList::const_iterator ing_it = authorList.begin(); ing_it != authorList.end(); ++ing_it )
+	for ( ElementList::const_iterator ing_it = authorList.constBegin(); ing_it != authorList.constEnd(); ++ing_it )
 		createAuthor( *ing_it );
 }
 

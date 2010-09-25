@@ -30,7 +30,7 @@ double UnitRatioList::getRatio(int uid1, int uid2)
     if (uid1 == uid2)
         return (1.0);
 
-    for (UnitRatioList::const_iterator ur_it = begin(); ur_it != end(); ++ur_it) {
+    for (UnitRatioList::const_iterator ur_it = constBegin(); ur_it != constEnd(); ++ur_it) {
         if (ur_it->unitId1() == uid1 && ur_it->unitId2() == uid2)
             return ur_it->ratio();
 
