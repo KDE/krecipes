@@ -139,7 +139,7 @@ QList<int> RecipeActionsHandler::recipeIDs( const QList<Q3ListViewItem *> &items
 			ElementList list;
 			database->loadRecipeList( &list, cat_it->element().id, true );
 	
-			for ( ElementList::const_iterator cat_it = list.begin(); cat_it != list.end(); ++cat_it ) {
+			for ( ElementList::const_iterator cat_it = list.constBegin(); cat_it != list.constEnd(); ++cat_it ) {
 				if ( ids.indexOf( (*cat_it).id ) == -1 )
 					ids << (*cat_it).id;
 			}
@@ -547,7 +547,7 @@ QList<int> RecipeActionsHandler::getAllVisibleItems()
 				ElementList list;
 				database->loadRecipeList( &list, cat_id, true );
 		
-				for ( ElementList::const_iterator it = list.begin(); it != list.end(); ++it ) {
+				for ( ElementList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it ) {
 					if ( ids.indexOf( (*it).id ) == -1 )
 						ids << (*it).id;
 				}
