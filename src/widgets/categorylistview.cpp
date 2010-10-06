@@ -428,7 +428,7 @@ void CategoryCheckListView::stateChange( CategoryCheckListItem* it, bool on )
 		if ( on )
 			m_selections.append(it->element());
 		else
-			m_selections.remove(it->element());
+			m_selections.removeAll(it->element());
 	}
 }
 
