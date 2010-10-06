@@ -184,8 +184,8 @@ void check( const RatingList &rating, const RatingList &base )
 		check("checking rater",(*rating_it).rater(),(*base_rating_it).rater());
 		check("checking comment",(*rating_it).comment(),(*base_rating_it).comment());
 
-		RatingCriteriaList rating_rcs( (*rating_it).ratingCriterias() );
-		RatingCriteriaList base_rcs( (*base_rating_it).ratingCriterias() );
+		const RatingCriteriaList rating_rcs( (*rating_it).ratingCriterias() );
+		const RatingCriteriaList base_rcs( (*base_rating_it).ratingCriterias() );
 		RatingCriteriaList::const_iterator rc_it = rating_rcs.begin();
 		RatingCriteriaList::const_iterator base_rc_it = base_rcs.begin();
 		for ( ; rc_it != rating_rcs.end() || base_rc_it != base_rcs.end(); ++rc_it, ++base_rc_it ) {
