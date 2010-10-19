@@ -609,17 +609,17 @@ void PerformancePrefs::saveOptions()
 
 //=============Sonnet Options Dialog================//
 SpellCheckingPrefs::SpellCheckingPrefs( QWidget *parent )
-    : QWidget( parent )
+	: QWidget( parent )
 {
-    QHBoxLayout *lay = new QHBoxLayout( this );
-    m_confPage = new Sonnet::ConfigWidget(&( *KGlobal::config() ), this );
-    lay->addWidget( m_confPage );
-    setLayout( lay );
+	QHBoxLayout *lay = new QHBoxLayout( this );
+	m_confPage = new Sonnet::ConfigWidget(&( *KGlobal::config() ), this );
+	lay->addWidget( m_confPage );
+	setLayout( lay );
 }
 
 void SpellCheckingPrefs::saveOptions()
 {
-    m_confPage->save();
+	m_confPage->save();
 }
 
 #include "pref.moc"
