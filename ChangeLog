@@ -1,5 +1,11 @@
 Changes from 2.0-beta1 to svn:
   * Replaced shorcut for export action. It was ctrl+P, now it is ctrl+O.
+  * Use .setPlainText() and .toPlainText() rather than .setText() and .text()
+    when dealing with the recipe instructions KTextEdit because the latter
+    couple of methods guess if the text is in plain format or HTML and I found
+    that sometimes (after spellchecking the instructions, but I don't know how
+    to reproduce the problem) the guess is wrong and, for example, the database
+    might store the instructions in HTML which is not what we want.
 
 Changes from 2.0-alpha6 to 2.0-beta1:
   * Various changes to make the windows able to be smaller than 800x600.

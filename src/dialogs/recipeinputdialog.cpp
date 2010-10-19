@@ -587,7 +587,7 @@ void RecipeInputDialog::reload( void )
 	//Load Values in Interface
 	titleEdit->setText( loadedRecipe->title );
 	instructionsEdit->clearCompletionItems();
-	instructionsEdit->setText( loadedRecipe->instructions );
+	instructionsEdit->setPlainText( loadedRecipe->instructions );
 	yieldNumInput->setValue( loadedRecipe->yield.amount(), loadedRecipe->yield.amountOffset() );
 	yieldTypeEdit->setText( loadedRecipe->yield.type() );
 	prepTimeEdit->setTime( loadedRecipe->prepTime );
@@ -1131,7 +1131,7 @@ void RecipeInputDialog::saveRecipe( void )
 	// was stored before for performance. (recipeID is already there)
 
 	loadedRecipe->photo = sourcePhoto;
-	loadedRecipe->instructions = instructionsEdit->text();
+	loadedRecipe->instructions = instructionsEdit->toPlainText();
 	loadedRecipe->title = titleEdit->text();
 	double amount = 0.0, amountOffset = 0.0;
 	yieldNumInput->value(amount, amountOffset);
@@ -1154,7 +1154,7 @@ void RecipeInputDialog::newRecipe( void )
 	photoLabel->setPixmap( image );
 	sourcePhoto = QPixmap();
 
-	instructionsEdit->setText( i18nc( "@label:textbox", "Write the recipe instructions here" ) );
+	instructionsEdit->setPlainText( i18nc( "@label:textbox", "Write the recipe instructions here" ) );
 	instructionsEdit->clearCompletionItems();
 	titleEdit->setText( i18nc( "@label:textbox", "Write the recipe title here" ) );
 	ingredientList->clear();
