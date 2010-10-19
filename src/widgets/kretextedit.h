@@ -28,6 +28,8 @@ class KreTextEdit : public KTextEdit, KCompletionBase
 public:
     KreTextEdit( QWidget *parent );
 
+	virtual void createHighlighter();
+
     virtual void setCompletedText( const QString &text );
     virtual void setCompletedItems( const QStringList &items , bool);
 

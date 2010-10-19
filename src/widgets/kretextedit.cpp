@@ -16,6 +16,8 @@
 #include <kaction.h>
 #include <kdebug.h>
 
+#include <sonnet/highlighter.h>
+
 KreTextEdit::KreTextEdit( QWidget *parent ):
 	KTextEdit( parent )//, KCompletionBase()
 {
@@ -25,6 +27,14 @@ KreTextEdit::KreTextEdit( QWidget *parent ):
 	completing = false;
 
 	//connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
+}
+
+void KreTextEdit::createHighlighter()
+{
+	KTextEdit::createHighlighter();
+	Sonnet::Highlighter * current_highlighter = highlighter();
+	if (current_highlighter)
+		current_highlighter->setAutomatic( false );
 }
 
 void KreTextEdit::haltCompletion()
