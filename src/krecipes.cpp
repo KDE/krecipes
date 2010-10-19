@@ -259,7 +259,7 @@ void Krecipes::setupActions()
 
 	exportAction = new KAction( this );
 	exportAction->setText( i18n( "Export..." ) );
-	exportAction->setShortcut( Qt::CTRL + Qt::Key_P );
+	exportAction->setShortcut( Qt::CTRL + Qt::Key_O );
 	exportAction->setIcon( KIcon( "document-export" ) );
 	actionCollection()->addAction( "export_action" , exportAction );
 	connect( exportAction, SIGNAL(triggered(bool)), this, SLOT( fileExport() ) );

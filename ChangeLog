@@ -1,3 +1,6 @@
+Changes from 2.0-beta1 to svn:
+  * Replaced shorcut for export action. It was ctrl+P, now it is ctrl+O.
+
 Changes from 2.0-alpha6 to 2.0-beta1:
   * Various changes to make the windows able to be smaller than 800x600.
   * The setup assistant, preferences dialog and advanced search dialog follow
