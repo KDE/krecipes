@@ -6,6 +6,12 @@ Changes from 2.0-beta1 to svn:
     that sometimes (after spellchecking the instructions, but I don't know how
     to reproduce the problem) the guess is wrong and, for example, the database
     might store the instructions in HTML which is not what we want.
+  * Bug fixes/improvements regarding spell checking:
+    + Use our own local configuration, as configured by the settings dialog.
+    + Don't disable the spell checking automatically.
+    + Reload background spell checker if the configuration changes, thusly you
+      can, for instance, change the language for spell checking and use it
+      inmediatly without restarting the program.
 
 Changes from 2.0-alpha6 to 2.0-beta1:
   * Various changes to make the windows able to be smaller than 800x600.
