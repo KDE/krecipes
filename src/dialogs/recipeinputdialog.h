@@ -81,6 +81,7 @@ public:
 	bool everythingSaved();
 	void reload( void );
 	int loadedRecipeID() const;
+	void reloadCheckSpelling();
 
 private:
 

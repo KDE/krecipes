@@ -845,6 +845,7 @@ void Krecipes::optionsPreferences()
 	// popup some sort of preference dialog, here
 	QPointer<KrecipesPreferences> dlg = new KrecipesPreferences( this );
 	dlg->exec();
+	m_view->inputPanel->reloadCheckSpelling();
 	delete dlg;
 
 }

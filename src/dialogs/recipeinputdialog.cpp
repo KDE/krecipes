@@ -1775,4 +1775,12 @@ void RecipeInputDialog::statusLinkClicked( const QUrl &link )
 	updatePropertyStatus();
 }
 
+void RecipeInputDialog::reloadCheckSpelling()
+{
+	if ( instructionsEdit->checkSpellingEnabled() ) {                                                                                                              
+		instructionsEdit->setCheckSpellingEnabled( false );
+		instructionsEdit->setCheckSpellingEnabled( true );
+	}
+}
+
 #include "recipeinputdialog.moc"
