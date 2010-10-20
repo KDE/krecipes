@@ -9,6 +9,7 @@
 
 #include "kretextedit.h"
 
+#include <KStandardDirs>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <KStandardShortcut>
@@ -25,6 +26,8 @@ KreTextEdit::KreTextEdit( QWidget *parent ):
 	comp->setIgnoreCase( true );
 
 	completing = false;
+
+	setSpellCheckingConfigFileName( KStandardDirs::locateLocal( "config", "krecipesrc"  ) );
 
 	//connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
 }
