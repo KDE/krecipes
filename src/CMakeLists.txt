@@ -308,7 +308,7 @@ install(TARGETS krecipes ${INSTALL_TARGETS_DEFAULT_ARGS})
 ########### install files ###############
 
 install( FILES  krecipesui.rc DESTINATION ${DATA_INSTALL_DIR}/krecipes )
-install( FILES  krecipes.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( PROGRAMS  krecipes.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 
 kde4_install_icons( ${ICON_INSTALL_DIR} )
 
