@@ -149,7 +149,7 @@ void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
 	UnitRatioList ratioList;
 	database->loadUnitRatios( &ratioList, type );
 	for ( UnitRatioList::const_iterator ratio_it = ratioList.constBegin(); ratio_it != ratioList.constEnd(); ++ratio_it ) {
-		table->setRatio( ( *ratio_it ).unitId1(), ( *ratio_it ).unitId1(), ( *ratio_it ).ratio() );
+		table->setRatio( ( *ratio_it ).unitId1(), ( *ratio_it ).unitId2(), ( *ratio_it ).ratio() );
 	}
 }
 

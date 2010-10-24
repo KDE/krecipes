@@ -6,6 +6,8 @@ Changes from 2.0-beta1 to svn:
     that sometimes (after spellchecking the instructions, but I don't know how
     to reproduce the problem) the guess is wrong and, for example, the database
     might store the instructions in HTML which is not what we want.
+  * Due to a bug which affects only 2.0-beta1, conversion tables were not being
+    displayed properly, fixed.
   * Bug fixes/improvements regarding spell checking:
     + Use our own local configuration, as configured by the settings dialog.
     + Don't disable the spell checking automatically.
