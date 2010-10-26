@@ -53,7 +53,7 @@ QStringList PSqlRecipeDB::backupCommand() const
 	KConfigGroup config = KGlobal::config()->group("Server");
 
 	QStringList command;
-	command<<config.readEntry( "PgDumpPath", "pg_dump" )<<"-d"<<database->databaseName()
+	command<<config.readEntry( "PgDumpPath", "pg_dump" )<<"--inserts"<<database->databaseName()
 	  <<"-U"<<config.readEntry( "Username" );
 
 	int port = config.readEntry( "Port", 0 );
