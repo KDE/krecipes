@@ -1858,6 +1858,7 @@ QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 {
 	QString s_escaped = s;
 
+	s_escaped.replace ( '\\', "\\\\" );
 	s_escaped.replace ( '\'', "\\'" );
 	s_escaped.replace ( ';', "\";@" ); // Small trick for only for parsing later on
 
