@@ -10,6 +10,8 @@
 #include "kretextedit.h"
 
 #include <KStandardDirs>
+#include <KCmdLineArgs>
+#include <KAboutData>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <KStandardShortcut>
@@ -27,7 +29,8 @@ KreTextEdit::KreTextEdit( QWidget *parent ):
 
 	completing = false;
 
-	setSpellCheckingConfigFileName( KStandardDirs::locateLocal( "config", "krecipesrc"  ) );
+	setSpellCheckingConfigFileName( KStandardDirs::locateLocal( "config",
+		KCmdLineArgs::aboutData()->appName() + "rc" ) );
 
 	//connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
 }
