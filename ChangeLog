@@ -10,6 +10,9 @@ Changes from 2.0-beta1 to svn:
     displayed properly, fixed.
   * Pass "--inserts" intead of "-d" to pg_dump command, so the backup works
     with PostgreSQL 8.x series.
+  * Revert a wrong bug fix done in previous release, now the message which
+    warns that you are using the same layout for printing and viewing recipes
+    is displayed when it should.
   * Escape backslashes when storing strings in the database.
   * Bug fixes/improvements regarding spell checking:
     + Use our own local configuration, as configured by the settings dialog.
