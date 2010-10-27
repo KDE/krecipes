@@ -12,6 +12,7 @@
 #include <KStandardDirs>
 #include <KCmdLineArgs>
 #include <KAboutData>
+#include <KConfigGroup>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <KStandardShortcut>
@@ -31,6 +32,12 @@ KreTextEdit::KreTextEdit( QWidget *parent ):
 
 	setSpellCheckingConfigFileName( KStandardDirs::locateLocal( "config",
 		KCmdLineArgs::aboutData()->appName() + "rc" ) );
+
+	KConfigGroup grp( KGlobal::config(), "Spelling");
+	if ( grp.readEntry( "checkerEnabledByDefault", false ) )
+		setCheckSpellingEnabled( true );
+	else
+		setCheckSpellingEnabled( false );
 
 	//connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
 }

@@ -20,6 +20,7 @@ Changes from 2.0-beta1 to svn:
     + Reload background spell checker if the configuration changes, thusly you
       can, for instance, change the language for spell checking and use it
       inmediatly without restarting the program.
+    + Respect the "Automatic spell checking enabled by default" option.
 
 Changes from 2.0-alpha6 to 2.0-beta1:
   * Various changes to make the windows able to be smaller than 800x600.
