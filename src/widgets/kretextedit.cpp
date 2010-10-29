@@ -13,6 +13,7 @@
 #include <KCmdLineArgs>
 #include <KAboutData>
 #include <KConfigGroup>
+#include <QString>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <KStandardShortcut>
@@ -30,11 +31,26 @@ KreTextEdit::KreTextEdit( QWidget *parent ):
 
 	completing = false;
 
-	setSpellCheckingConfigFileName( KStandardDirs::locateLocal( "config",
-		KCmdLineArgs::aboutData()->appName() + "rc" ) );
+	QString spellCheckingConfigFileName = KStandardDirs::locateLocal( "config",
+		KCmdLineArgs::aboutData()->appName() + "rc" );
 
-	KConfigGroup grp( KGlobal::config(), "Spelling");
-	if ( grp.readEntry( "checkerEnabledByDefault", false ) )
+	KConfig localConfig( spellCheckingConfigFileName, KConfig::SimpleConfig );
+	KConfigGroup localGroup( &localConfig, "Spelling" );
+
+	//If we don't have our local configuration for spell checking, fall back to
+	//user's global configuration.
+	if ( !localConfig.hasGroup( "Spelling" ) ) {
+		KConfig globalSonnetConfig( KStandardDirs::locateLocal( "config", "sonnetrc" ) );
+		KConfigGroup globalGroup( &globalSonnetConfig, "Spelling" );
+		globalGroup.copyTo( &localGroup );
+		localConfig.sync();
+		KConfigGroup group( KGlobal::config(), "Spelling" );
+		globalGroup.copyTo( &group );
+	}
+
+	setSpellCheckingConfigFileName( spellCheckingConfigFileName );
+
+	if ( localGroup.readEntry( "checkerEnabledByDefault", false ) )
 		setCheckSpellingEnabled( true );
 	else
 		setCheckSpellingEnabled( false );

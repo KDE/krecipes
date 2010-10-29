@@ -43,6 +43,8 @@
 #include <ktoolinvocation.h>
 #include <kglobal.h>
 #include <kvbox.h>
+#include <KCmdLineArgs>
+#include <KAboutData>
 
 #include <sonnet/configwidget.h>
 
@@ -612,6 +614,24 @@ SpellCheckingPrefs::SpellCheckingPrefs( QWidget *parent )
 	: QWidget( parent )
 {
 	QHBoxLayout *lay = new QHBoxLayout( this );
+
+	QString spellCheckingConfigFileName = KStandardDirs::locateLocal( "config",
+		KCmdLineArgs::aboutData()->appName() + "rc" );
+
+	KConfig localConfig( spellCheckingConfigFileName, KConfig::SimpleConfig );
+
+	//If we don't have our local configuration for spell checking, fall back to
+	//user's global configuration.
+	if ( !localConfig.hasGroup( "Spelling" ) ) {
+		KConfigGroup localGroup( &localConfig, "Spelling" );
+		KConfig globalSonnetConfig( KStandardDirs::locateLocal( "config", "sonnetrc" ) );
+		KConfigGroup globalGroup( &globalSonnetConfig, "Spelling" );
+		globalGroup.copyTo( &localGroup );
+		localConfig.sync();
+		KConfigGroup group( KGlobal::config(), "Spelling" );
+		globalGroup.copyTo( &group );
+	}
+
 	m_confPage = new Sonnet::ConfigWidget(&( *KGlobal::config() ), this );
 	lay->addWidget( m_confPage );
 	setLayout( lay );

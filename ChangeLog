@@ -15,7 +15,9 @@ Changes from 2.0-beta1 to svn:
     is displayed when it should.
   * Escape backslashes when storing strings in the database.
   * Bug fixes/improvements regarding spell checking:
-    + Use our own local configuration, as configured by the settings dialog.
+    + Use our own local configuration (in krecipesrc), as configured by the
+      settings dialog. If we don't have a local configuration yet, it would try
+      to fall back to the user's global configuration (stored in sonnetrc).
     + Don't disable the spell checking automatically.
     + Reload background spell checker if the configuration changes, thusly you
       can, for instance, change the language for spell checking and use it
