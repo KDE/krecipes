@@ -66,6 +66,7 @@ SelectPropertyDialog::SelectPropertyDialog( QWidget* parent, int ingID, RecipeDB
 	layout2->addWidget( perUnitsLabel );
 
 	perUnitsBox = new KComboBox( true, box );
+	perUnitsBox->setInsertPolicy( QComboBox::NoInsert );
 	layout2->addWidget( perUnitsBox );
 	boxLayout->addLayout( layout2 );
 
