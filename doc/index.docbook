@@ -5114,7 +5114,7 @@ or menu bars. -->
 <title>The main <emphasis>&krecipes;</emphasis> window</title>
 
 <sect2 id="file-menu">
-<title>The File Menu</title>
+<title>The <guimenu>File</guimenu> Menu</title>
 <para>
 <variablelist>
 <varlistentry>
@@ -5125,7 +5125,8 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>New Recipe</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Creates a new recipe</action></para></listitem>
+<listitem><para><action>Creates a new recipe</action> - see <link linkend="enter-edit-recipes">Entering
+and Editing Recipes</link> for details.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -5136,7 +5137,7 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Save</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the recipe</action></para></listitem>
+<listitem><para><action>Saves the recipe</action>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -5147,21 +5148,9 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Print</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Prints the currently loaded recipe</action> &ndash;
+<listitem><para><action>Prints the current recipe</action> &ndash;
 See the section <link linkend="print-recipe">Printing Your Recipe</link>
-for instructions</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycap>F5</keycap>
-</shortcut>
-<guimenu>File</guimenu>
-<guimenuitem>Reload</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Reloads the currently active
-recipe</action></para></listitem>
+for instructions.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -5174,7 +5163,7 @@ recipe</action></para></listitem>
 </menuchoice></term>
 <listitem><para><action>Imports recipes</action> from a file &ndash; See
 the section <link linkend="file-import">Importing from a File</link> for
-instructions</para></listitem>
+instructions.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -5187,17 +5176,20 @@ choices</para>
 <para>See the corresponding sections on importing from a
 Database &ndash; <link linkend="import-sqlite">SQLite</link>,
 <link linkend="import-mysql">MySQL</link>, or <link
-linkend="import-postgresql">PostgreSQL</link></para></listitem>
+linkend="import-postgresql">PostgreSQL</link>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Export...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Exports</action> either a single recipe or all
 recipes to a file &ndash; <link linkend="export-recipe">Exporting Recipes
-to Other Formats</link></para></listitem>
+to Other Formats</link>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -5229,7 +5221,7 @@ Your <emphasis>&krecipes;</emphasis> Database</link>.</para></listitem>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Quits</action>
-<emphasis>&krecipes;</emphasis></para></listitem>
+<emphasis>&krecipes;</emphasis>.</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
@@ -5241,31 +5233,18 @@ Your <emphasis>&krecipes;</emphasis> Database</link>.</para></listitem>
 
 <para>
 <variablelist>
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Page Setup...</guimenuitem>
-</menuchoice></term>
-<listitem><para>Accesses the <emphasis>&krecipes;</emphasis> <action>Page
-Setup interface</action> for defining the page layout &ndash; see the
-section on <link linkend="krecipes-page-setup">Page Setup</link> for further
-details</para></listitem>
-</varlistentry>
 
 <varlistentry>
-<term>
-<menuchoice>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo>
+</shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Print Setup...</guimenuitem>
+<guimenuitem>Edit Recipe</guimenuitem>
 </menuchoice></term>
-<listitem><para>Accesses the <emphasis>&krecipes;</emphasis> <action>Print
-Setup interface</action> &ndash; this interface is identical to the
-<interface>Page Setup</interface>, but is used to define a setup that can
-be different and separate from the page layout for viewing your recipes</para>
-
-<para>See the section on <link linkend="print-setup">Print Setup</link>
-for further details.</para></listitem>
+<listitem><para>Accesses the <emphasis>&krecipes;</emphasis>
+<action>Edit</action> mode - see <link linkend="enter-edit-recipes">Entering
+and Editing Recipes</link> for details.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -5287,22 +5266,45 @@ for example an email.</para></listitem>
 
 </sect2>
 
+<sect2 id="view-menu">
+<title>The <guimenu>View</guimenu> Menu</title>
+<para>
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycap>F5</keycap>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Reloads the currently active
+recipe.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Show Recipe(s)</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays the currently active
+recipe.</action></para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+</sect2>
+
 <sect2 id="tools-menu">
 <title>The <guimenu>Tools</guimenu> Menu</title>
 
 <para>
 <variablelist>
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo>
-</shortcut>
-<guimenu>Tools</guimenu>
-<guimenuitem>Edit</guimenuitem>
-</menuchoice></term>
-<listitem><para>Accesses the <emphasis>&krecipes;</emphasis>
-<action>Edit</action> mode</para></listitem>
-</varlistentry>
 
 <varlistentry>
 <term><menuchoice>
@@ -5317,34 +5319,54 @@ for example an email.</para></listitem>
 linkend="measure-converter">Using the Measurement Converter</link> section
 for instruction.</para></listitem>
 </varlistentry>
+
 </variablelist>
 </para>
 
 </sect2>
 
 <sect2 id="settings-menu">
-<title>The Settings Menu</title>
+<title>The <guimenu>Settings</guimenu> Menu</title>
 <para>
 <variablelist>
+
 <varlistentry>
-<term><menuchoice>
+<term>
+<menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show Toolbar</guimenuitem>
+<guimenuitem>Page Setup...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Turns display of Toolbar on and
-off</action></para></listitem>
+<listitem><para>Accesses the <emphasis>&krecipes;</emphasis> <action>Page
+Setup interface</action> for defining the page layout &ndash; see the
+section on <link linkend="krecipes-page-setup">Page Setup</link> for further
+details.</para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Print Setup...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Accesses the <emphasis>&krecipes;</emphasis> <action>Print
+Setup interface</action> &ndash; this interface is identical to the
+<interface>Page Setup</interface>, but is used to define a setup that can
+be different and separate from the page layout for viewing your recipesi.</para>
+
+<para>See the section on <link linkend="print-setup">Print Setup</link>
+for further details.</para></listitem>
+</varlistentry>
+
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Hide Statusbar</guimenuitem>
+<guimenuitem>Show Statusbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Hides the Statusbar</action></para>
-<para>If this menu item is selected, the choice changes to
-<guimenuitem>Show Statusbar</guimenuitem> which <action>Shows the
-Statusbar</action></para></listitem>
+<listitem><para><action>Turns display of Statusbar on and
+off</action>.</para></listitem>
 </varlistentry>
+
 
 <varlistentry>
 <term><menuchoice>
@@ -5352,9 +5374,9 @@ Statusbar</action></para></listitem>
 <guimenuitem>Configure Shortcuts...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens</action> the <interface>Configure Shortcuts -
-&krecipes;</interface> window from which Shortcuts can be defined</para>
+&krecipes;</interface> window from which Shortcuts can be defined.</para>
 <para>For complete instructions on configuring shortcuts, see the section
-<link linkend="configure-shortcuts">Creating Shortcuts</link></para>
+<link linkend="configure-shortcuts">Creating Shortcuts</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -5364,7 +5386,7 @@ Statusbar</action></para></listitem>
 <guimenuitem>Configure Toolbars...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens</action> the <interface>Configure Toolbars -
-&krecipes;</interface> window from which Toolbars can be configured</para>
+&krecipes;</interface> window from which Toolbars can be configured.</para>
 <para>See the section <link linkend="configure-toolbars">Customizing the
 Toolbar</link> for details.</para></listitem>
 </varlistentry>
@@ -5374,14 +5396,11 @@ Toolbar</link> for details.</para></listitem>
 <guimenu>Settings</guimenu>
 <guimenuitem>Configure &krecipes;...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens</action> the <interface>&krecipes; Preferences
-- &krecipes;</interface> window from which a number of preferences can be
-defined</para>
-<para>See the sections, <link linkend="configure-server-settings">Server
-Settings</link>, <link linkend="custom-formatting">Customizing
-Formatting</link>, or <link linkend="import-export-preference">Choosing
-Import/Export Preferences</link> for specific configuration
-instructions.</para></listitem>
+<listitem><para><action>Opens</action> the <interface>Configure -
+&krecipes;</interface> window from which a number of preferences can be
+defined.</para>
+<para>See the section <link linkend="configure-krecipes-choice">Configure
+&krecipes;</link> for specific configuration instructions.</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
