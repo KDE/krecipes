@@ -1,4 +1,4 @@
-* On my debian system, if I don't provide a password for PostgreSQL, krecipes
+* On my debian system, if I don't provide a password for PostgreSQL, Krecipes
   silently fails.
 
 * Autocompletion does not work for recipe instructions.
@@ -25,3 +25,6 @@
   get a crash sooner or later.
 
 * Remote access is supported, however, concurrent access is not.
+
+* While windows with UI messages in english are able to be smaller than 800x600,
+  for other languages they may be always bigger.

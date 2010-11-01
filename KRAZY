@@ -1,9 +1,9 @@
 
 krazy2 Analysis
 
-Checkers Run = 46
+Checkers Run = 47
 Files Processed = 319
-Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
+Total Issues = 145 ...as of November 01 2010 18:19:14 UTC
 
 == c++: For File Type c++ ==
 1. Check for TRUE and FALSE macros [captruefalse]... Ok!
@@ -12,9 +12,9 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 
 3. Check for an acceptable copyright [copyright]... 5 issues found
 	./src/image.h: missing tags: copyright  (1)
+	./src/importers/mx2importer.h: missing tags: email address(line 2)  (1)
 	./src/importers/recipemlimporter.h: missing tags: email address(line 2)  (1)
 	./src/importers/mx2importer.cpp: missing tags: email address(line 2)  (1)
-	./src/importers/mx2importer.h: missing tags: email address(line 2)  (1)
 	./src/importers/recipemlimporter.cpp: missing tags: email address(line 2)  (1)
 	All source files must contain a copyright header which identifies
 	the copyright holder(s) together with a e-mail address that can be
@@ -26,10 +26,10 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 	<joe.hacker@kde.org>"
 
 4. Check for cpp macros and usage [cpp]... 20 issues found
-	./src/pref.cpp: Unknown HAVE_FOO macro line#284[HAVE_SQLITE3] (1)
+	./src/pref.cpp: Unknown HAVE_FOO macro line#286[HAVE_SQLITE3] (1)
 	./src/backends/recipedb.cpp: Unknown HAVE_FOO macro line#46[HAVE_SQLITE3],130[HAVE_SQLITE3] (2)
-	./src/backends/SQLite/literecipedb.cpp: Unknown HAVE_FOO macro line#27[HAVE_SQLITE3],69[HAVE_SQLITE3],85[HAVE_SQLITE3],1023[HAVE_SQLITE3],1029[HAVE_SQLITE3] (5)
 	./src/backends/SQLite/qsql_sqlite.cpp: Unknown HAVE_FOO macro line#31[HAVE_SQLITE3],451[HAVE_SQLITE3] (2)
+	./src/backends/SQLite/literecipedb.cpp: Unknown HAVE_FOO macro line#27[HAVE_SQLITE3],69[HAVE_SQLITE3],85[HAVE_SQLITE3],1023[HAVE_SQLITE3],1029[HAVE_SQLITE3] (5)
 	./src/backends/SQLite/libqsqlite/krecqsqlitedb.h: Unknown HAVE_FOO macro line#29[HAVE_SQLITE3],51[HAVE_SQLITE3] (2)
 	./src/backends/SQLite/libqsqlite/krecqsqlitedb.cpp: Unknown HAVE_FOO macro line#34[HAVE_SQLITE3],49[HAVE_SQLITE3],57[HAVE_SQLITE3],70[HAVE_SQLITE3],90[HAVE_SQLITE3],103[HAVE_SQLITE3],110[HAVE_SQLITE3],147[HAVE_SQLITE3] (8)
 	C++ source files and non-installed headers should NOT use cpp
@@ -40,11 +40,11 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 5. Check for code that should be considered crashy. [crashy]... Ok!
 
 6. Check single-char QString operations for efficiency [doublequote_chars]... 13 issues found
+	./src/exporters/mx2exporter.cpp: line#54 (1)
 	./src/tests/mmftest.cpp: line#59,64,69 (3)
 	./src/tests/kretest.cpp: line#137,142,147 (3)
 	./src/tests/rezkonvtest.cpp: line#61,66,71 (3)
 	./src/tests/recipemltest.cpp: line#127,132,137 (3)
-	./src/exporters/mx2exporter.cpp: line#54 (1)
 	Adding single characters to a QString is faster if the characters
 	are QChars and not QStrings.  For example: QString path = oldpath +
 	"/" + base is better written as QString path = oldpath + '/' +
@@ -64,17 +64,17 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 11. Check for C++ ctors that should be declared 'explicit' [explicit]... Ok!
 
 12. Check for foreach loop issues [foreach]... 13 issues found
-	./src/importers/baseimporter.cpp: non-const ref iterator line#289 (1)
-	./src/datablocks/rating.cpp: non-const ref iterator line#128 (1)
 	./src/backends/qsqlrecipedb.cpp: non-const ref iterator line#814 (1)
-	./src/dialogs/advancedsearchdialog.cpp: non-const ref iterator line#875 (1)
+	./src/importers/baseimporter.cpp: non-const ref iterator line#289 (1)
+	./src/exporters/htmlexporter.cpp: non-const ref iterator line#413 (1)
+	./src/exporters/mx2exporter.cpp: non-const ref iterator line#162 (1)
+	./src/exporters/xsltexporter.cpp: non-const ref iterator line#177 (1)
+	./src/exporters/plaintextexporter.cpp: non-const ref iterator line#148 (1)
+	./src/exporters/kreexporter.cpp: non-const ref iterator line#245 (1)
+	./src/datablocks/rating.cpp: non-const ref iterator line#128 (1)
 	./src/dialogs/recipeinputdialog.cpp: non-const ref iterator line#1405,1437,1461 (3)
 	./src/dialogs/editratingdialog.cpp: non-const ref iterator line#216 (1)
-	./src/exporters/kreexporter.cpp: non-const ref iterator line#245 (1)
-	./src/exporters/xsltexporter.cpp: non-const ref iterator line#177 (1)
-	./src/exporters/htmlexporter.cpp: non-const ref iterator line#413 (1)
-	./src/exporters/plaintextexporter.cpp: non-const ref iterator line#148 (1)
-	./src/exporters/mx2exporter.cpp: non-const ref iterator line#162 (1)
+	./src/dialogs/advancedsearchdialog.cpp: non-const ref iterator line#875 (1)
 	When not using POD types (int, double, pointer, ...) you should use
 	const & for your foreach variables. There are two reasons for this:
 	1) Prevents you from the mistake of writing foreach loops that
@@ -83,15 +83,15 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 	copy constructor call for each of the list elements
 
 13. Check validity of i18n calls [i18ncheckarg]... 46 issues found
-	./src/dialogs/dietviewdialog.cpp: missing KUIT context marker line#59,78,98
-	./src/dialogs/editpropertiesdialog.cpp: HTML tag 'b' is not advised with KUIT markup line#252
-	./src/dialogs/dietwizarddialog.cpp: missing KUIT context marker line#165,187,191,359,362,365,400
+	./src/dialogs/borderdialog.cpp: missing KUIT context marker line#229
 	./src/dialogs/recipeinputdialog.cpp: use of QString::number() on an argument line#1562,1612,1624,1631,1637,1646
 	./src/dialogs/recipeinputdialog.cpp: missing KUIT context marker line#176,685,727,1117,1583
 	./src/dialogs/recipeinputdialog.cpp: HTML tag 'a' is not advised with KUIT markup line#1562,1612,1624,1631,1637,1646
 	./src/dialogs/recipeinputdialog.cpp: HTML tag 'b' is not advised with KUIT markup line#1562,1583,1612,1624,1631,1637,1646
+	./src/dialogs/dietviewdialog.cpp: missing KUIT context marker line#59,78,98
+	./src/dialogs/editpropertiesdialog.cpp: HTML tag 'b' is not advised with KUIT markup line#252
 	./src/dialogs/shoppinglistviewdialog.cpp: missing KUIT context marker line#67,69
-	./src/dialogs/borderdialog.cpp: missing KUIT context marker line#229
+	./src/dialogs/dietwizarddialog.cpp: missing KUIT context marker line#165,187,191,359,362,365,400
 	./src/dialogs/conversiondialog.cpp: HTML tag 'b' is not advised with KUIT markup line#99,135,139,143,147,151,155,159
 	Make the translators' job easier and detect problems in the usage
 	of the i18n() calls. When the fix is not clear, check the Techbase
@@ -128,8 +128,8 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 
 19. Check for compares to QString::null or QString() [nullstrcompare]... 5 issues found
 	./src/backends/recipedb.cpp: line#582 (1)
-	./src/backends/usda_unit_data.cpp: line#39,83 (2)
 	./src/backends/usda_property_data.cpp: line#44 (1)
+	./src/backends/usda_unit_data.cpp: line#39,83 (2)
 	./src/dialogs/setupdisplay.cpp: line#146 (1)
 	Do not compare a QString to QString::null or QString().  Instead
 	use the .isEmpty() method.  For example, if(str == QString::null)
@@ -167,7 +167,16 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 
 25. Check for Qt methods that should be avoided [qmethods]... Ok!
 
-26. Check for QMIN and QMAX macros [qminmax]... Ok!
+26. Check for QMIN and QMAX macros [qminmax]... 3 issues found
+	./src/exporters/mmfexporter.cpp: passing non-casted float to qMin line#83 (1)
+	./src/dialogs/editratingdialog.cpp: passing non-casted float to qMin line#180 (1)
+	./src/dialogs/editratingdialog.cpp: passing non-casted float to qMax line#180 (1)
+	Obsolete macros QMIN(), Q_MIN(), QMAX() and Q_MAX() should be
+	replaced by the qMin() and qMax() functions. Additionally, when
+	passing floating point constants make sure to cast them as qreal's
+	so the code builds ok on machines without an fpu (like ARMs). For
+	example, qMax(foo(),1.0) should be changed to
+	qMax(foo(),qreal(1.0))
 
 27. Check for classes that should use the 'Q_OBJECT' macro [qobject]... Ok!
 
@@ -179,37 +188,29 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 	show up later in API documentation, handbooks, etc.  Misspelled
 	strings make the translator's job harder. Please use US English.
 
-30. Check for strings used improperly or should be i18n. [strings]... 23 issues found
+30. Check for improperly initialized global static objects [staticobjects]... 2 issues found
+	./src/main.cpp: line#22,24 (2)
+	Global static objects in libraries should be avoided. You never
+	know when the constructor will be run or if it will be run at all.
+	See
+	<http://techbase.kde.org/Policies/Library_Code_Policy#Static_Object
+	s> for more info.
+
+31. Check for strings used improperly or should be i18n. [strings]... 23 issues found
+	./src/backends/recipedb.cpp: QLatin1String issues line#455,584 (2)
 	./src/importers/mmfimporter.cpp: QLatin1String issues line#48,56,60,113,119,179,242,260 (8)
 	./src/importers/nycgenericimporter.cpp: QLatin1String issues line#38,89,90,95,98,105,108,111 (8)
 	./src/importers/mx2importer.cpp: QLatin1String issues line#46 (1)
-	./src/backends/recipedb.cpp: QLatin1String issues line#455,584 (2)
-	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1747,1753 (2)
-	./src/dialogs/pagesetupdialog.cpp: QLatin1String issues line#197 (1)
 	./src/exporters/xsltexporter.cpp: QLatin1String issues line#73 (1)
+	./src/dialogs/pagesetupdialog.cpp: QLatin1String issues line#197 (1)
+	./src/dialogs/recipeinputdialog.cpp: QLatin1String issues line#1747,1753 (2)
 	Some QString methods (like startsWith() and endsWith()) are more
 	efficient if they are passed a QLatin1String, avoiding an implicit
 	conversion from const char *.
 
-31. Check for system calls to replace by KDE or Qt equivalents [syscalls]... Ok!
+32. Check for system calls to replace by KDE or Qt equivalents [syscalls]... Ok!
 
-32. Check for typedefs that should be replaced by Qt typedefs [typedefs]... Ok!
-
-== desktop: For File Type desktop ==
-1. Check that file ends with a newline [endswithnewline]... Ok!
-
-2. Check for invalid icon names [iconnames]... Ok!
-
-3. Check for spelling errors [spelling]... Ok!
-
-4. Validates desktop files using 'desktop-file-validate' [validate]... 1 issue found
-	./src/krecipes.desktop: (will be fatal in the future): value "Database" in key "Categories" in group "Desktop Entry" requires another category to be present among the following categories: Office, or Development, or AudioVideo
-	Please make sure your .desktop files conform to the freedesktop.org
-	standard. See the spec at
-	<http://standards.freedesktop.org/desktop-entry-spec/latest>
-
-== messages: For File Type messages ==
-1. Check for appending to rc.cpp [rcappend]... Ok!
+33. Check for typedefs that should be replaced by Qt typedefs [typedefs]... Ok!
 
 == kpartgui: For File Type kpartgui ==
 1. Check that file ends with a newline [endswithnewline]... Ok!
@@ -219,6 +220,18 @@ Total Issues = 141 ...as of July 06 2010 01:21:14 CEST
 3. Check for spelling errors [spelling]... Ok!
 
 4. Validates kpartgui files using 'xmllint' [validate]... Ok!
+
+== messages: For File Type messages ==
+1. Check for appending to rc.cpp [rcappend]... Ok!
+
+== desktop: For File Type desktop ==
+1. Check that file ends with a newline [endswithnewline]... Ok!
+
+2. Check for invalid icon names [iconnames]... Ok!
+
+3. Check for spelling errors [spelling]... Ok!
+
+4. Validates desktop files using 'desktop-file-validate' [validate]... Ok!
 
 == designer: For File Type designer ==
 1. Check that file ends with a newline [endswithnewline]... Ok!

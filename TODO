@@ -25,12 +25,22 @@ Planned for the 2.1 branch:
  * Check files taken from other projects and explain in a comment where those
    files came from.
  * Update the USDA database.
+ * Create a typedef for id type instead of just using 'int'.
 
  [Brainstorming]
  * Make configurable the length of VARCHAR(%n) fields, for instance, the
    preparation method name.
  * Probably most of SQL queries are not using the word "join", so slow.
  * Replace PanelDeco with KTitleWidget?, see what KPageView can do for you.
+ * The strings stored in database are being escaped in
+   QSqlRecipeDB::escapeAndEncode() and they are in UTF-8 encoded as latin1:
+   should I use QSqlQuery::bindValue()? doing it probably will result in having
+   to bump the database schema version number and reencoding the strings.
+ * One of the problems to solve if I want to support concurrent access is how to
+   update data in the GUI while other client is doing changes in the database.
+   It seems this can be solved with LISTEN, NOTIFY and triggers in PostgreSQL.
+   See QSqlDriver::subscribeToNotification() which uses LISTEN if I recall
+   correctly.
 
 Planned for the 2.2 branch:
 
