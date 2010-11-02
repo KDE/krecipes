@@ -5351,7 +5351,7 @@ details.</para></listitem>
 <listitem><para>Accesses the <emphasis>&krecipes;</emphasis> <action>Print
 Setup interface</action> &ndash; this interface is identical to the
 <interface>Page Setup</interface>, but is used to define a setup that can
-be different and separate from the page layout for viewing your recipesi.</para>
+be different and separate from the page layout for viewing your recipes.</para>
 
 <para>See the section on <link linkend="print-setup">Print Setup</link>
 for further details.</para></listitem>
