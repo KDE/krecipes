@@ -65,7 +65,7 @@ void IngredientActionsHandler::remove()
 			list.name = i18n( "Recipes" );
 
 			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( parentListView, list );
-			warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			warnDialog->setCustomWarning( i18n("You are about to permanently delete recipes from your database.") );
 			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeIngredient( id );
 			delete warnDialog;

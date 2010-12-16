@@ -151,7 +151,7 @@ void UnitActionsHandler::remove()
 		else { // need warning!
 			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( parentListView, lists );
 			if ( !recipeDependancies.isEmpty() )
-				warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+				warnDialog->setCustomWarning( i18n("You are about to permanently delete recipes from your database.") );
 			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removeUnit( unitID );
 			delete warnDialog;

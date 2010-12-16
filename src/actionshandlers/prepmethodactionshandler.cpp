@@ -64,7 +64,7 @@ void PrepMethodActionsHandler::remove()
 			info.list = dependingRecipes;
 			info.name = i18n("Recipes");
 			QPointer<DependanciesDialog> warnDialog = new DependanciesDialog( parentListView, info );
-			warnDialog->setCustomWarning( i18n("You are about to permanantly delete recipes from your database.") );
+			warnDialog->setCustomWarning( i18n("You are about to permanently delete recipes from your database.") );
 			if ( warnDialog->exec() == QDialog::Accepted )
 				database->removePrepMethod( prepMethodID );
 			delete warnDialog;
