@@ -5276,7 +5276,7 @@ for example an email.</para></listitem>
 <shortcut>
 <keycap>F5</keycap>
 </shortcut>
-<guimenu>File</guimenu>
+<guimenu>View</guimenu>
 <guimenuitem>Reload</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Reloads the currently active
@@ -5288,7 +5288,7 @@ recipe.</action></para></listitem>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
 </shortcut>
-<guimenu>File</guimenu>
+<guimenu>View</guimenu>
 <guimenuitem>Show Recipe(s)</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Displays the currently active
