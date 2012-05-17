@@ -1631,15 +1631,14 @@ recipe entry interface.</screeninfo>
 <para>OK! Now that the recipe has been input, what needs to be done?</para>
 
 <para>The following options can be selected &mdash;</para>
-
 <itemizedlist>
-<listitem><para>Spell-check &ndash; this is accomplished by clicking on the
-<guiicon>ABC</guiicon> icon that appears on the bar below the input area in the
+<listitem><para>Spell-check &ndash; this is accomplished by selecting 
+<guilabel>Check Spelling</guilabel> from the context menu of the input area in the
 <emphasis><guilabel>Instructions</guilabel></emphasis> tab</para></listitem>
-<listitem><para>Save &ndash; click on the <guibutton>Save</guibutton> button
+<listitem><para>Save &ndash; click on the <guibutton>Save recipe</guibutton> button
 that appears on the bottom of the screen</para>
 
-<tip><para>The <guibutton>Save</guibutton> button can be used to save the
+<tip><para>The <guibutton>Save recipe</guibutton> button can be used to save the
 recipe at any point during the input.  As with any other application, when
 editing, it is always a good idea to save frequently!</para></tip>
 </listitem>
@@ -1658,7 +1657,7 @@ like to save it now?</emphasis></para>
 the <guibutton>No</guibutton> button to close the dialog and return to the
 recipe entry interface.</para>
 
-<para>If the <guibutton>Show</guibutton> button is pressed, the recipe will
+<para>If the <guibutton>Show recipe</guibutton> button is pressed, the recipe will
 display.  To return to the <interface>Edit Recipe</interface> interface
 in the event that the recipe has not been completely entered, click on
 the <guibutton>Recipe Name</guibutton> button that appears at the bottom
@@ -1684,7 +1683,7 @@ button to close the recipe without saving, or the <guibutton>Cancel</guibutton>
 button to close the dialog and return to the recipe entry interface.</para>
 </listitem>
 
-<listitem><para>Resize &ndash; click the <guibutton>Resize</guibutton>
+<listitem><para>Resize &ndash; click the <guibutton>Resize recipe</guibutton>
 button to resize the recipe</para>
 
 <tip><para>The recipe can be resized by either of two methods &mdash;</para>
