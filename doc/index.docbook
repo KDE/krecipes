@@ -1662,7 +1662,7 @@ display.  To return to the <interface>Edit Recipe</interface> interface
 in the event that the recipe has not been completely entered, click on
 the <guibutton>Recipe Name</guibutton> button that appears at the bottom
 of the component list in the left-hand pane of the window.  Alternatively,
-<guimenu>Tools</guimenu> and <guimenuitem>Edit</guimenuitem> can be chosen
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Edit Recipe</guimenuitem></menuchoice> can be chosen
 from the <emphasis>&krecipes;</emphasis> menu, or select the <keycombo
 action="simul">&Ctrl;<keycap>E</keycap></keycombo> key combination.</para>
 </note>
@@ -1732,7 +1732,7 @@ With the <emphasis>Find/Edit Recipes</emphasis> component selected, </para>
 <orderedlist><listitem><para>Select the recipe to be edited from the recipe
 list in the main portion of the <emphasis>&krecipes;</emphasis> window.
 Click on the <guibutton>Open Recipe(s)</guibutton> button.  From the
-<guimenu>Tools</guimenu> menu, select <guimenuitem>Edit Recipe</guimenuitem>,
+<guimenu>Edit</guimenu> menu, select <guimenuitem>Edit Recipe</guimenuitem>,
 or the <keycombo action="simul">&Ctrl;<keycap>E</keycap></keycombo> key
 combination can be pressed.</para></listitem>
 
@@ -1787,7 +1787,7 @@ recipe, the <interface>Edit Recipe</interface> interface must be accessed.
 This can be done in a variety of ways &mdash;</para>
 
 <itemizedlist>
-<listitem><para>Select <guimenu>Tools</guimenu> and then, <guimenuitem>Edit
+<listitem><para>Select <guimenu>Edit</guimenu> and then, <guimenuitem>Edit
 Recipe</guimenuitem> from the <emphasis>&krecipes;</emphasis>
 menu</para></listitem>
 <listitem><para>Press the <keycombo
