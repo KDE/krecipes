@@ -1813,7 +1813,7 @@ entire recipe may be deleted by selecting it from the list and clicking the
 <title>Page Setup</title>
 
 <para>
-To access Page Setup, select <guimenu>Edit</guimenu> and <guimenuitem>Page
+To access Page Setup, select <guimenu>Settings</guimenu> and <guimenuitem>Page
 Setup...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu bar.
 </para>
 
@@ -1838,43 +1838,31 @@ Setup...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu bar.
 <para>
 In the <interface>Page Setup</interface> window, the toolbar displays the
 icons for <guiicon>Open</guiicon>, <guiicon>Save</guiicon>, <guiicon>Save
-As</guiicon> and <guiicon>Redisplay</guiicon>.
+As</guiicon> and <guiicon>Revert</guiicon> and a drop down box <guilabel>Show Items</guilabel>.
 </para>
 
 <tip>
-<itemizedlist>
 
-<listitem><para>If you click and hold the <guiicon>Open</guiicon> icon,
-choices for <emphasis>Styles</emphasis> and <emphasis>Templates</emphasis>
-will be revealed.  <emphasis>Styles</emphasis> are for selection of a color
-scheme for your recipes and <emphasis>Templates</emphasis> are choices for
-the layout of your recipes.</para>
-
-<para><guimenuitem>Default</guimenuitem>, as the name suggests, is the default
-style.	However, it is easy to change colors and to make other enhancements
-to the look of your recipes.  To discover how to do this, refer to the section
-<link linkend="change-attributes">Changing Attributes</link>.</para></listitem>
-
-<listitem><para>With regard to <guiicon>Redisplay</guiicon>, a word of caution
-is in order.  Clicking on <guiicon>Redisplay</guiicon> after changes have
+<para>With regard to <guiicon>Revert</guiicon>, a word of caution
+is in order.  Clicking on <guiicon>Revert</guiicon> after changes have
 been made in the Page Setup window, will reload the currently active layout
 file, erasing all changes <emphasis>unless they have been saved</emphasis>.
-This represents the prime function for <guiicon>Redisplay</guiicon>.  Should
+This represents the prime function for <guiicon>Revert</guiicon>.  Should
 you wish to revert to your previous settings while still in <interface>Page
-Setup</interface>, clicking <guiicon>Redisplay</guiicon> will allow you to
+Setup</interface>, clicking <guiicon>Revert</guiicon> will allow you to
 do this provided that you have not saved any changes.
 </para>
 
 <para>
-Beneath the toolbar, the label <guilabel>Usage: Right-click any element to
+Beneath the toolbar, the label <guilabel>Usage: Select a template along the left,
+and right-click any element to
 edit the look of that element.</guilabel> clearly states the <interface>Page
 Setup</interface> method of use.  All attribute changes are dynamic and
 do not necessitate reloading while in <interface>Page Setup</interface>.
 See the section <link linkend="change-attributes">Changing Attributes</link>
 for details on changing the appearance of your recipe elements.
-</para></listitem>
+</para>
 
-</itemizedlist>
 </tip>
 
 <para>
@@ -1892,7 +1880,7 @@ the confines of the window.
 
 
 <para>
-The last icon on the toolbar allows access to a list of items that are
+The drop down box on the toolbar allows access to a list of items that are
 available for display in the recipe.  These include &mdash;
 </para>
 
