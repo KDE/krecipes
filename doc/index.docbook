@@ -4548,7 +4548,7 @@ was clicked</emphasis>.</para>
 <para>When you choose <guimenu>Settings</guimenu> and <guimenuitem>Configure
 &krecipes;</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu, the
 <interface>&krecipes; Preferences - &krecipes;</interface> window appears.
-From this window, you can choose one of three buttons to configure various
+From this window, you can choose one of five pages to configure various
 aspects of <emphasis>&krecipes;</emphasis>.</para>
 
 <sect2 id="configure-server-settings">
