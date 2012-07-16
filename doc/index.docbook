@@ -72,8 +72,8 @@ Please respect the format of the date (YYYY-MM-DD) and of the version
 (V.MM.LL), it could be used by automation scripts.
 Do NOT change these in the translation. -->
 
-<date>2010-11-01</date>
-<releaseinfo>2.0.beta2</releaseinfo>
+<date>2012-07-16</date>
+<releaseinfo>2.0.beta2 (&kde; 4.9)</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -4269,34 +4269,6 @@ Shortcuts...</guimenuitem> from the <emphasis>&krecipes;</emphasis> menu.
 The <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen
 will appear.</para>
 
-<para>In the <emphasis><guilabel>Search:</guilabel></emphasis> text box,
-<action>type the name</action> of the <emphasis>Action</emphasis>
-for which you want to create the shortcut.  Under the heading
-<emphasis><guilabel>Action</guilabel></emphasis>, the cursor will position
-itself on an item in the list that matches the characters typed.  As more
-characters are typed, the cursor will reposition itself on another item in
-the list.  If an exact match is typed, the cursor will be positioned on
-this item.  However, if multiple matches exist for the characters typed,
-the cursor will be positioned on the first match.</para>
-
-<para>For example, in the screenshot below, two <emphasis>Actions</emphasis>
-exist for the expression <quote>Import</quote>	Therefore, if you type
-<quote>Import</quote>, the cursor will be positioned on <quote>Import from
-Database...</quote>, although it may not be this Action that you want to create
-the shortcut for.  However, if you type <quote>Import from File</quote>,
-the cursor will be positioned on the <quote>Import from File...</quote>
-Action.</para>
-
-<para>Clicking the <guiicon><inlinemediaobject><imageobject><imagedata
-fileref="clear_right.png"
-format="PNG"/></imageobject></inlinemediaobject></guiicon> icon located
-beside the <emphasis><guilabel>Search:</guilabel></emphasis> text box clears
-the contents of the text box.</para>
-
-<para>Alternatively, you can use the scroll bars to scroll through the
-<emphasis>Actions</emphasis> until the one for which you want to change the
-shortcut is found.</para>
-
 <para>
 <screenshot>
 <screeninfo>Here's a screenshot of the Configure Shortcuts &ndash; &krecipes;
@@ -4314,173 +4286,9 @@ starting screen.</screeninfo>
 </screenshot>
 </para>
 
-<para>To begin creating your shortcut, ensure that the
-<emphasis>Action</emphasis> for which you want to create the shortcut is
-selected.</para>
-<para>If the <emphasis>Action</emphasis> has no attached shortcut,
-the radio button beside <emphasis><guilabel>None</guilabel></emphasis>
-will be selected by default.  If there is a shortcut attached, the
-<emphasis><guilabel>Default</guilabel></emphasis> radio button will be
-selected as shown in the example in the screenshot.</para>
-<para>To create a shortcut for an <emphasis>Action</emphasis> that does not
-have one attached, or to change an existing shortcut, click the radio button
-beside the <emphasis><guilabel>Custom</guilabel></emphasis> label.</para>
-
-<para>When you click the <guibutton>Custom</guibutton> radio button, the
-window for doing the actual defining of your shortcut will appear.</para>
-
-<para>
-<screenshot>
-<screeninfo>Here's a screenshot of the &krecipes; Basic Shortcut configuration
-screen.</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="configure-shortcuts-basic.png" format="PNG"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>Screenshot</phrase>
-	  </textobject>
-	  <caption><para>Configure Shortcuts &ndash; Basic
-	  Configuration</para></caption>
-	</mediaobject>
-</screenshot>
+<para>For more information read the section about <ulink url="help:/fundamentals/config.html#shortcuts"
+>Using and Customizing Shortcuts</ulink> of the &kde; Fundamentals.
 </para>
-
-<para>If a shortcut already exists, the text box
-will contain an entry, as seen in the screenshot above.
-To clear this entry in order to enter a new one, click on the
-<guiicon><inlinemediaobject><imageobject><imagedata fileref="clear_right.png"
-format="PNG"/></imageobject></inlinemediaobject></guiicon> icon on the left
-of the text box.
-</para>
-
-<para>If no shortcut exists, position the cursor in the text box and enter
-your key combination.  For example, to enter the key combination <keycombo
-action="simul">&Ctrl;<keycap>I</keycap></keycombo>, hold the &Ctrl;
-and simultaneously, press the <keycap>I</keycap> key.  Entering the key
-combination in the text box will close the entry window and return you to the
-main <interface>Configure Shortcuts &ndash; &krecipes;</interface> screen.
-The shortcut will show on the <guibutton>Shortcut</guibutton> button that
-appears to the left of the <emphasis><guilabel>Custom</guilabel></emphasis>
-label.</para>
-
-<para>Clicking the <guibutton>OK</guibutton> button, will set a change
-made, for instance if you cleared a shortcut and didn't want to set
-another, and return you to the main <interface>Configure Shortcuts &ndash;
-&krecipes;</interface> screen.	The <guibutton>Cancel</guibutton> button
-on the shortcut entry screen will cancel setting of the shortcut and return
-you to the main interface.</para>
-
-<para>Clicking the <guibutton>Advanced&gt;&gt;</guibutton> button will expand
-the shortcut entry screen as shown in the screenshot below.</para>
-
-<para>
-<screenshot>
-<screeninfo>Here's a screenshot of the &krecipes; Advanced Shortcut
-configuration screen.</screeninfo>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="configure-shortcuts-adv.png" format="PNG"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>Screenshot</phrase>
-	  </textobject>
-	  <caption><para>Configure Shortcuts &ndash; Advanced
-	  Configuration</para></caption>
-	</mediaobject>
-</screenshot>
-</para>
-
-<para>On the <emphasis>Advanced</emphasis> shortcut entry screen,
-shortcuts are defined in the same manner as previously described.  However,
-you will note that the	definition of an <emphasis><guilabel>Alternate
-shortcut:</guilabel></emphasis> is possible.</para>
-
-<para>The <guibutton>OK</guibutton> and <guibutton>Cancel</guibutton>
-buttons also operate in the same manner as previously described.  The
-<guibutton>Advanced&lt;&lt;</guibutton> button collapses the window to the
-single shortcut entry interface.</para>
-
-<para>You will also notice beneath the <emphasis><guilabel>Alternate
-shortcut:</guilabel></emphasis> text box, that there is a tickbox labeled
-<emphasis><guilabel>Multi-key mode</guilabel></emphasis>.  Selecting this
-provides very cool functionality!  Follow these steps to see how it works
-&mdash;</para>
-
-<orderedlist>
-<listitem><para>From the main <interface>Configure Shortcuts &ndash;
-&krecipes;</interface> screen, choose an <emphasis>Action</emphasis> for
-which you would like to configure a shortcut.  As an example, let's choose
-<quote>About KDE</quote>.  </para></listitem>
-<listitem><para>Select the <emphasis><guilabel>Custom</guilabel></emphasis>
-radio button.</para></listitem>
-<listitem><para>In the shortcut input screen, click the
-<guibutton>Advanced&gt;&gt;</guibutton> button, if the window is not already
-expanded.</para></listitem>
-<listitem><para>Click the <emphasis><guilabel>Multi-key
-mode</guilabel></emphasis> tickbox to select.</para></listitem>
-<listitem><para>Type A,A by pressing the <keycap>A</keycap> key twice &ndash;
-this will cause <emphasis>A,A</emphasis> to appear in the shortcut entry
-text box.</para></listitem>
-<listitem><para>Click the <guibutton>OK</guibutton> button.  You will
-be returned to the main <interface>Configure Shortcuts &ndash;
-&krecipes;</interface> screen.</para></listitem>
-<listitem><para>Select another <emphasis>Action</emphasis>, for example,
-<quote>About Krecipes</quote>.</para></listitem>
-<listitem><para>Again, make sure that you have selected the
-<emphasis><guilabel>Multi-key mode</guilabel></emphasis>
-tickbox.</para></listitem>
-<listitem><para>For your shortcut combination, type A,B by pressing
-the <keycap>A</keycap> key and then, the <keycap>B</keycap> key &ndash;
-<emphasis>A,B</emphasis> will show in the shortcut text box.</para></listitem>
-<listitem><para>Click the <guibutton>OK</guibutton> button.</para></listitem>
-<listitem><para>Back on the main <interface>Configure Shortcuts &ndash;
-&krecipes;</interface> screen, click the <guibutton>OK</guibutton> button
-to close the window.</para></listitem>
-</orderedlist>
-
-<para>Now the fun begins!  Anywhere in the program, as long as your cursor
-is not focused on text, for example, in a text box or in a recipe edit
-input area, press the <keycap>A</keycap> key on your keyboard.	In the top,
-left-hand corner of your screen, using the example outlined, a small menu
-will appear, as follows &mdash;</para>
-
-<para><inlinemediaobject><imageobject><imagedata fileref="menu.png"
-format="PNG"/></imageobject></inlinemediaobject></para>
-<para>You can press the <keycap>A</keycap> or <keycap>B</keycap> key on the
-keyboard to select your choice, or you can use the directional arrows on the
-keyboard to highlight your selection and then, press the &Enter; key.</para>
-
-<para>Although we have used <quote>About KDE</quote> and <quote>About
-Krecipes</quote> in our example, this functionality could be applied to other
-choices.  For example, you could choose to use the <emphasis>Multi-key
-mode</emphasis> for your import shortcuts, defining <quote>Import
-from Database</quote> as <emphasis>I,D</emphasis> and <quote>Import
-from File</quote> as <emphasis>I,F</emphasis>.	Then, pressing the
-<keycap>I</keycap> key on your keyboard will bring up the import choices menu.
-Note here that for the <quote>Import from File</quote> choice, there is already
-a shortcut attached by default.  However, <emphasis>&krecipes;</emphasis>
-is so configurable that you will be able to change this.</para>
-
-<para>Back on the main <interface>Configure Shortcuts &ndash;
-&krecipes;</interface> screen, below the radio buttons, the default shortcut
-appears beside the <emphasis><guilabel>Default key:</guilabel></emphasis>
-label.</para>
-
-<para>Below the <emphasis><guilabel>Default key:</guilabel></emphasis> label,
-functions of the buttons are as follows &mdash;</para>
-
-<itemizedlist>
-<listitem><para><guibutton>Defaults</guibutton> &ndash; returns all shortcut
-settings to their defaults</para></listitem>
-<listitem><para><guibutton>OK</guibutton> &ndash; sets any changes made and
-closes the <interface>Configure Shortcuts &ndash; &krecipes;</interface>
-window</para></listitem>
-<listitem><para><guibutton>Cancel</guibutton> &ndash; cancels any changes made
-and closes the <interface>Configure Shortcuts &ndash; &krecipes;</interface>
-window</para></listitem>
-</itemizedlist>
-
 </sect1>
 
 <sect1 id="configure-toolbars">
@@ -5397,13 +5205,12 @@ defined.</para>
 <sect2 id="help-menu">
 <title>The <guimenu>Help</guimenu> Menu</title>
 
-<!-- Assuming you have a standard help menu (help, what's this, about -->
-<!-- &krecipes;, about &kde;) then the documentation is already written. -->
-<!-- The following entity is valid anywhere that a variablelist is -->
-<!-- valid.  -->
-
-&help.menu.documentation;
-
+<para>
+&krecipes; has the common &kde; <guimenu>Help</guimenu>
+menu items, for more information read the section about the 
+<ulink url="help:/fundamentals/ui.html#menus-help">Help Menu</ulink>
+of the &kde; Fundamentals.
+</para>
 </sect2>
 
 </sect1>
@@ -5411,16 +5218,6 @@ defined.</para>
 
 <chapter id="faq">
 <title>Questions and Answers</title>
-
-<!-- (OPTIONAL but recommended) This chapter should include all of the silly
-(and not-so-silly) newbie questions that fill up your mailbox. This chapter
-should be reserved for BRIEF questions and answers! If one question uses more
-than a page or so then it should probably be part of the
-"Using this Application" chapter instead. You should use links to
-cross-reference questions to the parts of your documentation that answer them.
-This is also a great place to provide pointers to other FAQ's if your users
-must do some complicated configuration on other programs in order for your
-application work. -->
 
 &reporting.bugs;
 &updating.documentation;
