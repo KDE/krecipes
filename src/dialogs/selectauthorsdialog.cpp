@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -12,7 +13,6 @@
 #include "selectauthorsdialog.h"
 
 #include <kvbox.h>
-//Added by qt3to4:
 
 #include <kconfig.h>
 #include <kdialog.h>
@@ -22,6 +22,10 @@
 #include <KPushButton>
 
 #include <QLineEdit>
+#include <QStandardItemModel>
+#include <QTreeView>
+#include <QHeaderView>
+#include <QSortFilterProxyModel>
 
 #include "backends/recipedb.h"
 
@@ -59,14 +63,27 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 
 	// Author List
 
-	authorListView = new K3ListView( page );
-	authorListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+	authorListModel = new QStandardItemModel( 0, 2, this );
 
-	KConfigGroup config( KGlobal::config(), "Advanced" );
-	bool show_id = config.readEntry( "ShowID", false );
-	authorListView->addColumn( "Id" , show_id ? -1 : 0 );
-	authorListView->addColumn( i18nc( "@title:column", "Author" ) );
+	authorListView = new QTreeView( page );
+	authorListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	authorListView->setAllColumnsShowFocus( true );
+	authorListView->setRootIsDecorated( false );
+
+	QStringList horizontalLabels;
+	horizontalLabels << "Id" << i18nc( "@title:column", "Author" );
+	authorListModel->setHorizontalHeaderLabels( horizontalLabels );
+		
+	authorListProxyModel = new QSortFilterProxyModel(this);
+	authorListProxyModel->setSourceModel(authorListModel);
+	authorListProxyModel->setDynamicSortFilter( true );
+	authorListView->setModel( authorListProxyModel );
+	
+	KConfigGroup config( KGlobal::config(), "Advanced" );
+	if ( !config.readEntry( "ShowID", false ) ) {
+		authorListView->hideColumn( 0 );
+		authorListView->header()->hide();
+	}
 
 	// Load the list
 	loadAuthors( currentAuthors );
@@ -87,14 +104,13 @@ SelectAuthorsDialog::~SelectAuthorsDialog()
 
 void SelectAuthorsDialog::getSelectedAuthors( ElementList *newAuthors )
 {
-
-	for ( Q3ListViewItem * it = authorListView->firstChild();it; it = it->nextSibling() ) {
+	int row_count = authorListModel->rowCount();
+	for ( int i = 0; i < row_count; i++ ) {
 		Element author;
-		author.id = it->text( 0 ).toInt();
-		author.name = it->text( 1 );
+		author.id = authorListModel->item(i, 0 )->text().toInt();
+		author.name = authorListModel->item( i, 1 )->text();
 		newAuthors->append( author );
 	}
-
 }
 
 void SelectAuthorsDialog::loadAuthors( const ElementList &currentAuthors )
@@ -104,11 +120,20 @@ void SelectAuthorsDialog::loadAuthors( const ElementList &currentAuthors )
 	reloadAuthorsCombo();
 
 	// Load the ListView with the authors of this recipe
-	authorListView->clear();
+	//authorListModel->clear();
 	for ( ElementList::const_iterator author_it = currentAuthors.begin(); author_it != currentAuthors.end(); ++author_it ) {
-		( void ) new Q3ListViewItem( authorListView, QString::number( ( *author_it ).id ), ( *author_it ).name );
+		QStandardItem *itemId = new QStandardItem;
+		itemId->setData( QVariant(author_it->id), Qt::EditRole );
+		itemId->setEditable( false ); 
+		QStandardItem *itemAuthor = new QStandardItem( author_it->name );
+		itemAuthor->setEditable( false );
+		QList<QStandardItem*> items;
+		items << itemId << itemAuthor;
+		authorListModel->appendRow( items );
 	}
-
+	
+	authorListView->setSortingEnabled( true );
+	authorListView->sortByColumn( 1, Qt::AscendingOrder);
 }
 
 void SelectAuthorsDialog::addAuthor( void )
@@ -131,20 +156,24 @@ void SelectAuthorsDialog::addAuthor( void )
 	int currentItem = authorsCombo->currentIndex();
 	Element currentElement = authorList.getElement( currentItem );
 
-	( void ) new Q3ListViewItem( authorListView, QString::number( currentElement.id ), currentElement.name );
+	QStandardItem *itemId = new QStandardItem;
+	itemId->setData( QVariant(currentElement.id), Qt::EditRole );
+	itemId->setEditable( false ); 
+	QStandardItem *itemAuthor = new QStandardItem( currentElement.name );
+	itemAuthor->setEditable( false );
+	QList<QStandardItem*> items;
+	items << itemId << itemAuthor;
+	authorListModel->appendRow( items );
+
 	authorsCombo->lineEdit()->clear();
 }
 
 void SelectAuthorsDialog::removeAuthor( void )
 {
 	// Find the selected item first
-	Q3ListViewItem * it;
-	it = authorListView->selectedItem();
+	int row = authorListProxyModel->mapToSource(authorListView->currentIndex()).row();
 
-	if ( it ) {  // Check if an author is selected first
-		delete it;
-	}
-
+	authorListModel->removeRows( row, 1 );
 }
 
 void SelectAuthorsDialog::createNewAuthorIfNecessary( void )
