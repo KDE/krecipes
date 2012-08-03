@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -14,14 +15,11 @@
 
 #include <qwidget.h>
 
-#include <kiconloader.h>
-#include <k3listview.h>
-#include <kvbox.h>
-
 #include "widgets/dblistviewbase.h"
 
+
 class RecipeDB;
-class StdAuthorListView;
+class KreAuthorListWidget;
 class ActionsHandlerBase;
 class AuthorActionsHandler;
 class KAction;
@@ -49,7 +47,7 @@ private:
 	// Internal data
 	RecipeDB *database;
 	//Widgets
-	StdAuthorListView *authorListView;
+	KreAuthorListWidget *authorListWidget;
 	AuthorActionsHandler *authorActionsHandler;
 	KPushButton *newAuthorButton;
 	KPushButton *removeAuthorButton;

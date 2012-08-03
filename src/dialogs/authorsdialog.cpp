@@ -3,6 +3,7 @@
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
 *   Copyright © 2008 Montel Laurent <montel@kde.org>                      *
+*   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -13,7 +14,8 @@
 #include "authorsdialog.h"
 #include "createelementdialog.h"
 #include "backends/recipedb.h"
-#include "widgets/authorlistview.h"
+//#include "widgets/authorlistview.h"
+#include "widgets/kreauthorlistwidget.h"
 #include "actionshandlers/authoractionshandler.h"
 
 #include <kdialog.h>
@@ -33,9 +35,10 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 	QHBoxLayout* layout = new QHBoxLayout( this );
 
 	//Author List
-	authorListView = new StdAuthorListView( this, database, true );
-	authorActionsHandler = new AuthorActionsHandler( authorListView, database );
-	layout->addWidget( authorListView );
+	//authorListView = new StdAuthorListView( this, database, true );
+	authorListWidget = new KreAuthorListWidget( this, database );
+	//authorActionsHandler = new AuthorActionsHandler( authorListView, database );
+	layout->addWidget( authorListWidget );
 
 	//Buttons
 	QVBoxLayout* vboxl = new QVBoxLayout();
@@ -56,8 +59,8 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 
 	//Connect Signals & Slots
 
-	connect ( newAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( createNew() ) );
-	connect ( removeAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( remove() ) );
+	//connect ( newAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( createNew() ) );
+	//connect ( removeAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( remove() ) );
 }
 
 AuthorsDialog::~AuthorsDialog()
@@ -66,7 +69,7 @@ AuthorsDialog::~AuthorsDialog()
 // (Re)loads the data from the database
 void AuthorsDialog::reload( ReloadFlags flag )
 {
-	authorListView->reload( flag );
+	//authorListView->reload( flag );
 }
 
 ActionsHandlerBase* AuthorsDialog::getActionsHandler() const
@@ -76,7 +79,7 @@ ActionsHandlerBase* AuthorsDialog::getActionsHandler() const
 
 void AuthorsDialog::addAction( KAction * action )
 {
-	authorActionsHandler->addAction( action );
+	//authorActionsHandler->addAction( action );
 }
 
 #include "authorsdialog.moc"

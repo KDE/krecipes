@@ -87,11 +87,11 @@ set(krecipeswidgets_SRCS
    widgets/propertylistview.cpp
    widgets/prepmethodlistview.cpp
    widgets/categorylistview.cpp
-   widgets/authorlistview.cpp
+   widgets/kreauthorlistwidget.cpp
    widgets/recipelistview.cpp
    widgets/categorycombobox.cpp
    widgets/kretextedit.cpp
-   widgets/dblistviewbase.cpp
+   widgets/kregenericlistwidget.cpp
    widgets/conversiontable.cpp
    widgets/fractioninput.cpp
    widgets/ingredientcombobox.cpp
@@ -109,7 +109,13 @@ set(krecipeswidgets_SRCS
    widgets/weightinput.cpp
    widgets/thumbbar.cpp
    widgets/kratingwidget.cpp
-   widgets/kratingpainter.cpp)
+   widgets/kratingpainter.cpp
+   
+   #FIXME: The classes below are deprecated and must be removed sooner or later.
+   widgets/authorlistview.cpp #replaced by kreauthorlistwidget.cpp
+   widgets/dblistviewbase.cpp #replaced by kregenericlistwidget.cpp
+
+)
 
 
 ############## dialogs ###############
@@ -282,7 +288,10 @@ set(krecipes_SRCS
 )
 
 
-kde4_add_ui_files(krecipes_SRCS widgets/ratingdisplaywidget.ui)
+kde4_add_ui_files(krecipes_SRCS
+   widgets/ratingdisplaywidget.ui
+   widgets/kregenericlistwidget.ui
+)
 
 qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
 
