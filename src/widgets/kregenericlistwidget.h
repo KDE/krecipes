@@ -18,6 +18,7 @@
 
 class QStandardItemModel;
 class QSortFilterProxyModel;
+class QString;
 
 class Element;
 class RecipeDB;
@@ -44,6 +45,7 @@ public:
 	void reload( ReloadFlags flags );
 
 protected slots:
+	void setFilter( const QString & filter );
 	void activatePreviousPage();
 	void activateNextPage();
 

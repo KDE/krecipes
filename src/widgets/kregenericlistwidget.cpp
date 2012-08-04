@@ -33,6 +33,7 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	m_sourceModel = new QStandardItemModel( 0, 2, this ); 
 	m_proxyModel = new QSortFilterProxyModel( this );
 	m_proxyModel->setDynamicSortFilter( true );
+	m_proxyModel->setFilterKeyColumn( 1 );
 	m_proxyModel->setSourceModel( m_sourceModel );
 	ui->m_treeView->setModel( m_proxyModel );
 
@@ -42,6 +43,9 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 		ui->m_treeView->hideColumn( 0 );
 	}
 	ui->m_treeView->setRootIsDecorated( false );
+
+	//The filter text box.
+	connect( ui->m_searchBox, SIGNAL(textChanged(const QString &)), this, SLOT(setFilter(const QString &)) );
 
 	//Navigation buttons
 	ui->m_previousButton->setIcon( KIcon( "arrow-left" ) );
@@ -58,10 +62,15 @@ KreGenericListWidget::~KreGenericListWidget()
 
 void KreGenericListWidget::setCurrentLimit( int value )
 {
-	if (value == -1)
+	if (value == -1) { 
 		ui->m_pageNavigationWidget->setVisible( false );
-	else
+		ui->m_searchBox->setClickMessage( i18nc( "@label:textbox",
+			"Type here the text to search" ) );
+	} else {
 		ui->m_pageNavigationWidget->setVisible( true );
+		ui->m_searchBox->setClickMessage( i18nc( "@label:textbox",
+			"Type here the text to search in the current page" ) );
+	}
 	m_currentLimit = value;
 }
 
@@ -87,6 +96,12 @@ void KreGenericListWidget::reload( ReloadFlags flags )
 	m_sourceModel->setRowCount( 0 );
 	load( m_currentLimit, m_currentOffset );
 	KApplication::restoreOverrideCursor();
+}
+
+void KreGenericListWidget::setFilter( const QString & filter )
+{
+	QRegExp filterRegExp( filter, Qt::CaseInsensitive, QRegExp::FixedString );
+	m_proxyModel->setFilterRegExp( filterRegExp );
 }
 
 void KreGenericListWidget::activatePreviousPage()
