@@ -40,10 +40,18 @@ public:
 	KreGenericListWidget( QWidget *parent, RecipeDB *db );
 	virtual ~KreGenericListWidget();
 
+	void setCurrentLimit( int value );
 	void reload( ReloadFlags flags );
+
+protected slots:
+	void activatePreviousPage();
+	void activateNextPage();
 
 protected:
 	virtual void load(int limit, int offset) = 0;
+
+	int m_currentLimit;
+	int m_currentOffset;
 
 	Ui::KreGenericListWidget *ui;
 	QStandardItemModel *m_sourceModel;

@@ -10,6 +10,9 @@
 #include "kreauthorlistwidget.h"
 
 #include <klocalizedstring.h>
+#include <KApplication>
+#include <KConfigGroup>
+#include <KGlobal>
 
 #include <QStandardItemModel>
 
@@ -20,9 +23,15 @@
 KreAuthorListWidget::KreAuthorListWidget( QWidget *parent, RecipeDB *db ):
 	KreGenericListWidget( parent, db )
 {
+	//The horizontal column labels.
 	QStringList horizontalLabels;
 	horizontalLabels << "Id" << i18nc( "@title:column", "Author" );
 	m_sourceModel->setHorizontalHeaderLabels( horizontalLabels );
+
+	//The maximum number of elements to show in the author list.
+	KConfigGroup config = KGlobal::config()->group( "Performance" );
+	setCurrentLimit( config.readEntry( "Limit", -1 ) );
+
 }
 
 void KreAuthorListWidget::createAuthor( const Element &author )

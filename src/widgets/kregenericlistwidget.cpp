@@ -16,14 +16,18 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 
+#include "backends/recipedb.h"
+
 
 KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	QWidget(parent),
+	m_currentOffset(0),
 	ui(new Ui::KreGenericListWidget),
 	m_database(db)
 {
 
 	ui->setupUi(this);
+	setCurrentLimit(-1); //-1 means no limit
 
 	//The data models
 	m_sourceModel = new QStandardItemModel( 0, 2, this ); 
@@ -42,6 +46,9 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	//Navigation buttons
 	ui->m_previousButton->setIcon( KIcon( "arrow-left" ) );
 	ui->m_nextButton->setIcon( KIcon( "arrow-right" ) );
+	connect( ui->m_previousButton, SIGNAL(clicked()), this, SLOT(activatePreviousPage()) );
+	connect( ui->m_nextButton, SIGNAL(clicked()), this, SLOT(activateNextPage()) );
+
 }
 
 KreGenericListWidget::~KreGenericListWidget()
@@ -49,11 +56,53 @@ KreGenericListWidget::~KreGenericListWidget()
 	delete ui;
 }
 
+void KreGenericListWidget::setCurrentLimit( int value )
+{
+	if (value == -1)
+		ui->m_pageNavigationWidget->setVisible( false );
+	else
+		ui->m_pageNavigationWidget->setVisible( true );
+	m_currentLimit = value;
+}
+
 void KreGenericListWidget::reload( ReloadFlags flags )
 {
+	if (m_currentLimit != -1) { //-1 means unlimited. 
+		//If we are at the first page, the previous button must be disabled.
+		if (m_currentOffset == 0)
+			ui->m_previousButton->setEnabled( false );
+		else
+			ui->m_previousButton->setEnabled( true );
+
+		//If we are at the last page, the next button must be disabled.
+		int authorCount = m_database->authorCount();
+		if ( m_currentOffset + m_currentLimit >= authorCount )
+			ui->m_nextButton->setEnabled( false );
+		else
+			ui->m_nextButton->setEnabled( true );
+	}
+
+	//Reload the current page.
 	KApplication::setOverrideCursor( Qt::WaitCursor );
-	load(-1,-1);
+	m_sourceModel->setRowCount( 0 );
+	load( m_currentLimit, m_currentOffset );
 	KApplication::restoreOverrideCursor();
+}
+
+void KreGenericListWidget::activatePreviousPage()
+{
+	if ( m_currentOffset != 0 ) {
+		m_currentOffset -= m_currentLimit;
+		if ( m_currentOffset < 0 )
+			m_currentOffset = 0;
+		reload(ForceReload);
+	}
+}
+
+void KreGenericListWidget::activateNextPage()
+{
+	m_currentOffset += m_currentLimit;
+        reload(ForceReload);
 }
 
 
