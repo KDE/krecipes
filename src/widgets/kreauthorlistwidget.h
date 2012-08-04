@@ -30,6 +30,9 @@ protected slots:
 	virtual void createAuthor( const Element & );
 	virtual void removeAuthor( int );
 
+protected:
+	virtual void load(int limit, int offset);
+
 };
 
 

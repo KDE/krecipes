@@ -12,6 +12,10 @@
 
 #include <QWidget>
 
+//FIXME: Remove this header and uncomment ReloadFlags below
+// whenever we can get rid of the obsolete DBListviewBase.
+#include "dblistviewbase.h"
+
 class QStandardItemModel;
 class QSortFilterProxyModel;
 
@@ -22,6 +26,12 @@ namespace Ui {
 	class KreGenericListWidget;
 }
 
+/* enum ReloadFlags {
+	Load,			// Only performs the reload if the list hasn't already been loaded.
+	ReloadIfPopulated,	// Only performs the reload if the list has been loaded.
+	ForceReload		// Load/reload the list regardless of whether or not it's been loaded.
+};*/
+
 class KreGenericListWidget : public QWidget
 {
 	Q_OBJECT
@@ -30,10 +40,15 @@ public:
 	KreGenericListWidget( QWidget *parent, RecipeDB *db );
 	virtual ~KreGenericListWidget();
 
+	void reload( ReloadFlags flags );
+
 protected:
+	virtual void load(int limit, int offset) = 0;
+
 	Ui::KreGenericListWidget *ui;
 	QStandardItemModel *m_sourceModel;
 	QSortFilterProxyModel *m_proxyModel;
+	RecipeDB *m_database;
 };
 
 

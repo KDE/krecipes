@@ -11,15 +11,16 @@
 
 #include "ui_kregenericlistwidget.h"
 
+#include <KApplication>
 #include <KIcon>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 
-#include <kdebug.h>
-
 
 KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
-	QWidget(parent), ui(new Ui::KreGenericListWidget)
+	QWidget(parent),
+	ui(new Ui::KreGenericListWidget),
+	m_database(db)
 {
 
 	ui->setupUi(this);
@@ -35,7 +36,6 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	KConfigGroup config( KGlobal::config(), "Advanced" );
 	if ( !config.readEntry( "ShowID", false ) ) {
 		ui->m_treeView->hideColumn( 0 );
-		ui->m_treeView->header()->hide();
 	}
 	ui->m_treeView->setRootIsDecorated( false );
 
@@ -47,6 +47,13 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 KreGenericListWidget::~KreGenericListWidget()
 {
 	delete ui;
+}
+
+void KreGenericListWidget::reload( ReloadFlags flags )
+{
+	KApplication::setOverrideCursor( Qt::WaitCursor );
+	load(-1,-1);
+	KApplication::restoreOverrideCursor();
 }
 
 

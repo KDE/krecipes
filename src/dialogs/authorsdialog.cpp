@@ -69,7 +69,7 @@ AuthorsDialog::~AuthorsDialog()
 // (Re)loads the data from the database
 void AuthorsDialog::reload( ReloadFlags flag )
 {
-	//authorListView->reload( flag );
+	authorListWidget->reload( flag );
 }
 
 ActionsHandlerBase* AuthorsDialog::getActionsHandler() const
