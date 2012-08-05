@@ -41,16 +41,20 @@ public:
 	KreGenericListWidget( QWidget *parent, RecipeDB *db );
 	virtual ~KreGenericListWidget();
 
+	void setSearchAsYouType( bool value );
 	void setCurrentLimit( int value );
 	void reload( ReloadFlags flags );
 
 protected slots:
+	void setFilter();
 	void setFilter( const QString & filter );
 	void activatePreviousPage();
 	void activateNextPage();
 
 protected:
 	virtual void load(int limit, int offset) = 0;
+
+	bool m_searchAsYouType;
 
 	int m_currentLimit;
 	int m_currentOffset;

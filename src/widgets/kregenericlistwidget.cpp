@@ -38,14 +38,15 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	ui->m_treeView->setModel( m_proxyModel );
 
 	//The QTreeView
-	KConfigGroup config( KGlobal::config(), "Advanced" );
-	if ( !config.readEntry( "ShowID", false ) ) {
+	KConfigGroup configAdvanced( KGlobal::config(), "Advanced" );
+	if ( !configAdvanced.readEntry( "ShowID", false ) ) {
 		ui->m_treeView->hideColumn( 0 );
 	}
 	ui->m_treeView->setRootIsDecorated( false );
 
 	//The filter text box.
-	connect( ui->m_searchBox, SIGNAL(textChanged(const QString &)), this, SLOT(setFilter(const QString &)) );
+	KConfigGroup configPerformance( KGlobal::config(), "Performance" );
+	setSearchAsYouType( configPerformance.readEntry( "SearchAsYouType", true ) );
 
 	//Navigation buttons
 	ui->m_previousButton->setIcon( KIcon( "arrow-left" ) );
@@ -58,6 +59,20 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 KreGenericListWidget::~KreGenericListWidget()
 {
 	delete ui;
+}
+
+void KreGenericListWidget::setSearchAsYouType( bool value )
+{
+	disconnect( ui->m_searchBox );
+	if (value) {
+		connect( ui->m_searchBox, SIGNAL(textChanged(const QString &)),
+			this, SLOT(setFilter(const QString &)) );
+	} else {
+		connect( ui->m_searchBox, SIGNAL(returnPressed()),
+			this, SLOT(setFilter()) );	
+		connect( ui->m_searchBox, SIGNAL(clearButtonClicked()),
+			this, SLOT(setFilter()) );
+	}
 }
 
 void KreGenericListWidget::setCurrentLimit( int value )
@@ -96,6 +111,12 @@ void KreGenericListWidget::reload( ReloadFlags flags )
 	m_sourceModel->setRowCount( 0 );
 	load( m_currentLimit, m_currentOffset );
 	KApplication::restoreOverrideCursor();
+}
+
+
+void KreGenericListWidget::setFilter()
+{
+	setFilter( ui->m_searchBox->text() );
 }
 
 void KreGenericListWidget::setFilter( const QString & filter )
