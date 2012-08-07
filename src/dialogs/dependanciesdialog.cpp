@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003-2005 Jason Kivlighn <jkivlighn@gmail.com>            *
+*   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -13,16 +14,20 @@
 #include "datablocks/elementlist.h"
 
 #include <kvbox.h>
-//Added by qt3to4:
 #include <QLabel>
-#include <Q3ValueList>
+#include <QList>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QGroupBox>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 
-DependanciesDialog::DependanciesDialog( QWidget *parent, const Q3ValueList<ListInfo> &lists, bool deps_are_deleted )
+
+DependanciesDialog::DependanciesDialog( QWidget *parent, const QList<ListInfo> &lists, bool deps_are_deleted )
 	: KDialog( parent ), m_depsAreDeleted(deps_are_deleted)
 {
 	init( lists );
@@ -31,7 +36,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const Q3ValueList<ListI
 DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted ) : KDialog( parent ),
 	m_depsAreDeleted(deps_are_deleted)
 {
-	Q3ValueList<ListInfo> lists;
+	QList<ListInfo> lists;
 	lists << list;
 	init( lists );
 }
@@ -39,7 +44,7 @@ DependanciesDialog::DependanciesDialog( QWidget *parent, const ListInfo &list, b
 DependanciesDialog::~DependanciesDialog()
 {}
 
-void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
+void DependanciesDialog::init( const QList<ListInfo> &lists )
 {
 	setModal(true);
 	setDefaultButton(KDialog::Cancel);
@@ -63,10 +68,13 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 		instructionsLabel->setText( i18nc( "@info", "<warning>The following currently use the element you have chosen to be removed.</warning>" ) );
 	}
 
-	for ( Q3ValueList<ListInfo>::const_iterator list_it = lists.begin(); list_it != lists.end(); ++list_it ) {
+	for ( QList<ListInfo>::const_iterator list_it = lists.begin(); list_it != lists.end(); ++list_it ) {
 		if ( !((*list_it).list).isEmpty() ) {
-			Q3GroupBox *groupBox = new Q3GroupBox( 1, Qt::Vertical, (*list_it).name, page );
-			K3ListBox *listBox = new K3ListBox( groupBox );
+			QGroupBox * groupBox = new QGroupBox( list_it->name, page );
+			QListWidget *listBox = new QListWidget;
+			QVBoxLayout *vbox = new QVBoxLayout;
+			vbox->addWidget( listBox );
+			groupBox->setLayout( vbox );
 			loadList( listBox, (*list_it).list );
 		}
 	}
@@ -75,7 +83,7 @@ void DependanciesDialog::init( const Q3ValueList<ListInfo> &lists )
 	resize( QSize(500, 350) );
 }
 
-void DependanciesDialog::loadList( K3ListBox* listBox, const ElementList &list )
+void DependanciesDialog::loadList( QListWidget* listBox, const ElementList &list )
 {
 	KConfigGroup config( KGlobal::config(), "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
@@ -84,7 +92,8 @@ void DependanciesDialog::loadList( K3ListBox* listBox, const ElementList &list )
 		QString name = ( *el_it ).name;
 		if ( show_id )
 			name += " (" + QString::number(( *el_it ).id) + ')';
-		listBox->insertItem( name );
+		QListWidgetItem * item = new QListWidgetItem( name );
+		listBox->addItem( item );
 	}
 }
 

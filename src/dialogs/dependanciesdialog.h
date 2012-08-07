@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003-2005 Jason Kivlighn <jkivlighn@gmail.com>            *
+*   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -12,16 +13,14 @@
 #ifndef DEPENDANCIESDIALOG_H
 #define DEPENDANCIESDIALOG_H
 
-#include <q3groupbox.h>
 #include <QLabel>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
-#include <k3listview.h>
-#include <K3ListBox>
 #include <kdialog.h>
 
 #include "datablocks/elementlist.h"
+
+class QListWidget;
 
 struct ListInfo {
 	ElementList list;
@@ -35,7 +34,7 @@ class DependanciesDialog: public KDialog
 {
 public:
 	//Methods
-	DependanciesDialog( QWidget *parent, const Q3ValueList<ListInfo> &lists, bool deps_are_deleted = true );
+	DependanciesDialog( QWidget *parent, const QList<ListInfo> &lists, bool deps_are_deleted = true );
 	DependanciesDialog( QWidget *parent, const ListInfo &list, bool deps_are_deleted = true );
 
 	~DependanciesDialog();
@@ -53,8 +52,8 @@ private:
 	QString m_msg;
 
 	// Methods
-	void init( const Q3ValueList<ListInfo> &lists );
-	void loadList( K3ListBox*, const ElementList &list );
+	void init( const QList<ListInfo> &lists );
+	void loadList( QListWidget*, const ElementList &list );
 };
 
 #endif
