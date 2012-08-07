@@ -36,6 +36,8 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	m_proxyModel->setFilterKeyColumn( 1 );
 	m_proxyModel->setSourceModel( m_sourceModel );
 	ui->m_treeView->setModel( m_proxyModel );
+	connect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
 
 	//The QTreeView
 	KConfigGroup configAdvanced( KGlobal::config(), "Advanced" );
@@ -43,6 +45,9 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 		ui->m_treeView->hideColumn( 0 );
 	}
 	ui->m_treeView->setRootIsDecorated( false );
+	ui->m_treeView->setContextMenuPolicy( Qt::CustomContextMenu );
+	connect( ui->m_treeView, SIGNAL(customContextMenuRequested(const QPoint &)),
+		this, SLOT(contextMenuSlot(const QPoint &)) );
 
 	//The filter text box.
 	KConfigGroup configPerformance( KGlobal::config(), "Performance" );
@@ -139,6 +144,42 @@ void KreGenericListWidget::activateNextPage()
 {
 	m_currentOffset += m_currentLimit;
         reload(ForceReload);
+}
+
+int KreGenericListWidget::currentRow ()
+{
+	QModelIndex index = ui->m_treeView->currentIndex();
+	if ( index.isValid() )
+		return index.row();
+	else
+		return -1;
+}
+
+void KreGenericListWidget::edit( int row )
+{
+	QModelIndex index = m_proxyModel->index( row, 1 );
+	ui->m_treeView->edit( index );
+}
+
+int KreGenericListWidget::selectedRowId()
+{
+	int row = currentRow();
+	QModelIndex index = m_proxyModel->index( row, 0 );
+	if ( index.isValid() )
+		return index.data().toInt();
+	else
+		return -1;
+}
+
+void KreGenericListWidget::contextMenuSlot( const QPoint & point)
+{
+	QPoint globalPoint( ui->m_treeView->mapToGlobal(point) );
+	QHeaderView * header = ui->m_treeView->header();
+	if ( !header->isHidden() ) {
+		globalPoint.setY( globalPoint.y() + header->height() );
+	}
+	emit contextMenuRequested( ui->m_treeView->indexAt(point),
+		globalPoint );
 }
 
 

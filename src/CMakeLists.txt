@@ -65,13 +65,17 @@ set(krecipesimporters_SRCS
 
 set(krecipesactionshandlers_SRCS
    actionshandlers/recipeactionshandler.cpp
-   actionshandlers/actionshandlerbase.cpp
+   actionshandlers/kregenericactionshandler.cpp
    actionshandlers/ingredientactionshandler.cpp
    actionshandlers/headeractionshandler.cpp
    actionshandlers/propertyactionshandler.cpp
    actionshandlers/unitactionshandler.cpp
    actionshandlers/prepmethodactionshandler.cpp
    actionshandlers/categoryactionshandler.cpp
+   actionshandlers/kreauthoractionshandler.cpp
+   
+   #FIXME: The classes below are deprecated and must be removed sooner or later.
+   actionshandlers/actionshandlerbase.cpp
    actionshandlers/authoractionshandler.cpp
 )
 

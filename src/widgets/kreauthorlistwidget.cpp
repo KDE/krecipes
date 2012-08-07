@@ -32,16 +32,21 @@ KreAuthorListWidget::KreAuthorListWidget( QWidget *parent, RecipeDB *db ):
 	KConfigGroup config = KGlobal::config()->group( "Performance" );
 	setCurrentLimit( config.readEntry( "Limit", -1 ) );
 
+	connect( m_database, SIGNAL( authorCreated( const Element & ) ), 
+		SLOT( createAuthor( const Element & ) ) );
+	connect( m_database, SIGNAL( authorRemoved( int ) ), 
+		SLOT( removeAuthor( int ) ) );
+
 }
 
 void KreAuthorListWidget::createAuthor( const Element &author )
 {
-	//TODO
+	reload( ForceReload );
 }
 
 void KreAuthorListWidget::removeAuthor( int id )
 {
-	//TODO
+	reload( ForceReload );
 }
 
 void KreAuthorListWidget::load( int limit, int offset )
@@ -55,7 +60,7 @@ void KreAuthorListWidget::load( int limit, int offset )
                 itemId->setData( QVariant(author_it->id), Qt::EditRole );
                 itemId->setEditable( false );
                 QStandardItem *itemAuthor = new QStandardItem( author_it->name );
-                itemAuthor->setEditable( false );
+                itemAuthor->setEditable( true );
                 QList<QStandardItem*> items;
                 items << itemId << itemAuthor;
                 m_sourceModel->appendRow( items );

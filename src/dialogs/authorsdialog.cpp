@@ -14,14 +14,12 @@
 #include "authorsdialog.h"
 #include "createelementdialog.h"
 #include "backends/recipedb.h"
-//#include "widgets/authorlistview.h"
 #include "widgets/kreauthorlistwidget.h"
-#include "actionshandlers/authoractionshandler.h"
+#include "actionshandlers/kreauthoractionshandler.h"
 
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-//Added by qt3to4:
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <KPushButton>
@@ -35,9 +33,8 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 	QHBoxLayout* layout = new QHBoxLayout( this );
 
 	//Author List
-	//authorListView = new StdAuthorListView( this, database, true );
 	authorListWidget = new KreAuthorListWidget( this, database );
-	//authorActionsHandler = new AuthorActionsHandler( authorListView, database );
+	authorActionsHandler = new KreAuthorActionsHandler( authorListWidget, database );
 	layout->addWidget( authorListWidget );
 
 	//Buttons
@@ -59,8 +56,8 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 
 	//Connect Signals & Slots
 
-	//connect ( newAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( createNew() ) );
-	//connect ( removeAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( remove() ) );
+	connect ( newAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( createNew() ) );
+	connect ( removeAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( remove() ) );
 }
 
 AuthorsDialog::~AuthorsDialog()
@@ -72,14 +69,14 @@ void AuthorsDialog::reload( ReloadFlags flag )
 	authorListWidget->reload( flag );
 }
 
-ActionsHandlerBase* AuthorsDialog::getActionsHandler() const
+KreGenericActionsHandler* AuthorsDialog::getActionsHandler() const
 {
 	return authorActionsHandler;
 }
 
 void AuthorsDialog::addAction( KAction * action )
 {
-	//authorActionsHandler->addAction( action );
+	authorActionsHandler->addAction( action );
 }
 
 #include "authorsdialog.moc"

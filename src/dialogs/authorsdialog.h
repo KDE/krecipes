@@ -20,8 +20,8 @@
 
 class RecipeDB;
 class KreAuthorListWidget;
-class ActionsHandlerBase;
-class AuthorActionsHandler;
+class KreGenericActionsHandler;
+class KreAuthorActionsHandler;
 class KAction;
 class KPushButton;
 
@@ -40,7 +40,7 @@ public:
 	~AuthorsDialog();
 	void reload( ReloadFlags flag = Load );
 
-	ActionsHandlerBase* getActionsHandler() const;
+	KreGenericActionsHandler* getActionsHandler() const;
 	void addAction( KAction * action );
 
 private:
@@ -48,7 +48,7 @@ private:
 	RecipeDB *database;
 	//Widgets
 	KreAuthorListWidget *authorListWidget;
-	AuthorActionsHandler *authorActionsHandler;
+	KreAuthorActionsHandler *authorActionsHandler;
 	KPushButton *newAuthorButton;
 	KPushButton *removeAuthorButton;
 };

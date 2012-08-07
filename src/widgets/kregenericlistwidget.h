@@ -19,6 +19,8 @@
 class QStandardItemModel;
 class QSortFilterProxyModel;
 class QString;
+class QModelIndex;
+class QPoint;
 
 class Element;
 class RecipeDB;
@@ -44,12 +46,20 @@ public:
 	void setSearchAsYouType( bool value );
 	void setCurrentLimit( int value );
 	void reload( ReloadFlags flags );
+	int currentRow();
+	void edit( int row );
+	int selectedRowId();
+
+signals:
+	void contextMenuRequested( const QModelIndex & index, const QPoint & point);
+	void itemsChanged( const QModelIndex & topLeft, const QModelIndex & bottomRight);
 
 protected slots:
 	void setFilter();
 	void setFilter( const QString & filter );
 	void activatePreviousPage();
 	void activateNextPage();
+	void contextMenuSlot( const QPoint & point );
 
 protected:
 	virtual void load(int limit, int offset) = 0;

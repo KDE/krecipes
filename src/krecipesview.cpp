@@ -23,6 +23,7 @@
 #include <kvbox.h>
 #include <QFrame>
 
+#include "actionshandlers/kreauthoractionshandler.h"
 #include "actionshandlers/recipeactionshandler.h"
 #include "actionshandlers/unitactionshandler.h"
 #include "actionshandlers/categoryactionshandler.h"
