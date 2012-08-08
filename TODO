@@ -1,21 +1,22 @@
-Note that this is only a draft, to get a rough idea about what will be done.
+Note that this is only a draft, to get a rough idea about what should be done.
 
-Planned for the next release in 2.0 branch:
 
- [Mandatory]
- * Fix bugs.
- * Update user manual.
- 
- [Brainstorming]
- * When you print recipes, they are printed in no particular order, I guess they
-   should be in alphabetical order.
- * D-BUS interface and service menus to import recipes and restore databases.
+Planned for next 2.0.x releases:
+
+ * Only simple bug fixes. If a bug fix is somewhat complex it would be included
+   in future major releases.
+
 
 Planned for the 2.1 branch:
 
+ * Remove KDE/Qt 3 support stuff (or at least a significant part of it).
+ * Remove the internal SQLite backend, Qt 4 supports SQLite.
+
+
+Planned for the 2.2 branch:
+
  [Mandatory]
  * The database version number should be a string instead of a float.
- * Remove the internal SQLite backend, Qt 4 supports SQLite.
  * Replace left panel with something better, check what Kontact is using, its
    left panel is superior (it can use small icons without text, which would be
    very appropiate for netbooks) and seems easier to maintain.
@@ -28,6 +29,9 @@ Planned for the 2.1 branch:
  * Create a typedef for id type instead of just using 'int'.
 
  [Brainstorming]
+ * When you print recipes, they are printed in no particular order, I guess they
+   should be in alphabetical order.
+ * D-BUS interface and service menus to import recipes and restore databases.
  * Make configurable the length of VARCHAR(%n) fields, for instance, the
    preparation method name.
  * Probably most of SQL queries are not using the word "join", so slow.
@@ -41,11 +45,10 @@ Planned for the 2.1 branch:
    It seems this can be solved with LISTEN, NOTIFY and triggers in PostgreSQL.
    See QSqlDriver::subscribeToNotification() which uses LISTEN if I recall
    correctly.
+ * Port the current xslt stuff to grantlee?
 
-Planned for the 2.2 branch:
 
- [Mandatory]
- * Remove Q3 support stuff (a huge work).
+Planned for the 2.3 branch:
 
  [Brainstorming]
  * Allow the user to select the encoding for mmf importer/exporter, note that
@@ -62,7 +65,8 @@ Planned for the 2.2 branch:
    from i18n team before coding these programs)
  * Try apidox.
 
-Planned for 2.3 branch:
+
+Planned for 2.4 branch:
 
  [Brainstorming]
  * Akonadi backend?
@@ -79,6 +83,7 @@ Planned for 2.3 branch:
  * Something to manage money cost in shopping list.
  * Step-by-Step recipe instructions with photos?
  * There is something called eurofir out there.
+
 _______________________________________________________________________________
 Old stuff from previous maintainers:
 
