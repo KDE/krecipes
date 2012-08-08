@@ -39,6 +39,8 @@ protected:
 	virtual QSqlDriver *qsqlDriver() const { return 0; }
 	virtual void createDB( void ) = 0;
 
+	virtual void initializeData( void );
+
 	virtual void storePhoto( int recipeID, const QByteArray &data );
 	virtual void loadPhoto( int recipeID, QPixmap &photo );
 	void loadRecipeMetadata( Recipe *recipe );
@@ -109,6 +111,8 @@ public:
 	void findUseOfAuthorInRecipes( ElementList *results, int authorID );
 
 	QString getUniqueRecipeTitle( const QString &recipe_title );
+
+	virtual void importUSDADatabase();
 
 	bool ingredientContainsProperty( int ingredientID, int propertyID, int perUnitsID );
 	bool ingredientContainsUnit( int ingredientID, int unitID );

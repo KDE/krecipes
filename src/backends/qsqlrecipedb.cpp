@@ -172,6 +172,13 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	return NoError;
 }
 
+void QSqlRecipeDB::initializeData( void )
+{
+	database->transaction();
+	RecipeDB::initializeData();
+	database->commit();
+}
+
 void QSqlRecipeDB::execSQL( const QString &command )
 {
 	kDebug();
@@ -1660,6 +1667,14 @@ double QSqlRecipeDB::unitRatio( int unitID1, int unitID2 )
 	else
 		return ( -1 );
 }
+
+void QSqlRecipeDB::importUSDADatabase()
+{
+	database->transaction();
+	RecipeDB::importUSDADatabase();
+	database->commit();
+}
+
 
 double QSqlRecipeDB::ingredientWeight( const Ingredient &ing, bool *wasApproximated )
 {
