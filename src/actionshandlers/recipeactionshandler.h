@@ -57,6 +57,9 @@ signals:
 	void recipeSelected( bool );
 	void recipeSelected( int id, int action );
 	void recipesSelected( const QList<int> &ids, int action );
+	
+	//For internal use only
+	void printDone();
 
 public slots:
 	void exec( ItemType type, const QPoint &p );
@@ -109,6 +112,7 @@ public slots:
 
 private slots:
 	void print( bool ok );
+	void printDoneSlot();
 
 private:
 	KMenu *kpop;

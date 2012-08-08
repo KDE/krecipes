@@ -70,6 +70,9 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 	);
 	connect( parentListView,
 		SIGNAL( selectionChanged() ), SLOT( selectionChangedSlot() ) );
+
+	connect( this, SIGNAL( printDone() ), 
+		this, SLOT( printDoneSlot() ), Qt::QueuedConnection );
 }
 
 void RecipeActionsHandler::addRecipeAction( KAction * action )
@@ -474,10 +477,16 @@ void RecipeActionsHandler::print(bool ok)
 	connect(previewdlg, SIGNAL(paintRequested(QPrinter *)),
 		m_printPage->mainFrame(), SLOT(print(QPrinter *)));
 	previewdlg->exec();
+	kDebug() << "previewdlg->exec() done";
 	delete previewdlg;
 	//Remove the temporary directory which stores the HTML and free memory.
 	m_tempdir->unlink();
 	delete m_tempdir;
+	emit( printDone() );
+}
+
+void RecipeActionsHandler::printDoneSlot()
+{
 	delete m_printPage;
 }
 
