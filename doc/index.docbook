@@ -1342,7 +1342,7 @@ and <guimenuitem>Measurement Converter</guimenuitem>.  This helper will
 be more fully discussed in <link linkend="measure-converter">Using the
 Measurement Converter</link>.</para>
 
-<para>After making the adustment for apples, the <emphasis>LED</emphasis>
+<para>After making the adjustment for apples, the <emphasis>LED</emphasis>
 status indicator will turn yellow because nutrient information is complete, but
 an approximation has been made for the ingredient <emphasis>butter</emphasis>.
 The <guilabel>Property Status:</guilabel> of your recipe will show as
@@ -2066,7 +2066,7 @@ menu bar.  From the available choices, select <guimenuitem>Import from File
 <para>A window will appear that allows the navigation to the file that you wish
 to import.  Navigation can be done using the <quote>point and click</quote>
 method, or the location of the file may be entered directly into the box
-labelled <emphasis><guilabel>Location:</guilabel></emphasis>.</para>
+labeled <emphasis><guilabel>Location:</guilabel></emphasis>.</para>
 
 <para>The <emphasis><guilabel>Filter:</guilabel></emphasis> box is used to
 select the format of the recipe being imported from the drop-down menu.</para>
@@ -2465,7 +2465,7 @@ select <guimenuitem>Export ...</guimenuitem></para>
 where you wish to save your exported recipe.  The location will default
 to your home folder, but another existing folder can be chosen, or
 you can create a new folder.  The name of the recipe will appear in
-the box labelled <emphasis><guilabel>Location:</guilabel></emphasis>
+the box labeled <emphasis><guilabel>Location:</guilabel></emphasis>
 and this will default to the name that was given to the recipe in the
 <emphasis>&krecipes;</emphasis> database.  However, this name can be changed
 to another at your discretion.</para>
@@ -3146,7 +3146,7 @@ format="PNG"/></imageobject></inlinemediaobject></guiicon> button, for removing
 ingredients. See the section on <link linkend="working-ingredients">Working
 with Ingredients</link> for more details.</para>
 
-<para>Below the list there is a button labelled <guilabel>Property
+<para>Below the list there is a button labeled <guilabel>Property
 Information</guilabel> to edit the property information for the selected ingredient.
 </para>
 
@@ -3889,9 +3889,9 @@ Conversions</guilabel></emphasis> tab for those units associated with a
 weight.  For those units associated with a volume, the conversions are set
 in <emphasis><guilabel>Volume Conversions</guilabel></emphasis> tab.  Both of
 these tables are set up in a <quote>spreadsheet</quote> style format.  Down the
-side of the table, you will note that each <quote>row</quote> is labelled
+side of the table, you will note that each <quote>row</quote> is labeled
 with a unit name.  Similarly, along the top, each <quote>column</quote> is
-also labelled with a unit name.  The<quote>cells</quote> in the body of the
+also labeled with a unit name.  The<quote>cells</quote> in the body of the
 table are used to set the equivalencies.  1 to 1 equivalencies are provided
 by default.</para>
 
@@ -3931,7 +3931,7 @@ Units component.</screeninfo>
 
 <para>Both of these conversion tables are completed in the same manner.
 Using the <emphasis>Volume Conversion</emphasis>, table as an example, down
-the left side of the spreadsheet, suppose there is a unit of measure labelled
+the left side of the spreadsheet, suppose there is a unit of measure labeled
 <emphasis>cup</emphasis> .  Using the <quote>horizontal scroll bar</quote>
 at the bottom of the window, if necessary, find the column that has the label
 <emphasis>fluid ounces</emphasis> at the top.  Click on the cell that is
@@ -4207,7 +4207,7 @@ list of authors appears in the main portion of the window.</para>
 screen.</para>
 
 <para>A window will appear that allows entry of the author's name in the
-text box labelled <emphasis><guilabel>New Author</guilabel></emphasis></para>
+text box labeled <emphasis><guilabel>New Author</guilabel></emphasis></para>
 
 <para>
 <screenshot>
