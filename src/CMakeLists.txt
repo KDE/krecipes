@@ -90,7 +90,7 @@ set(krecipeswidgets_SRCS
    widgets/unitlistview.cpp
    widgets/propertylistview.cpp
    widgets/prepmethodlistview.cpp
-   widgets/categorylistview.cpp
+   widgets/krecategorieslistwidget.cpp
    widgets/kreauthorlistwidget.cpp
    widgets/recipelistview.cpp
    widgets/categorycombobox.cpp
@@ -118,6 +118,7 @@ set(krecipeswidgets_SRCS
    #FIXME: The classes below are deprecated and must be removed sooner or later.
    widgets/authorlistview.cpp #replaced by kreauthorlistwidget.cpp
    widgets/dblistviewbase.cpp #replaced by kregenericlistwidget.cpp
+   widgets/categorylistview.cpp #replaced by krecategorieslistwidget.cpp
 
 )
 
