@@ -477,7 +477,6 @@ void RecipeActionsHandler::print(bool ok)
 	connect(previewdlg, SIGNAL(paintRequested(QPrinter *)),
 		m_printPage->mainFrame(), SLOT(print(QPrinter *)));
 	previewdlg->exec();
-	kDebug() << "previewdlg->exec() done";
 	delete previewdlg;
 	//Remove the temporary directory which stores the HTML and free memory.
 	m_tempdir->unlink();
