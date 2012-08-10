@@ -22,6 +22,7 @@
 #include <q3textedit.h>
 #include <KLineEdit>
 #include <q3whatsthis.h>
+#include <KRatingWidget>
 
 #include <KVBox>
 #include <kmenu.h>
@@ -32,7 +33,6 @@
 #include "datablocks/rating.h"
 #include "datablocks/elementlist.h"
 #include "datablocks/mixednumber.h"
-#include "widgets/kratingwidget.h"
 
 class RatingCriteriaListView : public K3ListView
 {

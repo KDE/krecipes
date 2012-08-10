@@ -16,7 +16,7 @@
 #include <QPixmap>
 
 #include <kiconloader.h>
-#include "widgets/kratingpainter.h"
+#include <kratingpainter.h>
 
 
 QPixmap Rating::starsPixmap(double stars_d)

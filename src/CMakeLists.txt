@@ -112,8 +112,6 @@ set(krecipeswidgets_SRCS
    widgets/amountunitinput.cpp
    widgets/weightinput.cpp
    widgets/thumbbar.cpp
-   widgets/kratingwidget.cpp
-   widgets/kratingpainter.cpp
    
    #FIXME: The classes below are deprecated and must be removed sooner or later.
    widgets/authorlistview.cpp #replaced by kreauthorlistwidget.cpp
@@ -216,7 +214,7 @@ set(datablocks_SRCS
 kde4_add_library(krecipescommon STATIC
    ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
-   ${datablocks_SRCS} klomanager.cpp propertycalculator.cpp widgets/kratingpainter.cpp)
+   ${datablocks_SRCS} klomanager.cpp propertycalculator.cpp)
 
 target_link_libraries(krecipescommon
    ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
