@@ -21,3 +21,5 @@ add_subdirectory( pics )
 add_subdirectory( data )
 add_subdirectory( layouts )
 add_subdirectory( mimetypes )
+add_subdirectory( doc )
+
