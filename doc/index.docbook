@@ -3891,7 +3891,7 @@ in <emphasis><guilabel>Volume Conversions</guilabel></emphasis> tab.  Both of
 these tables are set up in a <quote>spreadsheet</quote> style format.  Down the
 side of the table, you will note that each <quote>row</quote> is labeled
 with a unit name.  Similarly, along the top, each <quote>column</quote> is
-also labeled with a unit name.  The<quote>cells</quote> in the body of the
+also labeled with a unit name.  The <quote>cells</quote> in the body of the
 table are used to set the equivalencies.  1 to 1 equivalencies are provided
 by default.</para>
 
