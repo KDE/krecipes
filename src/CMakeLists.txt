@@ -24,14 +24,7 @@ add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 include(ConfigureChecks.cmake)
 configure_file(config-krecipes.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krecipes.h )
 
-# In case of having both sqlite 2.x and 3.x series we want to compile against 3.x
-if ( SQLITE_FOUND )
-   include_directories(${SQLITE_INCLUDE_DIR})
-   set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
-elseif ( SQLITE2_FOUND )
-   include_directories(${SQLITE2_INCLUDE_DIR})
-   set(sqlite_SRCS  backends/SQLite/libqsqlite/krecqsqlitedb.cpp backends/SQLite/libqsqlite/krecqsqliteresult.cpp backends/SQLite/literecipedb.cpp  backends/SQLite/qsql_sqlite.cpp)
-endif ( SQLITE_FOUND )   
+set(sqlite_SRCS backends/SQLite/literecipedb.cpp)
 
 set(mysql_SRCS backends/MySQL/mysqlrecipedb.cpp)
 

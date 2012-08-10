@@ -16,9 +16,8 @@
 
 #include <QString>
 #include <KDebug>
-#include "qsql_sqlite.h"
 
-#define SQLITE_DRIVER "KRESQLITE"
+#define SQLITE_DRIVER "QSQLITE"
 
 class LiteRecipeDB : public QSqlRecipeDB
 {
@@ -38,11 +37,10 @@ public:
 	virtual void givePermissions(const QString&, const QString&, const QString&, const QString&){} //no permissions in this backend
 
 protected:
-	virtual QSqlDriver *qsqlDriver() const
-	{
-		kDebug();
-		return new KreSQLiteDriver();
-	}
+        QString qsqlDriverPlugin() const
+        {
+                return SQLITE_DRIVER;
+        }
 
 	virtual QString escapeAndEncode( const QString &s ) const;
 
