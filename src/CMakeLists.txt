@@ -69,7 +69,6 @@ set(krecipesactionshandlers_SRCS
    
    #FIXME: The classes below are deprecated and must be removed sooner or later.
    actionshandlers/actionshandlerbase.cpp
-   actionshandlers/authoractionshandler.cpp
 )
 
 ############### widgets ##############
