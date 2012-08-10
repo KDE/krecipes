@@ -34,6 +34,18 @@ public:
 	virtual int lastInsertID();
 
 	virtual void createTable( const QString &tableName );
+
+	virtual int maxAuthorNameLength() const;
+	virtual int maxCategoryNameLength() const;
+	virtual int maxIngredientNameLength() const;
+	virtual int maxIngGroupNameLength() const;
+	virtual int maxRecipeTitleLength() const;
+	virtual int maxUnitNameLength() const;
+	virtual int maxPrepMethodNameLength() const;
+	virtual int maxPropertyNameLength() const;
+	virtual int maxYieldTypeLength() const;
+
+
 	virtual void givePermissions(const QString&, const QString&, const QString&, const QString&){} //no permissions in this backend
 
 protected:

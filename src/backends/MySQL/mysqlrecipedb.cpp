@@ -181,6 +181,51 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		databaseToCreate.exec( ( *it ) );
 }
 
+int MySQLRecipeDB::maxAuthorNameLength() const
+{
+	return 50;
+}
+
+int MySQLRecipeDB::maxCategoryNameLength() const
+{
+	return 40;
+}
+
+int MySQLRecipeDB::maxIngredientNameLength() const
+{
+	return 50;
+}
+
+int MySQLRecipeDB::maxIngGroupNameLength() const
+{
+	return 50;
+}
+
+int MySQLRecipeDB::maxRecipeTitleLength() const
+{
+	return 200;
+}
+
+int MySQLRecipeDB::maxUnitNameLength() const
+{
+	return 20;
+}
+
+int MySQLRecipeDB::maxPrepMethodNameLength() const
+{
+	return 20;
+}
+
+int MySQLRecipeDB::maxPropertyNameLength() const
+{
+	return 20;
+}
+
+int MySQLRecipeDB::maxYieldTypeLength() const 
+{
+	return 20;
+}
+
 void MySQLRecipeDB::portOldDatabases( float version )
 {
 	kDebug() << "Current database version is..." << version << "\n";

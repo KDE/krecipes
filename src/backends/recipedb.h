@@ -12,6 +12,8 @@
 #ifndef RECIPEDB_H
 #define RECIPEDB_H
 
+#include <limits.h> /* needed for INT_MAX */
+
 #include <QObject>
 #include <QString>
 #include <q3valuelist.h>
@@ -321,42 +323,19 @@ public:
 
 	virtual float databaseVersion( void ) = 0;
 
-	int maxAuthorNameLength() const
-	{
-		return 50;
-	}
-	int maxCategoryNameLength() const
-	{
-		return 40;
-	}
-	int maxIngredientNameLength() const
-	{
-		return 50;
-	}
-	int maxIngGroupNameLength() const
-	{
-		return 50;
-	}
-	int maxRecipeTitleLength() const
-	{
-		return 200;
-	}
-	int maxUnitNameLength() const
-	{
-		return 20;
-	}
-	int maxPrepMethodNameLength() const
-	{
-		return 20;
-	}
-	int maxPropertyNameLength() const
-	{
-		return 20;
-	}
-	int maxYieldTypeLength() const
-	{
-		return 20;
-	}
+	// Functions to retrieve the maximum length of string fields,
+	// these functions must be reimplemented in RecipeDB subclasses,
+        // return the UnlimitedLength const if the field is unlimited.
+	static const int UnlimitedLength = INT_MAX;
+	virtual int maxAuthorNameLength() const = 0;
+	virtual int maxCategoryNameLength() const = 0;
+	virtual int maxIngredientNameLength() const = 0;
+	virtual int maxIngGroupNameLength() const = 0;
+	virtual int maxRecipeTitleLength() const = 0;
+	virtual int maxUnitNameLength() const = 0;
+	virtual int maxPrepMethodNameLength() const = 0;
+	virtual int maxPropertyNameLength() const = 0;
+	virtual int maxYieldTypeLength() const = 0;
 
 	virtual bool ok()
 	{

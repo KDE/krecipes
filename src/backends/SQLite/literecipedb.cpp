@@ -196,6 +196,51 @@ void LiteRecipeDB::createTable( const QString &tableName )
 
 }
 
+int LiteRecipeDB::maxAuthorNameLength() const
+{
+	return 50;
+}
+
+int LiteRecipeDB::maxCategoryNameLength() const
+{
+	return 40;
+}
+
+int LiteRecipeDB::maxIngredientNameLength() const
+{
+	return 50;
+}
+
+int LiteRecipeDB::maxIngGroupNameLength() const
+{
+	return 50;
+}
+
+int LiteRecipeDB::maxRecipeTitleLength() const
+{
+	return 200;
+}
+
+int LiteRecipeDB::maxUnitNameLength() const
+{
+	return 20;
+}
+
+int LiteRecipeDB::maxPrepMethodNameLength() const
+{
+	return 20;
+}
+
+int LiteRecipeDB::maxPropertyNameLength() const
+{
+	return 20;
+}
+
+int LiteRecipeDB::maxYieldTypeLength() const 
+{
+	return 20;
+}
+
 void LiteRecipeDB::portOldDatabases( float version )
 {
 	QString command;

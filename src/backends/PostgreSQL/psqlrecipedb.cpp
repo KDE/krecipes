@@ -171,6 +171,52 @@ void PSqlRecipeDB::createTable( const QString &tableName )
 		databaseToCreate.exec( *it );
 }
 
+int PSqlRecipeDB::maxAuthorNameLength() const
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+int PSqlRecipeDB::maxCategoryNameLength() const
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+int PSqlRecipeDB::maxIngredientNameLength() const
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+int PSqlRecipeDB::maxIngGroupNameLength() const
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+int PSqlRecipeDB::maxRecipeTitleLength() const
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+int PSqlRecipeDB::maxUnitNameLength() const
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+int PSqlRecipeDB::maxPrepMethodNameLength() const
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+int PSqlRecipeDB::maxPropertyNameLength() const
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+int PSqlRecipeDB::maxYieldTypeLength() const 
+{
+	return RecipeDB::UnlimitedLength;
+}
+
+
 void PSqlRecipeDB::initializeData()
 {
 	QSqlRecipeDB::initializeData();
