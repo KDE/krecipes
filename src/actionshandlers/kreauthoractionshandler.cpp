@@ -58,8 +58,7 @@ void KreAuthorActionsHandler::remove()
 	if ( recipeDependancies.isEmpty() ) {
 		switch ( KMessageBox::warningContinueCancel(
 			m_listWidget,
-			i18n( "Are you sure you want to delete this author?" ) ),
-			false ) {
+			i18n( "Are you sure you want to delete this author?" ) ) ) {
 			case KMessageBox::Continue:
 				m_database->removeAuthor( id );
 				break;
