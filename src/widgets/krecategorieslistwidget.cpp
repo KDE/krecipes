@@ -28,7 +28,11 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 	//The QTreeView.
 	ui->m_treeView->setRootIsDecorated( true );
 	ui->m_treeView->showColumn( 0 );
-	ui->m_treeView->hideColumn( 1 );
+	KConfigGroup configAdvanced( KGlobal::config(), "Advanced" );
+	if ( !configAdvanced.readEntry( "ShowID", false ) ) {
+		ui->m_treeView->hideColumn( 1 );
+	}
+
 
 	//The horizontal column labels.
 	QStringList horizontalLabels;
@@ -36,8 +40,8 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 	m_sourceModel->setHorizontalHeaderLabels( horizontalLabels );
 
 	//The maximum number of elements to show in the author list.
-	KConfigGroup config = KGlobal::config()->group( "Performance" );
-	setCurrentLimit( config.readEntry( "CategoryLimit", -1 ) );
+	KConfigGroup configPerformance = KGlobal::config()->group( "Performance" );
+	setCurrentLimit( configPerformance.readEntry( "CategoryLimit", -1 ) );
 
 	/*connect( m_database, SIGNAL( categoryCreated( const Element &, int) ), 
 		SLOT( createCategory( const Element &, int ) ) );
