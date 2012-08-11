@@ -907,6 +907,10 @@ void LiteRecipeDB::portOldDatabases( float version )
 		fixUSDAPropertyUnits();
 		database->exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
 	}
+
+	if ( qRound(version*100) < 97 ) {
+		database->exec( "UPDATE db_info SET ver='0.97',generated_by='Krecipes 2.0.0'" );
+	}
 }
 
 void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_col_info, const QString &default_value, const QString &table_name, int col_index )

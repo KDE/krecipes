@@ -171,6 +171,9 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 	else
 		return ;
 
+	commands << QString( "ALTER TABLE %1 DEFAULT CHARSET UTF8" ).arg( tableName ) ;
+	commands << QString( "ALTER TABLE %1 CONVERT TO CHARACTER SET UTF8" ).arg( tableName );
+
 	QSqlQuery databaseToCreate( QString(), *database );
 
 	// execute the queries
@@ -526,6 +529,25 @@ void MySQLRecipeDB::portOldDatabases( float version )
 	if ( qRound(version*100) < 96 ) {
 		fixUSDAPropertyUnits();
 		database->exec( "UPDATE db_info SET ver='0.96',generated_by='Krecipes SVN (20060903)'" );
+	}
+
+	if ( qRound(version*100) < 97 ) {
+		QStringList tables;
+		tables << "author_list" << "authors" << "categories" 
+			<< "category_list" << "db_info" << "ingredient_groups"
+			<< "ingredient_info" << "ingredient_list" << "ingredient_properties"
+			<< "ingredient_weights" << "ingredients" << "prep_method_list"
+			<< "prep_methods" << "rating_criteria" << "rating_criterion_list"
+			<< "ratings" << "recipes" << "unit_list" << "units"
+			<< "units_conversion" << "yield_types";
+		QStringList::const_iterator it;
+		for ( it = tables.constBegin(); it != tables.constEnd(); it++ ) {
+			QString command = QString( "ALTER TABLE %1 DEFAULT CHARSET UTF8" ).arg( *it );
+			database->exec( command );
+			command = QString( "ALTER TABLE %1 CONVERT TO CHARACTER SET UTF8" ).arg( *it );
+			database->exec( command );
+		}
+		database->exec( "UPDATE db_info SET ver='0.97',generated_by='Krecipes 2.0.0'" );
 	}
 }
 
