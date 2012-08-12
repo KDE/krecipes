@@ -1016,13 +1016,12 @@ void LiteRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 
 QString LiteRecipeDB::escapeAndEncode( const QString &s ) const
 {
-	QString s_escaped;
+	return escape( s );
+}
 
-	// Escape
-	s_escaped = escape( QString::fromLatin1(s.toUtf8()) );
-
-	// Return encoded
-	return s_escaped.toLatin1(); // Note that the text has already been converted before escaping.
+QString LiteRecipeDB::unescapeAndDecode( const QByteArray &s ) const
+{
+	return QString::fromLatin1( s );
 }
 
 /*
