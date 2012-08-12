@@ -14,6 +14,7 @@
 #include <QBuffer>
 //Added by qt3to4:
 #include <QSqlQuery>
+#include <QSqlField>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -30,9 +31,8 @@
 #include <sqlite.h>
 #endif
 
-//keep these two around for porting old databases
+//keep this around for porting old databases
 int sqlite_decode_binary( const unsigned char *in, unsigned char *out );
-QString escape( const QString &s );
 
 LiteRecipeDB::LiteRecipeDB( const QString &_dbFile ) : QSqlRecipeDB( QString(), QString(), QString(), _dbFile )
 {
@@ -1060,26 +1060,14 @@ int sqlite_decode_binary( const unsigned char *in, unsigned char *out )
 	return i;
 }
 
-QString escape( const QString &s )
+QString LiteRecipeDB::escape( const QString &s ) const
 {
-	QString s_escaped = s;
-
-	if ( !s_escaped.isEmpty() ) { //###: sqlite_mprintf() seems to fill an empty string with garbage
-		// Escape using SQLite's function
-#ifdef HAVE_SQLITE
-		char * escaped = sqlite_mprintf( "%q", s.toLatin1().data() ); // Escape the string(allocates memory)
-#elif HAVE_SQLITE3
-		char * escaped = sqlite3_mprintf( "%q", s.toLatin1().data() ); // Escape the string(allocates memory)
-#endif
-		s_escaped = escaped;
-#ifdef HAVE_SQLITE
-		sqlite_freemem( escaped ); // free allocated memory
-#elif HAVE_SQLITE3
-		sqlite3_free( escaped ); // free allocated memory
-#endif
-	}
-
-	return ( s_escaped );
+	QSqlField field( "dummyfield", QVariant::String );
+	field.setValue( QVariant(s) );
+	QString result = this->currentDriver()->formatValue( field );
+	result.remove(0,1);
+	result.chop(1);
+	return result;
 }
 
 void LiteRecipeDB::storePhoto( int recipeID, const QByteArray &data )

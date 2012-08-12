@@ -20,6 +20,7 @@
 #include <QString>
 #include <QPixmap>
 #include <QSqlQuery>
+#include <QSqlDriver>
 
 #include "datablocks/recipe.h"
 #include "datablocks/elementlist.h"
@@ -36,7 +37,15 @@ class QSqlRecipeDB : public RecipeDB
 
 protected:
 	virtual QString qsqlDriverPlugin() const { return QString(); }
+	
+	//If this function returns 0, it means we are using a builtin driver.
 	virtual QSqlDriver *qsqlDriver() const { return 0; }
+
+	//Unlike qsqlDriver() this function does NOT return 0 if we are using a
+	// builtin driver, it always retuns the current driver used by the
+	// database.
+	virtual QSqlDriver *currentDriver() const { return database->driver(); }
+
 	virtual void createDB( void ) = 0;
 
 	virtual void initializeData( void );
