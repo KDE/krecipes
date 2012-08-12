@@ -98,3 +98,9 @@ to use the Krecipes backup feature. If you want to use "krecipes
  Ingredients...") in the "Tools" menu.
 
 
+** The NukeDB tool
+
+ nukedb is a development tool to fill the Krecipes database with huge amounts
+ of data. You can build it along with Krecipes adding "-DBUILD_NUKEDB=ON" when
+ you execute cmake. To use it just type "nukedb" in the console.
+

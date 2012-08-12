@@ -259,6 +259,27 @@ foreach(_TEST ${UNIT_TESTS})
     add_unit_test(${_TEST})
 endforeach(_TEST)
 
+
+############# NukeDB #################
+
+if(BUILD_NUKEDB)
+   set(nukedb_SRCS
+      nukedb/main.cpp
+      nukedb/mainwindow.cpp
+      nukedb/nukeconfigwidget.cpp
+   )
+
+   kde4_add_ui_files(nukedb_SRCS
+      nukedb/nukeconfigwidget.ui
+   )
+   
+   kde4_add_executable(nukedb ${nukedb_SRCS})
+   target_link_libraries(nukedb ${KDE4_KDEUI_LIBS})
+   
+   install(TARGETS nukedb ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif(BUILD_NUKEDB)
+
+
 ############# Main  #################
 
 set(krecipes_SRCS 
