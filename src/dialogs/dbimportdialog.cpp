@@ -144,13 +144,6 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 
 	languageChange();
 
-
-#if (! (defined(HAVE_SQLITE) || defined(HAVE_SQLITE3)))
-	liteRadioButton->setEnabled( false );
-	dbButtonGroup->setButton( 1 ); // Otherwise by default liteCheckBox is checked even if it's disabled
-	switchDBPage(1);
-#endif
-
 	// signals and slots connections
 	connect( dbButtonGroup, SIGNAL( clicked( int ) ), this, SLOT( switchDBPage( int ) ) );
 }

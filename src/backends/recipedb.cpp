@@ -43,9 +43,7 @@
 
 #include "MySQL/mysqlrecipedb.h"
 
-#if HAVE_SQLITE || HAVE_SQLITE3
 #include "SQLite/literecipedb.h"
-#endif
 
 #include "datablocks/categorytree.h"
 #include "datablocks/ingredientpropertylist.h"
@@ -125,14 +123,9 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	kDebug();
 	RecipeDB * database = 0;
 
-	if ( 0 )
-		; //we need some condition here
-#if HAVE_SQLITE || HAVE_SQLITE3
-
-	else if ( dbType == "SQLite" ) {
+	if ( dbType == "SQLite" ) {
 		database = new LiteRecipeDB( file );
 	}
-#endif //HAVE_SQLITE || HAVE_SQLITE3
 	else if ( dbType == "MySQL" ) {
 		database = new MySQLRecipeDB( host, user, pass, dbname, port );
 	}

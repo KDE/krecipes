@@ -282,12 +282,7 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 	QSpacerItem* spacerRow5 = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	Form1Layout->addItem( spacerRow5 );
 
-	QString sqliteBinary;
-	#if HAVE_SQLITE3
-	sqliteBinary = "sqlite3";
- 	#elif HAVE_SQLITE
-	sqliteBinary = "sqlite";
-	#endif
+	QString sqliteBinary = "sqlite3";
 
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this );

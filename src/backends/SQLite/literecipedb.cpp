@@ -25,11 +25,6 @@
 #include <QImageWriter>
 #include <KCodecs>
 
-#ifdef HAVE_SQLITE3
-#include <sqlite3.h>
-#elif HAVE_SQLITE
-#include <sqlite.h>
-#endif
 
 //keep this around for porting old databases
 int sqlite_decode_binary( const unsigned char *in, unsigned char *out );
@@ -64,14 +59,8 @@ int LiteRecipeDB::lastInsertID()
 
 QStringList LiteRecipeDB::backupCommand() const
 {
-#ifdef HAVE_SQLITE
-	QString binary = "sqlite";
-#elif HAVE_SQLITE3
-	QString binary = "sqlite3";
-#endif
-
 	KConfigGroup config( KGlobal::config(), "Server" );
-	binary = config.readEntry( "SQLitePath", binary );
+	QString binary = config.readEntry( "SQLitePath", "sqlite3" );
 
 	QStringList command;
 	command<<binary<<database->databaseName()<<".dump";
@@ -80,14 +69,8 @@ QStringList LiteRecipeDB::backupCommand() const
 
 QStringList LiteRecipeDB::restoreCommand() const
 {
-#ifdef HAVE_SQLITE
-	QString binary = "sqlite";
-#elif HAVE_SQLITE3
-	QString binary = "sqlite3";
-#endif
-	kDebug()<<" binary: "<<binary;
 	KConfigGroup config( KGlobal::config(), "Server" );
-	binary = config.readEntry( "SQLitePath", binary );
+	QString binary = config.readEntry( "SQLitePath", "sqlite3" );
 
 	QStringList command;
 	command<<binary<<database->databaseName();
