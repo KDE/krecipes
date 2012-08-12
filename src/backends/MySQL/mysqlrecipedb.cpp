@@ -128,7 +128,11 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
 
 	else if ( tableName == "ingredient_properties" )
-		commands << "CREATE TABLE ingredient_properties (id INTEGER NOT NULL AUTO_INCREMENT,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
+		commands << QString( "CREATE TABLE ingredient_properties "
+			"(id INTEGER NOT NULL AUTO_INCREMENT, "
+			"name VARCHAR(%1), units VARCHAR(%2), "
+			"PRIMARY KEY (id));" 
+			).arg( maxPropertyNameLength() ).arg( maxUnitNameLength() ) ;
 
 	else if ( tableName == "ingredient_weights" )
 		commands << "CREATE TABLE ingredient_weights (id INTEGER NOT NULL AUTO_INCREMENT, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, prep_method_id INTEGER, PRIMARY KEY (id), INDEX(ingredient_id), INDEX(unit_id), INDEX(weight_unit_id), INDEX(prep_method_id) );";
@@ -156,7 +160,10 @@ void MySQLRecipeDB::createTable( const QString &tableName )
 		commands << QString( "CREATE TABLE `ingredient_groups` (`id` int(11) NOT NULL auto_increment, `name` varchar(%1), PRIMARY KEY (`id`));" ).arg( maxIngGroupNameLength() );
 	}
 	else if ( tableName == "yield_types" ) {
-		commands << QString( "CREATE TABLE `yield_types` (`id` int(11) NOT NULL auto_increment, `name` varchar(%1), PRIMARY KEY (`id`));" ).arg( 20 );
+		commands << QString( "CREATE TABLE 'yield_types' "
+			"('id' int(11) NOT NULL auto_increment, "
+			"'name' VARCHAR(%1), "
+			"PRIMARY KEY ('id'));" ).arg( maxYieldTypeLength() );
 	}
 
 	else if ( tableName == "ratings" )

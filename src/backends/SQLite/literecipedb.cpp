@@ -120,7 +120,10 @@ void LiteRecipeDB::createTable( const QString &tableName )
 		commands << "CREATE TABLE ingredient_info (ingredient_id INTEGER, property_id INTEGER, amount FLOAT, per_units INTEGER);";
 
 	else if ( tableName == "ingredient_properties" )
-		commands << "CREATE TABLE ingredient_properties (id INTEGER NOT NULL,name VARCHAR(20), units VARCHAR(20), PRIMARY KEY (id));";
+		commands << QString ( "CREATE TABLE ingredient_properties "
+			"(id INTEGER NOT NULL, name VARCHAR(%1), units VARCHAR(%2), "
+			"PRIMARY KEY (id));"
+			).arg( maxPrepMethodNameLength() ).arg( maxUnitNameLength() );
 
 	else if ( tableName == "ingredient_weights" ) {
 		commands << "CREATE TABLE ingredient_weights (id INTEGER NOT NULL, ingredient_id INTEGER NOT NULL, amount FLOAT, unit_id INTEGER, weight FLOAT, weight_unit_id INTEGER, prep_method_id INTEGER, PRIMARY KEY (id) );"
