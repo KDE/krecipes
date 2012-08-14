@@ -274,7 +274,7 @@ if(BUILD_NUKEDB)
    )
    
    kde4_add_executable(nukedb ${nukedb_SRCS})
-   target_link_libraries(nukedb ${KDE4_KDEUI_LIBS})
+   target_link_libraries(nukedb krecipescommon ${KDE4_KDEUI_LIBS})
    
    install(TARGETS nukedb ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif(BUILD_NUKEDB)

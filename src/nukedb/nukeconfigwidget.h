@@ -13,6 +13,8 @@
 
 #include <QWidget>
 
+class RecipeDB;
+
 namespace Ui {
 	class NukeConfigWidget;
 }
@@ -30,6 +32,8 @@ private slots:
 
 private:
 	Ui::NukeConfigWidget * ui;
+	
+	RecipeDB * database;
 
 };
 
