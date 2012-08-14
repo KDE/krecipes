@@ -172,6 +172,16 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	return NoError;
 }
 
+void QSqlRecipeDB::transaction()
+{
+	database->transaction();
+}
+
+void QSqlRecipeDB::commit()
+{
+	database->commit();
+}
+
 void QSqlRecipeDB::initializeData( void )
 {
 	database->transaction();

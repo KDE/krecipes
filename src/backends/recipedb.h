@@ -157,6 +157,9 @@ public:
 	/** Convenience method.  Calls the above with arguments from KConfig. */
 	static RecipeDB* createDatabase( const QString &dbType, const QString &file = QString() );
 
+	virtual void transaction() = 0;
+	virtual void commit() = 0;
+
 	virtual void addIngredientWeight( const Weight & ) = 0;
 	virtual void addProperty( const QString &name, const QString &units ) = 0;
 	virtual void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID ) = 0;

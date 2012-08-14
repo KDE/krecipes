@@ -81,6 +81,9 @@ public:
 
 	RecipeDB::Error connect( bool create_db, bool create_tables );
 
+	virtual void transaction();
+	virtual void commit();
+
 	void addIngredientWeight( const Weight & );
 	void addProperty( const QString &name, const QString &units );
 	void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID );
