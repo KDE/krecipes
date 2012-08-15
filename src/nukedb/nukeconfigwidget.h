@@ -29,11 +29,18 @@ public:
 
 private slots:
 	void proceed();
+	void wipeDatabase();
+	void updateTotals( int number );
 
 private:
+	void connectToDatabase();
+
 	Ui::NukeConfigWidget * ui;
 	
 	RecipeDB * database;
+	int m_totalCategories;
+	int m_totalRecipes;
+	int m_totalAuthors;
 
 };
 

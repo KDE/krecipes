@@ -11,39 +11,54 @@
 
 #include "ui_nukeconfigwidget.h"
 
+#include <KApplication>
 #include <KGlobal>
 #include <QStringList>
 #include <KStandardDirs>
 #include <KConfigGroup>
 #include <KMessageBox>
 
-#include <kdebug.h>
-
 #include "backends/recipedb.h"
 
 
 NukeConfigWidget::NukeConfigWidget( QWidget * parent ) : 
 	QWidget( parent ), 
-	ui(new Ui::NukeConfigWidget)
+	ui(new Ui::NukeConfigWidget),
+	m_totalCategories(0),
+	m_totalRecipes(0),
+	m_totalAuthors(0)
 {
 	//Setup UI
 	ui->setupUi( this );
 
 	//Conect signals/slots.
+	connect( ui->m_rootCategoriesNumberInput, SIGNAL(valueChanged(int)),
+		this, SLOT(updateTotals(int)) );
+	connect( ui->m_subCategoriesNumberInput, SIGNAL(valueChanged(int)),
+		this, SLOT(updateTotals(int)) );
+	connect( ui->m_recipesNumInput, SIGNAL(valueChanged(int)),
+		this, SLOT(updateTotals(int)) );
+	connect( ui->m_recipeAuthorsNumInput, SIGNAL(valueChanged(int)),
+		this, SLOT(updateTotals(int)) );
+	connect( ui->m_standaloneAuthorsNumInput, SIGNAL(valueChanged(int)),
+		this, SLOT(updateTotals(int)) );
+
+	connect( ui->m_wipeDatabaseButton, SIGNAL(clicked()), this, SLOT(wipeDatabase()) );
 	connect( ui->m_proceedButton, SIGNAL(clicked()), this, SLOT(proceed()) );
+	connect( ui->m_quitButton, SIGNAL(clicked()), kapp, SLOT(quit()) );
 }
 
-void NukeConfigWidget::proceed()
+void NukeConfigWidget::connectToDatabase()
 {
-	QString krecipesConfigFileName = 
-		KStandardDirs::locateLocal( "config", "krecipesrc" );
-	
-	QStringList strList;
-	strList << krecipesConfigFileName;
-	KGlobal::config()->addConfigSources( strList );
+        QString krecipesConfigFileName =
+                KStandardDirs::locateLocal( "config", "krecipesrc" );
 
-	KConfigGroup dbtypeGroup = KGlobal::config()->group( "DBType" );
-	QString dbType = dbtypeGroup.readEntry( "Type", "" );
+        QStringList strList;
+        strList << krecipesConfigFileName;
+        KGlobal::config()->addConfigSources( strList );
+
+        KConfigGroup dbtypeGroup = KGlobal::config()->group( "DBType" );
+        QString dbType = dbtypeGroup.readEntry( "Type", "" );
 
         KConfigGroup performanceGroup = KGlobal::config()->group( "Server" );
         QString host = performanceGroup.readEntry( "Host", "localhost" );
@@ -52,28 +67,147 @@ void NukeConfigWidget::proceed()
         QString dbname = performanceGroup.readEntry( "DBName", "Krecipes" );
         int port = performanceGroup.readEntry( "Port", 0 );
         QString dbfile = performanceGroup.readEntry( "DBFile",
-		KStandardDirs::locateLocal ( "appdata", "krecipes.krecdb" ) );
+                KStandardDirs::locateLocal ( "appdata", "krecipes.krecdb" ) );
 
-	database = RecipeDB::createDatabase( dbType, host, user, pass, dbname, port, dbfile );
+        database = RecipeDB::createDatabase( dbType, host, user, pass, dbname, port, dbfile );
 
-	RecipeDB::Error connectError = database->connect();
+        database->connect();
 
-	if ( !database->ok() ) {
-		KMessageBox::error( this, "Error opening the Krecipes database.");
-	}
+        if ( !database->ok() ) {
+                KMessageBox::error( this, "Error opening the Krecipes database.");
+        }
+}
 
-	int authors_number = ui->m_authorsNumberInput->value();
+
+void NukeConfigWidget::proceed()
+{
+
+	connectToDatabase();
+	
+	//Gather parameters.
+	int root_categories_number = ui->m_rootCategoriesNumberInput->value();
+	int subcategories_number = ui->m_subCategoriesNumberInput->value();
+	int recipes_number = ui->m_recipesNumInput->value();
+	int recipe_authors_number = ui->m_recipeAuthorsNumInput->value();
+	int standalone_authors_number = ui->m_standaloneAuthorsNumInput->value();
+	QString rootCategoryNamePattern = ui->m_rootCategoryNamePattern->text();
+	QString subcategoryNamePattern = ui->m_subcategoryNamePattern->text();
+	QString recipeNamePattern = ui->m_recipeNamePattern->text();
+	QString authorNamePattern = ui->m_recipeAuthorNamePattern->text();
+	QString standaloneAuthorNamePattern = ui->m_standaloneAuthorNamePattern->text();
+
+
+	//Write the data to the database.
+	int i, j, k, l, progress;
+	int last_id;
 
 	ui->m_progressBar->setValue( 0 );
-	ui->m_progressBar->setMaximum( authors_number - 1 );
+
 	database->transaction();
-	int i;
-	for (i = 0; i < authors_number; i++ ) {
-		database->createNewAuthor( QString( "Author %1" ).arg( i ) );
-		ui->m_progressBar->setValue( i );
+
+	QString categoryName;
+	progress = 0;
+	for ( i = 0; i < root_categories_number; i++ ) {
+		categoryName = rootCategoryNamePattern + " " + QString::number( i );
+		database->createNewCategory( categoryName );
+		last_id = database->lastInsertID();
+		progress++;
+		ui->m_progressBar->setValue( progress );
+		Element category;
+		category.id = last_id;
+		category.name = categoryName;
+		for ( j = 0; j < recipes_number; j++ ) {
+			Recipe recipe;
+			recipe.recipeID = -1; //This means it's a new recipe.
+			recipe.title = recipeNamePattern + " "
+				+ QString::number( i ) + " " + QString::number( j );
+			recipe.categoryList << category;
+			for (k = 0; k < recipe_authors_number; k++) {
+				Element author;
+				author.name = authorNamePattern + " "
+					+ QString::number( i ) + " " + QString::number( j )
+					+ " " + QString::number( k );
+				database->createNewAuthor( author.name );
+				author.id = database->lastInsertID();
+				recipe.authorList << author;
+			}
+			database->saveRecipe( &recipe );
+			progress++;
+			ui->m_progressBar->setValue( progress );
+		}
+		for ( j = 0; j < subcategories_number; j++ ) {
+			categoryName = subcategoryNamePattern + " " 
+				+ QString::number( i ) + " " + QString::number( j );
+			database->createNewCategory( categoryName, last_id );
+			progress++;
+			ui->m_progressBar->setValue( progress );
+			Element subcategory;
+			subcategory.id = database->lastInsertID();
+			subcategory.name = categoryName;
+			for ( k = 0; k < recipes_number; k++ ) {
+				Recipe recipe;
+				recipe.recipeID = -1; //This means it's a new recipe.
+				recipe.title = recipeNamePattern + " "
+					+ QString::number( i ) + " " + QString::number( j ) +
+					+ " " + QString::number( k );
+				recipe.categoryList << subcategory;
+				for (l = 0; l < recipe_authors_number; l++) {
+					Element author;
+					author.name = authorNamePattern + " "
+						+ QString::number( i ) + " " + QString::number( j )
+						+ " " + QString::number( k ) + " " + QString::number( l );
+					database->createNewAuthor( author.name );
+					author.id = database->lastInsertID();
+					recipe.authorList << author;
+				}
+				database->saveRecipe( &recipe );
+				progress++;
+				ui->m_progressBar->setValue( progress );
+			}
+		}
 	}
+
+	QString authorName;
+	for (k = 0; k < standalone_authors_number; k++ ) {
+		authorName = standaloneAuthorNamePattern + " " + QString::number( k );
+		database->createNewAuthor( authorName );
+		progress++;
+		ui->m_progressBar->setValue( progress );
+	}
+
 	database->commit();
 
+}
+
+
+void NukeConfigWidget::wipeDatabase()
+{
+	connectToDatabase();
+	database->wipeDatabase();
+}
+
+
+void NukeConfigWidget::updateTotals( int value )
+{
+	Q_UNUSED(value)
+
+        int root_categories_number = ui->m_rootCategoriesNumberInput->value();
+        int subcategories_number = ui->m_subCategoriesNumberInput->value();
+        int recipes_number = ui->m_recipesNumInput->value();
+        int recipe_authors_number = ui->m_recipeAuthorsNumInput->value();
+        int standalone_authors_number = ui->m_standaloneAuthorsNumInput->value();
+
+	int total_categories = root_categories_number * subcategories_number
+		+ root_categories_number;
+	int total_recipes = total_categories * recipes_number;
+	int total_authors = total_recipes * recipe_authors_number
+		+ standalone_authors_number;
+
+	ui->m_totalCategoriesLabel->setText( QString::number(total_categories) );
+	ui->m_totalRecipesLabel->setText( QString::number(total_recipes) );
+	ui->m_totalAuthorsLabel->setText( QString::number(total_authors) );
+	ui->m_progressBar->setMaximum( total_categories + total_recipes
+		+ standalone_authors_number );
 }
 
 
