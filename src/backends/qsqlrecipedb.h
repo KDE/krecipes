@@ -213,6 +213,8 @@ public:
 
 	bool checkIntegrity( void );
 
+	virtual void wipeDatabase();
+
 	void splitCommands( QString& s, QStringList& sl );
 
 	virtual float databaseVersion( void );

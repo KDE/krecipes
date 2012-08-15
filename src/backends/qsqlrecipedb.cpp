@@ -2059,6 +2059,16 @@ bool QSqlRecipeDB::checkIntegrity( void )
 	return true;
 }
 
+void QSqlRecipeDB::wipeDatabase()
+{
+	QStringList tables = database->tables();
+	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
+		QString command;
+		command  = QString("DROP TABLE %1").arg( *it );
+		database->exec( command );
+	}
+}
+
 void QSqlRecipeDB::splitCommands( QString& s, QStringList& sl )
 {
 	if (s.isEmpty())

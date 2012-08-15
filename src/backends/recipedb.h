@@ -321,6 +321,8 @@ public:
 
 	virtual bool checkIntegrity( void ) = 0;
 
+	virtual void wipeDatabase() = 0;
+
 	virtual void createTable( const QString &tableName ) = 0;
 	virtual void splitCommands( QString& s, QStringList& sl ) = 0;
 
