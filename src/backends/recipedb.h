@@ -16,7 +16,6 @@
 
 #include <QObject>
 #include <QString>
-#include <q3valuelist.h>
 #include <QList>
 
 class QEventLoop;
@@ -43,12 +42,6 @@ class RecipeSearchParameters;
 class Weight;
 typedef QList<Weight> WeightList;
 
-typedef struct
-{
-	Q3ValueList <int> recipeIdList;
-	IngredientList ilist;
-}
-RecipeIngredientList;
 
 class RecipeDB: public QObject
 {
