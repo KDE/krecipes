@@ -52,18 +52,23 @@ void KreAuthorListWidget::removeAuthor( int id )
 void KreAuthorListWidget::load( int limit, int offset )
 {
 	ElementList authorList;
-	m_database->loadAuthors( &authorList, limit, offset );
+	int loadedAuthorsNumber = m_database->loadAuthors( &authorList, limit, offset );
+	m_sourceModel->setRowCount( loadedAuthorsNumber );
 
 	ElementList::const_iterator author_it;
+	int current_row = 0;
+	QModelIndex index;
         for ( author_it = authorList.constBegin(); author_it != authorList.constEnd(); ++author_it ) {
-                QStandardItem *itemId = new QStandardItem;
-                itemId->setData( QVariant(author_it->id), Qt::EditRole );
-                itemId->setEditable( false );
-                QStandardItem *itemAuthor = new QStandardItem( author_it->name );
-                itemAuthor->setEditable( true );
-                QList<QStandardItem*> items;
-                items << itemId << itemAuthor;
-                m_sourceModel->appendRow( items );
+		// Write the database id in the model.
+		index = m_sourceModel->index( current_row, 0 );
+                m_sourceModel->setData( index, QVariant(author_it->id), Qt::EditRole );
+                m_sourceModel->itemFromIndex( index )->setEditable( false );
+		// Write the name of the author in the model.
+		index = m_sourceModel->index( current_row, 1 );
+                m_sourceModel->setData( index, QVariant(author_it->name), Qt::EditRole );
+                m_sourceModel->itemFromIndex( index )->setEditable( true );
+		// Increment the row counter.
+		++current_row;
 	}
 }
 

@@ -129,7 +129,7 @@ public:
 	bool ingredientContainsProperty( int ingredientID, int propertyID, int perUnitsID );
 	bool ingredientContainsUnit( int ingredientID, int unitID );
 
-	void loadAuthors( ElementList *list, int limit = -1, int offset = 0 );
+	int loadAuthors( ElementList *list, int limit = -1, int offset = 0 );
 	void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true );
 	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
 	void loadIngredientGroups( ElementList *list );

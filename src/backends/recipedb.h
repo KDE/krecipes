@@ -207,7 +207,7 @@ public:
 
 	virtual int lastInsertID() = 0;
 
-	virtual void loadAuthors( ElementList *list, int limit = -1, int offset = 0 ) = 0;
+	virtual int loadAuthors( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true ) = 0;
 	void loadCachedCategories( CategoryTree **list, int limit, int offset, int parent_id, bool recurse );
 	virtual void loadCategories( ElementList *list, int limit = -1, int offset = 0 ) = 0;

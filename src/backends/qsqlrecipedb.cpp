@@ -2222,8 +2222,9 @@ void QSqlRecipeDB::removeCategory( int categoryID )
 }
 
 
-void QSqlRecipeDB::loadAuthors( ElementList *list, int limit, int offset )
+int QSqlRecipeDB::loadAuthors( ElementList *list, int limit, int offset )
 {
+	int authorsNumber = 0;
 	list->clear();
 	QString command = "SELECT id,name FROM authors ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
@@ -2234,8 +2235,10 @@ void QSqlRecipeDB::loadAuthors( ElementList *list, int limit, int offset )
 			el.id = authorToLoad.value( 0 ).toInt();
 			el.name = unescapeAndDecode( authorToLoad.value( 1 ).toByteArray() );
 			list->append( el );
+			++authorsNumber;
 		}
 	}
+	return authorsNumber;
 }
 
 void QSqlRecipeDB::createNewAuthor( const QString &authorName )

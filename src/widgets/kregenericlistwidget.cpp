@@ -36,8 +36,6 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	m_proxyModel->setFilterKeyColumn( 1 );
 	m_proxyModel->setSourceModel( m_sourceModel );
 	ui->m_treeView->setModel( m_proxyModel );
-	connect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
 
 	//The QTreeView
 	KConfigGroup configAdvanced( KGlobal::config(), "Advanced" );
@@ -114,8 +112,15 @@ void KreGenericListWidget::reload( ReloadFlags flags )
 
 	//Reload the current page.
 	KApplication::setOverrideCursor( Qt::WaitCursor );
-	m_sourceModel->setRowCount( 0 );
+
+	disconnect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
+
 	load( m_currentLimit, m_currentOffset );
+
+	connect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
+
 	KApplication::restoreOverrideCursor();
 }
 
