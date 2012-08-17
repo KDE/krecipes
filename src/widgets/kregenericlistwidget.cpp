@@ -45,6 +45,7 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 		ui->m_treeView->hideColumn( 0 );
 	}
 	ui->m_treeView->setRootIsDecorated( false );
+	ui->m_treeView->setUniformRowHeights( true );
 	ui->m_treeView->setContextMenuPolicy( Qt::CustomContextMenu );
 	connect( ui->m_treeView, SIGNAL(customContextMenuRequested(const QPoint &)),
 		this, SLOT(contextMenuSlot(const QPoint &)) );
