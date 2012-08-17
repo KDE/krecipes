@@ -65,6 +65,9 @@ public:
 	bool dbOK;
 	QString dbErr;
 
+	typedef int IdType;
+	static const IdType InvalidId = -1;
+
 	enum RecipeItems {
 		None = 0,
 		NamesOnly = 256,
