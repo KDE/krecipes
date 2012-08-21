@@ -63,9 +63,12 @@ protected slots:
 	void activatePreviousPage();
 	void activateNextPage();
 	void contextMenuSlot( const QPoint & point );
+	void startAnimation();
 	void loadFinishedPrivateSlot();
 
 protected:
+	const int busyAnimationThreshold = 500;
+
 	virtual void load(int limit, int offset) = 0;
 	virtual void cancelLoad() = 0;
 
@@ -76,6 +79,7 @@ protected:
 
 	Ui::KreGenericListWidget *ui;
 	KPixmapSequenceWidget * m_anim;
+	bool m_loadFinished;
 	QStandardItemModel *m_sourceModel;
 	QSortFilterProxyModel *m_proxyModel;
 	RecipeDB *m_database;

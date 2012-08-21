@@ -17,6 +17,7 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <QGridLayout>
+#include <QTimer>
 
 #include "backends/recipedb.h"
 
@@ -50,6 +51,7 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	connect( ui->m_treeView, SIGNAL(customContextMenuRequested(const QPoint &)),
 		this, SLOT(contextMenuSlot(const QPoint &)) );
 	m_anim = new KPixmapSequenceWidget;
+	m_anim->setVisible( false );
 	QGridLayout * layout = new QGridLayout;
 	layout->addWidget( m_anim );
 	ui->m_treeView->setLayout( layout );
@@ -102,7 +104,10 @@ void KreGenericListWidget::setCurrentLimit( int value )
 void KreGenericListWidget::reload( ReloadFlags flags )
 {
 	this->setEnabled( false );
-	m_anim->setVisible( true );
+
+	m_loadFinished = false;
+	QTimer::singleShot( busyAnimationThreshold, this, SLOT(startAnimation()) );
+
 	if (m_currentLimit != -1) { //-1 means unlimited. 
 		//If we are at the first page, the previous button must be disabled.
 		if (m_currentOffset == 0)
@@ -137,10 +142,18 @@ void KreGenericListWidget::reload( ReloadFlags flags )
 }
 
 
+void KreGenericListWidget::startAnimation()
+{
+	if (!m_loadFinished) {
+		m_anim->setVisible( true );
+	}
+}
+
 void KreGenericListWidget::loadFinishedPrivateSlot()
 {
 	connect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
 		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
+	m_loadFinished = true;
 	m_anim->setVisible( false );
 	this->setEnabled( true );
 }
