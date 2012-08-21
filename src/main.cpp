@@ -18,6 +18,7 @@
 #include <klocale.h>
 
 #include "convert_sqlite3.h"
+#include "datablocks/elementlist.h"
 
 static const char *version = "2.0-beta2";
 
@@ -25,6 +26,9 @@ static KCmdLineOptions options;
 
 int main( int argc, char **argv )
 {
+
+	qRegisterMetaType<ElementList>();
+
 	options.add("convert-sqlite3", ki18n("Convert the current SQLite 2.x database to SQLite 3 and exit") , 0 );
 	options.add( 0, KLocalizedString(), 0 );    
 

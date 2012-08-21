@@ -16,7 +16,9 @@
 #include "kregenericlistwidget.h"
 
 class Element;
+class ElementList;
 class RecipeDB;
+class LoadingAuthorsThread;
 
 
 class KreAuthorListWidget : public KreGenericListWidget
@@ -25,6 +27,7 @@ class KreAuthorListWidget : public KreGenericListWidget
 
 public:
 	KreAuthorListWidget( QWidget *parent, RecipeDB *db );
+	~KreAuthorListWidget();
 
 protected slots:
 	virtual void createAuthor( const Element & );
@@ -32,7 +35,13 @@ protected slots:
 
 protected:
 	virtual void load(int limit, int offset);
+	virtual void cancelLoad();
 
+private slots:
+	void queryFinished( const ElementList & authorList, int authorsLoaded );
+
+private:
+	LoadingAuthorsThread * m_thread;
 };
 
 

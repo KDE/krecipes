@@ -6,6 +6,7 @@ find_package(QImageBlitz)
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
    ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${QIMAGEBLITZ_INCLUDES}
    ${CMAKE_CURRENT_SOURCE_DIR}/backends/
+   ${CMAKE_CURRENT_SOURCE_DIR}/threadedqueries
    ${CMAKE_CURRENT_SOURCE_DIR}/importers
    ${CMAKE_CURRENT_SOURCE_DIR}/exporters
    ${CMAKE_CURRENT_SOURCE_DIR}/actionshandlers
@@ -51,6 +52,12 @@ set(krecipesimporters_SRCS
    importers/kreimporter.cpp
    importers/rezkonvimporter.cpp
    importers/kredbimporter.cpp)
+
+##### Threaded database queries  #####
+
+set(krecipesthreadedqueries_SRCS
+   threadedqueries/loadingauthorsthread.cpp
+)
 
 ######### Actions Handlers ###########
 
@@ -204,7 +211,8 @@ set(datablocks_SRCS
 kde4_add_library(krecipescommon STATIC
    ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
-   ${datablocks_SRCS} klomanager.cpp propertycalculator.cpp)
+   ${datablocks_SRCS} ${krecipesthreadedqueries_SRCS}
+   klomanager.cpp propertycalculator.cpp)
 
 target_link_libraries(krecipescommon
    ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}

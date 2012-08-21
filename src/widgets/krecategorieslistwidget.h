@@ -33,6 +33,7 @@ protected slots:
 
 protected:
 	virtual void load(int limit, int offset);
+	virtual void cancelLoad(){}
 	void populate ( QStandardItem * item, int id );
 };
 

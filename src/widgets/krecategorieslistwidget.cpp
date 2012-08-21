@@ -111,6 +111,8 @@ void KreCategoriesListWidget::load( int limit, int offset )
 		//Populate the current element.
 		populate( itemCategory, child_it->category.id );
         }
+
+	emit loadFinishedPrivate();
 }
 
 

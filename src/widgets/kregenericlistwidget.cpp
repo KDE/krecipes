@@ -13,8 +13,10 @@
 
 #include <KApplication>
 #include <KIcon>
+#include <KPixmapSequenceWidget>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
+#include <QGridLayout>
 
 #include "backends/recipedb.h"
 
@@ -47,6 +49,10 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	ui->m_treeView->setContextMenuPolicy( Qt::CustomContextMenu );
 	connect( ui->m_treeView, SIGNAL(customContextMenuRequested(const QPoint &)),
 		this, SLOT(contextMenuSlot(const QPoint &)) );
+	m_anim = new KPixmapSequenceWidget;
+	QGridLayout * layout = new QGridLayout;
+	layout->addWidget( m_anim );
+	ui->m_treeView->setLayout( layout );
 
 	//The filter text box.
 	KConfigGroup configPerformance( KGlobal::config(), "Performance" );
@@ -95,6 +101,8 @@ void KreGenericListWidget::setCurrentLimit( int value )
 
 void KreGenericListWidget::reload( ReloadFlags flags )
 {
+	this->setEnabled( false );
+	m_anim->setVisible( true );
 	if (m_currentLimit != -1) { //-1 means unlimited. 
 		//If we are at the first page, the previous button must be disabled.
 		if (m_currentOffset == 0)
@@ -110,18 +118,31 @@ void KreGenericListWidget::reload( ReloadFlags flags )
 			ui->m_nextButton->setEnabled( true );
 	}
 
-	//Reload the current page.
+	//Cancel/wait for any possible loading thread in progress.
 	KApplication::setOverrideCursor( Qt::WaitCursor );
+	cancelLoad();
+	KApplication::restoreOverrideCursor();
 
+	//Disconnect this signal, because calling load(...) may alter the model
+	//data triggering this signal, we must restore this signal/slot connection
+	//as soon as the load is finished.
 	disconnect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
 		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
 
+	connect( this, SIGNAL(loadFinishedPrivate()), this, SLOT(loadFinishedPrivateSlot()) );
+
+	//Reload the current page.
 	load( m_currentLimit, m_currentOffset );
 
+}
+
+
+void KreGenericListWidget::loadFinishedPrivateSlot()
+{
 	connect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
 		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
-
-	KApplication::restoreOverrideCursor();
+	m_anim->setVisible( false );
+	this->setEnabled( true );
 }
 
 

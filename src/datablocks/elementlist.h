@@ -12,6 +12,7 @@
 
 #include <QList>
 #include <QRegExp>
+#include <QMetaType>
 
 #include "element.h"
 
@@ -36,6 +37,8 @@ public:
 
 	static ElementList split( const QString &sep, const QString &str );
 };
+
+Q_DECLARE_METATYPE(ElementList);
 
 typedef QList<int> IDList;
 

@@ -22,6 +22,8 @@ class QString;
 class QModelIndex;
 class QPoint;
 
+class KPixmapSequenceWidget;
+
 class Element;
 class RecipeDB;
 
@@ -53,6 +55,7 @@ public:
 signals:
 	void contextMenuRequested( const QModelIndex & index, const QPoint & point);
 	void itemsChanged( const QModelIndex & topLeft, const QModelIndex & bottomRight);
+	void loadFinishedPrivate();
 
 protected slots:
 	void setFilter();
@@ -60,9 +63,11 @@ protected slots:
 	void activatePreviousPage();
 	void activateNextPage();
 	void contextMenuSlot( const QPoint & point );
+	void loadFinishedPrivateSlot();
 
 protected:
 	virtual void load(int limit, int offset) = 0;
+	virtual void cancelLoad() = 0;
 
 	bool m_searchAsYouType;
 
@@ -70,6 +75,7 @@ protected:
 	int m_currentOffset;
 
 	Ui::KreGenericListWidget *ui;
+	KPixmapSequenceWidget * m_anim;
 	QStandardItemModel *m_sourceModel;
 	QSortFilterProxyModel *m_proxyModel;
 	RecipeDB *m_database;

@@ -101,6 +101,13 @@ void RecipeDB::cancelOperation()
 		process->kill();
 }
 
+RecipeDB* RecipeDB::createDatabase()
+{
+	KConfigGroup config = KGlobal::config()->group( "DBType" );
+	QString dbType = config.readEntry( "Type", "" );
+	return createDatabase( dbType );
+}
+
 RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &file )
 {
 	kDebug()<<" type :"<<dbType<<" file :"<<file;

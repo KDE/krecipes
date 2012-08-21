@@ -15,14 +15,22 @@
 #include <KGlobal>
 
 #include <QStandardItemModel>
+#include <QThread>
 
 #include "datablocks/elementlist.h"
 #include "backends/recipedb.h"
+
+#include <kdebug.h>
+
+#include "threadedqueries/loadingauthorsthread.h"
 
 
 KreAuthorListWidget::KreAuthorListWidget( QWidget *parent, RecipeDB *db ):
 	KreGenericListWidget( parent, db )
 {
+	//The thread to execute the SQL query.
+	m_thread = new LoadingAuthorsThread;
+	
 	//The horizontal column labels.
 	QStringList horizontalLabels;
 	horizontalLabels << "Id" << i18nc( "@title:column", "Author" );
@@ -39,6 +47,12 @@ KreAuthorListWidget::KreAuthorListWidget( QWidget *parent, RecipeDB *db ):
 
 }
 
+KreAuthorListWidget::~KreAuthorListWidget()
+{
+	cancelLoad();
+	delete m_thread;
+}
+
 void KreAuthorListWidget::createAuthor( const Element &author )
 {
 	reload( ForceReload );
@@ -51,10 +65,26 @@ void KreAuthorListWidget::removeAuthor( int id )
 
 void KreAuthorListWidget::load( int limit, int offset )
 {
-	ElementList authorList;
-	int loadedAuthorsNumber = m_database->loadAuthors( &authorList, limit, offset );
-	m_sourceModel->setRowCount( loadedAuthorsNumber );
+	m_thread->setLimit( limit );
+	m_thread->setOffset( offset );
 
+	connect( m_thread, SIGNAL(loadFinished(const ElementList&,int)), 
+		this, SLOT(queryFinished(const ElementList&,int)), Qt::QueuedConnection );
+
+	kDebug() << "Starting thread.";
+	m_thread->start();
+}
+
+void KreAuthorListWidget::cancelLoad()
+{
+	m_thread->disconnect();
+	m_thread->wait();
+}
+
+void KreAuthorListWidget::queryFinished(const ElementList & authorList, int authorsLoaded)
+{
+	kDebug() << "Thread done, I'm in" << (size_t)QThread::currentThreadId();
+	m_sourceModel->setRowCount( authorsLoaded );
 	ElementList::const_iterator author_it;
 	int current_row = 0;
 	QModelIndex index;
@@ -70,6 +100,10 @@ void KreAuthorListWidget::load( int limit, int offset )
 		// Increment the row counter.
 		++current_row;
 	}
+	
+	m_thread->disconnect();
+	emit loadFinishedPrivate();
 }
+
 
 #include "kreauthorlistwidget.moc"

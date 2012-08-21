@@ -24,6 +24,8 @@
 #include <QBuffer>
 #include <QTextCodec>
 
+#include <QThread>
+
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -33,7 +35,7 @@
 int QSqlRecipeDB::m_refCount = 0;
 
 QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &name, int port ) : RecipeDB(),
-	connectionName("connection" + QString::number( m_refCount+1 ))
+	connectionName( QString("krecipes %1 c%2").arg((size_t)QThread::currentThreadId()).arg(m_refCount) )
 {
 	kDebug();
 	DBuser = user;

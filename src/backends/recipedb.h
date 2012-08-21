@@ -152,6 +152,8 @@ public:
 
 	/** Convenience method.  Calls the above with arguments from KConfig. */
 	static RecipeDB* createDatabase( const QString &dbType, const QString &file = QString() );
+	/** Convenience method.  Calls the above with arguments from KConfig. */
+	static RecipeDB* createDatabase();
 
 	virtual void transaction() = 0;
 	virtual void commit() = 0;
