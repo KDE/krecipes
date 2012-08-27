@@ -67,7 +67,7 @@ protected slots:
 	void loadFinishedPrivateSlot();
 
 protected:
-	const int busyAnimationThreshold = 500;
+	static const int busyAnimationThreshold = 500;
 
 	virtual int elementCount() = 0;
 	virtual void load(int limit, int offset) = 0;
