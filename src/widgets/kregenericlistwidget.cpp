@@ -116,8 +116,7 @@ void KreGenericListWidget::reload( ReloadFlags flags )
 			ui->m_previousButton->setEnabled( true );
 
 		//If we are at the last page, the next button must be disabled.
-		int authorCount = m_database->authorCount();
-		if ( m_currentOffset + m_currentLimit >= authorCount )
+		if ( m_currentOffset + m_currentLimit >= elementCount() )
 			ui->m_nextButton->setEnabled( false );
 		else
 			ui->m_nextButton->setEnabled( true );

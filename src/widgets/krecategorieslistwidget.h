@@ -32,6 +32,7 @@ protected slots:
 	virtual void removeCategory( int id );
 
 protected:
+	virtual int elementCount();
 	virtual void load(int limit, int offset);
 	virtual void cancelLoad(){}
 	void populate ( QStandardItem * item, int id );

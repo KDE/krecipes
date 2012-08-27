@@ -87,11 +87,17 @@ void KreCategoriesListWidget::removeCategory( int id )
 	//reload( ForceReload );
 }
 
+int KreCategoriesListWidget::elementCount()
+{
+	return m_database->categoryTopLevelCount();
+}
+
 void KreCategoriesListWidget::load( int limit, int offset )
 {
 	CategoryTree categoryTree;
 	CategoryTree * pCategoryTree = &categoryTree;
-	m_database->loadCachedCategories( &pCategoryTree, -1, -1, -1, true );
+	m_sourceModel->setRowCount( 0 );
+	m_database->loadCachedCategories( &pCategoryTree, limit, offset, -1, true );
 
         for ( CategoryTree * child_it = pCategoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
 		//The "Id" item.

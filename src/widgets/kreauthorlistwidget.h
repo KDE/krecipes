@@ -34,6 +34,7 @@ protected slots:
 	virtual void removeAuthor( int );
 
 protected:
+	virtual int elementCount();
 	virtual void load(int limit, int offset);
 	virtual void cancelLoad();
 

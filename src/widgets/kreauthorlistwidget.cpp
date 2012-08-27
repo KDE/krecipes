@@ -63,6 +63,11 @@ void KreAuthorListWidget::removeAuthor( int id )
 	reload( ForceReload );
 }
 
+int KreAuthorListWidget::elementCount()
+{
+	return m_database->authorCount();
+}
+
 void KreAuthorListWidget::load( int limit, int offset )
 {
 	m_thread->setLimit( limit );
