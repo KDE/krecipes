@@ -33,6 +33,8 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 	if ( !configAdvanced.readEntry( "ShowID", false ) ) {
 		ui->m_treeView->hideColumn( 1 );
 	}
+	ui->m_treeView->header()->setStretchLastSection( false );
+	ui->m_treeView->header()->setResizeMode( 0, QHeaderView::Stretch );
 
 
 	//The horizontal column labels.
