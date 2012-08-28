@@ -37,6 +37,7 @@ protected:
 	virtual int elementCount();
 	virtual void load(int limit, int offset);
 	virtual void cancelLoad();
+	virtual int idColumn();
 
 private slots:
 	void queryFinished( const ElementList & authorList, int authorsLoaded );

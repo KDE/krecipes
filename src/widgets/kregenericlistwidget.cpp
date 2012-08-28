@@ -194,6 +194,11 @@ int KreGenericListWidget::currentRow ()
 		return -1;
 }
 
+QModelIndex KreGenericListWidget::currentParent() const
+{
+	return ui->m_treeView->currentIndex().parent();
+}
+
 void KreGenericListWidget::edit( int row )
 {
 	QModelIndex index = m_proxyModel->index( row, 1 );
@@ -203,7 +208,7 @@ void KreGenericListWidget::edit( int row )
 int KreGenericListWidget::selectedRowId()
 {
 	int row = currentRow();
-	QModelIndex index = m_proxyModel->index( row, 0 );
+	QModelIndex index = m_proxyModel->index( row, idColumn(), currentParent() );
 	if ( index.isValid() )
 		return index.data().toInt();
 	else

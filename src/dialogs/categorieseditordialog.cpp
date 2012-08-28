@@ -17,11 +17,10 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "widgets/categorylistview.h"
 #include "widgets/krecategorieslistwidget.h"
 #include "createcategorydialog.h"
 #include "backends/recipedb.h"
-#include "actionshandlers/categoryactionshandler.h"
+#include "actionshandlers/krecategoryactionshandler.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <KPushButton>
@@ -35,10 +34,8 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 	QHBoxLayout* layout = new QHBoxLayout( this );
 
 	//Category List
-	categoryListView = new StdCategoryListView( /*this*/ 0, database, true );
-	categoryActionsHandler = new CategoryActionsHandler( categoryListView, database );
-	//layout->addWidget( categoryListView );
 	m_categoriesListWidget = new KreCategoriesListWidget( this, database );
+	categoryActionsHandler = new KreCategoryActionsHandler( m_categoriesListWidget, database );
 	layout->addWidget( m_categoriesListWidget );
 
 	//Buttons
@@ -71,7 +68,7 @@ void CategoriesEditorDialog::reload( ReloadFlags flag )
 	m_categoriesListWidget->reload( flag );
 }
 
-CategoryActionsHandler* CategoriesEditorDialog::getActionsHandler () const
+KreCategoryActionsHandler* CategoriesEditorDialog::getActionsHandler () const
 {
 	return categoryActionsHandler;
 }

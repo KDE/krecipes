@@ -69,11 +69,12 @@ set(krecipesactionshandlers_SRCS
    actionshandlers/propertyactionshandler.cpp
    actionshandlers/unitactionshandler.cpp
    actionshandlers/prepmethodactionshandler.cpp
-   actionshandlers/categoryactionshandler.cpp
+   actionshandlers/krecategoryactionshandler.cpp
    actionshandlers/kreauthoractionshandler.cpp
    
    #FIXME: The classes below are deprecated and must be removed sooner or later.
    actionshandlers/actionshandlerbase.cpp
+   actionshandlers/categoryactionshandler.cpp
 )
 
 ############### widgets ##############

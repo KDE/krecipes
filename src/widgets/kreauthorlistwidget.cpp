@@ -110,5 +110,9 @@ void KreAuthorListWidget::queryFinished(const ElementList & authorList, int auth
 	emit loadFinishedPrivate();
 }
 
+int KreAuthorListWidget::idColumn()
+{
+	return 0;
+}
 
 #include "kreauthorlistwidget.moc"

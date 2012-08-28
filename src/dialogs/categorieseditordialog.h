@@ -15,20 +15,17 @@
 
 #include <qwidget.h>
 
-//Added by qt3to4:
 #include <QGridLayout>
-#include <k3listview.h>
 #include <kvbox.h>
 
 #include "datablocks/categorytree.h"
-#include "widgets/dblistviewbase.h"
+#include "widgets/dblistviewbase.h" //needed for ReloadFlags
 
 class RecipeDB;
-class StdCategoryListView;
 class KreCategoriesListWidget;
-class ActionsHandlerBase;
 class KAction;
-class CategoryActionsHandler;
+class KreGenericActionsHandler;
+class KreCategoryActionsHandler;
 class KPushButton;
 
 /**
@@ -46,7 +43,7 @@ public:
 
 	void reload( ReloadFlags flag = Load );
 
-	CategoryActionsHandler* getActionsHandler() const;
+	KreCategoryActionsHandler* getActionsHandler() const;
 	void addAction( KAction * action );
 	void setCategoryPasteAction( KAction * action );
 	void setPasteAsSubcategoryAction( KAction * action );
@@ -56,9 +53,8 @@ private:
 	RecipeDB *database;
 	//Widgets
 	QGridLayout *layout;
-	StdCategoryListView *categoryListView;
 	KreCategoriesListWidget * m_categoriesListWidget;
-	CategoryActionsHandler *categoryActionsHandler;
+	KreCategoryActionsHandler *categoryActionsHandler;
 	KHBox *buttonBar;
 	KPushButton *newCategoryButton;
 	KPushButton *removeCategoryButton;

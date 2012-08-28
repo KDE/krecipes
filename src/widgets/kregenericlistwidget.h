@@ -21,6 +21,7 @@ class QSortFilterProxyModel;
 class QString;
 class QModelIndex;
 class QPoint;
+class QModelIndex;
 
 class KPixmapSequenceWidget;
 
@@ -49,6 +50,7 @@ public:
 	void setCurrentLimit( int value );
 	void reload( ReloadFlags flags );
 	int currentRow();
+	QModelIndex currentParent() const;
 	void edit( int row );
 	int selectedRowId();
 
@@ -72,6 +74,9 @@ protected:
 	virtual int elementCount() = 0;
 	virtual void load(int limit, int offset) = 0;
 	virtual void cancelLoad() = 0;
+
+ 	//This function must return the column number where the id is stored.
+	virtual int idColumn() = 0;
 
 	bool m_searchAsYouType;
 

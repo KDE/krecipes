@@ -16,6 +16,7 @@
 #include <KGlobal>
 
 #include <QStandardItemModel>
+#include <QSortFilterProxyModel>
 
 #include "datablocks/categorytree.h"
 #include "backends/recipedb.h"
@@ -43,16 +44,16 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 	KConfigGroup configPerformance = KGlobal::config()->group( "Performance" );
 	setCurrentLimit( configPerformance.readEntry( "CategoryLimit", -1 ) );
 
-	/*connect( m_database, SIGNAL( categoryCreated( const Element &, int) ), 
+	connect( m_database, SIGNAL( categoryCreated( const Element &, int) ), 
 		SLOT( createCategory( const Element &, int ) ) );
 	connect( m_database, SIGNAL( categoryRemoved( int ) ), 
-		SLOT( removeCategory( int ) ) );*/
+		SLOT( removeCategory( int ) ) );
 
 }
 
 void KreCategoriesListWidget::createCategory( const Element & category, int parent_id )
 {
-	//reload( ForceReload );
+	reload( ForceReload );
 }
 
 void KreCategoriesListWidget::populate( QStandardItem * item, int id )
@@ -84,7 +85,7 @@ void KreCategoriesListWidget::populate( QStandardItem * item, int id )
 
 void KreCategoriesListWidget::removeCategory( int id )
 {
-	//reload( ForceReload );
+	reload( ForceReload );
 }
 
 int KreCategoriesListWidget::elementCount()
@@ -119,6 +120,11 @@ void KreCategoriesListWidget::load( int limit, int offset )
         }
 
 	emit loadFinishedPrivate();
+}
+
+int KreCategoriesListWidget::idColumn()
+{
+	return 1;
 }
 
 

@@ -16,7 +16,6 @@
 #include "kregenericlistwidget.h"
 
 class Element;
-class RecipeDB;
 class QStandardItem;
 
 
@@ -35,6 +34,9 @@ protected:
 	virtual int elementCount();
 	virtual void load(int limit, int offset);
 	virtual void cancelLoad(){}
+
+	virtual int idColumn();
+
 	void populate ( QStandardItem * item, int id );
 };
 
