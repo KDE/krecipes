@@ -94,7 +94,6 @@ bool KreAuthorActionsHandler::checkBounds( const QString &name )
 void KreAuthorActionsHandler::saveElement( const QModelIndex & topLeft,
 	const QModelIndex & bottomRight )
 {
-	//KMessageBox::information( m_listWidget, QString::number(m_listWidget->selectedRowId()), "Renombrando" );
 	//Not used parameters.
 	Q_UNUSED( bottomRight )
 
