@@ -41,7 +41,6 @@
 #include "backends/recipedb.h"
 #include "dialogs/setupdisplay.h"
 #include "image.h"
-#include "krepagelayout.h"
 
 const char* i18n_strings[] = {
   "I18N_INSTRUCTIONS", I18N_NOOP("Instructions"),

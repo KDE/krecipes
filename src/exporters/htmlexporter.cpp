@@ -34,7 +34,6 @@
 #include "backends/recipedb.h"
 #include "dialogs/setupdisplay.h"
 #include "image.h"
-#include "krepagelayout.h"
 
 #include <cmath> //for ceil()
 
