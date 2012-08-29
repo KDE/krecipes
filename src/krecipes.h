@@ -11,8 +11,6 @@
 #ifndef KRECIPES_H
 #define KRECIPES_H
 
-#include <config-krecipes.h>
-
 #include <kapplication.h>
 #include <kaction.h>
 

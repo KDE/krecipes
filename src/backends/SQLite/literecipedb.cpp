@@ -21,7 +21,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <KConfigGroup>
-#include <config-krecipes.h>
 #include <QImageWriter>
 #include <KCodecs>
 

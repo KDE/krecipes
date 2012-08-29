@@ -12,8 +12,6 @@
 
 #include "backends/recipedb.h"
 
-#include <config-krecipes.h>
-
 #include <kapplication.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>

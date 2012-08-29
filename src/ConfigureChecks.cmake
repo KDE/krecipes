@@ -1,8 +1,0 @@
-
-macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE3)
-
-macro_bool_to_01(SQLITE2_FOUND HAVE_SQLITE)
-
-if (SQLITE_FOUND)
-   macro_bool_to_01(FALSE HAVE_SQLITE)
-endif (SQLITE_FOUND)

@@ -19,10 +19,6 @@ add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ############# backends ###############
 
-
-include(ConfigureChecks.cmake)
-configure_file(config-krecipes.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-krecipes.h )
-
 set(sqlite_SRCS backends/SQLite/literecipedb.cpp)
 
 set(mysql_SRCS backends/MySQL/mysqlrecipedb.cpp)

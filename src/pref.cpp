@@ -11,8 +11,6 @@
 
 #include "pref.h"
 
-#include <config-krecipes.h>
-
 #include <QLabel>
 
 

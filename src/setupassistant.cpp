@@ -9,8 +9,6 @@
 ***************************************************************************/
 #include "setupassistant.h"
 
-#include <config-krecipes.h>
-
 #include <unistd.h>
 #include <pwd.h>
 
