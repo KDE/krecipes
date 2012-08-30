@@ -11,7 +11,6 @@
 
 #include "kreexporter.h"
 
-#include <q3ptrdict.h>
 #include <QImage>
 #include <QFileInfo>
 #include <QDir>
@@ -27,7 +26,6 @@
 #include <kprogressdialog.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
-#include <kiconloader.h>
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>

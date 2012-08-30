@@ -30,8 +30,6 @@
 #include <qinputdialog.h>
 #include <QAction>
 #include <QFile>
-#include <q3textedit.h>
-#include <q3valuelist.h>
 //Added by qt3to4:
 #include <QMenu>
 #include <QTextDocument>

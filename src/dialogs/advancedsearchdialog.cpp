@@ -26,7 +26,6 @@
 #include <QVBoxLayout>
 #include <QFormLayout>
 #include <kpushbutton.h>
-#include <q3whatsthis.h>
 #include <QLabel>
 #include <KLineEdit>
 

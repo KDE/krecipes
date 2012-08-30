@@ -14,7 +14,6 @@
 #include <QLabel>
 
 
-#include <q3buttongroup.h>
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QRadioButton>

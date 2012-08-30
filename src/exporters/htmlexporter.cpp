@@ -11,7 +11,6 @@
 
 #include "htmlexporter.h"
 
-#include <q3ptrdict.h>
 #include <QImage>
 #include <QFileInfo>
 #include <QDir>

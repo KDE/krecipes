@@ -18,7 +18,6 @@
 #include <Q3ValueList>
 #include <QVBoxLayout>
 #include <QTextStream>
-#include <q3whatsthis.h>
 #include <KMessageBox>
 #include <QFile>
 #include <QSplitter>

@@ -16,8 +16,6 @@
 #include <QString>
 #include <QPixmap>
 #include <QTime> 
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"

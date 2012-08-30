@@ -15,7 +15,6 @@
 
 #include <QFile>
 #include <QRegExp>
-#include <q3textstream.h>
 #include <QStringList>
 #include <QTextStream>
 

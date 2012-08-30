@@ -9,8 +9,6 @@
 
 #include "criteriacombobox.h"
 
-#include <q3listbox.h>
-
 #include "backends/recipedb.h"
 #include "datablocks/elementlist.h"
 

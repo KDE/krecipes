@@ -21,7 +21,6 @@
 #include <k3listview.h>
 #include <q3textedit.h>
 #include <KLineEdit>
-#include <q3whatsthis.h>
 #include <KRatingWidget>
 
 #include <KVBox>

@@ -11,7 +11,6 @@
 
 #include <QPushButton>
 #include <QLabel>
-#include <q3whatsthis.h>
 
 #include <KVBox>
 

@@ -11,7 +11,6 @@
 
 #include <q3buttongroup.h>
 #include <QLabel>
-#include <q3whatsthis.h>
 #include <kvbox.h>
 #include <QHBoxLayout>
 #include <QComboBox>

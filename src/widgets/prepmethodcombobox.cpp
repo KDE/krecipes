@@ -9,7 +9,6 @@
 
 #include "prepmethodcombobox.h"
 
-#include <q3listbox.h>
 #include <QLineEdit>
 
 #include <kdebug.h>

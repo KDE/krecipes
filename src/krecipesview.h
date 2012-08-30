@@ -17,11 +17,7 @@
 #include <q3valuelist.h>
 
 #include <qwidget.h>
-#include <q3widgetstack.h>
-//Added by qt3to4:
 #include <QList>
-
-#include <kiconloader.h>
 
 #include <kparts/part.h>
 #include <kstyle.h>

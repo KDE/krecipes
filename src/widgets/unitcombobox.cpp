@@ -9,8 +9,6 @@
 
 #include "unitcombobox.h"
 
-#include <q3listbox.h>
-
 #include <klocale.h>
 #include <kconfig.h>
 #include <kglobal.h>

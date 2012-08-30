@@ -15,10 +15,6 @@
 #include <klocale.h>
 #include <kprogressdialog.h>
 #include <kmessagebox.h>
-
-#include <q3valuevector.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <kglobal.h>
 
 #include "datablocks/recipe.h"

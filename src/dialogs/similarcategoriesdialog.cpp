@@ -12,8 +12,6 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QLabel>
-#include <q3header.h>
-#include <q3whatsthis.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QGridLayout>

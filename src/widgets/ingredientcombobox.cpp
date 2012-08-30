@@ -9,7 +9,6 @@
 
 #include "ingredientcombobox.h"
 
-#include <q3listbox.h>
 #include <QTimer>
 #include <QLineEdit>
 

@@ -12,7 +12,6 @@
 #include <q3groupbox.h>
 #include <QLabel>
 #include <QPushButton>
-#include <q3whatsthis.h>
 
 #include <KVBox>
 #include <QGridLayout>

@@ -12,7 +12,6 @@
 #ifndef RECIPEIMPORTDIALOG_H
 #define RECIPEIMPORTDIALOG_H
 
-#include <q3valuelist.h>
 #include <qmap.h>
 #include <q3listview.h>
 
