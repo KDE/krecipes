@@ -101,6 +101,10 @@ QString Yield::amountToString() const
 
 QString Yield::toString() const
 {
-    return amountToString() + ' ' + d->type;
+    if ( d->type.isEmpty() ) {
+        return amountToString();
+    } else {
+        return amountToString() + ' ' + d->type;
+    }
 }
 
