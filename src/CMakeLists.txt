@@ -233,6 +233,16 @@ set(UNIT_TESTS
     test_weight
     )
 
+set(DATABASE_TESTS
+    authors
+    )
+
+set(DATABASE_TESTS_DATA
+    tests/database/sqliterc
+    tests/database/mysqlrc
+    tests/database/postgresqlrc
+    )
+
 macro(add_import_export_test _TEST)
     if(KDE4_BUILD_TESTS)
         kde4_add_executable(krecipes-${_TEST} tests/${_TEST}.cpp)
@@ -253,6 +263,12 @@ macro(add_unit_test _TEST)
     install(TARGETS krecipes-${_TEST} ${INSTALL_TARGETS_DEFAULT_ARGS})
 endmacro(add_unit_test)
 
+macro(add_database_test _TEST)
+    kde4_add_unit_test(krecipes-database-${_TEST} tests/database/${_TEST}.cpp)
+    target_link_libraries(krecipes-database-${_TEST} ${UNIT_TEST_LIBRARIES})
+    install(TARGETS krecipes-database-${_TEST} ${INSTALL_TARGETS_DEFAULT_ARGS})
+endmacro(add_database_test)
+
 set(UNIT_TEST_LIBRARIES krecipescommon
     ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTSQL_LIBRARY}  ${QT_QTTEST_LIBRARY}
@@ -264,6 +280,11 @@ foreach(_TEST ${IMPORT_EXPORT_TESTS})
 endforeach(_TEST)
 foreach(_TEST ${UNIT_TESTS})
     add_unit_test(${_TEST})
+endforeach(_TEST)
+foreach(_TEST ${DATABASE_TESTS})
+    add_database_test(${_TEST})
+    install( FILES ${DATABASE_TESTS_DATA}
+        DESTINATION ${DATA_INSTALL_DIR}/krecipes-database-${_TEST}/ )
 endforeach(_TEST)
 
 
