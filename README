@@ -81,7 +81,11 @@ to use the Krecipes backup feature. If you want to use "krecipes
  importers and exporters. You can build it adding "-DKDE4_BUILD_TESTS=ON" when
  you execute cmake.
 
- You can execute the tests just typing 'make test'.
+ You can execute all the tests just typing 'make test'. If any of them fails
+ and you need to see more details about what failed, you should execute the
+ failing test individually; you can do this just typing the name of the test in
+ the command line, they are installed in the same place than the 'krecipes'
+ executable.
 
 
 ** Hidden features

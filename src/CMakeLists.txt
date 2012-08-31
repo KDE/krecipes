@@ -244,11 +244,13 @@ macro(add_import_export_test _TEST)
 
         add_test(NAME krecipes-${_TEST} COMMAND $<TARGET_FILE:krecipes-${_TEST}> ${_TEST_DATA})
     endif(KDE4_BUILD_TESTS)
+    install(TARGETS krecipes-${_TEST} ${INSTALL_TARGETS_DEFAULT_ARGS})
 endmacro(add_import_export_test)
 
 macro(add_unit_test _TEST)
     kde4_add_unit_test(krecipes-${_TEST} tests/${_TEST}.cpp)
     target_link_libraries(krecipes-${_TEST} ${UNIT_TEST_LIBRARIES})
+    install(TARGETS krecipes-${_TEST} ${INSTALL_TARGETS_DEFAULT_ARGS})
 endmacro(add_unit_test)
 
 set(UNIT_TEST_LIBRARIES krecipescommon
