@@ -2065,8 +2065,10 @@ void QSqlRecipeDB::wipeDatabase()
 {
 	QStringList tables = database->tables();
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it ) {
+		if (*it == "db_info")
+			continue;
 		QString command;
-		command  = QString("DROP TABLE %1").arg( *it );
+		command  = QString("DELETE FROM %1").arg( *it );
 		database->exec( command );
 	}
 }
