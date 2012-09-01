@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 
-#include "test_unitratio.h"
+#include "unitratio.h"
 
 #include "datablocks/unitratio.h"
 
@@ -76,4 +76,4 @@ void Test_UnitRatio::testReverse()
 
 QTEST_MAIN(Test_UnitRatio)
 
-#include "test_unitratio.moc"
+#include "unitratio.moc"

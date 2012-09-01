@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 
-#include "test_ratingcriteria.h"
+#include "ratingcriteria.h"
 
 #include "datablocks/ratingcriteria.h"
 
@@ -56,4 +56,4 @@ void Test_RatingCriteria::testCopyConstructionAndAssignment()
 
 QTEST_MAIN(Test_RatingCriteria)
 
-#include "test_ratingcriteria.moc"
+#include "ratingcriteria.moc"

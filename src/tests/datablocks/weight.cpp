@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 
-#include "test_weight.h"
+#include "weight.h"
 
 #include "datablocks/weight.h"
 
@@ -96,4 +96,4 @@ void Test_Weight::testCopyConstructionAndAssignment()
 
 QTEST_MAIN(Test_Weight)
 
-#include "test_weight.moc"
+#include "weight.moc"

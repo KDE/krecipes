@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 
-#include "test_unitratiolist.h"
+#include "unitratiolist.h"
 
 #include "datablocks/unitratiolist.h"
 
@@ -37,4 +37,4 @@ void Test_UnitRatioList::testGetRatio()
 
 QTEST_MAIN(Test_UnitRatioList)
 
-#include "test_unitratiolist.moc"
+#include "unitratiolist.moc"

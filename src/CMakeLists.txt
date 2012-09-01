@@ -232,14 +232,14 @@ set(IMPORT_EXPORT_TESTS
     kretest mmftest mx2test mxptest nyctest recipemltest rezkonvtest
     )
 
-set(UNIT_TESTS
-    test_rating
-    test_ratingcriteria
-    test_yield
-    test_unit
-    test_unitratio
-    test_unitratiolist
-    test_weight
+set(DATABLOCKS_TESTS
+    rating
+    ratingcriteria
+    yield
+    unit
+    unitratio
+    unitratiolist
+    weight
     mixednumber
     )
 
@@ -255,23 +255,24 @@ set(DATABASE_TESTS_DATA
 
 macro(add_import_export_test _TEST)
     if(KDE4_BUILD_TESTS)
-        kde4_add_executable(krecipes-${_TEST} tests/${_TEST}.cpp)
-        target_link_libraries(krecipes-${_TEST} ${UNIT_TEST_LIBRARIES})
+        kde4_add_executable(krecipes-import-export-${_TEST} tests/import-export/${_TEST}.cpp)
+        target_link_libraries(krecipes-import-export-${_TEST} ${UNIT_TEST_LIBRARIES})
 
         set(_TEST_DATA
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/${_TEST}.txt
-            ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_photo.jpg)
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/import-export/${_TEST}.txt
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/import-export/test_photo.jpg)
 
-        add_test(NAME krecipes-${_TEST} COMMAND $<TARGET_FILE:krecipes-${_TEST}> ${_TEST_DATA})
+        add_test(NAME krecipes-import-export-${_TEST}
+            COMMAND $<TARGET_FILE:krecipes-import-export-${_TEST}> ${_TEST_DATA})
     endif(KDE4_BUILD_TESTS)
-    install(TARGETS krecipes-${_TEST} ${INSTALL_TARGETS_DEFAULT_ARGS})
+    install(TARGETS krecipes-import-export-${_TEST} ${INSTALL_TARGETS_DEFAULT_ARGS})
 endmacro(add_import_export_test)
 
-macro(add_unit_test _TEST)
-    kde4_add_unit_test(krecipes-${_TEST} tests/${_TEST}.cpp)
-    target_link_libraries(krecipes-${_TEST} ${UNIT_TEST_LIBRARIES})
-    install(TARGETS krecipes-${_TEST} ${INSTALL_TARGETS_DEFAULT_ARGS})
-endmacro(add_unit_test)
+macro(add_datablocks_test _TEST)
+    kde4_add_unit_test(krecipes-datablocks-${_TEST} tests/datablocks/${_TEST}.cpp)
+    target_link_libraries(krecipes-datablocks-${_TEST} ${UNIT_TEST_LIBRARIES})
+    install(TARGETS krecipes-datablocks-${_TEST} ${INSTALL_TARGETS_DEFAULT_ARGS})
+endmacro(add_datablocks_test)
 
 macro(add_database_test _TEST)
     kde4_add_unit_test(krecipes-database-${_TEST} tests/database/${_TEST}.cpp)
@@ -288,8 +289,8 @@ set(UNIT_TEST_LIBRARIES krecipescommon
 foreach(_TEST ${IMPORT_EXPORT_TESTS})
     add_import_export_test(${_TEST})
 endforeach(_TEST)
-foreach(_TEST ${UNIT_TESTS})
-    add_unit_test(${_TEST})
+foreach(_TEST ${DATABLOCKS_TESTS})
+    add_datablocks_test(${_TEST})
 endforeach(_TEST)
 foreach(_TEST ${DATABASE_TESTS})
     add_database_test(${_TEST})

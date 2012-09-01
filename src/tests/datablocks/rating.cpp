@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 
-#include "test_rating.h"
+#include "rating.h"
 
 #include "datablocks/rating.h"
 
@@ -144,4 +144,4 @@ void Test_Rating::testNumberSumAndAverage()
 
 QTEST_MAIN(Test_Rating)
 
-#include "test_rating.moc"
+#include "rating.moc"

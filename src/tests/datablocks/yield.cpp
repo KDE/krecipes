@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 
-#include "test_yield.h"
+#include "yield.h"
 
 #include "datablocks/yield.h"
 
@@ -73,4 +73,4 @@ void Test_Yield::testToString()
 
 QTEST_MAIN(Test_Yield)
 
-#include "test_yield.moc"
+#include "yield.moc"

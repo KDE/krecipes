@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 
-#include "test_unit.h"
+#include "unit.h"
 
 #include "datablocks/unit.h"
 
@@ -139,4 +139,4 @@ void Test_Unit::testDetermineName()
 
 QTEST_MAIN(Test_Unit)
 
-#include "test_unit.moc"
+#include "unit.moc"
