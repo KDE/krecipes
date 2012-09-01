@@ -344,16 +344,17 @@ void RecipeMLImporter::readRecipemlPreptime( const QDomElement &preptime )
 void RecipeMLImporter::readRecipemlQty( const QDomElement &qty, Ingredient &ing )
 {
 	QDomNodeList qtyChilds = qty.childNodes();
-	bool ok;
 
 	for ( int i = 0; i < qtyChilds.count(); i++ ) {
 		QDomElement qtyChild = qtyChilds.item( i ).toElement();
 		QString tagName = qtyChild.tagName();
 		if ( tagName == "range" )
 			readRecipemlRange( qtyChild, ing.amount, ing.amount_offset );
-		else if ( tagName.isEmpty() )
-			ing.amount = MixedNumber::fromString( qty.text(), &ok, false ).toDouble();
-		else
+		else if ( tagName.isEmpty() ) {
+			MixedNumber number;
+			MixedNumber::fromString( qty.text(), number, false );
+			ing.amount = number.toDouble();
+		} else
 			kDebug() << "Unknown tag within <qty>: " << tagName ;
 	}
 }
@@ -362,15 +363,17 @@ void RecipeMLImporter::readRecipemlRange( const QDomElement& range, double &amou
 {
 	QDomNodeList rangeChilds = range.childNodes();
 	double q1 = 1, q2 = 0; // default quantity assumed by RecipeML DTD
-	bool ok;
+	MixedNumber number;
 	for ( int j = 0; j < rangeChilds.count(); j++ ) {
 		QDomElement rangeChild = rangeChilds.item( j ).toElement();
 		QString subTagName = rangeChild.tagName();
-		if ( subTagName == "q1" )
-			q1 = MixedNumber::fromString( rangeChild.text(), &ok, false ).toDouble();
-		else if ( subTagName == "q2" )
-			q2 = MixedNumber::fromString( rangeChild.text(), &ok, false ).toDouble();
-		else
+		if ( subTagName == "q1" ) {
+			MixedNumber::fromString( rangeChild.text(), number, false );
+			q1 = number.toDouble();
+		} else if ( subTagName == "q2" ) {
+			MixedNumber::fromString( rangeChild.text(), number, false );
+			q2 = number.toDouble();
+		} else
 			kDebug() << "Unknown tag within <range>: " << subTagName ;
 	}
 

@@ -139,7 +139,9 @@ void ResizeRecipeDialog::accept()
 	else if ( buttonGroup->selected() == yieldRadioButton ) {
 		if ( newYieldInput->isInputValid() ) {
 			double new_yield = newYieldInput->value().toDouble();
-			double current_yield = MixedNumber::fromString(currentYieldInput->text()).toDouble();
+			MixedNumber number;
+			MixedNumber::fromString( currentYieldInput->text(), number, true );
+			double current_yield = number.toDouble();
 
 			resizeRecipe( new_yield / current_yield );
 		}
@@ -164,7 +166,9 @@ void ResizeRecipeDialog::accept()
 
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
-	m_recipe->yield.setAmount(MixedNumber::fromString(currentYieldInput->text()).toDouble() * factor);
+	MixedNumber number;
+	MixedNumber::fromString( currentYieldInput->text(), number, true );
+	m_recipe->yield.setAmount( number.toDouble() * factor );
 
 	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it ) {
 		( *ing_it ).amount = ( *ing_it ).amount * factor;

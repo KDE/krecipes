@@ -115,16 +115,22 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 		}
 		else if ( tagName == "IngR" ) {
 			double quantity1=0, quantity2=0, offset=0;
-			bool ok;
 			QStringList qtyStrList = el.attribute( "qty" ).split( ' ' );
 			if ( !qtyStrList.isEmpty() ) {
-				quantity1 = MixedNumber::fromString( qtyStrList.first(), &ok, false ).toDouble();
-				if ( !ok )
+				QValidator::State state;
+				MixedNumber number;
+				state = MixedNumber::fromString( qtyStrList.first(), number, false );
+				if ( state != QValidator::Acceptable )
 					quantity1 = 0;
-				if ( qtyStrList.constBegin() != qtyStrList.constEnd() )
-					quantity2 = MixedNumber::fromString( qtyStrList.last(), &ok, false ).toDouble();
-						if ( !ok )
-							quantity2 = 0;
+				else
+					quantity1 = number.toDouble();
+				if ( qtyStrList.constBegin() != qtyStrList.constEnd() ) {
+					state = MixedNumber::fromString( qtyStrList.last(), number, false );
+					if ( state != QValidator::Acceptable )
+						quantity2 = 0;
+					else
+						quantity2 = number.toDouble();
+				}
 			}
 			offset = quantity2 - quantity1;
 			Ingredient new_ing( el.attribute( "name" ),

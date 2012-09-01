@@ -200,6 +200,14 @@ set(datablocks_SRCS
    datablocks/yield.cpp
    )
 
+
+############ validators ##############
+
+set(validators_SRCS
+   validators/mixednumbervalidator.cpp
+   )
+
+
 ############### common library ################
 # The reason to have this static library is to compile some files
 # once for *all* executables in this project.
@@ -209,6 +217,7 @@ kde4_add_library(krecipescommon STATIC
    ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
    ${datablocks_SRCS} ${krecipesthreadedqueries_SRCS}
+   ${validators_SRCS}
    klomanager.cpp propertycalculator.cpp)
 
 target_link_libraries(krecipescommon
@@ -231,6 +240,7 @@ set(UNIT_TESTS
     test_unitratio
     test_unitratiolist
     test_weight
+    mixednumber
     )
 
 set(DATABASE_TESTS

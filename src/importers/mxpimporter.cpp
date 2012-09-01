@@ -182,9 +182,10 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 			QString amount_str = current.mid( 0, 9 ).simplified();
 			if ( !amount_str.isEmpty() )  // case of amount_str.isEmpty() correctly handled by class default
 			{
-				bool ok;
-				MixedNumber amount( MixedNumber::fromString( amount_str, &ok ) );
-				if ( !ok )
+				MixedNumber amount;
+				QValidator::State state;
+				state = MixedNumber::fromString( amount_str, amount, false );
+				if ( state != QValidator::Acceptable )
 				{
 					addWarningMsg( i18n( "While loading recipe \"%1\" Invalid amount \"%2\" in the line \"%3\"" , recipe.title, amount_str , current.trimmed() ) );
 					current = stream.readLine();

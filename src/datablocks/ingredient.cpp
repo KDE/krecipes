@@ -78,8 +78,13 @@ void Ingredient::setAmount( const QString &range, bool *ok )
 	double min, max=0;
 
 	if ( MixedNumber::isFraction( amount_min ) ) {
-		MixedNumber mixed_min = MixedNumber::fromString( amount_min, ok );
-		if ( ok && *ok == false ) return;
+		MixedNumber mixed_min;
+		QValidator::State state;
+		state = MixedNumber::fromString( amount_min, mixed_min, true );
+		if ( state != QValidator::Acceptable ) {
+			if (ok) *ok = false;
+			return;
+		}
 		min = mixed_min.toDouble();
 	} else {
 		min = locale->readNumber( amount_min, ok );
@@ -88,8 +93,13 @@ void Ingredient::setAmount( const QString &range, bool *ok )
 
 	if ( !amount_max.isEmpty() ) {
 		if ( MixedNumber::isFraction( amount_max ) ) {
-			MixedNumber mixed_max = MixedNumber::fromString( amount_max, ok );
-			if ( ok && *ok == false ) return;
+			MixedNumber mixed_max;
+			QValidator::State state;
+			state = MixedNumber::fromString( amount_max, mixed_max, true );
+			if ( state != QValidator::Acceptable ) {
+				if (ok) *ok = false;
+				return;
+			}
 			max = mixed_max.toDouble();
 		} else {
 			max = locale->readNumber( amount_max, ok );

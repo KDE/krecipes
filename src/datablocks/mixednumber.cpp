@@ -16,6 +16,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <QIntValidator>
+#include <QDoubleValidator>
+
+
 QString beautify( const QString &num )
 {
 	QString copy( num );
@@ -96,24 +100,30 @@ MixedNumber::MixedNumber( double decimal, double precision ) :
 MixedNumber::~MixedNumber()
 {}
 
-int MixedNumber::getNumerator( const QString &input, int space_index, int slash_index, bool *ok )
+QValidator::State MixedNumber::getNumerator( const QString &input, int space_index, int slash_index, int &result )
 {
-	return input.mid( space_index + 1, slash_index - space_index - 1 ).toInt( ok );
+	QIntValidator int_validator;
+	QString buffer = input.mid( space_index + 1, slash_index - space_index - 1 );
+	result = buffer.toInt();
+	int pos = 0; //we are going to ignore this parameter
+	kDebug() << buffer;
+	return int_validator.validate(buffer, pos);
 }
 
-int MixedNumber::getDenominator( const QString &input, int slash_index, bool *ok )
+QValidator::State MixedNumber::getDenominator( const QString &input, int slash_index, int &result)
 {
-	return input.mid( slash_index + 1, input.length() ).toInt( ok );
+	QIntValidator int_validator;
+	QString buffer = input.mid( slash_index + 1 );
+	result = buffer.toInt();
+	int pos = 0; //we are going to ignore this parameter
+	return int_validator.validate(buffer, pos);
 }
 
-MixedNumber MixedNumber::fromString( const QString &str, bool *ok, bool locale_aware )
+QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &result, bool locale_aware )
 {
 	QString input = str.trimmed();
 	if ( input.isEmpty() ) {
-		if ( ok ) {
-			*ok = true;
-		}
-		return MixedNumber();
+		return QValidator::Intermediate;
 	}
 
 	KLocale *locale = KGlobal::locale();
@@ -124,96 +134,101 @@ MixedNumber MixedNumber::fromString( const QString &str, bool *ok, bool locale_a
 	int numerator;
 	int denominator;
 
+	if ( input.count(" ") > 1 ) {
+		return QValidator::Invalid;
+	}
+	if ( input.count("/") > 1 ) {
+		return QValidator::Invalid;
+	}
+
 	int space_index = input.indexOf( " " );
 	int slash_index = input.indexOf( "/" );
+	if ( space_index > slash_index ) {
+		return QValidator::Invalid;
+	}
 
-	if ( space_index == -1 ) {
-		if ( slash_index == -1 )  //input contains no fractional part
+	if ( (space_index == -1) && (slash_index == -1) ) {  //input contains no fractional part
+		QString decimal_symbol = ( locale_aware ) ? locale->decimalSymbol() : ".";
+		if ( input.endsWith( decimal_symbol ) )
 		{
-			QString decimal_symbol = ( locale_aware ) ? locale->decimalSymbol() : ".";
-			if ( input.endsWith( decimal_symbol ) )
-			{
-				if ( ok ) {
-					*ok = false;
-				}
-				return MixedNumber();
-			}
-
-			double decimal = ( locale_aware ) ? locale->readNumber( input, &num_ok ) : input.toDouble( &num_ok );
-
-			if ( !num_ok )
-			{
-				if ( ok ) {
-					*ok = false;
-				}
-				return MixedNumber();
-			}
-
-			if ( ok )
-			{
-				*ok = true;
-			}
-			return MixedNumber( decimal );
+			return QValidator::Intermediate;
 		}
-		else //input just contains a fraction
+
+		double decimal = ( locale_aware ) ? locale->readNumber( input, &num_ok ) : input.toDouble( &num_ok );
+
+		if ( !num_ok )
 		{
-			whole = 0;
+			QDoubleValidator double_validator;
+			if (!locale_aware)
+				double_validator.setLocale( QLocale::c() );
+			//Should return Intermediate or Invalid, whichever it's appropiate.
+			int pos = 0; //we are going to ignore this parameter
+			return double_validator.validate( input, pos );
+		}
 
-			numerator = MixedNumber::getNumerator( input, space_index, slash_index, &num_ok );
-			if ( !num_ok ) {
-				if ( ok ) {
-					*ok = false;
-				}
-				return MixedNumber();
+		result = MixedNumber( decimal );
+		return QValidator::Acceptable;
+	} else if ( (space_index == -1) && (slash_index != -1) ) {  //input just contains a fraction
+		if ( input.endsWith( "/" ) )
+		{
+			return QValidator::Intermediate;
+		}
+
+		whole = 0;
+
+		QValidator::State num_state;
+		num_state = MixedNumber::getNumerator( input, space_index, slash_index, numerator );
+		kDebug() << num_state;
+		if ( num_state != QValidator::Acceptable ) {
+			return QValidator::Invalid;
+		}
+
+		QValidator::State den_state;
+		den_state = MixedNumber::getDenominator( input, slash_index, denominator );
+		if ( denominator == 0 ) {
+			return QValidator::Invalid;
+		} else {
+			result = MixedNumber( whole, numerator, denominator );
+			return den_state;
+		}
+	} else if ( (space_index != -1) && (slash_index == -1) ) {  //input contains an incomplete mixed number
+		whole = input.mid( 0, space_index ).toInt( &num_ok );
+		if ( !num_ok ) {
+			return QValidator::Invalid;
+		} else {
+			QIntValidator int_validator;
+			QValidator::State state;
+			int pos = 0; //we are going to ignore this parameter
+			QString buffer = input.mid(space_index+1);
+			state = int_validator.validate( buffer, pos );
+			if ( state == QValidator::Invalid ){
+				return QValidator::Invalid;
+			} else {
+				return QValidator::Intermediate;
 			}
-
-			denominator = MixedNumber::getDenominator( input, slash_index, &num_ok );
-			if ( !num_ok || denominator == 0 ) {
-				if ( ok ) {
-					*ok = false;
-				}
-				return MixedNumber();
-			}
-
-			if ( ok ) {
-				*ok = true;
-			}
-			return MixedNumber( whole, numerator, denominator );
 		}
-		if ( ok ) {
-			*ok = false;
+	} else if ( (space_index != -1) && (slash_index != -1) ) { //input contains a mixed number
+		whole = input.mid( 0, space_index ).toInt( &num_ok );
+		if ( !num_ok ) {
+			return QValidator::Invalid;
 		}
-		return MixedNumber();
-	}
 
-	whole = input.mid( 0, space_index ).toInt( &num_ok );
-	if ( !num_ok ) {
-		if ( ok ) {
-			*ok = false;
+		QValidator::State num_state;
+		num_state = MixedNumber::getNumerator( input, space_index, slash_index, numerator );
+		if ( num_state != QValidator::Acceptable ) {
+			return QValidator::Invalid;
 		}
-		return MixedNumber();
-	}
 
-	numerator = MixedNumber::getNumerator( input, space_index, slash_index, &num_ok );
-	if ( !num_ok ) {
-		if ( ok ) {
-			*ok = false;
+		QValidator::State den_state;
+		den_state = MixedNumber::getDenominator( input, slash_index, denominator );
+		if ( denominator == 0 ) {
+			return QValidator::Invalid;
+		} else {
+			result = MixedNumber( whole, numerator, denominator );
+			return den_state;
 		}
-		return MixedNumber();
 	}
-
-	denominator = MixedNumber::getDenominator( input, slash_index, &num_ok );
-	if ( !num_ok || denominator == 0 ) {
-		if ( ok ) {
-			*ok = false;
-		}
-		return MixedNumber();
-	}
-
-	if ( ok ) {
-		*ok = true;
-	}
-	return MixedNumber( whole, numerator, denominator );
+	return QValidator::Invalid;
 }
 
 bool MixedNumber::isFraction( const QString &input )

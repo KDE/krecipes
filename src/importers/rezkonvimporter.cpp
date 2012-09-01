@@ -294,8 +294,12 @@ void RezkonvImporter::readRange( const QString &range_str, double &amount, doubl
 	QString from = range_str.section( '-', 0, 0 );
 	QString to   = range_str.section( '-', 1, 1 );
 
-	amount = MixedNumber::fromString( from ).toDouble();
+	MixedNumber number;
+	MixedNumber::fromString( from, number, false);
+	amount = number.toDouble();
 
-	if ( !to.trimmed().isEmpty() )
-		amount_offset = MixedNumber::fromString( to ).toDouble() - amount;
+	if ( !to.trimmed().isEmpty() ) {
+		MixedNumber::fromString( to, number, false );
+		amount_offset = number.toDouble() - amount;
+	}
 }

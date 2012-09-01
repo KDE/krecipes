@@ -192,9 +192,10 @@ void RefineShoppingListDialog::itemRenamed( Q3ListViewItem* item, const QString 
 	if ( col == 1 ) {
 		IngredientList::iterator found_it = *item_ing_map.find( item );
 
-		bool ok;
-		MixedNumber amount = MixedNumber::fromString( new_text, &ok );
-		if ( ok ) {
+		QValidator::State state;
+		MixedNumber amount;
+		state = MixedNumber::fromString( new_text, amount, true );
+		if ( state == QValidator::Acceptable ) {
 			( *found_it ).amount = amount.toDouble();
 		}
 		else { //revert back to the valid amount string

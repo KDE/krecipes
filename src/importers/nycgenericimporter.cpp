@@ -154,9 +154,10 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 
 	if ( !ingredient_line.empty() )  //probably an unnecessary check... but to be safe
 	{
-		bool ok;
-		MixedNumber test_amount = MixedNumber::fromString( ingredient_line[ 0 ], &ok );
-		if ( ok )
+		MixedNumber test_amount;
+		QValidator::State state;
+		state = MixedNumber::fromString( ingredient_line[ 0 ], test_amount, false );
+		if ( state != QValidator::Acceptable )
 		{
 			amount = amount + test_amount;
 			ingredient_line.pop_front();
@@ -165,9 +166,10 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	}
 	if ( !ingredient_line.empty() )  //probably an unnecessary check... but to be safe
 	{
-		bool ok;
-		MixedNumber test_amount = MixedNumber::fromString( ingredient_line[ 0 ], &ok );
-		if ( ok )
+		MixedNumber test_amount;
+		QValidator::State state;
+		state = MixedNumber::fromString( ingredient_line[ 0 ], test_amount, false );
+		if ( state == QValidator::Acceptable )
 		{
 			amount = amount + test_amount;
 			ingredient_line.pop_front();

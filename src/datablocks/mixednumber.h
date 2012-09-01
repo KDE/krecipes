@@ -10,6 +10,7 @@
 #ifndef MIXEDNUMBER_H
 #define MIXEDNUMBER_H
 
+#include <QValidator>
 #include <QString>
 
 /** remove any extra zeros on the end of the string and the decimal if a whole number */
@@ -86,13 +87,13 @@ public:
 	/** Parses the given QString as a mixed number.  The input can be
 	  * expressed as a mixed number in the form "a b/c", or as a decimal.
 	  */
-	static MixedNumber fromString( const QString &input, bool *ok = 0, bool locale_aware = true );
+	static QValidator::State fromString( const QString &input, MixedNumber &result, bool locale_aware );
 
 	static bool isFraction( const QString &input );
 
 private:
-	static int getNumerator( const QString &input, int space_index, int slash_index, bool *ok );
-	static int getDenominator( const QString &input, int slash_index, bool *ok );
+	static QValidator::State getNumerator( const QString &input, int space_index, int slash_index, int &result );
+	static QValidator::State getDenominator( const QString &input, int slash_index, int &result );
 
 	int gcd( int, int );
 

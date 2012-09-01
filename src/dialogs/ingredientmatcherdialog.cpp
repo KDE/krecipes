@@ -164,7 +164,9 @@ void IngredientMatcherDialog::itemRenamed( Q3ListViewItem* item, const QPoint &,
 		AmountUnitInput *amountEdit = new AmountUnitInput( box, database );
 		// Set the values from the item
 		if ( !item->text(1).isEmpty() ) {
-			amountEdit->setAmount( MixedNumber::fromString(item->text(2)) );
+			MixedNumber number;
+			MixedNumber::fromString( item->text(2), number, true );
+			amountEdit->setAmount( number );
 			Unit u;
 			u.setId(item->text(3).toInt());
 			amountEdit->setUnit( u );
