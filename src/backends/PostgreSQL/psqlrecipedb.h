@@ -32,7 +32,6 @@ public:
 	explicit PSqlRecipeDB( const QString& host, const QString& user = QString(), const QString& pass = QString(), const QString& DBName = DEFAULT_DB_NAME, int port = 0 );
 	~PSqlRecipeDB( void );
 
-	int lastInsertID();
 	void initializeData();
 
 	void createTable( const QString &tableName );
@@ -57,6 +56,7 @@ protected:
 		return PSQL_DRIVER;
 	}
 	virtual int getNextInsertID( const QString &table, const QString &column );
+	virtual RecipeDB::IdType lastInsertId( const QSqlQuery &query );
 
 	virtual void empty( void );
 

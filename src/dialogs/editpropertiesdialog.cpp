@@ -560,8 +560,7 @@ void EditPropertiesDialog::loadUSDAData()
 			//FIXME: take advantage of abbreviations
 			Unit unit("g","g");
 			unit.setType(Unit::Mass);
-			db->createNewUnit( unit );
-			grams_id = db->lastInsertID();
+			grams_id = db->createNewUnit( unit );
 		}
 		else {
 			Unit unit = db->unitName(grams_id);
@@ -584,8 +583,7 @@ void EditPropertiesDialog::loadUSDAData()
 		for ( QStringList::const_iterator it = data.constBegin()+2; propertyIt != property_data_list.constEnd(); ++it, ++propertyIt ) {
 			int property_id = property_list.findByName( (*propertyIt).name );
 			if ( property_id == -1 ) {
-				db->addProperty( (*propertyIt).name, (*propertyIt).unit );
-				property_id = db->lastInsertID();
+				property_id = db->addProperty( (*propertyIt).name, (*propertyIt).unit );
 			}
 
 			double amount = ( *it ).toDouble() / 100.0; //data givin per 100g so divide by 100 to get the amount in 1 gram
@@ -623,19 +621,16 @@ void EditPropertiesDialog::loadUSDAData()
 				if ( unitID == -1 ) {
 					for ( USDA::UnitDataList::const_iterator it = unit_data_list.constBegin(); it != unit_data_list.constEnd(); ++it ) {
 						if ( w.perAmountUnit() == (*it).translation || w.perAmountUnit() == (*it).translationPlural ) {
-							db->createNewUnit( Unit((*it).translation,(*it).translationPlural) );
+							unitID = db->createNewUnit( Unit((*it).translation,(*it).translationPlural) );
 						}
 					}
-
-					unitID = db->lastInsertID();
 				}
 				w.setPerAmountUnitId(unitID);
 
 				if ( !w.prepMethod().isEmpty() ) {
 					int prepID = db->findExistingPrepByName( w.prepMethod() );
 					if ( prepID == -1 ) {
-						db->createNewPrepMethod( w.prepMethod() );
-						prepID = db->lastInsertID();
+						prepID = db->createNewPrepMethod( w.prepMethod() );
 					}
 					w.setPrepMethodId(prepID);
 				}

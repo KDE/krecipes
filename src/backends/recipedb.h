@@ -159,21 +159,21 @@ public:
 	virtual void commit() = 0;
 
 	virtual void addIngredientWeight( const Weight & ) = 0;
-	virtual void addProperty( const QString &name, const QString &units ) = 0;
+	virtual RecipeDB::IdType addProperty( const QString &name, const QString &units ) = 0;
 	virtual void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID ) = 0;
 	virtual void addUnitToIngredient( int ingredientID, int unitID ) = 0;
 
 	virtual void categorizeRecipe( int recipeID, const ElementList &categoryList ) = 0;
 	virtual void changePropertyAmountToIngredient( int ingredientID, int propertyID, double amount, int per_units ) = 0;
 
-	virtual void createNewAuthor( const QString &authorName ) = 0;
-	virtual void createNewCategory( const QString &categoryName, int parent_id = -1 ) = 0;
-	virtual void createNewIngGroup( const QString &name ) = 0;
-	virtual void createNewIngredient( const QString &ingredientName ) = 0;
-	virtual void createNewPrepMethod( const QString &prepMethodName ) = 0;
-	virtual void createNewRating( const QString &name ) = 0;
-	virtual void createNewUnit( const Unit &unit ) = 0;
-	virtual void createNewYieldType( const QString &type ) = 0;
+	virtual RecipeDB::IdType createNewAuthor( const QString &authorName ) = 0;
+	virtual RecipeDB::IdType createNewCategory( const QString &categoryName, int parent_id = -1 ) = 0;
+	virtual RecipeDB::IdType createNewIngGroup( const QString &name ) = 0;
+	virtual RecipeDB::IdType createNewIngredient( const QString &ingredientName ) = 0;
+	virtual RecipeDB::IdType createNewPrepMethod( const QString &prepMethodName ) = 0;
+	virtual RecipeDB::IdType createNewRating( const QString &name ) = 0;
+	virtual RecipeDB::IdType createNewUnit( const Unit &unit ) = 0;
+	virtual RecipeDB::IdType createNewYieldType( const QString &type ) = 0;
 
 	virtual void emptyData( void ) = 0;
 	virtual void empty( void ) = 0;
@@ -206,8 +206,6 @@ public:
 	virtual bool ingredientContainsUnit( int ingredientID, int unitID ) = 0;
 
 	virtual void initializeData( void );
-
-	virtual int lastInsertID() = 0;
 
 	virtual int loadAuthors( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true ) = 0;

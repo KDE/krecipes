@@ -43,19 +43,6 @@ LiteRecipeDB::~LiteRecipeDB()
 {
 }
 
-int LiteRecipeDB::lastInsertID()
-{
-	kDebug();
-	int lastID = -1;
-	QSqlQuery query( "SELECT lastInsertID()", *database );
-	if ( query.isActive() && query.first() )
-		lastID = query.value(0).toInt();
-
-	//kDebug()<<"lastInsertID(): "<<lastID;
-
-	return lastID;
-}
-
 QStringList LiteRecipeDB::backupCommand() const
 {
 	KConfigGroup config( KGlobal::config(), "Server" );
@@ -626,12 +613,12 @@ void LiteRecipeDB::portOldDatabases( float version )
 				          + "','" + escape( copyQuery.value( 6 ).toString() )
 				          + "','" + escape( copyQuery.value( 7 ).toString() )
 				          + "')";
-				database->exec( command );
+				QSqlQuery query = database->exec( command );
 
 				int prep_method_id = copyQuery.value( 5 ).toInt();
 				if ( prep_method_id != -1 ) {
 					command = "INSERT INTO prep_method_list VALUES('"
-							+ QString::number(lastInsertID())
+							+ QString::number(lastInsertId(query))
 						+ "','" + QString::number(prep_method_id)
 						+ "','1" //order_index
 						+ "')";

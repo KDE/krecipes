@@ -93,9 +93,7 @@ void TestDatabaseAuthors::cleanupTestCase()
 
 void TestDatabaseAuthors::createAuthors( RecipeDB * database )
 {
-	database->createNewAuthor( "Ethan" );
-
-	RecipeDB::IdType last_insert_id = database->lastInsertID();
+	RecipeDB::IdType last_insert_id = database->createNewAuthor( "Ethan" );
 	QVERIFY( last_insert_id != RecipeDB::InvalidId );
 
 	RecipeDB::IdType author_id = database->findExistingAuthorByName( "Ethan" );

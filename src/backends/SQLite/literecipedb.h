@@ -31,8 +31,6 @@ public:
 	LiteRecipeDB( const QString &DBName = DEFAULT_DB_NAME );
 	~LiteRecipeDB( void );
 
-	virtual int lastInsertID();
-
 	virtual void createTable( const QString &tableName );
 
 	virtual int maxAuthorNameLength() const;

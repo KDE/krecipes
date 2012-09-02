@@ -109,8 +109,7 @@ void NukeConfigWidget::proceed()
 	progress = 0;
 	for ( i = 0; i < root_categories_number; i++ ) {
 		categoryName = rootCategoryNamePattern + " " + QString::number( i );
-		database->createNewCategory( categoryName );
-		last_id = database->lastInsertID();
+		last_id = database->createNewCategory( categoryName );
 		progress++;
 		ui->m_progressBar->setValue( progress );
 		Element category;
@@ -127,8 +126,7 @@ void NukeConfigWidget::proceed()
 				author.name = authorNamePattern + " "
 					+ QString::number( i ) + " " + QString::number( j )
 					+ " " + QString::number( k );
-				database->createNewAuthor( author.name );
-				author.id = database->lastInsertID();
+				author.id = database->createNewAuthor( author.name );
 				recipe.authorList << author;
 			}
 			database->saveRecipe( &recipe );
@@ -138,12 +136,11 @@ void NukeConfigWidget::proceed()
 		for ( j = 0; j < subcategories_number; j++ ) {
 			categoryName = subcategoryNamePattern + " " 
 				+ QString::number( i ) + " " + QString::number( j );
-			database->createNewCategory( categoryName, last_id );
+			Element subcategory;
+			subcategory.id = database->createNewCategory( categoryName, last_id );
+			subcategory.name = categoryName;
 			progress++;
 			ui->m_progressBar->setValue( progress );
-			Element subcategory;
-			subcategory.id = database->lastInsertID();
-			subcategory.name = categoryName;
 			for ( k = 0; k < recipes_number; k++ ) {
 				Recipe recipe;
 				recipe.recipeID = -1; //This means it's a new recipe.
@@ -156,8 +153,7 @@ void NukeConfigWidget::proceed()
 					author.name = authorNamePattern + " "
 						+ QString::number( i ) + " " + QString::number( j )
 						+ " " + QString::number( k ) + " " + QString::number( l );
-					database->createNewAuthor( author.name );
-					author.id = database->lastInsertID();
+					author.id = database->createNewAuthor( author.name );
 					recipe.authorList << author;
 				}
 				database->saveRecipe( &recipe );

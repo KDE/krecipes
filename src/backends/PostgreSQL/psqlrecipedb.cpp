@@ -577,8 +577,9 @@ void PSqlRecipeDB::addColumn( const QString &new_table_sql, const QString &new_c
 	query.exec( "DROP TABLE "+table_name+"_copy;" );
 }
 
-int PSqlRecipeDB::lastInsertID()
-{
+RecipeDB::IdType PSqlRecipeDB::lastInsertId(const QSqlQuery &query)
+{	
+	Q_UNUSED( query )
 	return last_insert_id;
 }
 

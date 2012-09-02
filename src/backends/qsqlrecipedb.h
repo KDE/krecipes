@@ -85,21 +85,21 @@ public:
 	virtual void commit();
 
 	void addIngredientWeight( const Weight & );
-	void addProperty( const QString &name, const QString &units );
+	RecipeDB::IdType addProperty( const QString &name, const QString &units );
 	void addPropertyToIngredient( int ingredientID, int propertyID, double amount, int perUnitsID );
 	void addUnitToIngredient( int ingredientID, int unitID );
 
 	void categorizeRecipe( int recipeID, const ElementList &categoryList );
 	void changePropertyAmountToIngredient( int ingredientID, int propertyID, double amount, int per_units );
 
-	void createNewAuthor( const QString &authorName );
-	void createNewCategory( const QString &categoryName, int parent_id = -1 );
-	void createNewIngGroup( const QString &name );
-	void createNewIngredient( const QString &ingredientName );
-	void createNewPrepMethod( const QString &prepMethodName );
-	void createNewRating( const QString &name );
-	void createNewUnit( const Unit &unit );
-	void createNewYieldType( const QString &type );
+	RecipeDB::IdType createNewAuthor( const QString &authorName );
+	RecipeDB::IdType createNewCategory( const QString &categoryName, int parent_id = -1 );
+	RecipeDB::IdType createNewIngGroup( const QString &name );
+	RecipeDB::IdType createNewIngredient( const QString &ingredientName );
+	RecipeDB::IdType createNewPrepMethod( const QString &prepMethodName );
+	RecipeDB::IdType createNewRating( const QString &name );
+	RecipeDB::IdType createNewUnit( const Unit &unit );
+	RecipeDB::IdType createNewYieldType( const QString &type );
 
 	void emptyData( void );
 	void empty( void );
@@ -221,6 +221,7 @@ public:
 
 protected:
 	void execSQL( const QString &command );
+	virtual RecipeDB::IdType lastInsertId( const QSqlQuery &query );
 
 private:
 	void loadElementList( ElementList *elList, QSqlQuery *query );

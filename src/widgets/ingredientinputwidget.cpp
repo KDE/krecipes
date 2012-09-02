@@ -473,8 +473,7 @@ int IngredientInputWidget::createNewIngredientIfNecessary( const QString &ing, R
 
 	id = database->findExistingIngredientByName( ing );
 	if (  id == -1 ) {
-		database->createNewIngredient( ing );
-		id = database->lastInsertID();
+		id = database->createNewIngredient( ing );
 	}
 	return id;
 }
@@ -488,9 +487,7 @@ int IngredientInputWidget::createNewUnitIfNecessary( const QString &unit, bool p
 			new CreateUnitDialog( 0, ( plural ) ? QString() : unit, ( !plural ) ? QString() : unit );
 		if ( getUnit->exec() == QDialog::Accepted ) {
 			new_unit = getUnit->newUnit();
-			database->createNewUnit( new_unit );
-
-			id = database->lastInsertID();
+			id = database->createNewUnit( new_unit );
 		}
 		delete getUnit;
 	}
@@ -522,8 +519,7 @@ QList<int> IngredientInputWidget::createNewPrepIfNecessary( const ElementList &p
 			int id = database->findExistingPrepByName( (*it).name.trimmed() );
 			if ( id == -1 )
 			{
-				database->createNewPrepMethod( (*it).name.trimmed() );
-				id = database->lastInsertID();
+				id = database->createNewPrepMethod( (*it).name.trimmed() );
 			}
 			ids << id;
 		}
@@ -541,8 +537,7 @@ int IngredientInputWidget::createNewGroupIfNecessary( const QString &group, Reci
 		int id = database->findExistingIngredientGroupByName( group );
 		if ( id == -1 ) //creating new
 		{
-			database->createNewIngGroup( group );
-			id = database->lastInsertID();
+			id = database->createNewIngGroup( group );
 		}
 
 		return id;

@@ -972,8 +972,7 @@ void RecipeDB::importUSDADatabase()
 			if ( !w.prepMethod().isEmpty() ) {
 				int prepID = findExistingPrepByName( w.prepMethod() );
 				if ( prepID == -1 ) {
-					createNewPrepMethod( w.prepMethod() );
-					prepID = lastInsertID();
+					prepID = createNewPrepMethod( w.prepMethod() );
 				}
 				w.setPrepMethodId(prepID);
 			}
@@ -1016,8 +1015,7 @@ int createIngredient( const QString &name, RecipeDB *database, bool do_checks )
 
 	if ( assigned_id == -1 ) {
 		ingredientExisted = false;
-		database->createNewIngredient( name );
-		assigned_id = database->lastInsertID();
+		assigned_id = database->createNewIngredient( name );
 	}
 
 	return assigned_id;
@@ -1031,8 +1029,7 @@ int createUnit( const QString &name, Unit::Type type, RecipeDB *database )
 	{
 		Unit unit(name, name);
 		unit.setType(type);
-		database->createNewUnit( unit );
-		assigned_id = database->lastInsertID();
+		assigned_id = database->createNewUnit( unit );
 	}
 	//keep what the user specified if the type here is Other
 	else if ( type != Unit::Other ) {
@@ -1055,8 +1052,7 @@ void create_properties( RecipeDB *database, Q3ValueList<USDA::PropertyData> &pro
 		(*it).id = property_list.findByName( (*it).name );
 		if ( (*it).id == -1 ) //doesn't exist, so insert it and set property_data_list[i].id
 		{
-			database->addProperty( (*it).name, (*it).unit );
-			(*it).id = database->lastInsertID();
+			it->id = database->addProperty( (*it).name, (*it).unit );
 		}
 	}
 }

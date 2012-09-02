@@ -89,11 +89,12 @@ void SelectCategoriesDialog::createNewCategory( void )
 			KMessageBox::error( this, i18ncp( "@info", "Category name cannot be longer than 1 character.", "Category name cannot be longer than %1 characters.", database->maxCategoryNameLength() ) );
 			return ;
 		}
-
-		database->createNewCategory( result, subcategory ); // Create the new category in the database
+		// Create the new category in the database
+		RecipeDB::IdType last_insert_id;
+		last_insert_id = database->createNewCategory( result, subcategory );
 
 		//a listview item will automatically be created, but we need to turn it on
-		Element new_cat( result, database->lastInsertID() );
+		Element new_cat( result, last_insert_id );
 		Q3CheckListItem *new_item = ((Q3CheckListItem*)categoryListView->findItem( QString::number(new_cat.id), 1 ));
 		if ( new_item )
 			new_item->setOn(true);

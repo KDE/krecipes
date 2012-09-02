@@ -739,8 +739,7 @@ void Krecipes::mergeSimilarCategories()
 
 		int id = m_view->database->findExistingCategoryByName(name);
 		if ( id == -1 ) {
-			m_view->database->createNewCategory(name);
-			id = m_view->database->lastInsertID();
+			id = m_view->database->createNewCategory(name);
 		}
 
 		for ( QList<int>::const_iterator it = ids.constBegin(); it != ids.constEnd(); ++it ) {
@@ -764,8 +763,7 @@ void Krecipes::mergeSimilarIngredients()
 
 		int id = m_view->database->findExistingIngredientByName(name);
 		if ( id == -1 ) {
-			m_view->database->createNewIngredient(name);
-			id = m_view->database->lastInsertID();
+			id = m_view->database->createNewIngredient(name);
 		}
 
 		for ( QList<int>::const_iterator it = ids.constBegin(); it != ids.constEnd(); ++it ) {

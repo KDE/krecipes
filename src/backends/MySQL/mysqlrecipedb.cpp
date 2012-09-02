@@ -438,7 +438,7 @@ void MySQLRecipeDB::portOldDatabases( float version )
 				int prep_method_id = copyQuery.value( 5 ).toInt();
 				if ( prep_method_id != -1 ) {
 					query.prepare( "INSERT INTO prep_method_list VALUES (?, ?, ?);" );
-					query.addBindValue( lastInsertID() );
+					query.addBindValue( lastInsertId(query) );
 					query.addBindValue( prep_method_id );
 					query.addBindValue( 1 );
 					query.exec();
@@ -601,17 +601,6 @@ void MySQLRecipeDB::portOldDatabases( float version )
 		}
 		database->exec( "UPDATE db_info SET ver='0.97',generated_by='Krecipes 2.0.0'" );
 	}
-}
-
-int MySQLRecipeDB::lastInsertID()
-{
-	QSqlQuery lastInsertID( "SELECT LAST_INSERT_ID();", *database );
-
-	int id = -1;
-	if ( lastInsertID.isActive() && lastInsertID.next() )
-		id = lastInsertID.value( 0 ).toInt();
-
-	return id;
 }
 
 void MySQLRecipeDB::givePermissions( const QString &dbName, const QString &username, const QString &password, const QString &clientHost )

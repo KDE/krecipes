@@ -148,16 +148,14 @@ void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgres
 	QString real_group_name = ing.group.left( max_group_length );
 	int new_group_id = db->findExistingIngredientGroupByName(real_group_name);
 	if ( new_group_id == -1 ) {
-		db->createNewIngGroup( real_group_name );
-		new_group_id = db->lastInsertID();
+		new_group_id = db->createNewIngGroup( real_group_name );
 	}
 	ing.groupID = new_group_id;
 
 	int new_ing_id = db->findExistingIngredientByName(ing.name);
 	if ( new_ing_id == -1 && !ing.name.isEmpty() )
 	{
-		db->createNewIngredient( ing.name );
-		new_ing_id = db->lastInsertID();
+		new_ing_id = db->createNewIngredient( ing.name );
 	}
 
 	if ( direct ) {
@@ -173,8 +171,7 @@ void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgres
 
 	int new_unit_id = db->findExistingUnitByName(real_unit.name());
 	if ( new_unit_id == -1 ) {
-		db->createNewUnit( Unit(real_unit.name(), real_unit.plural()) );
-		new_unit_id = db->lastInsertID();
+		new_unit_id = db->createNewUnit( Unit(real_unit.name(), real_unit.plural()) );
 	}
 
 	if ( direct ) {
@@ -186,8 +183,7 @@ void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgres
 		for ( ElementList::iterator prep_it = ing.prepMethodList.begin(); prep_it != ing.prepMethodList.end(); ++prep_it ) {
 			int new_prep_id = db->findExistingPrepByName((*prep_it).name);
 			if ( new_prep_id == -1 ) {
-				db->createNewPrepMethod((*prep_it).name);
-				new_prep_id = db->lastInsertID();
+				new_prep_id = db->createNewPrepMethod((*prep_it).name);
 			}
 			(*prep_it).id = new_prep_id;
 		}
@@ -243,8 +239,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 
 			int new_author_id = db->findExistingAuthorByName(( *author_it ).name);
 			if ( new_author_id == -1 && !( *author_it ).name.isEmpty() ) {
-				db->createNewAuthor( ( *author_it ).name );
-				new_author_id = db->lastInsertID();
+				new_author_id = db->createNewAuthor( ( *author_it ).name );
 			}
 
 			( *author_it ).id = new_author_id;
@@ -259,8 +254,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 
 			int new_cat_id = db->findExistingCategoryByName(( *cat_it ).name);
 			if ( new_cat_id == -1 && !( *cat_it ).name.isEmpty() ) {
-				db->createNewCategory( ( *cat_it ).name );
-				new_cat_id = db->lastInsertID();
+				new_cat_id = db->createNewCategory( ( *cat_it ).name );
 			}
 
 			( *cat_it ).id = new_cat_id;
@@ -269,8 +263,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 		if ( !(*recipe_it).yield.type().isEmpty() ) {
 			int new_id = db->findExistingYieldTypeByName((*recipe_it).yield.type());
 			if ( new_id == -1 ) {
-				db->createNewYieldType( (*recipe_it).yield.type() );
-				new_id = db->lastInsertID();
+				new_id = db->createNewYieldType( (*recipe_it).yield.type() );
 			}
 			(*recipe_it).yield.setTypeId(new_id);
 		}
@@ -285,8 +278,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			foreach (RatingCriteria rc, (*rating_it).ratingCriterias()) {
 				int new_criteria_id = db->findExistingRatingByName(rc.name());
 				if ( new_criteria_id == -1 && !rc.name().isEmpty() ) {
-					db->createNewRating( rc.name() );
-					new_criteria_id = db->lastInsertID();
+					new_criteria_id = db->createNewRating( rc.name() );
 				}
 	
 				rc.setId( new_criteria_id );
@@ -326,8 +318,7 @@ void BaseImporter::importCategoryStructure( RecipeDB *db, const CategoryTree *ca
 	for ( CategoryTree * child_it = categoryTree->firstChild(); child_it; child_it = child_it->nextSibling() ) {
 		int new_cat_id = db->findExistingCategoryByName( child_it->category.name );
 		if ( new_cat_id == -1 ) {
-			db->createNewCategory( child_it->category.name, categoryTree->category.id );
-			new_cat_id = db->lastInsertID();
+			new_cat_id = db->createNewCategory( child_it->category.name, categoryTree->category.id );
 		}
 
 		child_it->category.id = new_cat_id;

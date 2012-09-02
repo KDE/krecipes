@@ -972,8 +972,7 @@ int RecipeInputDialog::createNewYieldIfNecessary( const QString &yield )
 		int id = database->findExistingYieldTypeByName( yield );
 		if ( id == -1 ) //creating new
 		{
-			database->createNewYieldType( yield );
-			id = database->lastInsertID();
+			id = database->createNewYieldType( yield );
 		}
 
 		return id;
@@ -1405,8 +1404,7 @@ void RecipeInputDialog::slotAddRating()
 		foreach( RatingCriteria rc, r.ratingCriterias() ) {
 			int criteria_id = database->findExistingRatingByName(rc.name());
 			if ( criteria_id == -1 ) {
-				database->createNewRating(rc.name());
-				criteria_id = database->lastInsertID();
+				criteria_id = database->createNewRating(rc.name());
 			}
 			r.setIdOfRatingCriteria(rc.name(), criteria_id);
 		}
@@ -1461,8 +1459,7 @@ void RecipeInputDialog::slotEditRating()
 		foreach ( RatingCriteria rc, r.ratingCriterias() ) {
 			int criteria_id = database->findExistingRatingByName(rc.name());
 			if ( criteria_id == -1 ) {
-				database->createNewRating(rc.name());
-				criteria_id = database->lastInsertID();
+				criteria_id = database->createNewRating(rc.name());
 			}
 			r.setIdOfRatingCriteria(rc.name(), criteria_id);
 		}
