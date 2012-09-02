@@ -841,9 +841,11 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	}
 
 	// only delete those ratings that don't exist anymore
-	command = QString( "DELETE FROM ratings WHERE recipe_id=%1 AND id NOT IN( %2 )" )
-	          .arg( recipeID ).arg( ids.join(",") );
-	recipeToSave.exec( command );
+	if ( !ids.isEmpty() ) {
+		command = QString( "DELETE FROM ratings WHERE recipe_id=%1 AND id NOT IN( %2 )" )
+			  .arg( recipeID ).arg( ids.join(",") );
+		recipeToSave.exec( command );
+	}
 
 	if ( newRecipe )
 		emit recipeCreated( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
