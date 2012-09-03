@@ -20,7 +20,7 @@ FractionInput::FractionInput( QWidget *parent, MixedNumber::Format format ) : KL
 	m_validateTimer(new QTimer(this)),
 	m_format(format)
 {
-	setAlignment( Qt::AlignRight );
+	//setAlignment( Qt::AlignRight );
 
 	connect( this, SIGNAL(textChanged(const QString&)), this, SLOT(slotStartValidateTimer()) );
 	connect( m_validateTimer, SIGNAL(timeout()), this, SLOT(validate()) );
