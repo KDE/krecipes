@@ -158,6 +158,10 @@ set(krecipesdialogs_SRCS
    dialogs/editpropertiesdialog.cpp
    dialogs/createunitconversiondialog.cpp)
 
+kde4_add_ui_files(krecipesdialogs_SRCS
+   dialogs/resizerecipedialog.ui
+   )
+
 
 ############# exporters ##############
 

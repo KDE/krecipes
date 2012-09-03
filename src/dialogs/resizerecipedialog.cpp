@@ -12,27 +12,16 @@
 
 #include "resizerecipedialog.h"
 
-#include <cmath>
+#include "ui_resizerecipedialog.h"
 
-#include <kvbox.h>
-#include <q3buttongroup.h>
-#include <qframe.h>
-#include <QFormLayout>
-#include <QVBoxLayout>
-#include <knuminput.h>
-#include <klineedit.h>
-#include <QRadioButton>
-#include <q3whatsthis.h>
+#include <cmath>
 
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
 
 #include "datablocks/recipe.h"
 #include "widgets/fractioninput.h"
 
-#define FACTOR_RADIO_BUTTON 0
-#define SERVINGS_RADIO_BUTTON 1
 
 ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 		: KDialog( parent ),
@@ -42,132 +31,77 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	setButtons(KDialog::Ok | KDialog::Cancel);
 	setDefaultButton(KDialog::Ok);
 	setModal( true );
-	KVBox *page = new KVBox( this );
-	setMainWidget( page );
-	buttonGroup = new Q3ButtonGroup( page );
-	buttonGroup->setSizePolicy( QSizePolicy( ( QSizePolicy::SizeType ) 5, ( QSizePolicy::SizeType ) 7, 0, 1, buttonGroup->sizePolicy().hasHeightForWidth() ) );
-	buttonGroup->setLineWidth( 0 );
-	buttonGroup->setColumnLayout( 0, Qt::Vertical );
-	buttonGroup->layout() ->setSpacing( 6 );
-	buttonGroup->layout() ->setMargin( 11 );
-	buttonGroupLayout = new QVBoxLayout( buttonGroup->layout() );
-	buttonGroupLayout->setAlignment( Qt::AlignTop );
+	ui = new Ui::ResizeRecipeDialog;
+	QWidget * mainWidget = new QWidget( this );
+	ui->setupUi( mainWidget );
+	setMainWidget( mainWidget );
 
-	yieldRadioButton = new QRadioButton( buttonGroup );
-	buttonGroup->insert( yieldRadioButton, SERVINGS_RADIO_BUTTON );
-	buttonGroupLayout->addWidget( yieldRadioButton );
-
-	yieldFrame = new QFrame( buttonGroup );
-	yieldFrame->setFrameStyle( QFrame::StyledPanel|QFrame::Raised );
-	yieldFrameLayout = new QFormLayout( yieldFrame );
-
-	currentYieldInput = new KLineEdit( yieldFrame );
-	currentYieldInput->setReadOnly( true );
-	currentYieldInput->setAlignment( Qt::AlignRight );
-	yieldFrameLayout->addRow( i18nc( "@label:textbox",
-		"Current yield:" ), currentYieldInput );
-
-	newYieldInput = new FractionInput( yieldFrame );
-	yieldFrameLayout->addRow( i18nc( "@label:textbox",
-		"New yield:" ), newYieldInput );
-
-	buttonGroupLayout->addWidget( yieldFrame );
-
-	factorRadioButton = new QRadioButton( buttonGroup );
-	buttonGroup->insert( factorRadioButton, FACTOR_RADIO_BUTTON );
-	buttonGroupLayout->addWidget( factorRadioButton );
-
-	factorFrame = new QFrame( buttonGroup );
-	factorFrame->setFrameStyle( QFrame::StyledPanel|QFrame::Raised );
-	factorFrameLayout = new QFormLayout( factorFrame );
-
-	factorInput = new FractionInput( factorFrame );
-	factorFrameLayout->addRow( i18nc( "@label:textbox",
-		"Factor (e.g. 1/2 to half, 3 to triple):" ), factorInput );
-
-	buttonGroupLayout->addWidget( factorFrame );
-
-	languageChange();
-
-
-	newYieldInput->setValue( m_recipe->yield.amount(), 0 ); //Ignore the range info, it doesn't work in this context
-	currentYieldInput->setText( m_recipe->yield.toString() );
+	//Ignore the range info, it doesn't work in this context
+	ui->m_newYieldInput->setValue( m_recipe->yield.amount(), 0 );
+	ui->m_currentYieldInput->setText( m_recipe->yield.toString() );
 
 	if ( recipe->yield.amountOffset() > 0 ) {
-		yieldRadioButton->setEnabled(false);
-		buttonGroup->setButton( FACTOR_RADIO_BUTTON );
-		activateCurrentOption( FACTOR_RADIO_BUTTON );
-	}
-	else {
-		buttonGroup->setButton( SERVINGS_RADIO_BUTTON );
-		activateCurrentOption( SERVINGS_RADIO_BUTTON );
+		ui->m_yieldButton->setEnabled(false);
+		ui->m_buttonGroup->setSelected( ui->m_buttonGroup->id(ui->m_factorButton) );
+		activateCurrentOption( ui->m_buttonGroup->id(ui->m_factorButton) );
+	} else {
+		//We are selecting the factorbutton first to workaround
+		//a possible bug in KButtonGroup.
+		ui->m_buttonGroup->setSelected( ui->m_buttonGroup->id(ui->m_factorButton) );
+		ui->m_buttonGroup->setSelected( ui->m_buttonGroup->id(ui->m_yieldButton) );
+		activateCurrentOption( ui->m_buttonGroup->id(ui->m_yieldButton) );
 	}
 
 	// signals and slots connections
-	connect( buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( activateCurrentOption( int ) ) );
-}
-
-void ResizeRecipeDialog::languageChange()
-{
-	// Warning: This is not useful at all since were putting strings in QFormLayout's
-	// in the constructor.
-	buttonGroup->setTitle( QString() );
-	yieldRadioButton->setText( i18nc( "@option:radio", "Scale by yield" ) );
-	factorRadioButton->setText( i18nc( "@option:radio", "Scale by factor" ) );
+	connect( ui->m_buttonGroup, SIGNAL( changed( int ) ),
+		this, SLOT( activateCurrentOption( int ) ) );
 }
 
 void ResizeRecipeDialog::activateCurrentOption( int button_id )
 {
-	switch ( button_id ) {
-	case SERVINGS_RADIO_BUTTON:
-		factorFrame->setEnabled( false );
-		yieldFrame->setEnabled( true );
-		break;
-	case FACTOR_RADIO_BUTTON:
-		factorFrame->setEnabled( true );
-		yieldFrame->setEnabled( false );
-		break;
-	default:
-		break;
+	if ( button_id == ui->m_buttonGroup->id(ui->m_yieldButton) ) {
+		ui->m_factorFrame->setEnabled( false );
+		ui->m_yieldFrame->setEnabled( true );
+	} else if ( button_id == ui->m_buttonGroup->id(ui->m_factorButton) ) {
+		ui->m_factorFrame->setEnabled( true );
+		ui->m_yieldFrame->setEnabled( false );
 	}
 }
 
 void ResizeRecipeDialog::accept()
 {
-	if ( m_recipe->yield.amount() == 0 )
+	if ( m_recipe->yield.amount() == 0 ) {
 		KMessageBox::error( this, i18nc( "@info", "Unable to scale a recipe with zero yield" ) );
-	else if ( buttonGroup->selected() == yieldRadioButton ) {
-		if ( newYieldInput->isInputValid() ) {
-			double new_yield = newYieldInput->value().toDouble();
+	} else if ( ui->m_buttonGroup->selected() == ui->m_buttonGroup->id(ui->m_yieldButton) ) {
+		if ( ui->m_newYieldInput->isInputValid() ) {
+			double new_yield = ui->m_newYieldInput->value().toDouble();
 			MixedNumber number;
-			MixedNumber::fromString( currentYieldInput->text(), number, true );
+			MixedNumber::fromString( ui->m_currentYieldInput->text(), number, true );
 			double current_yield = number.toDouble();
 
 			resizeRecipe( new_yield / current_yield );
-		}
-		else {
+		} else {
 			KMessageBox::error( this, i18nc( "@info", "Invalid input" ) );
-			newYieldInput->selectAll();
+			ui->m_newYieldInput->selectAll();
 			return;
 		}
-	}
-	else {
-		if ( factorInput->isInputValid() && factorInput->value() > 0 )
-			resizeRecipe( factorInput->value().toDouble() );
-		else {
+	} else {
+		if ( ui->m_factorInput->isInputValid() && ui->m_factorInput->value() > 0 ) {
+			resizeRecipe( ui->m_factorInput->value().toDouble() );
+		} else {
 			KMessageBox::error( this, i18nc( "@info", "Invalid input" ) );
-			factorInput->selectAll();
+			ui->m_factorInput->selectAll();
 			return ;
 		}
 	}
 
-	QDialog::accept();
+	KDialog::accept();
 }
 
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
 	MixedNumber number;
-	MixedNumber::fromString( currentYieldInput->text(), number, true );
+	MixedNumber::fromString( ui->m_currentYieldInput->text(), number, true );
 	m_recipe->yield.setAmount( number.toDouble() * factor );
 
 	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it ) {

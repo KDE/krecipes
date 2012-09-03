@@ -17,13 +17,9 @@
 
 class Recipe;
 
-class QVBoxLayout;
-class QFormLayout;
-class FractionInput;
-class Q3ButtonGroup;
-class QFrame;
-class KLineEdit;
-class QRadioButton;
+namespace Ui {
+	class ResizeRecipeDialog;
+}
 
 /**
   *@author Jason Kivlighn
@@ -38,25 +34,12 @@ public:
 protected slots:
 	void accept();
 	void activateCurrentOption( int );
-	virtual void languageChange();
 
 private:
 	void resizeRecipe( double factor );
 
 	Recipe *m_recipe;
-
-	Q3ButtonGroup* buttonGroup;
-	QRadioButton* yieldRadioButton;
-	QFrame* yieldFrame;
-	KLineEdit* currentYieldInput;
-	FractionInput* newYieldInput;
-	QRadioButton* factorRadioButton;
-	QFrame* factorFrame;
-	FractionInput* factorInput;
-
-	QVBoxLayout* buttonGroupLayout;
-	QFormLayout* yieldFrameLayout;
-	QFormLayout* factorFrameLayout;
+	Ui::ResizeRecipeDialog * ui;
 };
 
 #endif //RESIZERECIPEDIALOG_H
