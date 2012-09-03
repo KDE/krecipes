@@ -60,13 +60,13 @@ void NukeConfigWidget::connectToDatabase()
         KConfigGroup dbtypeGroup = KGlobal::config()->group( "DBType" );
         QString dbType = dbtypeGroup.readEntry( "Type", "" );
 
-        KConfigGroup performanceGroup = KGlobal::config()->group( "Server" );
-        QString host = performanceGroup.readEntry( "Host", "localhost" );
-        QString user = performanceGroup.readEntry( "Username", QString() );
-        QString pass = performanceGroup.readEntry( "Password", QString() );
-        QString dbname = performanceGroup.readEntry( "DBName", "Krecipes" );
-        int port = performanceGroup.readEntry( "Port", 0 );
-        QString dbfile = performanceGroup.readEntry( "DBFile",
+        KConfigGroup serverGroup = KGlobal::config()->group( "Server" );
+        QString host = serverGroup.readEntry( "Host", "localhost" );
+        QString user = serverGroup.readEntry( "Username", QString() );
+        QString pass = serverGroup.readEntry( "Password", QString() );
+        QString dbname = serverGroup.readEntry( "DBName", "Krecipes" );
+        int port = serverGroup.readEntry( "Port", 0 );
+        QString dbfile = serverGroup.readEntry( "DBFile",
                 KStandardDirs::locateLocal ( "appdata", "krecipes.krecdb" ) );
 
         database = RecipeDB::createDatabase( dbType, host, user, pass, dbname, port, dbfile );
