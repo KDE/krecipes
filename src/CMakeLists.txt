@@ -1,8 +1,6 @@
-include(FindLibXml2)
-include(FindLibXslt)
-include(FindQImageBlitz)
-
-find_package(QImageBlitz)
+find_package(LibXml2 REQUIRED)
+find_package(LibXslt REQUIRED)
+find_package(QImageBlitz REQUIRED)
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
    ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${QIMAGEBLITZ_INCLUDES}
    ${CMAKE_CURRENT_SOURCE_DIR}/backends/
