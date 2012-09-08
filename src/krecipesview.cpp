@@ -344,7 +344,7 @@ bool KrecipesView::questionRerunWizard( const QString &message, const QString &e
 			ConvertSQLite3 converter;
 			converter.convert();
 		} else {
-			kError() << errormsg << ". " << i18nc("Exiting Krecipes", "Exiting" ) ;
+			kError() << errormsg << ". Exiting" ;
 			kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
 			return false;
 		}
@@ -359,7 +359,7 @@ bool KrecipesView::questionRerunWizard( const QString &message, const QString &e
 		if ( answer == KMessageBox::Yes )
 			wizard( true );
 		else {
-			kError() << errormsg << ". " << i18nc("Exiting Krecipes", "Exiting" ) ;
+			kError() << errormsg << ". Exiting" ;
 			kapp->exit( 1 ); exit ( 1 ); //FIXME: why doesn't kapp->exit(1) do anything?
 			return false;
 		}
@@ -1010,7 +1010,7 @@ void KrecipesView::initializeData( const QString &host, const QString &dbName, c
 	kDebug();
 	RecipeDB * db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( !db ) {
-		kError() << i18n( "Code error. No DB support has been included. Exiting" ) ;
+		kError() << "Code error. No DB support has been included. Exiting" ;
 		kapp->exit( 1 );
 	}
 	kDebug()<<" connect it";
@@ -1172,7 +1172,7 @@ void KrecipesView::initDatabase()
 	if ( !database ) {
 		// No DB type has been enabled(should not happen at all, but just in case)
 
-		kError() << i18n( "Code error. No DB support was built in. Exiting" ) ;
+		kError() << "Code error. No DB support was built in. Exiting" ;
 		kapp->exit( 1 );
 	}
 
@@ -1198,12 +1198,12 @@ void KrecipesView::initDatabase()
 		else {
 			// No DB type has been enabled (should not happen at all, but just in case)
 
-			kError() << i18n( "Code error. No DB support was built in. Exiting" ) ;
+			kError() << "Code error. No DB support was built in. Exiting" ;
 			kapp->exit( 1 );
 			break;
 		}
 	}
-	kDebug() << i18n( "DB started correctly\n" ).toLatin1();
+	kDebug() << "DB started correctly" ;
 }
 
 QString KrecipesView::checkCorrectDBType( KConfigGroup &config )

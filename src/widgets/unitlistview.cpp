@@ -67,7 +67,7 @@ StdUnitListView::StdUnitListView( QWidget *parent, RecipeDB *db, bool editable )
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id", show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ), show_id ? -1 : 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );

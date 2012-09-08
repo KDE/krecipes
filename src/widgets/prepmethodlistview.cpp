@@ -49,11 +49,11 @@ void PrepMethodListView::checkCreatePrepMethod( const Element &el )
 
 StdPrepMethodListView::StdPrepMethodListView( QWidget *parent, RecipeDB *db, bool editable ) : PrepMethodListView( parent, db )
 {
-	addColumn( i18n( "Preparation Method" ) );
+	addColumn( i18nc( "@title:column", "Preparation Method" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id" , show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );

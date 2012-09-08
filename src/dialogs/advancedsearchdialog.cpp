@@ -95,7 +95,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	titleButton = new KPushButton( parametersFrame );
 	titleButton->setObjectName( "titleButton" );
 	titleButton->setCheckable( true );
-	titleButton->setText( QString("%1 >>").arg(i18nc("@action:button Recipe title", "Title")) );
+	titleButton->setText( i18nc("@action:button Recipe title", "Title >>") );
 	parametersFrameLayout->addWidget( titleButton );
 	
 	titleFrame = new QFrame( parametersFrame );
@@ -124,7 +124,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ingredientButton = new KPushButton( parametersFrame );
 	ingredientButton->setObjectName( "ingredientButton" );
 	ingredientButton->setCheckable( true );
-	ingredientButton->setText( QString("%1 >>").arg(i18nc("@action:button", "Ingredients")) );
+	ingredientButton->setText( i18nc("@action:button", "Ingredients >>") );
 	parametersFrameLayout->addWidget( ingredientButton );
 	
 	ingredientFrame = new QFrame( parametersFrame );
@@ -198,7 +198,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	authorsButton = new KPushButton( parametersFrame );
 	authorsButton->setObjectName( "authorsButton" );
 	authorsButton->setCheckable( true );
-	authorsButton->setText( QString("%1 >>").arg(i18nc("@action:button", "Authors")) );
+	authorsButton->setText( i18nc("@action:button", "Authors >>") );
 	parametersFrameLayout->addWidget( authorsButton );
 	
 	authorsFrame = new QFrame( parametersFrame );
@@ -235,7 +235,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	servingsButton = new KPushButton( parametersFrame );
 	servingsButton->setObjectName( "servingsButton" );
 	servingsButton->setCheckable( true );
-	servingsButton->setText( QString("%1 >>").arg(i18nc("@action:button", "Yield")) );
+	servingsButton->setText( i18nc("@action:button", "Yield >>") );
 	parametersFrameLayout->addWidget( servingsButton );
 	
 	servingsFrame = new QFrame( parametersFrame );
@@ -283,7 +283,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	prepTimeButton = new KPushButton( parametersFrame );
 	prepTimeButton->setObjectName( "prepTimeButton" );
 	prepTimeButton->setCheckable( true );
-	prepTimeButton->setText( QString("%1 >>").arg(i18nc( "@action:button", "Preparation Time")) );
+	prepTimeButton->setText( i18nc( "@action:button", "Preparation Time >>") );
 	parametersFrameLayout->addWidget( prepTimeButton );
 	
 	prepTimeFrame = new QFrame( parametersFrame );
@@ -328,7 +328,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	instructionsButton = new KPushButton( parametersFrame );
 	instructionsButton->setObjectName( "instructionsButton" );
 	instructionsButton->setCheckable( true );
-	instructionsButton->setText( QString("%1 >>").arg(i18nc( "@action:button", "Instructions")) );
+	instructionsButton->setText( i18nc( "@action:button", "Instructions >>") );
 	parametersFrameLayout->addWidget( instructionsButton );
 	
 	instructionsFrame = new QFrame( parametersFrame );
@@ -358,7 +358,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataButton = new KPushButton( parametersFrame );
 	metaDataButton->setObjectName( "metaDataButton" );
 	metaDataButton->setCheckable( true );
-	metaDataButton->setText( QString("%1 >>").arg(i18nc( "@label", "Meta Data")) );
+	metaDataButton->setText( i18nc( "@label", "Meta Data >>") );
 	parametersFrameLayout->addWidget( metaDataButton );
 	
 	metaDataFrame = new QFrame( parametersFrame );
@@ -411,7 +411,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	ratingsButton = new KPushButton( parametersFrame );
 	ratingsButton->setObjectName( "ratingsButton" );
 	ratingsButton->setCheckable( true );
-	ratingsButton->setText( QString("%1 >>").arg(i18nc("@action:button", "Ratings")) );
+	ratingsButton->setText( i18nc("@action:button", "Ratings >>") );
 	parametersFrameLayout->addWidget( ratingsButton );
 
 	ratingButtonGroup = new QGroupBox( parametersFrame );

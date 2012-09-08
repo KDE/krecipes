@@ -71,7 +71,7 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	authorListView->setRootIsDecorated( false );
 
 	QStringList horizontalLabels;
-	horizontalLabels << "Id" << i18nc( "@title:column", "Author" );
+	horizontalLabels << i18nc( "@title:column", "Id" ) << i18nc( "@title:column", "Author" );
 	authorListModel->setHorizontalHeaderLabels( horizontalLabels );
 		
 	authorListProxyModel = new QSortFilterProxyModel(this);

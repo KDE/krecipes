@@ -52,12 +52,12 @@ void HeaderListView::checkCreateHeader( const Element &el )
 
 StdHeaderListView::StdHeaderListView( QWidget *parent, RecipeDB *db, bool editable ) : HeaderListView( parent, db )
 {
-	addColumn( i18n( "Header" ) );
+	addColumn( i18nc( "@title:column", "Header" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
 
-	addColumn( "Id" , show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );

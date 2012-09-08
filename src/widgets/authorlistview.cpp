@@ -50,11 +50,11 @@ void AuthorListView::checkCreateAuthor( const Element &el )
 
 StdAuthorListView::StdAuthorListView( QWidget *parent, RecipeDB *db, bool editable ) : AuthorListView( parent, db )
 {
-	addColumn( i18n( "Author" ) );
+	addColumn( i18nc( "@title:column", "Author" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id" , show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );
@@ -110,11 +110,11 @@ void AuthorCheckListItem::stateChange( bool on )
 
 AuthorCheckListView::AuthorCheckListView( QWidget *parent, RecipeDB *db ) : AuthorListView( parent, db )
 {
-	addColumn( i18n( "Author" ) );
+	addColumn( i18nc( "@title:column", "Author" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id" , show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
 }
 
 void AuthorCheckListView::createAuthor( const Element &author )

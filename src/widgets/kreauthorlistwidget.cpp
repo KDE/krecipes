@@ -33,7 +33,7 @@ KreAuthorListWidget::KreAuthorListWidget( QWidget *parent, RecipeDB *db ):
 	
 	//The horizontal column labels.
 	QStringList horizontalLabels;
-	horizontalLabels << "Id" << i18nc( "@title:column", "Author" );
+	horizontalLabels << i18nc( "@title:column", "Id" ) << i18nc( "@title:column", "Author" );
 	m_sourceModel->setHorizontalHeaderLabels( horizontalLabels );
 
 	//The maximum number of elements to show in the author list.

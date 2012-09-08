@@ -127,12 +127,12 @@ void PropertyListView::load(int, int)
 
 StdPropertyListView::StdPropertyListView( QWidget *parent, RecipeDB *db, bool editable ) : PropertyListView( parent, db )
 {
-	addColumn( i18n( "Property" ) );
-	addColumn( i18n( "Units" ) );
+	addColumn( i18nc( "@title:column", "Property" ) );
+	addColumn( i18nc( "@title:column", "Units" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id" , show_id ? -1 : 2 );
+	addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 2 );
 
 	setSorting( 0 );
 
@@ -160,10 +160,10 @@ void StdPropertyListView::createProperty( const IngredientProperty &property )
 
 PropertyConstraintListView::PropertyConstraintListView( QWidget *parent, RecipeDB *db ) : PropertyListView( parent, db )
 {
-	addColumn( i18n( "Enabled" ) );
-	addColumn( i18n( "Property" ) );
-	addColumn( i18n( "Min. Value" ) );
-	addColumn( i18n( "Max. Value" ) );
+	addColumn( i18nc( "@title:column", "Enabled" ) );
+	addColumn( i18nc( "@title:column", "Property" ) );
+	addColumn( i18nc( "@title:column", "Min. Value" ) );
+	addColumn( i18nc( "@title:column", "Max. Value" ) );
 	addColumn( "Id", 0 ); //hidden, only for internal purposes
 
 	setRenameable( 0, true );

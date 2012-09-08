@@ -67,7 +67,7 @@ QSqlRecipeDB::~QSqlRecipeDB()
 
 RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 {
-	kDebug() << i18n( "QSqlRecipeDB: Opening Database..." ) ;
+	kDebug() << "QSqlRecipeDB: Opening Database..." ;
 	kDebug() << "Parameters: \n\thost: " << DBhost << "\n\tuser: " << DBuser << "\n\ttable: " << DBname ;
 
 	bool driver_found = false;
@@ -85,7 +85,7 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	}
 
 	if ( !driver_found ) {
-		dbErr = i18n( "The Qt database plug-in (%1) is not installed.  This plug-in is required for using this database backend." , qsqlDriverPlugin() );
+		dbErr = i18n( "The Qt database plugin (%1) is not installed.  This plugin is required for using this database backend." , qsqlDriverPlugin() );
 		return NoDriverFound;
 	}
 
@@ -115,13 +115,13 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	if ( DBport > 0 )
 		database->setPort(DBport);
 
-	kDebug() << i18n( "Parameters set. Calling db->open()" ) ;
+	kDebug() << "Parameters set. Calling db->open()" ;
 
 	if ( !database->open() ) {
 		kDebug()<<" database.open false : create_db ? :"<<create_db;
 		//Try to create the database
 		if ( create_db ) {
-			kDebug() << i18n( "Failing to open database. Trying to create it" ) ;
+			kDebug() << "Failing to open database. Trying to create it" ;
 			createDB();
 		}
 		else {
@@ -139,7 +139,7 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 		//Now Reopen the Database and signal & exit if it fails
 		if ( !database->open() ) {
 			QString error = i18n( "Database message: %1" , database->lastError().databaseText() );
-			kDebug() << i18n( "Failing to open database. Exiting\n" ).toLatin1();
+			kDebug() << "Failing to open database. Exiting" ;
 			// Handle the error (passively)
 			if ( DBuser.isEmpty() ) {
 				dbErr = i18n( "Krecipes could not open the \"%1\" database.", DBname );

@@ -353,7 +353,7 @@ bool RecipeDB::backup( const QString &backup_file, QString *errMsg )
 		else
 			kDebug()<<"Unable to open file to get error output.";
 
-		if ( errMsg ) *errMsg = QString("%1\n%2").arg(i18n("Backup failed.")).arg(appOutput);
+		if ( errMsg ) *errMsg = i18n("Backup failed.\n%1", appOutput);
 		QFile::remove(backup_file);
 		delete process;
 		process = NULL;

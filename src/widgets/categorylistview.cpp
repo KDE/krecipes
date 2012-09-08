@@ -309,14 +309,14 @@ void CategoryListView::mergeCategories( int id1, int id2 )
 StdCategoryListView::StdCategoryListView( QWidget *parent, RecipeDB *db, bool editable ) :
 	CategoryListView( parent, db )
 {
-	addColumn( i18n( "Category" ) );
+	addColumn( i18nc( "@title:column", "Category" ) );
 
 	//FIXME: for some reason when I have "ShowID=true" this code results in
 	//krecipes eating 100% of my cpu time.
 	//KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	//bool show_id = config.readEntry( "ShowID", false );
-	//addColumn( "Id" , show_id ? -1 : 0 );
-	addColumn( "Id" , 0 );
+	//addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ) , 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );
@@ -376,11 +376,11 @@ void StdCategoryListView::createCategory( const Element &category, int parent_id
 CategoryCheckListView::CategoryCheckListView( QWidget *parent, RecipeDB *db, bool _exclusive, const ElementList &init_items_checked ) :
 CategoryListView( parent, db ), exclusive( _exclusive )
 {
-	addColumn( i18n( "Category" ) );
+	addColumn( i18nc( "@title:column", "Category" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id" , show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
 
 	for ( ElementList::const_iterator it = init_items_checked.begin(); it != init_items_checked.end(); ++it )
 		m_selections.append(*it);

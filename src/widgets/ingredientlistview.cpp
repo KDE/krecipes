@@ -104,11 +104,11 @@ void IngredientListView::checkCreateIngredient( const Element &el )
 
 StdIngredientListView::StdIngredientListView( QWidget *parent, RecipeDB *db, bool editable ) : IngredientListView( parent, db )
 {
-	addColumn( i18n( "Ingredient" ) );
+	addColumn( i18nc( "@title:column", "Ingredient" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id" , show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
 
 	if ( editable ) {
 		setRenameable( 0, true );
@@ -129,11 +129,11 @@ void StdIngredientListView::removeIngredient( int id )
 
 IngredientCheckListView::IngredientCheckListView( QWidget *parent, RecipeDB *db ) : IngredientListView( parent, db )
 {
-	addColumn( i18n( "Ingredient" ) );
+	addColumn( i18nc( "@title:column", "Ingredient" ) );
 
 	KConfigGroup config = KGlobal::config()->group( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	addColumn( "Id" , show_id ? -1 : 0 );
+	addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
 }
 
 void IngredientCheckListView::createIngredient( const Element &ing )

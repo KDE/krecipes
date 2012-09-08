@@ -73,26 +73,22 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 		content += ( *recipe_it ).title + "\n\n";
 
 		if ( ( *recipe_it ).authorList.count() > 0 ) {
-			content += QString("%1: ").arg(i18n("Authors"));
-			content += ( *recipe_it ).authorList.join(", ");
+			content += i18n("Authors: %1", ( *recipe_it ).authorList.join(", "));
 			content += '\n';
 		}
 
 		if ( ( *recipe_it ).categoryList.count() > 0 ) {
-			content += QString("%1: ").arg(i18n("Categories"));
-			content += ( *recipe_it ).categoryList.join(", ");
+			content += i18n("Categories: %1", ( *recipe_it ).categoryList.join(", "));
 			content += '\n';
 		}
 
 		if ( ( *recipe_it ).yield.amount() > 0 ) {
-			content += QString("%1: ").arg(i18n("Yields"));
-			content += ( *recipe_it ).yield.toString();
+			content += i18n("Yields: %1", ( *recipe_it ).yield.toString());
 			content += '\n';
 		}
 
 		if ( !( *recipe_it ).prepTime.isNull() ) {
-			content += QString("%1: ").arg(i18n("Preparation Time"));
-			content += ( *recipe_it ).prepTime.toString( "hh:mm" );
+			content += i18n("Preparation Time: %1", ( *recipe_it ).prepTime.toString( "hh:mm" ));
 			content += '\n';
 		}
 

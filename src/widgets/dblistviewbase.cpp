@@ -30,7 +30,7 @@ public:
 
 	QString text( int c ) const {
 		if ( c == 0 ) {
-			return QString("<< %1").arg(i18nc("Previous item", "Previous"));
+			return i18nc("Previous item", "<< Previous");
 		}
 		else
 			return QString();
@@ -46,7 +46,7 @@ public:
 
 	QString text( int c ) const {
 		if ( c == 0 ) {
-			return QString("%1 >>").arg(i18nc("Next item", "Next"));
+			return i18nc("Next item", "Next >>");
 		}
 		else
 			return QString();

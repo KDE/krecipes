@@ -117,7 +117,7 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 
 	config.changeGroup( "Advanced" );
 	bool show_id = config.readEntry( "ShowID", false );
-	shopRecipeListView->listView() ->addColumn( "Id" , show_id ? -1 : 0 );
+	shopRecipeListView->listView() ->addColumn( i18nc( "@title:column", "Id" ) , show_id ? -1 : 0 );
 
 	shopRecipeListView->listView() ->setSorting( -1 );
 	shopRecipeListView->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
