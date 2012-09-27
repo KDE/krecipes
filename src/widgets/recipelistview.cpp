@@ -233,7 +233,7 @@ void RecipeListView::populateAll( Q3ListViewItem *parent )
 	bool first = false;
 	if ( !parent ) {
 		first = true;
-		m_progress_dlg = new KProgressDialog(this,QString(),i18n("Loading recipes"));
+		m_progress_dlg = new KProgressDialog(this,QString(),i18nc("@info:progress", "Loading recipes"));
 		m_progress_dlg->setObjectName( "populate_all_prog_dlg" );
 		m_progress_dlg->setModal( true );
 		m_progress_dlg->setAllowCancel(false);

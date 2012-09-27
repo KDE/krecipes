@@ -155,7 +155,7 @@ MySQLServerPrefs::MySQLServerPrefs( QWidget *parent ) : QWidget( parent )
 
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this );
-	backupGBox->setTitle( i18n( "Backup" ) );
+	backupGBox->setTitle( i18nc( "@title:group Backup options", "Backup" ) );
 	QFormLayout *backupGBoxLayout = new QFormLayout;
 
 	dumpPathRequester = new KUrlRequester;
@@ -226,7 +226,7 @@ PostgreSQLServerPrefs::PostgreSQLServerPrefs( QWidget *parent ) : QWidget( paren
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this );
 	QFormLayout *backupGBoxLayout = new QFormLayout;
-	backupGBox->setTitle( i18n( "Backup" ) );
+	backupGBox->setTitle( i18nc( "@title:group Backup options", "Backup" ) );
 
 	dumpPathRequester = new KUrlRequester;
 	dumpPathRequester->fileDialog()->setCaption( i18n( "Select PostgreSQL dump command" ) );
@@ -283,7 +283,7 @@ SQLiteServerPrefs::SQLiteServerPrefs( QWidget *parent ) : QWidget( parent )
 
 	// Backup options
 	QGroupBox *backupGBox = new QGroupBox( this );
-	backupGBox->setTitle( i18n( "Backup" ) );
+	backupGBox->setTitle( i18nc( "@title:group Backup options", "Backup" ) );
 	
 	QFormLayout *backupGBoxLayout = new QFormLayout;
 	backupGBox->setLayout( backupGBoxLayout );

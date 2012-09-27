@@ -432,11 +432,11 @@ void RecipeActionsHandler::exportRecipes( const QList<int> &ids, const QString &
 
 			int overwrite = -1;
 			if ( QFile::exists( exporter->fileName() ) ) {
-				overwrite = KMessageBox::warningYesNo( 0, i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" , exporter->fileName()), i18n( "Saving recipe" ) );
+				overwrite = KMessageBox::warningYesNo( 0, i18n( "File \"%1\" exists.  Are you sure you want to overwrite it?" , exporter->fileName()), i18nc( "@title:window", "Saving recipe" ) );
 			}
 
 			if ( overwrite == KMessageBox::Yes || overwrite == -1 ) {
-				KProgressDialog progress_dialog( 0, QString(), i18n( "Saving recipes..." ) );
+				KProgressDialog progress_dialog( 0, QString(), i18nc( "@info:progress", "Saving recipes..." ) );
 				progress_dialog.setObjectName("export_progress_dialog");
 				exporter->exporter( ids, database, &progress_dialog );
 			}

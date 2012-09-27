@@ -2152,7 +2152,7 @@ void QSqlRecipeDB::loadCategories( CategoryTree *list, int limit, int offset, in
 {
 	QString limit_str;
 	if ( parent_id == -1 ) {
-		emit progressBegin(0,QString(),i18n("Loading category list"));
+		emit progressBegin(0,QString(),i18nc("@info:progress", "Loading category list"));
 		list->clear();
 
 		//only limit the number of top-level categories
