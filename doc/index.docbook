@@ -20,7 +20,7 @@
 <!-- This header contains all of the meta-information for the document such
 as Authors, publish date, the abstract, and Keywords -->
 
-<book id="krecipes"info>
+<bookinfo>
 <title>The <emphasis>&krecipes;</emphasis> Handbook</title>
 
 <authorgroup>
