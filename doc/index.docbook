@@ -15,12 +15,12 @@
 
 <!-- The language must NOT be changed here. -->
 
-<book lang="&language;">
+<book id="krecipes" lang="&language;">
 
 <!-- This header contains all of the meta-information for the document such
 as Authors, publish date, the abstract, and Keywords -->
 
-<bookinfo>
+<book id="krecipes"info>
 <title>The <emphasis>&krecipes;</emphasis> Handbook</title>
 
 <authorgroup>
