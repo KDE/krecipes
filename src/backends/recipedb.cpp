@@ -478,7 +478,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 
 		emit progressBegin(0,QString(),
 			QString("<center><b>%1</b></center>%2")
-				.arg(i18n("Restoring backup"))
+				.arg(i18nc("@info:progress", "Restoring backup"))
 				.arg(i18n("Depending on the number of recipes and amount of data, this could take some time.")),50);
 
 		process->start();
