@@ -674,7 +674,7 @@ enter the date to reveal a calendar.</para>
 and are using a <emphasis>date range</emphasis> as opposed to an exact date,
 ensure that the dates for the start and end of the range are entered in the
 same format.  For example, if you enter the starting date for the range in
-the format of <quote>DD-MM-YY</quote>and the ending date for the range in the format of
+the format of <quote>DD-MM-YY</quote> and the ending date for the range in the format of
 "DD/MM/YY", either no recipes will be found or the results returned will
 include only those recipes that fit the criteria for the starting date,
 if this date agrees with the format as set in &kde;.</para></caution>
