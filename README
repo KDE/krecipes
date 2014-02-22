@@ -1,5 +1,4 @@
 Krecipes is a Recipe Book for KDE. It requires KDE 4.4 or greater (and Qt 4).
-Developed and tested on Debian GNU/Linux sid (KDE 4.4.5 and Qt 4.6.3).
 
 
 ** Dependencies
@@ -11,7 +10,7 @@ to use the Krecipes backup feature. If you want to use "krecipes
 
 ** Build Dependencies
 
- If you're using a Debian-like GNU/Linux distribution you may want to install
+ If you're using an APT based GNU/Linux distribution you may want to install
  the following packages: 
   - kdelibs5-dev
   - libqimageblitz-dev 
@@ -19,15 +18,15 @@ to use the Krecipes backup feature. If you want to use "krecipes
   - libxml2-dev
   - libxslt1-dev
  
-** Building The Latest (2.0-beta2) Release
+** Building The Latest Release
  
  Just untar the package first:
  
- tar -zxf krecipes-2.0-beta2.tar.gz
+ tar -zxf krecipes-2.x.x.tar.gz (replace x with the corresponding version number)
  
  And compile:
  
- cd krecipes-2.0-beta2
+ cd krecipes-2.x.x (replace x with the corresponding version number)
  mkdir build && cd build
  cmake ..
  make

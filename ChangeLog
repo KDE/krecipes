@@ -6,6 +6,8 @@ Changes from 2.0-beta2 to 2.0.0:
   * MySQL tables now use UTF8 as encoding, this avoids breaking some random
     non-ascii characters if the MySQL tables happen to be configured to store
     strings in latin1.
+  * Fix a problematic iterator usage which was crashing the ingredient matcher.
+    (closes bugs.kde.org #261163)
 
 Changes from 2.0-beta1 to 2.0-beta2:
   * Replaced shorcut for export action. It was ctrl+P, now it is ctrl+O.
