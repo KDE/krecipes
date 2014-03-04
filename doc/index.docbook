@@ -4465,7 +4465,7 @@ window.</screeninfo>
 </screenshot>
 </para>
 
-<para>From this window, there are three formatting preferences that can be
+<para>From this window, there are two formatting preferences that can be
 customized &mdash;</para>
 
 <orderedlist><listitem><para><emphasis><guilabel>Number
@@ -4474,17 +4474,6 @@ Format</guilabel></emphasis> &ndash; either
 <emphasis><guilabel>Decimal</guilabel></emphasis> can be selected by clicking
 on the appropriate radio button and this choice controls how the units of
 measure will display in your recipes</para></listitem>
-
-<listitem><para><emphasis><guilabel>Ingredient</guilabel></emphasis> format
-&ndash; this controls how the ingredients are listed in your recipes</para>
-<para>You will notice from the screenshot that each portion of the
-ingredient has a variable associated with it, <emphasis>%n</emphasis>
-for <quote>Name</quote>, <emphasis>%p</emphasis> for <quote>Preparation
-method</quote>, <emphasis>%a</emphasis> for <quote>Amount</quote>,
-<emphasis>%u</emphasis> for <quote>Unit</quote>.  The chosen order for
-display of these items appears in the <emphasis><guilabel>Ingredient
-format:</guilabel></emphasis> text box and can be changed at will.</para>
-</listitem>
 
 <listitem><para><emphasis><guilabel>Use abbreviations</guilabel></emphasis>
 &ndash; this feature is turned on by clicking on the tickbox beside the
@@ -4495,12 +4484,6 @@ of selecting to <emphasis>Use abbreviations</emphasis> is that your units of
 measure will be displayed in their abbreviated form when you are viewing or
 printing your recipe, and in the printable version of your <emphasis>Shopping
 List</emphasis>.</para>
-
-<para>For example, if <emphasis>Use abbreviations</emphasis> is selected
-and the ingredient format is specified as <emphasis>%a %u %n%p</emphasis>,
-as in the screenshot, this will cause the ingredient to be displayed as
-follows &mdash;</para>
-<para>2&#0189; lbs. cream cheese; softened</para>
 </listitem>
 
 </orderedlist>
