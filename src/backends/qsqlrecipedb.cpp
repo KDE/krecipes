@@ -1664,7 +1664,6 @@ void QSqlRecipeDB::saveUnitRatio( const UnitRatio *ratio )
 	// Check if it's a new ratio or it exists already.
 	command = QString( "SELECT * FROM units_conversion WHERE unit1_id=%1 AND unit2_id=%2" ).arg( ratio->unitId1() ).arg( ratio->unitId2() ); // Find ratio between units
 
-	kDebug() << command;
 	QSqlQuery ratioFound( command, *database); // Find the entries
 
 	if ( !ratioFound.first() ) //If the ratio doesn't exist, create it, otherwise update it.
@@ -1672,7 +1671,6 @@ void QSqlRecipeDB::saveUnitRatio( const UnitRatio *ratio )
 	else
 		command = QString( "UPDATE units_conversion SET ratio=%3 WHERE unit1_id=%1 AND unit2_id=%2" ).arg( ratio->unitId1() ).arg( ratio->unitId2() ).arg( ratio->ratio() );
 
-	kDebug() << command;
 	ratioFound.exec( command ); // Enter the new ratio
 }
 
