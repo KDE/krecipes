@@ -515,8 +515,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	connect ( database, SIGNAL( recipeRemoved(int) ), this, SLOT( recipeRemoved(int) ) );
 
-	//FIXME: We've got some sort of build issue... we get undefined references to CreateUnitDialog without this dummy code here
-	CreateUnitDialog d( this, "" );
 }
 
 

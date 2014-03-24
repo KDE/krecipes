@@ -92,8 +92,6 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	//Populate data into the table
 	loadConversionTables();
 
-	//FIXME: We've got some sort of build issue... we get undefined references to CreateElementDialog without this dummy code here
-	CreateElementDialog d( this, "" );
 }
 
 UnitsDialog::~UnitsDialog()
