@@ -19,7 +19,7 @@
 #include "widgets/dblistviewbase.h"
 
 class RecipeDB;
-class ConversionTable;
+class KreConversionTable;
 class StdUnitListView;
 class UnitActionsHandler;
 class KAction;
@@ -49,8 +49,8 @@ private:
 	// Widgets
 	StdUnitListView *unitListView;
 	UnitActionsHandler *unitActionsHandler;
-	ConversionTable *massConversionTable;
-	ConversionTable *volumeConversionTable;
+	KreConversionTable *massConversionTable;
+	KreConversionTable *volumeConversionTable;
 	KPushButton *newUnitButton;
 	KPushButton *removeUnitButton;
 	QWidget *unitTab;
@@ -65,7 +65,7 @@ private:
 
 private slots:
 	void loadConversionTables();
-	void loadConversionTable( ConversionTable*, Unit::Type );
+	void loadConversionTable( KreConversionTable*, Unit::Type );
 	void saveRatio( int r, int c, double value );
 	void removeRatio( int r, int c );
 };

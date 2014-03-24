@@ -88,7 +88,7 @@ set(krecipeswidgets_SRCS
    widgets/categorycombobox.cpp
    widgets/kretextedit.cpp
    widgets/kregenericlistwidget.cpp
-   widgets/conversiontable.cpp
+   widgets/kreconversiontable.cpp
    widgets/fractioninput.cpp
    widgets/ingredientcombobox.cpp
    widgets/headercombobox.cpp
@@ -109,6 +109,7 @@ set(krecipeswidgets_SRCS
    widgets/authorlistview.cpp #replaced by kreauthorlistwidget.cpp
    widgets/dblistviewbase.cpp #replaced by kregenericlistwidget.cpp
    widgets/categorylistview.cpp #replaced by krecategorieslistwidget.cpp
+   widgets/conversiontable.cpp #replaced by kreconversiontable.cpp
 
 )
 

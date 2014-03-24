@@ -18,7 +18,8 @@
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
 #include "backends/recipedb.h"
-#include "widgets/conversiontable.h"
+#include "widgets/conversiontable.h" //TODO: Remove, deprecated.
+#include "widgets/kreconversiontable.h"
 #include "widgets/unitlistview.h"
 #include "actionshandlers/unitactionshandler.h"
 
@@ -64,10 +65,10 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 
 	tabWidget->insertTab( -1, unitTab, i18nc( "@title:tab", "Units" ) );
 
-	massConversionTable = new ConversionTable( tabWidget, 1, 1 );
+	massConversionTable = new KreConversionTable( tabWidget, 1, 1 );
 	tabWidget->insertTab( -1, massConversionTable, i18nc( "@title:tab", "Mass Conversions" ) );
 
-	volumeConversionTable = new ConversionTable( tabWidget, 1, 1 );
+	volumeConversionTable = new KreConversionTable( tabWidget, 1, 1 );
 	tabWidget->insertTab( -1, volumeConversionTable, i18nc( "@title:tab", "Volume Conversions" ) );
 
 	page_layout->addWidget( tabWidget );
@@ -123,7 +124,7 @@ void UnitsDialog::loadConversionTables( void )
 	loadConversionTable( volumeConversionTable, Unit::Volume );
 }
 
-void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
+void UnitsDialog::loadConversionTable( KreConversionTable *table, Unit::Type type )
 {
 	UnitList unitList;
 	database->loadUnits( &unitList, type );
@@ -140,8 +141,8 @@ void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
 	table->resize( unitNames.count(), unitNames.count() );
 
 	// Set the table labels, and id's
-	table->setRowLabels( unitNames );
-	table->setColumnLabels( unitNames );
+	table->setHorizontalHeaderLabels( unitNames );
+	table->setVerticalHeaderLabels( unitNames );
 	table->setUnitIDs( unitIDs );
 
 
@@ -155,7 +156,7 @@ void UnitsDialog::loadConversionTable( ConversionTable *table, Unit::Type type )
 
 void UnitsDialog::saveRatio( int r, int c, double value )
 {
-	ConversionTable *conversionTable = (ConversionTable*)sender();
+	KreConversionTable *conversionTable = (KreConversionTable*)sender();
 	UnitRatio ratio(conversionTable->getUnitID( r ),
 	                conversionTable->getUnitID( c ),
 	                value);
@@ -175,8 +176,12 @@ void UnitsDialog::saveRatio( int r, int c, double value )
 
 void UnitsDialog::removeRatio( int r, int c )
 {
-	ConversionTable *conversionTable = (ConversionTable*)sender();
+	KreConversionTable *conversionTable = (KreConversionTable*)sender();
+	// Delete ratio from database.
 	database->removeUnitRatio( conversionTable->getUnitID( r ), conversionTable->getUnitID( c ) );
+	// Also delete the reverse ratio both from the database and the UI.
+	database->removeUnitRatio( conversionTable->getUnitID( c ), conversionTable->getUnitID( r ) );
+	conversionTable->deleteRatio( c, r );
 }
 
 void UnitsDialog::saveAllRatios( UnitRatioList &/*ratioList*/ )
