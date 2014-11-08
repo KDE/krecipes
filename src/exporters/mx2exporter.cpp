@@ -131,7 +131,10 @@ QString MX2Exporter::createContent( const RecipeList& recipes )
 				ingr_tag.setAttribute("name", (*ing_it).name);
 				ingr_tag.setAttribute("unit", (( (*ing_it).amount > 1 ) ? (*ing_it).units.plural() : (*ing_it).units.name() ));
 				// MasterCook doesn't seem to know about ranges, so we'll ignore amount range here
-				ingr_tag.setAttribute("qty", (*ing_it).amount);
+				if ((*ing_it).amount_offset > 0)
+					ingr_tag.setAttribute("qty", QString::number((*ing_it).amount) + " " + QString::number((*ing_it).amount + (*ing_it).amount_offset));
+				else
+					ingr_tag.setAttribute("qty", QString::number((*ing_it).amount));
 				// The "Ingr" tag also accepts a subelement "IPrp" for initial preparation
 				if (!(*ing_it).prepMethodList.join(",").isEmpty() ) {
 					QDomElement prep_tag = doc.createElement( "IPrp" );

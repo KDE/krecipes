@@ -124,13 +124,11 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 					quantity1 = 0;
 				else
 					quantity1 = number.toDouble();
-				if ( qtyStrList.constBegin() != qtyStrList.constEnd() ) {
-					state = MixedNumber::fromString( qtyStrList.last(), number, false );
-					if ( state != QValidator::Acceptable )
-						quantity2 = 0;
-					else
-						quantity2 = number.toDouble();
-				}
+				state = MixedNumber::fromString( qtyStrList.last(), number, false );
+				if ( state != QValidator::Acceptable )
+					quantity2 = 0;
+				else
+					quantity2 = number.toDouble();
 			}
 			offset = quantity2 - quantity1;
 			Ingredient new_ing( el.attribute( "name" ),
