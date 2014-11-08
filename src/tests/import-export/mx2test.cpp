@@ -36,7 +36,7 @@ main(int argc, char *argv[])
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	QString file("mx2test.txt");
 	if(args->count() >= 1)
-	file = args->arg(0);
+		file = args->arg(0);
 
 	printf("Creating MX2Importer.\n");
 	MX2Importer importer;
