@@ -685,7 +685,7 @@ void Krecipes::conversionToolSlot()
 void Krecipes::backupSlot()
 {
 	QString fileName = KFileDialog::getSaveFileName(KUrl(),
-		QString("*.krecbk|%1 (*.krecbk)").arg("Krecipes Backup File"),
+		QString("*.krecbk|%1 (*.krecbk)").arg(i18n("Krecipes Backup File")),
 		this, i18n("Save Backup As..."));
 
 	int overwrite = KMessageBox::Yes;
