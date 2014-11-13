@@ -7,8 +7,10 @@
 		<sub-class-of type="application/x-gzip"/>
 		<comment>Krecipes Backup file</comment>
 		<comment xml:lang="de">Krecipes-Datensicherungsdatei</comment>
+		<comment xml:lang="es">Archivo de copia de respaldo de Krecipes</comment>
 		<comment xml:lang="nl">Bestand met reservekopie van Krecipes</comment>
 		<comment xml:lang="pt_BR">Arquivo de backup do Krecipes</comment>
+		<comment xml:lang="sk">Záložný súbor Krecipes</comment>
 		<comment xml:lang="uk">файл резервної копії Krecipes</comment>
 	</mime-type>
 
@@ -17,8 +19,10 @@
 		<sub-class-of type="text/xml" />
 		<comment>Krecipes Exported Recipes</comment>
 		<comment xml:lang="de">Krecipes Exportierte Rezepte</comment>
+		<comment xml:lang="es">Recetas exportadas de Krecipes</comment>
 		<comment xml:lang="nl">Geëxporteerde recepten van Krecipes</comment>
 		<comment xml:lang="pt_BR">Receitas exportadas do Krecipes</comment>
+		<comment xml:lang="sk">Exportované recepty Krecipes</comment>
 		<comment xml:lang="uk">експортовані рецепти Krecipes</comment>
 	</mime-type>
 
@@ -27,8 +31,10 @@
 		<sub-class-of type="application/x-tarz"/>
 		<comment>Krecipes Exported Recipes (compressed data)</comment>
 		<comment xml:lang="de">Krecipes Exportierte Rezepte (komprimierte Daten)</comment>
+		<comment xml:lang="es">Recetas exportadas de Krecipes (datos comprimidos)</comment>
 		<comment xml:lang="nl">Geëxporteerde recepten van Krecipes (gecomprimeerde gegevens)</comment>
 		<comment xml:lang="pt_BR">Receitas exportadas do Krecipes (dados compactados)</comment>
+		<comment xml:lang="sk">Exportované recepty Krecipes (komprimované dáta)</comment>
 		<comment xml:lang="uk">експортовані рецепти Krecipes (стиснені дані)</comment>
 	</mime-type>
 
