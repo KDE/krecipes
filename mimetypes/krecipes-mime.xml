@@ -6,6 +6,7 @@
 		<glob pattern="*.krecbk" />
 		<sub-class-of type="application/x-gzip"/>
 		<comment>Krecipes Backup file</comment>
+		<comment xml:lang="cs">Záložní soubor Krecipes</comment>
 		<comment xml:lang="de">Krecipes-Datensicherungsdatei</comment>
 		<comment xml:lang="en_GB">Krecipes Backup file</comment>
 		<comment xml:lang="es">Archivo de copia de respaldo de Krecipes</comment>
@@ -20,6 +21,7 @@
 		<glob pattern="*.kreml" />
 		<sub-class-of type="text/xml" />
 		<comment>Krecipes Exported Recipes</comment>
+		<comment xml:lang="cs">Exportované recepty Krecipes</comment>
 		<comment xml:lang="de">Krecipes Exportierte Rezepte</comment>
 		<comment xml:lang="en_GB">Krecipes Exported Recipes</comment>
 		<comment xml:lang="es">Recetas exportadas de Krecipes</comment>
@@ -34,6 +36,7 @@
 		<glob pattern="*.kre" />
 		<sub-class-of type="application/x-tarz"/>
 		<comment>Krecipes Exported Recipes (compressed data)</comment>
+		<comment xml:lang="cs">Exportované recepty Krecipes (zkomprimovaná data)</comment>
 		<comment xml:lang="de">Krecipes Exportierte Rezepte (komprimierte Daten)</comment>
 		<comment xml:lang="en_GB">Krecipes Exported Recipes (compressed data)</comment>
 		<comment xml:lang="es">Recetas exportadas de Krecipes (datos comprimidos)</comment>
