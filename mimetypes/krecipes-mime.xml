@@ -20,6 +20,7 @@
 		<comment xml:lang="pt_BR">Arquivo de backup do Krecipes</comment>
 		<comment xml:lang="sk">Záložný súbor Krecipes</comment>
 		<comment xml:lang="sl">Datoteka z varnostno kopijo Krecipes</comment>
+		<comment xml:lang="sv">Krecept säkerhetskopieringsfil</comment>
 		<comment xml:lang="uk">файл резервної копії Krecipes</comment>
 	</mime-type>
 
@@ -41,6 +42,7 @@
 		<comment xml:lang="pt_BR">Receitas exportadas do Krecipes</comment>
 		<comment xml:lang="sk">Exportované recepty Krecipes</comment>
 		<comment xml:lang="sl">Izvoženi recepti Krecipes</comment>
+		<comment xml:lang="sv">Krecept exporterade recept</comment>
 		<comment xml:lang="uk">експортовані рецепти Krecipes</comment>
 	</mime-type>
 
@@ -62,6 +64,7 @@
 		<comment xml:lang="pt_BR">Receitas exportadas do Krecipes (dados compactados)</comment>
 		<comment xml:lang="sk">Exportované recepty Krecipes (komprimované dáta)</comment>
 		<comment xml:lang="sl">Izvoženi recepti Krecipes (stisnjeni podatki)</comment>
+		<comment xml:lang="sv">Krecept exporterade recept (komprimerad data)</comment>
 		<comment xml:lang="uk">експортовані рецепти Krecipes (стиснені дані)</comment>
 	</mime-type>
 
