@@ -55,11 +55,13 @@ KreAuthorListWidget::~KreAuthorListWidget()
 
 void KreAuthorListWidget::createAuthor( const Element &author )
 {
+          Q_UNUSED(author);
 	reload( ForceReload );
 }
 
 void KreAuthorListWidget::removeAuthor( int id )
 {
+          Q_UNUSED(id);
 	reload( ForceReload );
 }
 

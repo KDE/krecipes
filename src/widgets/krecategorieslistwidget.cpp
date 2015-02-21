@@ -55,6 +55,8 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 
 void KreCategoriesListWidget::createCategory( const Element & category, int parent_id )
 {
+          Q_UNUSED(category);
+          Q_UNUSED(parent_id);
 	reload( ForceReload );
 }
 
@@ -87,6 +89,7 @@ void KreCategoriesListWidget::populate( QStandardItem * item, int id )
 
 void KreCategoriesListWidget::removeCategory( int id )
 {
+          Q_UNUSED(id);
 	reload( ForceReload );
 }
 

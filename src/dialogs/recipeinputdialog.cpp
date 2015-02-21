@@ -68,8 +68,6 @@
 
 #include "profiling.h"
 
-typedef enum ColorStatus { GreenStatus, RedStatus, YellowStatus };
-
 ClickableLed::ClickableLed( QWidget *parent ) : KLed(parent)
 {
 }
@@ -1473,7 +1471,7 @@ void RecipeInputDialog::slotEditRating()
 void RecipeInputDialog::slotRemoveRating()
 {
 	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
-	loadedRecipe->ratingList.remove(sender->rating_it);
+	loadedRecipe->ratingList.erase(sender->rating_it);
 
 	//FIXME: sender is removed but never deleted (sender->deleteLater() doesn't work)
 	ratingListDisplayWidget->removeItem(sender);

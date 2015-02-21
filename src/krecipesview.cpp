@@ -98,7 +98,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	leftPanelFrameLayout->setMargin( 0 );
 	leftPanelFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
 	leftPanelFrame->setFrameRect( QRect( 0, 0, 0, 0 ) );
-	rightPanel = new PanelDeco( splitter, "rightPanel", i18n( "Find/Edit Recipes" ), "system-search" );
+	rightPanel = new PanelDeco( splitter, i18n( "Find/Edit Recipes" ), "system-search" );
 
 	// Design Left Panel
 

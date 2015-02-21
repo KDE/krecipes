@@ -150,6 +150,7 @@ void KreTextEdit::keyPressEvent( QKeyEvent *e )
 
 void KreTextEdit::setCompletedText( const QString &txt )
 {
+    Q_UNUSED(txt);
 #if 0
 	int para, index;
 	getCursorPosition( &para, &index );

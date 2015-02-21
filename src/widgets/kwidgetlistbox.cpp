@@ -114,18 +114,13 @@ int KWidgetListbox::selected() const
 
 QWidget* KWidgetListbox::selectedItem() const
 {
-  return item(selected());
-}
-
-QWidget* KWidgetListbox::item(int index) const
-{
-  return cellWidget(index, 0);
+  return cellWidget(selected(),0);
 }
 
 int KWidgetListbox::index(QWidget* itm) const
 {
   for(int i = 0; i < numRows(); ++i)
-    if(item(i) == itm)
+    if(cellWidget(i,0) == itm)
       return i;
   return -1;
 }
@@ -158,7 +153,7 @@ void KWidgetListbox::updateColors()
 
 void KWidgetListbox::setItemColors(int index, bool even)
 {
-  QWidget* itm = item(index);
+  QWidget* itm = cellWidget(index,0);
   // KDE4 add
   QPalette p = palette();
 if ( !itm){ kDebug()<<"no widget at index "<<index; return; }
@@ -185,7 +180,7 @@ void KWidgetListbox::showItems(show_callback func, void* data)
       showRow(i);
     else
     {
-      if(func(i, item(i), data))
+      if(func(i, cellWidget(i,0), data))
         showRow(i);
       else
         hideRow(i);

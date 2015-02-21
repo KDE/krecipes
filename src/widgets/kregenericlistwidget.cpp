@@ -103,6 +103,7 @@ void KreGenericListWidget::setCurrentLimit( int value )
 
 void KreGenericListWidget::reload( ReloadFlags flags )
 {
+          Q_UNUSED(flags);
 	this->setEnabled( false );
 
 	m_loadFinished = false;

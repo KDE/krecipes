@@ -419,6 +419,7 @@ void Krecipes::setupActions()
 
 void Krecipes::saveProperties( KConfigGroup& group )
 {
+          Q_UNUSED(group);
 	// the 'config' object points to the session managed
 	// config file.  anything you write here will be available
 	// later when this app is restored
@@ -429,6 +430,7 @@ void Krecipes::saveProperties( KConfigGroup& group )
 
 void Krecipes::readProperties( const KConfigGroup& group )
 {
+          Q_UNUSED(group);
 	// the 'config' object points to the session managed
 	// config file.  this function is automatically called whenever
 	// the app is being restored.  read in here whatever you wrote

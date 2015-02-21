@@ -197,7 +197,6 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 
 		double fromToWeightRatio, weightToToRatio;
 		int unitID = -1;
-		int prepID = -2;
 
 		WeightList idList = ingredientWeightUnits( from.ingredientID );
 
@@ -215,7 +214,6 @@ RecipeDB::ConversionStatus RecipeDB::convertIngredientUnits( const Ingredient &f
 				unitID = first;
 
 				if ( from.prepMethodList.containsId( (*it).prepMethodId() ) ) {
-					prepID = (*it).prepMethodId();
 					break;
 				}
 			}

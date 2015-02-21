@@ -21,7 +21,7 @@
 
 // Panel decoration
 
-PanelDeco::PanelDeco( QWidget *parent, const char *name, const QString &title, const QString &iconName ):
+PanelDeco::PanelDeco( QWidget *parent, const QString &title, const QString &iconName ):
 	QWidget( parent )
 {
 	QVBoxLayout * lay = new QVBoxLayout;

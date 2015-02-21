@@ -34,7 +34,7 @@ class PanelDeco : public QWidget
 	Q_OBJECT
 public:
 	// Methods
-	explicit PanelDeco( QWidget *parent = 0, const char *name = 0, const QString &title = QString(), const QString &iconName = QString() );
+	explicit PanelDeco( QWidget *parent = 0, const QString &title = QString(), const QString &iconName = QString() );
 	~PanelDeco();
 	int id( QWidget* w ); // obtain the id of the given panel
 	QWidget* visiblePanel( void ); // obtain the current active panel no.

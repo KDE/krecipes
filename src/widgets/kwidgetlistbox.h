@@ -49,7 +49,6 @@ class KWidgetListbox : public Q3Table
     void clear();
     int selected() const;
     QWidget* selectedItem() const;
-    QWidget* item(int index) const;
     int index(QWidget* itm) const;
     uint count() const { return numRows(); };
 

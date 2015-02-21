@@ -282,18 +282,21 @@ void ThumbBarView::invalidateThumb(ThumbBarItem* /*item*/)
 
 void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
 {
-    int cy, cx, ts, y1, y2, x1, x2;
+    int cy = 0, cx = 0, ts = 0, y1 = 0, y2 = 0, x1 = 0, x2 = 0;
     QPixmap bgPix, tile;
     QRect er(e->rect());
+
+    QColor hilightColor = QPalette().highlight().color();
+    QColor backgroundColor = QPalette().window().color();
 
     if (d->orientation == Vertical)
     {
        cy = viewportToContents(er.topLeft()).y();
 
-       bgPix.resize(contentsRect().width(), er.height());
+       bgPix = QPixmap(contentsRect().width(), er.height());
 
        ts = d->tileSize + 2*d->margin;
-       tile.resize(visibleWidth(), ts);
+       tile = QPixmap(visibleWidth(), ts);
 
        y1 = (cy/ts)*ts;
        y2 = ((y1 + er.height())/ts +1)*ts;
@@ -302,16 +305,16 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
     {
        cx = viewportToContents(er.topLeft()).x();
 
-       bgPix.resize(er.width(), contentsRect().height());
+       bgPix = QPixmap(er.width(), contentsRect().height());
 
        ts = d->tileSize + 2*d->margin;
-       tile.resize(ts, visibleHeight());
+       tile = QPixmap(ts, visibleHeight());
 
        x1 = (cx/ts)*ts;
        x2 = ((x1 + er.width())/ts +1)*ts;
     }
 
-    bgPix.fill(QColorGroup( QPalette() ).background());
+    bgPix.fill(backgroundColor);
 
     for (ThumbBarItem *item = d->firstItem; item; item = item->d->next)
     {
@@ -320,9 +323,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (y1 <= item->d->pos && item->d->pos <= y2)
             {
                 if (item == d->currItem)
-                    tile.fill(QColorGroup( QPalette() ).highlight());
+                    tile.fill(hilightColor);
                 else
-                    tile.fill(QColorGroup( QPalette() ).background());
+                    tile.fill(backgroundColor);
 
                 QPainter p(&tile);
                 p.setPen(Qt::white);
@@ -344,9 +347,9 @@ void ThumbBarView::viewportPaintEvent(QPaintEvent* e)
             if (x1 <= item->d->pos && item->d->pos <= x2)
             {
                 if (item == d->currItem)
-                    tile.fill(QColorGroup( QPalette() ).highlight());
+                    tile.fill(hilightColor);
                 else
-                    tile.fill(QColorGroup( QPalette() ).background());
+                    tile.fill(backgroundColor);
 
                 QPainter p(&tile);
                 p.setPen(Qt::white);

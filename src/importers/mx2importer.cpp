@@ -144,8 +144,9 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 						if ( !prepMethodStr.isEmpty() )
 							new_ing.prepMethodList.append( Element( prepMethodStr ) );
 					}
-					else if ( iChild.tagName() == "INtI" )
+					else if ( iChild.tagName() == "INtI" ) {
 						; // TODO: What does it mean?... ingredient nutrient info?
+					}
 				}
 			}
 			recipe->ingList.append( new_ing );

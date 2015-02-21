@@ -129,7 +129,7 @@ void DBListViewBase::slotDoubleClicked( Q3ListViewItem *it )
 
 void DBListViewBase::keyPressEvent( QKeyEvent *k )
 {
-	if ( k->state() == Qt::ShiftModifier ) {
+	if ( k->modifiers() & Qt::ShiftModifier ) {
 		switch ( k->key() ) {
 		case Qt::Key_N: {
 			if ( curr_offset + curr_limit >= total || curr_limit == -1 ) {

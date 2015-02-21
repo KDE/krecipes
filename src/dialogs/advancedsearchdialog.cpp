@@ -628,6 +628,7 @@ void AdvancedSearchDialog::addAction( KAction * action )
 
 void AdvancedSearchDialog::showEvent( QShowEvent * event )
 {
+          Q_UNUSED(event);
 	actionHandler->selectionChangedSlot();
 }
 
