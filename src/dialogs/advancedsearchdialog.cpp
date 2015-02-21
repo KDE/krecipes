@@ -358,7 +358,7 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataButton = new KPushButton( parametersFrame );
 	metaDataButton->setObjectName( "metaDataButton" );
 	metaDataButton->setCheckable( true );
-	metaDataButton->setText( i18nc( "@label", "Meta Data >>") );
+	metaDataButton->setText( i18nc( "@action:button", "Meta Data >>") );
 	parametersFrameLayout->addWidget( metaDataButton );
 	
 	metaDataFrame = new QFrame( parametersFrame );
@@ -755,9 +755,9 @@ void AdvancedSearchDialog::instructionsButtonSwitched( bool checked )
 void AdvancedSearchDialog::metaDataButtonSwitched( bool checked )
 {
 	if ( checked )
-		metaDataButton->setText( i18nc( "@label", "Meta Data <<") );
+		metaDataButton->setText( i18nc( "@action:button", "Meta Data <<") );
 	else
-		metaDataButton->setText( i18nc( "@label", "Meta Data >>") );
+		metaDataButton->setText( i18nc( "@action:button", "Meta Data >>") );
 }
 
 void AdvancedSearchDialog::ratingsButtonSwitched( bool checked )
