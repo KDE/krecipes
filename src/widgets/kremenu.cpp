@@ -30,7 +30,6 @@
 #include <kicon.h>
 #include <klocale.h>
 #include <QPixmap>
-#include <qimageblitz.h>
 
 
 KreMenu::KreMenu( QWidget *parent, const char *name ):
@@ -164,7 +163,7 @@ void KreMenu::keyPressEvent( QKeyEvent *e )
 			highlightButton( m_currentMenu->widgetList[ current_index - 1 ] );
 
 			//simulate a mouse click
-			QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+			QMouseEvent me( QEvent::MouseButtonPress, QPoint(), Qt::NoButton, Qt::NoButton, Qt::NoModifier );
 			KApplication::sendEvent( m_currentMenu->activeButton, &me );
 
 			e->accept();
@@ -175,9 +174,9 @@ void KreMenu::keyPressEvent( QKeyEvent *e )
 		int current_index = m_currentMenu->positionList[ m_currentMenu->activeButton ];
 		if ( current_index < int( m_currentMenu->positionList.count() ) - 1 ) {
 			highlightButton( m_currentMenu->widgetList[ current_index + 1 ] );
-	
+
 			//simulate a mouse click
-			QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+			QMouseEvent me( QEvent::MouseButtonPress, QPoint(), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
 			KApplication::sendEvent( m_currentMenu->activeButton, &me );
 
 			e->accept();
@@ -188,7 +187,7 @@ void KreMenu::keyPressEvent( QKeyEvent *e )
 	case Qt::Key_Return:
 	case Qt::Key_Space: {
 		//simulate a mouse click
-		QMouseEvent me( QEvent::MouseButtonPress, QPoint(), 0, 0 );
+		QMouseEvent me( QEvent::MouseButtonPress, QPoint(), Qt::NoButton, Qt::NoButton, Qt::NoModifier );
 		KApplication::sendEvent( m_currentMenu->activeButton, &me );
 
 		e->accept();
@@ -271,8 +270,7 @@ void KreMenu::showMenu( MenuId id )
 	// Hide the buttons in the current menu
 	// and show the ones in the new menu
 
-	const QList<QObject *> childElements = queryList();
-	foreach ( QObject *obj, childElements )
+	foreach ( QObject *obj, children() )
 	{
 		if ( obj->inherits( "KreMenuButton" ) ) {
 		KreMenuButton * button = static_cast<KreMenuButton*>( obj );
@@ -362,7 +360,7 @@ QSize KreMenuButton::minimumSizeHint() const
 
 void KreMenuButton::paintEvent( QPaintEvent * )
 {
-	if ( !isShown() )
+	if ( !isVisible() )
 		return ;
 	// First draw the gradient
 	int darken = 130, lighten = 120;
@@ -382,47 +380,42 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 		c2h = palette.highlight().color().light( lighten );
 	}
 
-	// draw the gradient now
-	QPainter painter;
-	QPixmap kpm;
-	QImage tmpimage;
-	QSize parentsize = ((QWidget*) parent())->size();
+	QPainter painter(this);
 
+	// draw the gradient now
 	if ( !highlighted ) {
 
 		// first the gradient
-		tmpimage = Blitz::gradient(parentsize,c1,c2,Blitz::HorizontalGradient);
-		kpm = QPixmap::fromImage(tmpimage);
+		QLinearGradient g(0,0,width(),0);
+		g.setColorAt(0, c1);
+		g.setColorAt(1, c2);
+                    QBrush b(g);
+                    painter.fillRect(rect(), b);
 
 	}
 	else {
-
-		// top gradient (highlighted)
-		kpm.resize( width(), height() );
-		// low gradient besides the line (not hightlighted)
-		tmpimage = Blitz::gradient(parentsize,c1h,c2h,Blitz::HorizontalGradient);
-		kpm = QPixmap::fromImage(tmpimage);
-		QPixmap kpmb;
-		QImage tmpimage2;
-		tmpimage2 = Blitz::gradient(QSize(width(),2),c1,c2,Blitz::HorizontalGradient);
-		kpmb = QPixmap::fromImage(tmpimage2);
-		// mix the two
-		bitBlt( &kpm, 0, height() - 2, &kpmb );
+                    {
+                    // top gradient (highlighted)
+                        QLinearGradient g(0,0,width(),0);
+                        g.setColorAt(0, c1h);
+                        g.setColorAt(1, c2h);
+                        QBrush b(g);
+                        painter.fillRect(QRectF(0,0,width(), height()-2), b);
+                    }
 
 	}
 
 	// Draw the line
-	painter.begin( &kpm );
-	painter.setPen( QColorGroup( QPalette() ).color(QPalette::Button).dark( darken ) );
-	painter.drawLine( width() / 5, height() - 2, width() - 1, height() - 2 );
-	painter.setPen( QColorGroup( QPalette() ).color(QPalette::Button).light( lighten ) );
-	painter.drawLine( width() / 5, height() - 1, width() - 1, height() - 1 );
-	painter.end();
+          painter.save();
+          painter.setPen( QColorGroup( QPalette() ).color(QPalette::Button).dark( darken ) );
+          painter.drawLine( width() / 5, height() - 2, width() - 1, height() - 2 );
+          painter.setPen( QColorGroup( QPalette() ).color(QPalette::Button).light( lighten ) );
+          painter.drawLine( width() / 5, height() - 1, width() - 1, height() - 1 );
+          painter.restore();
 
 	// Now Add the icon
 
-	painter.begin( &kpm );
-	int xPos, yPos;
+	int xPos = 0, yPos = 0;
 	if ( !icon.isNull() ) {
 		// Set the icon's desired horizontal position
 
@@ -450,12 +443,11 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 
 		// Now draw it
 
-		painter.drawPixmap( xPos, yPos, scaledIcon );
+                    painter.drawPixmap( xPos, yPos, scaledIcon );
 
 		xPos += scaledIcon.width(); // increase it to place the text area correctly
 	}
 
-	painter.end();
 	// If it's highlighted, draw a rounded area around the text
 
 	// Calculate the rounded area
@@ -481,34 +473,33 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 	{
 
 		// Draw the gradient
-		QPixmap area;
-		area.resize( areaw, areah );
+		QPixmap area(QSize( areaw, areah ));
 
-		QImage tmpimage = Blitz::gradient(QSize(areaw,areah),c1h.light(150),c2h.light(150),Blitz::VerticalGradient);
-		area = QPixmap::fromImage(tmpimage);
+                    {
+                        QPainter highlightPainter(&area);
 
-		QLinearGradient linearGrad(QPointF(xPos, xPos + width()), QPointF(yPos, yPos + height()));
-		linearGrad.setColorAt(0, c2h.light( 150 ) );
-		linearGrad.setColorAt(1, c1h.light( 150 ) );
+                        QLinearGradient linearGrad(0,0,0,area.height());
+                        linearGrad.setColorAt(0, c1h.light( 150 ) );
+                        linearGrad.setColorAt(1, c2h.light( 150 ) );
 
-		painter.begin( &area );
-		painter.setPen( c1h );
-		painter.setBrush( Qt::NoBrush );
-		painter.drawRoundRect( 0, 0, areaw, areah, roundx, roundy );
-		painter.end();
-
+                        highlightPainter.fillRect(area.rect(), QBrush(linearGrad));
+                        highlightPainter.setPen( c1h );
+                        highlightPainter.setBrush( Qt::NoBrush );
+                        highlightPainter.drawRoundRect( 0, 0, areaw, areah, roundx, roundy );
+                    }
 		// Make it round
 		QBitmap mask( QSize( areaw, areah ) );
 		mask.fill( Qt::color0 );
-		painter.begin( &mask );
-		painter.setPen( Qt::color1 );
-		painter.setBrush( Qt::color1 );
-		painter.drawRoundRect( 0, 0, areaw, areah, roundx, roundy );
-		painter.end();
+
+                    QPainter maskPainter(&mask);
+		maskPainter.begin( &mask );
+		maskPainter.setPen( Qt::color1 );
+		maskPainter.setBrush( Qt::color1 );
+		maskPainter.drawRoundRect( 0, 0, areaw, areah, roundx, roundy );
+		maskPainter.end();
 		area.setMask( mask );
 
-		// Copy it to the button
-		bitBlt( &kpm, areax, areay, &area );
+                    painter.drawPixmap(areax, areay,area);
 	}
 
 	// Finally, draw the text besides the icon
@@ -516,22 +507,22 @@ void KreMenuButton::paintEvent( QPaintEvent * )
 	r.setLeft( areax + 5 );
 	r.setWidth( areaw - 10 );
 
-	painter.begin( &kpm );
 	if ( highlighted )
-		painter.setPen( palette.highlight().color() );
+          {
+                    painter.setPen(palette.highlight().color() );
+          }
 	else
-		painter.setPen( palette.text().color() );
-	painter.setClipRect( r );
-	painter.drawText( r, Qt::AlignVCenter, text );
-	painter.end();
+          {
+                    painter.setPen(palette.text().color() );
+          }
+          painter.setClipRect(r);
+          painter.drawText(r, Qt::AlignVCenter, text);
 
-	// Copy the offscreen button to the widget
-	bitBlt( this, 0, 0, &kpm, 0, 0, width(), height() ); // Copy the image with correct button size (button is already smaller than parent in width to leave space for the handle, so no need to use -10)
 }
 
 void KreMenuButton::setIconSet( const QIcon &is )
 {
-	icon = is.pixmap( QIcon::Small, QIcon::Normal, QIcon::On );
+	icon = is.pixmap((style()->pixelMetric(QStyle::PM_SmallIconSize) + style()->pixelMetric(QStyle::PM_LargeIconSize))/2 , QIcon::Normal, QIcon::On );
 
 	setMinimumWidth( minimumSizeHint().width() );
 	if ( parentWidget() ->minimumWidth() < minimumSizeHint().width() )

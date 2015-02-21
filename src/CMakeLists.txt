@@ -1,8 +1,7 @@
 find_package(LibXml2 REQUIRED)
 find_package(LibXslt REQUIRED)
-find_package(QImageBlitz REQUIRED)
 include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
-   ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${QIMAGEBLITZ_INCLUDES}
+   ${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR}
    ${CMAKE_CURRENT_SOURCE_DIR}/backends/
    ${CMAKE_CURRENT_SOURCE_DIR}/threadedqueries
    ${CMAKE_CURRENT_SOURCE_DIR}/importers
@@ -65,7 +64,7 @@ set(krecipesactionshandlers_SRCS
    actionshandlers/prepmethodactionshandler.cpp
    actionshandlers/krecategoryactionshandler.cpp
    actionshandlers/kreauthoractionshandler.cpp
-   
+
    #FIXME: The classes below are deprecated and must be removed sooner or later.
    actionshandlers/actionshandlerbase.cpp
    actionshandlers/categoryactionshandler.cpp
@@ -104,7 +103,7 @@ set(krecipeswidgets_SRCS
    widgets/amountunitinput.cpp
    widgets/weightinput.cpp
    widgets/thumbbar.cpp
-   
+
    #FIXME: The classes below are deprecated and must be removed sooner or later.
    widgets/authorlistview.cpp #replaced by kreauthorlistwidget.cpp
    widgets/dblistviewbase.cpp #replaced by kregenericlistwidget.cpp
@@ -164,7 +163,7 @@ kde4_add_ui_files(krecipesdialogs_SRCS
 
 ############# exporters ##############
 
-set (krecipesexporters_SRCS 
+set (krecipesexporters_SRCS
    exporters/kreexporter.cpp
    exporters/baseexporter.cpp
    exporters/cookmlexporter.cpp
@@ -217,7 +216,7 @@ set(validators_SRCS
 # (i.e. I want to save CPU time when compiling with test programs)
 
 kde4_add_library(krecipescommon STATIC
-   ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS} 
+   ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS}
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
    ${datablocks_SRCS} ${krecipesthreadedqueries_SRCS}
    ${validators_SRCS}
@@ -225,8 +224,8 @@ kde4_add_library(krecipescommon STATIC
 
 target_link_libraries(krecipescommon
    ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
-   ${QT_QTSQL_LIBRARY} 
-   ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}) 
+   ${QT_QTSQL_LIBRARY}
+   ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES})
 
 ############### tests ################
 
@@ -314,27 +313,27 @@ if(BUILD_NUKEDB)
    kde4_add_ui_files(nukedb_SRCS
       nukedb/nukeconfigwidget.ui
    )
-   
+
    kde4_add_executable(nukedb ${nukedb_SRCS})
    target_link_libraries(nukedb krecipescommon ${KDE4_KDEUI_LIBS})
-   
+
    install(TARGETS nukedb ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif(BUILD_NUKEDB)
 
 
 ############# Main  #################
 
-set(krecipes_SRCS 
-   main.cpp 
-   krecipes.cpp 
-   krecipesview.cpp 
-   pref.cpp 
-   #propertycalculator.cpp 
-   setupassistant.cpp 
-   shoppingcalculator.cpp 
-   kstartuplogo.cpp 
-   recipefilter.cpp 
-   convert_sqlite3.cpp 
+set(krecipes_SRCS
+   main.cpp
+   krecipes.cpp
+   krecipesview.cpp
+   pref.cpp
+   #propertycalculator.cpp
+   setupassistant.cpp
+   shoppingcalculator.cpp
+   kstartuplogo.cpp
+   recipefilter.cpp
+   convert_sqlite3.cpp
    #klomanager.cpp
 )
 
@@ -353,7 +352,7 @@ kde4_add_executable(krecipes
    ${krecipesdialogs_SRCS}
    ${krecipesactionshandlers_SRCS})
 
-target_link_libraries(krecipes krecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QIMAGEBLITZ_LIBRARIES} ${QT_QTWEBKIT_LIBRARY} ${KDE4_KDEWEBKIT_LIBS})
+target_link_libraries(krecipes krecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QT_QTWEBKIT_LIBRARY} ${KDE4_KDEWEBKIT_LIBS})
 
 
 install(TARGETS krecipes ${INSTALL_TARGETS_DEFAULT_ARGS})
