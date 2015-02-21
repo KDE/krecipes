@@ -28,7 +28,7 @@ void KreImporter::parseFile( const QString &filename )
 {
 	QFile * file = 0;
 	bool unlink = false;
-	kDebug() << "loading file: %s" << filename ;
+	kDebug() << "loading file:" << filename ;
 
 	if ( filename.right( 4 ) == ".kre" ) {
 		file = new QFile( filename );

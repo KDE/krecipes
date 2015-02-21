@@ -214,7 +214,7 @@ void SelectRecipeDialog::filterComboCategory( int row )
 {
 	recipeListView->populateAll(); //TODO: this would be faster if we didn't need to load everything first
 
-	kDebug() << "I got row " << row << "\n";
+	kDebug() << "I got row " << row;
 
 	//First get the category ID corresponding to this combo row
 	int categoryID = categoryBox->id( row );

@@ -344,7 +344,7 @@ void MXPImporter::loadOptionalFields( QTextStream &stream, Recipe &recipe )
 
 	*/
 	if ( !notes.isEmpty() ) {
-		//kDebug()<<QString("Found notes: %s (adding to end of instructions)").arg(m_notes);
+		//kDebug()<<"Found notes:" << m_notes << "(adding to end of instructions)";
 		recipe.instructions += "\n\nNotes: " + notes.trimmed();
 	}
 }

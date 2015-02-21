@@ -249,7 +249,7 @@ float PSqlRecipeDB::databaseVersion( void )
 
 void PSqlRecipeDB::portOldDatabases( float version )
 {
-	kDebug() << "Current database version is..." << version << "\n";
+	kDebug() << "Current database version is..." << version;
 	QString command;
 
 	if ( qRound(version*10) < 7 ) {
@@ -614,7 +614,7 @@ void PSqlRecipeDB::givePermissions( const QString & /*dbName*/, const QString &u
 	command.append( ";" );
 	QSqlQuery permissionsToSet( command, *database );
 
-	kDebug() << "I'm doing the query to setup permissions\n";
+	kDebug() << "I'm doing the query to setup permissions";
 	command = QString( "GRANT ALL ON %1 TO %2;" ).arg( tables.join( "," ) ).arg( username );
 	permissionsToSet.exec( command );
 }

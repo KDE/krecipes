@@ -897,13 +897,13 @@ void KrecipesView::wizard( bool force )
 			// Setup user if necessary
 			if ( ( dbType == "MySQL" || dbType == "PostgreSQL" ) && setupUser )  // Don't setup user if checkbox of existing user... was set
 			{
-				kDebug() << "Setting up user\n";
+				kDebug() << "Setting up user";
 				setupAssistant->getAdminInfo( adminEnabled, adminUser, adminPass, dbType );
 				setupAssistant->getServerInfo( isRemote, host, client, dbName, user, pass, port );
 
 				if ( !adminEnabled )  // Use root without password
 				{
-					kDebug() << "Using default admin\n";
+					kDebug() << "Using default admin";
 					if ( dbType == "MySQL" )
 						adminUser = "root";
 					else if ( dbType == "PostgreSQL" )
@@ -912,7 +912,7 @@ void KrecipesView::wizard( bool force )
 				}
 				if ( !isRemote )  // Use localhost
 				{
-					kDebug() << "Using localhost\n";
+					kDebug() << "Using localhost";
 					host = "localhost";
 					client = "localhost";
 				}
@@ -987,10 +987,10 @@ void KrecipesView::setupUserPermissions( const QString &host, const QString &cli
 		else if ( dbType == "MySQL" )
 			user = "root";
 
-		kDebug() << "Open db as " << user << ", with no password\n";
+		kDebug() << "Open db as " << user << ", with no password";
 	}
 	else
-		kDebug() << "Open db as:" << user << ",*** with password ****\n";
+		kDebug() << "Open db as:" << user << ",*** with password ****";
 
 	RecipeDB *db = RecipeDB::createDatabase( dbType, host, user, pass, dbName, port, dbName );
 	if ( db ) {

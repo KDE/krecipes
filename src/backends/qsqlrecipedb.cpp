@@ -2036,7 +2036,7 @@ bool QSqlRecipeDB::checkIntegrity( void )
 		}
 
 		if ( !found ) {
-			kDebug() << "Recreating missing table: " << *it << "\n";
+			kDebug() << "Recreating missing table: " << *it;
 			createTable( *it );
 		}
 	}
@@ -2048,9 +2048,9 @@ bool QSqlRecipeDB::checkIntegrity( void )
 
 	// Check for older versions, and port
 
-	kDebug() << "Checking database version...\n";
+	kDebug() << "Checking database version...";
 	float version = databaseVersion();
-	kDebug() << "version found... " << version << " \n";
+	kDebug() << "version found... " << version;
 	kDebug() << "latest version... " << latestDBVersion() ;
 	if ( int( qRound( databaseVersion() * 1e5 ) ) < int( qRound( latestDBVersion() * 1e5 ) ) ) { //correct for float's imprecision
 		switch ( KMessageBox::questionYesNo( 0,

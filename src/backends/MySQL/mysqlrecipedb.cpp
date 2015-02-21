@@ -235,7 +235,7 @@ int MySQLRecipeDB::maxYieldTypeLength() const
 
 void MySQLRecipeDB::portOldDatabases( float version )
 {
-	kDebug() << "Current database version is..." << version << "\n";
+	kDebug() << "Current database version is..." << version;
 	QString command;
 
 	// Note that version no. means the version in which this DB structure
@@ -612,7 +612,7 @@ void MySQLRecipeDB::givePermissions( const QString &dbName, const QString &usern
 	else
 		command = QString( "GRANT ALL ON %1.* TO '%2'@'%3';" ).arg( dbName ).arg( username ).arg( clientHost );
 
-	kDebug() << "I'm doing the query to setup permissions\n";
+	kDebug() << "I'm doing the query to setup permissions";
 
 	QSqlQuery permissionsToSet( command, *database );
 }
