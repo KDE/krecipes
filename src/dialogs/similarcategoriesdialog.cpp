@@ -200,7 +200,6 @@ void SimilarCategoriesDialog::languageChange()
 /*****************************************************/
 
 #include <stdlib.h>
-#include <malloc.h>
 #include <string.h>
 int levenshtein_distance(const char *s,const char*t);
 int minimum(int a,int b,int c);
