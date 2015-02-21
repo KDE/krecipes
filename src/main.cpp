@@ -57,7 +57,6 @@ int main( int argc, char **argv )
 		ki18n("He advised using WebKit to fix printing support during Akademy-es 2010."),
 		"", 0 );
 
-	about.setTranslator( ki18n( "INSERT YOUR NAME HERE" ), ki18n( "INSERT YOUR EMAIL ADDRESS" ) );
 	KCmdLineArgs::init( argc, argv, &about );
 	KCmdLineArgs::addCmdLineOptions( options );
 	KUniqueApplication::addCmdLineOptions();
