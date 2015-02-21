@@ -819,10 +819,10 @@ QString RecipeDB::buildSearchQuery( const RecipeSearchParameters &p ) const
 }
 
 //These are helper functions solely for use by the USDA data importer
-void getIngredientNameAndID( std::multimap<int, QString> * );
-int createUnit( const QString &name, Unit::Type, RecipeDB* );
-int createIngredient( const QString &name, RecipeDB*, bool do_checks );
-void create_properties( RecipeDB*, Q3ValueList<USDA::PropertyData> & );
+static void getIngredientNameAndID( std::multimap<int, QString> * );
+static int createUnit( const QString &name, Unit::Type, RecipeDB* );
+static int createIngredient( const QString &name, RecipeDB*, bool do_checks );
+static void create_properties( RecipeDB*, Q3ValueList<USDA::PropertyData> & );
 
 void RecipeDB::importUSDADatabase()
 {
@@ -998,7 +998,7 @@ void RecipeDB::importUSDADatabase()
 	emit progressDone();
 }
 
-void getIngredientNameAndID( std::multimap<int, QString> *data )
+static void getIngredientNameAndID( std::multimap<int, QString> *data )
 {
 	Q3ValueList<USDA::IngredientData> ingredient_data_list = USDA::loadIngredients();
 
@@ -1006,7 +1006,7 @@ void getIngredientNameAndID( std::multimap<int, QString> *data )
 		data->insert( std::make_pair( (*it).usda_id, (*it).name ) );
 }
 
-int createIngredient( const QString &name, RecipeDB *database, bool do_checks )
+static int createIngredient( const QString &name, RecipeDB *database, bool do_checks )
 {
 	int assigned_id = -1;
 	if ( do_checks )
@@ -1019,7 +1019,7 @@ int createIngredient( const QString &name, RecipeDB *database, bool do_checks )
 	return assigned_id;
 }
 
-int createUnit( const QString &name, Unit::Type type, RecipeDB *database )
+static int createUnit( const QString &name, Unit::Type type, RecipeDB *database )
 {
 	int assigned_id = database->findExistingUnitByName( name );
 
@@ -1041,7 +1041,7 @@ int createUnit( const QString &name, Unit::Type type, RecipeDB *database )
 	return assigned_id;
 }
 
-void create_properties( RecipeDB *database, Q3ValueList<USDA::PropertyData> &property_data_list )
+static void create_properties( RecipeDB *database, Q3ValueList<USDA::PropertyData> &property_data_list )
 {
 	IngredientPropertyList property_list;
 	database->loadProperties( &property_list );
