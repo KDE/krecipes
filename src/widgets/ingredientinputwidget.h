@@ -25,7 +25,6 @@ class KHBox;
 class QLabel;
 class QButtonGroup;
 class QStackedWidget;
-class Q3GroupBox;
 class QCheckBox;
 
 class KComboBox;
@@ -117,7 +116,6 @@ private:
 	UnitList *unitComboList;
 
 	QCheckBox *orButton;
-	Q3GroupBox *ingredientGBox;
 	QLabel *amountLabel;
 	FractionInput* amountEdit;
 	QLabel *unitLabel;

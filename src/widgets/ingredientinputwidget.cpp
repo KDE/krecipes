@@ -15,7 +15,6 @@
 #include <QStackedWidget>
 
 
-#include <q3groupbox.h>
 #include <QButtonGroup>
 #include <QRadioButton>
 #include <QCheckBox>
