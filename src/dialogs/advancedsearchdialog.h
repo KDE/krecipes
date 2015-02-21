@@ -162,7 +162,15 @@ signals:
 private slots:
 	void search();
 	void clear();
-	void buttonSwitched();
+	void titleButtonSwitched( bool );
+	void ingredientButtonSwitched( bool );
+	void authorsButtonSwitched( bool );
+	void categoriesButtonSwitched( bool );
+	void servingsButtonSwitched( bool );
+	void prepTimeButtonSwitched( bool );
+	void instructionsButtonSwitched( bool );
+	void metaDataButtonSwitched( bool );
+	void ratingsButtonSwitched( bool );
 	void activateRatingOptionAvg();
 	void activateRatingOptionCriterion();
 	void slotAddRatingCriteria();

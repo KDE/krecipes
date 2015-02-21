@@ -582,15 +582,15 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( metaDataButton, SIGNAL( toggled( bool ) ), metaDataFrame, SLOT( setShown( bool ) ) );
 	connect( ratingsButton, SIGNAL( toggled( bool ) ), ratingButtonGroup, SLOT( setShown( bool ) ) );
 
-	connect( titleButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
-	connect( ingredientButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
-	connect( authorsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
-	connect( categoriesButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
-	connect( servingsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
-	connect( prepTimeButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
-	connect( instructionsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
-	connect( metaDataButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
-	connect( ratingsButton, SIGNAL( toggled( bool ) ), SLOT( buttonSwitched() ) );
+	connect( titleButton, SIGNAL( toggled( bool ) ), SLOT( titleButtonSwitched( bool ) ) );
+	connect( ingredientButton, SIGNAL( toggled( bool ) ), SLOT( ingredientButtonSwitched( bool ) ) );
+	connect( authorsButton, SIGNAL( toggled( bool ) ), SLOT( authorsButtonSwitched( bool ) ) );
+	connect( categoriesButton, SIGNAL( toggled( bool ) ), SLOT( categoriesButtonSwitched( bool ) ) );
+	connect( servingsButton, SIGNAL( toggled( bool ) ), SLOT( servingsButtonSwitched( bool ) ) );
+	connect( prepTimeButton, SIGNAL( toggled( bool ) ), SLOT( prepTimeButtonSwitched( bool ) ) );
+	connect( instructionsButton, SIGNAL( toggled( bool ) ), SLOT( instructionsButtonSwitched( bool ) ) );
+	connect( metaDataButton, SIGNAL( toggled( bool ) ), SLOT( metaDataButtonSwitched( bool ) ) );
+	connect( ratingsButton, SIGNAL( toggled( bool ) ), SLOT( ratingsButtonSwitched( bool ) ) );
 
 	connect( ratingAvgRadioButton, SIGNAL( clicked() ), this, SLOT( activateRatingOptionAvg() ) );
 	connect( criterionRadioButton, SIGNAL( clicked() ), this, SLOT( activateRatingOptionCriterion() ) );
@@ -696,17 +696,76 @@ void AdvancedSearchDialog::activateRatingOptionCriterion()
 	ratingAvgFrame->setEnabled( false );
 }
 
-void AdvancedSearchDialog::buttonSwitched()
+void AdvancedSearchDialog::titleButtonSwitched( bool checked )
 {
-	const QObject *sent = sender();
+	if ( checked )
+		titleButton->setText( i18nc("@action:button Recipe title", "Title <<") );
+	else
+		titleButton->setText( i18nc("@action:button Recipe title", "Title >>") );
+}
 
-	if ( sent->inherits("KPushButton") ) {
-		KPushButton *pushed = (KPushButton*) sent;
+void AdvancedSearchDialog::ingredientButtonSwitched( bool checked )
+{
+	if ( checked )
+		ingredientButton->setText( i18nc("@action:button", "Ingredients <<") );
+	else
+		ingredientButton->setText( i18nc("@action:button", "Ingredients >>") );
+}
 
-		//KDE4 port
-		QString suffix = ( pushed->isChecked() ) ? " <<" : " >>";
-		pushed->setText( pushed->text().left( pushed->text().length() - 3 ) + suffix );
-	}
+void AdvancedSearchDialog::authorsButtonSwitched( bool checked )
+{
+	if ( checked )
+		authorsButton->setText( i18nc("@action:button", "Authors <<") );
+	else
+		authorsButton->setText( i18nc("@action:button", "Authors >>") );
+}
+
+void AdvancedSearchDialog::categoriesButtonSwitched( bool checked )
+{
+	if ( checked )
+		categoriesButton->setText( i18nc( "@action:button", "Categories <<" ) );
+	else
+		categoriesButton->setText( i18nc( "@action:button", "Categories >>" ) );
+}
+
+void AdvancedSearchDialog::servingsButtonSwitched( bool checked )
+{
+	if ( checked )
+		servingsButton->setText( i18nc("@action:button", "Yield <<") );
+	else
+		servingsButton->setText( i18nc("@action:button", "Yield >>") );
+}
+
+void AdvancedSearchDialog::prepTimeButtonSwitched( bool checked )
+{
+	if ( checked )
+		prepTimeButton->setText( i18nc( "@action:button", "Preparation Time <<") );
+	else
+		prepTimeButton->setText( i18nc( "@action:button", "Preparation Time >>") );
+}
+
+void AdvancedSearchDialog::instructionsButtonSwitched( bool checked )
+{
+	if ( checked )
+		instructionsButton->setText( i18nc( "@action:button", "Instructions <<") );
+	else
+		instructionsButton->setText( i18nc( "@action:button", "Instructions >>") );
+}
+
+void AdvancedSearchDialog::metaDataButtonSwitched( bool checked )
+{
+	if ( checked )
+		metaDataButton->setText( i18nc( "@label", "Meta Data <<") );
+	else
+		metaDataButton->setText( i18nc( "@label", "Meta Data >>") );
+}
+
+void AdvancedSearchDialog::ratingsButtonSwitched( bool checked )
+{
+	if ( checked )
+		ratingsButton->setText( i18nc("@action:button", "Ratings <<") );
+	else
+		ratingsButton->setText( i18nc("@action:button", "Ratings >>") );
 }
 
 void AdvancedSearchDialog::search()
