@@ -38,7 +38,7 @@ KreMenu::KreMenu( QWidget *parent, const char *name ):
 	setObjectName( name );
 	Menu newMenu;
 
-	mainMenuId = menus.append( newMenu );
+	mainMenuId = menus.insert( menus.end(), newMenu );
 
 	currentMenuId = mainMenuId;
 	m_currentMenu = &( *currentMenuId );
@@ -114,7 +114,7 @@ MenuId KreMenu::createSubMenu( const QString &title, const QString &icon )
 
 	// Create the new menu
 	Menu newMenu;
-	MenuId id = menus.append( newMenu );
+	MenuId id = menus.insert( menus.end(), newMenu );
 
 	// Add a button to the main menu for this submenu
 	KreMenuButton *newMenuButton = new KreMenuButton( this );

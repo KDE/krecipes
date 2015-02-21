@@ -92,7 +92,7 @@ protected:
 
 private:
 	//Variables
-	Q3ValueList <Menu> menus;
+	QLinkedList <Menu> menus;
 	MenuId mainMenuId;
 	MenuId currentMenuId;
 	Menu *m_currentMenu;
