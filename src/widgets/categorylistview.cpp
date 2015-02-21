@@ -23,8 +23,6 @@
 #include "datablocks/categorytree.h"
 #include "dialogs/createcategorydialog.h"
 #include "dialogs/dependanciesdialog.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QPixmap>
 
 CategoryCheckListItem::CategoryCheckListItem( CategoryCheckListView* klv, const Element &category, bool _exclusive ) : Q3CheckListItem( klv, QString(), Q3CheckListItem::CheckBox ), CategoryItemInfo( category ),
