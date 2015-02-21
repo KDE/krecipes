@@ -13,8 +13,6 @@
 #include <QPushButton>
 
 #include <qwidget.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include <khtml_part.h>
 #include <khtmlview.h>
@@ -28,14 +26,14 @@ class DietViewDialog: public KDialog
 	Q_OBJECT
 
 public:
-	DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers );
+	DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QList <int> &dishNumbers );
 	~DietViewDialog();
 private:
 	// Widgets
 	KHTMLPart *dietView;
 
 	// Private methods
-	void showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers );
+	void showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const QList <int> &dishNumbers );
 private slots:
 	void print( void );
 	void slotOk( void );

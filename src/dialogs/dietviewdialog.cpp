@@ -18,7 +18,7 @@
 #include <Q3ValueList>
 #include <KVBox>
 
-DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
+DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QList <int> &dishNumbers )
 		: KDialog( parent )
 {
 	setCaption( i18nc( "@title:window", "View Diet" ) );
@@ -51,7 +51,7 @@ DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, i
 DietViewDialog::~DietViewDialog()
 {}
 
-void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const Q3ValueList <int> &dishNumbers )
+void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int mealNumber, const QList <int> &dishNumbers )
 {
 
 
@@ -82,8 +82,7 @@ void DietViewDialog::showDiet( const RecipeList &recipeList, int dayNumber, int 
 	htmlCode += QString( "<table><tbody>" );
 
 
-	Q3ValueList <int>::ConstIterator it;
-	it = dishNumbers.begin();
+	QList <int>::ConstIterator it = dishNumbers.begin();
 	RecipeList::ConstIterator rit;
 	rit = recipeList.begin();
 
