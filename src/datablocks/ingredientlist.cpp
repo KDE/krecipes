@@ -165,7 +165,7 @@ void IngredientList::removeSubstitute( const Ingredient &i )
 		for ( IngredientList::iterator it = begin(); it != end(); ++it ) {
 			Ingredient::SubstitutesList::iterator result = (*it).substitutes.find(i);
 			if ( result != (*it).substitutes.end() ) {
-				(*it).substitutes.remove(result);
+				(*it).substitutes.erase(result);
 				return;
 			}
 		}

@@ -214,7 +214,7 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 		}
 
 		if ( recipe_it_old != selected_recipes.end() )
-			selected_recipes.remove( recipe_it_old );
+			selected_recipes.erase( recipe_it_old );
 
 		progress_dialog->setLabelText( i18n( "Importing recipe: %1" ,( *recipe_it ).title ));
 		progress_dialog->progressBar()->setValue(progress_dialog->progressBar()->value()+1);

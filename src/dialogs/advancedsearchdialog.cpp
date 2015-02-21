@@ -832,7 +832,7 @@ void AdvancedSearchDialog::search()
 	for ( QStringList::const_iterator author_it = items.constBegin(); author_it != items.constEnd(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).id == -1 ) {
-				it = allRecipes.remove( it );
+				it = allRecipes.erase( it );
 				it--;
 			}
 		}
@@ -841,7 +841,7 @@ void AdvancedSearchDialog::search()
 	for ( QStringList::const_iterator author_it = items.constBegin(); author_it != items.constEnd(); ++author_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).authorList.findByName( QRegExp(*author_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).id != -1 ) {
-				it = allRecipes.remove( it );
+				it = allRecipes.erase( it );
 				it--;
 			}
 		}
@@ -852,7 +852,7 @@ void AdvancedSearchDialog::search()
 	for ( QStringList::const_iterator cat_it = items.constBegin(); cat_it != items.constEnd(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).id == -1 ) {
-				it = allRecipes.remove( it );
+				it = allRecipes.erase( it );
 				it--;
 			}
 		}
@@ -861,7 +861,7 @@ void AdvancedSearchDialog::search()
 	for ( QStringList::const_iterator cat_it = items.constBegin(); cat_it != items.constEnd(); ++cat_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).categoryList.findByName( QRegExp(*cat_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).id != -1 ) {
-				it = allRecipes.remove( it );
+				it = allRecipes.erase( it );
 				it--;
 			}
 		}
@@ -872,7 +872,7 @@ void AdvancedSearchDialog::search()
 	for ( QStringList::const_iterator ing_it = items.constBegin(); ing_it != items.constEnd(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).ingredientID == -1 ) {
-				it = allRecipes.remove( it );
+				it = allRecipes.erase( it );
 				it--;
 			}
 		}
@@ -881,7 +881,7 @@ void AdvancedSearchDialog::search()
 	for ( QStringList::const_iterator ing_it = items.constBegin(); ing_it != items.constEnd(); ++ing_it ) {
 		for ( RecipeList::iterator it = allRecipes.begin(); it != allRecipes.end(); ++it ) {
 			if ( ( *it ).ingList.findByName( QRegExp(*ing_it, Qt::CaseInsensitive, QRegExp::Wildcard) ).ingredientID != -1 ) {
-				it = allRecipes.remove( it );
+				it = allRecipes.erase( it );
 				it--;
 			}
 		}
@@ -912,12 +912,12 @@ void AdvancedSearchDialog::search()
 
 				kDebug()<<"average for "<<(*recipe_it).title<<" "<<average;
 				if ( average < stars || average > stars + stars_offset ) {
-					recipe_it = allRecipes.remove( recipe_it );
+					recipe_it = allRecipes.erase( recipe_it );
 					recipe_it--;
 				}
 			}
 			else {
-				recipe_it = allRecipes.remove( recipe_it );
+				recipe_it = allRecipes.erase( recipe_it );
 				recipe_it--;
 			}
 		}
@@ -962,13 +962,13 @@ void AdvancedSearchDialog::search()
 					double average = (*sum_it)/(*count_it);
 
 					if ( average < stars || average > stars + stars_offset ) {
-						recipe_it = allRecipes.remove( recipe_it );
+						recipe_it = allRecipes.erase( recipe_it );
 						recipe_it--;
 						break;
 					}
 				}
 				else {
-					recipe_it = allRecipes.remove( recipe_it );
+					recipe_it = allRecipes.erase( recipe_it );
 					recipe_it--;
 					break;
 				}
