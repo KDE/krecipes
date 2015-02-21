@@ -1,9 +1,0 @@
-[DBType]
-Type=MySQL
-
-[Server]
-Host=localhost
-Port=0
-DBName=kreunittests
-Username=kreunittests
-Password=kreunittests

@@ -12,68 +12,23 @@
 
 #include "backends/recipedb.h"
 
-#include <KApplication>
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KConfigGroup>
-#include <KSharedConfigPtr>
-
 #include <QtTest/QTest>
 
-
-RecipeDB * TestDatabaseAuthors::createDatabase(const QString & configFilename )
-{
-	RecipeDB * database;
-
-	QString configFilePath =
-		KStandardDirs::locateLocal( "appdata", configFilename );
-
-	QStringList strList;
-	strList << configFilePath;
-	KGlobal::config()->addConfigSources( strList );
-
-	KConfigGroup dbtypeGroup = KGlobal::config()->group( "DBType" );
-	QString dbType = dbtypeGroup.readEntry( "Type", "" );
-
-	KConfigGroup serverGroup = KGlobal::config()->group( "Server" );
-	QString host = serverGroup.readEntry( "Host", "localhost" );
-	QString user = serverGroup.readEntry( "Username", QString() );
-	QString pass = serverGroup.readEntry( "Password", QString() );
-	QString dbname = serverGroup.readEntry( "DBName", "Krecipes" );
-	int port = serverGroup.readEntry( "Port", 0 );
-	QString dbfile = serverGroup.readEntry( "DBFile",
-		KStandardDirs::locateLocal ( "appdata", "krecipes.krecdb" ) );
-
-	database = RecipeDB::createDatabase( dbType, host, user, pass, dbname, port, dbfile );
-
-	database->connect();
-	
-	return database;
-}
+#include <QDebug>
 
 
 void TestDatabaseAuthors::initTestCase()
 {
-	m_sqliteDatabase = createDatabase( "sqliterc" );
+	QLatin1String dummy("dummy");
+	m_sqliteDatabase = RecipeDB::createDatabase(QLatin1String("SQLite"), dummy, dummy, dummy, dummy, 0, QLatin1String(":memory"));
+	QVERIFY(m_sqliteDatabase);
+	m_sqliteDatabase->connect();
+
         QVERIFY( m_sqliteDatabase->ok() );
 	m_sqliteDatabase->transaction();
 	m_sqliteDatabase->wipeDatabase();
 	m_sqliteDatabase->commit();
-	//m_sqliteDatabase->checkIntegrity();
-
-	m_mysqlDatabase = createDatabase( "mysqlrc" );
-        QVERIFY( m_mysqlDatabase->ok() );
-	m_mysqlDatabase->transaction();
-	m_mysqlDatabase->wipeDatabase();
-	m_mysqlDatabase->commit();
-	//m_mysqlDatabase->checkIntegrity();
-
-	m_postgresqlDatabase = createDatabase( "postgresqlrc" );
-        QVERIFY( m_postgresqlDatabase->ok() );
-	m_postgresqlDatabase->transaction();
-	m_postgresqlDatabase->wipeDatabase();
-	m_postgresqlDatabase->commit();
-	//m_postgresqlDatabase->checkIntegrity();
+	m_sqliteDatabase->checkIntegrity();
 }
 
 
@@ -82,41 +37,38 @@ void TestDatabaseAuthors::cleanupTestCase()
 	if ( m_sqliteDatabase ) {
 		delete m_sqliteDatabase;
 	}
-	if ( m_mysqlDatabase ) {
-		delete m_mysqlDatabase;
-	}
-	if ( m_postgresqlDatabase ) {
-		delete m_postgresqlDatabase;
-	}
 }
 
 
-void TestDatabaseAuthors::createAuthors( RecipeDB * database )
+void TestDatabaseAuthors::createAuthors( RecipeDB * database, QString name, int expectedId )
 {
-	RecipeDB::IdType last_insert_id = database->createNewAuthor( "Ethan" );
+	RecipeDB::IdType last_insert_id = database->createNewAuthor( name );
+	qDebug() << last_insert_id << RecipeDB::InvalidId;
 	QVERIFY( last_insert_id != RecipeDB::InvalidId );
+	QCOMPARE( last_insert_id, expectedId );
 
-	RecipeDB::IdType author_id = database->findExistingAuthorByName( "Ethan" );
+	RecipeDB::IdType author_id = database->findExistingAuthorByName( name );
+	qDebug() << author_id;
 	QVERIFY( author_id != RecipeDB::InvalidId );
 	QCOMPARE( last_insert_id, author_id);
 }
 
+void TestDatabaseAuthors::testCreateSQLite_data() 
+{
+	  QTest::addColumn<QString>("name");
+	  QTest::addColumn<int>("expectedId");
+	  QTest::newRow("Ethan") << QString("Ethan") << 1;
+	  QTest::newRow("Et'han") << QString("Et'han") << 2;
+	  QTest::newRow("John") << QString("John") << 3;
+	  QTest::newRow("Martin") << QString("Martin") << 4;
+}
 
 void TestDatabaseAuthors::testCreateSQLite()
 {
-	createAuthors( m_sqliteDatabase );
-}
-
-
-void TestDatabaseAuthors::testCreateMySQL()
-{
-	createAuthors( m_mysqlDatabase );
-}
-
-
-void TestDatabaseAuthors::testCreatePostgreSQL()
-{
-	createAuthors( m_postgresqlDatabase );
+	QFETCH(QString, name);
+	QFETCH(int, expectedId);
+	createAuthors( m_sqliteDatabase, name, expectedId );
+	m_sqliteDatabase->checkIntegrity();
 }
 
 

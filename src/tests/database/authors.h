@@ -23,17 +23,12 @@ private slots:
 	void initTestCase();
 	void cleanupTestCase();
 	void testCreateSQLite();
-	void testCreateMySQL();
-	void testCreatePostgreSQL();
-	//void testModify();
-	//void testDelete();
+	void testCreateSQLite_data();
 private:
 	RecipeDB * createDatabase( const QString & configFilename );
-	inline void createAuthors( RecipeDB * database );
+	inline void createAuthors( RecipeDB * database, QString name, int expectedId );
 
 	RecipeDB * m_sqliteDatabase;
-	RecipeDB * m_mysqlDatabase;
-	RecipeDB * m_postgresqlDatabase;
 };
 
 #endif // TEST_DATABASE_AUTHORS_H
