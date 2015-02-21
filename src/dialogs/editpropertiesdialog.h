@@ -15,7 +15,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <Q3ValueList>
 #include <kdialog.h>
 
 #include "datablocks/unit.h"
@@ -88,7 +87,7 @@ private:
 
 	ElementList *perUnitListBack;
 	RecipeDB *db;
-	Q3ValueList<QStringList> loaded_data;
+	QList<QStringList> loaded_data;
 
 	int ingredientID;
 	QString ingredientName;

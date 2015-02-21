@@ -22,10 +22,6 @@
 #include <q3listview.h>
 #include <KPushButton>
 
-
-//Added by qt3to4:
-#include <Q3ValueList>
-
 #include <kstringhandler.h>
 #include <klocale.h>
 #include <kvbox.h>

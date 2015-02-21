@@ -553,7 +553,7 @@ void EditPropertiesDialog::loadUSDAData()
 	Q3ListViewItem * item = usdaListView->listView()->selectedItem();
 	if ( item ) {
 		int index = item->text( 1 ).toInt();
-		QStringList data = loaded_data[ index ];
+		const QStringList data = loaded_data[ index ];
 
 		int grams_id = db->findExistingUnitByName( "g" ); //get this id because all data is given per gram
 		if ( grams_id == -1 ) {
