@@ -14,8 +14,6 @@
 #include <QFileInfo>
 #include <QPushButton>
 #include <QLabel>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QVBoxLayout>
 #include <q3tl.h>
 
@@ -162,7 +160,7 @@ void PageSetupDialog::initShownItems()
 
 	PropertiesMap properties = m_htmlPart->properties();
 
-	Q3ValueList<QString> nameList;
+	QList<QString> nameList;
 	QMap<QString,KreDisplayItem*> nameMap;
 
 	for ( PropertiesMap::const_iterator it = properties.constBegin(); it != properties.constEnd(); ++it ) {
@@ -171,7 +169,7 @@ void PageSetupDialog::initShownItems()
 	}
 	qHeapSort( nameList );
 
-	for ( Q3ValueList<QString>::const_iterator it = nameList.constBegin(); it != nameList.constEnd(); ++it ) {
+	for ( QList<QString>::const_iterator it = nameList.constBegin(); it != nameList.constEnd(); ++it ) {
 		KreDisplayItem *item = nameMap[*it];
 		if ( properties[item] & SetupDisplay::Visibility ) {
 			int new_id = shown_items_popup->insertItem ( *it );
