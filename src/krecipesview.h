@@ -46,7 +46,7 @@ class ShoppingListDialog;
 class UnitsDialog;
 class QFrame;
 class KAction;
-typedef Q3ValueList <Menu>::Iterator MenuId;
+typedef QLinkedList <Menu>::Iterator MenuId;
 
 
 /**
