@@ -256,7 +256,15 @@ QString KreExporter::createContent( const RecipeList& recipes )
 		xml += "</krecipes-recipe>\n";
 	}
 
-	return xml;
+	// Filter out invalid XML chars
+	// http://www.w3.org/TR/xml/#charsets
+	QVector<uint> xmlUCS = xml.toUcs4();
+	for (int i = 0; i < xmlUCS.count(); ++i) {
+		if (xmlUCS[i] < 32 && xmlUCS[i] != 9 && xmlUCS[i] != 10 && xmlUCS[i] != 13) {
+			xmlUCS[i] = 32;
+		}
+	}
+	return QString::fromUcs4(xmlUCS.constData(), xmlUCS.count());
 }
 
 void KreExporter::createCategoryStructure( QString &xml, const RecipeList &recipes )
