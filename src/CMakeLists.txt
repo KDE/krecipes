@@ -249,12 +249,6 @@ set(DATABASE_TESTS
     authors
     )
 
-set(DATABASE_TESTS_DATA
-    tests/database/sqliterc
-    tests/database/mysqlrc
-    tests/database/postgresqlrc
-    )
-
 macro(add_import_export_test _TEST)
     if(KDE4_BUILD_TESTS)
         kde4_add_executable(krecipes-import-export-${_TEST} tests/import-export/${_TEST}.cpp)
@@ -296,8 +290,6 @@ foreach(_TEST ${DATABLOCKS_TESTS})
 endforeach(_TEST)
 foreach(_TEST ${DATABASE_TESTS})
     add_database_test(${_TEST})
-    install( FILES ${DATABASE_TESTS_DATA}
-        DESTINATION ${DATA_INSTALL_DIR}/krecipes-database-${_TEST}/ )
 endforeach(_TEST)
 
 
