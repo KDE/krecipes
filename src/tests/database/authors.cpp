@@ -20,7 +20,7 @@
 void TestDatabaseAuthors::initTestCase()
 {
 	QLatin1String dummy("dummy");
-	m_sqliteDatabase = RecipeDB::createDatabase(QLatin1String("SQLite"), dummy, dummy, dummy, dummy, 0, QLatin1String(":memory"));
+	m_sqliteDatabase = RecipeDB::createDatabase(QLatin1String("SQLite"), dummy, dummy, dummy, dummy, 0, QLatin1String(":memory:"));
 	QVERIFY(m_sqliteDatabase);
 	m_sqliteDatabase->connect();
 
