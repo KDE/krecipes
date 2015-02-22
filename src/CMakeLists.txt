@@ -247,6 +247,7 @@ set(DATABLOCKS_TESTS
 
 set(DATABASE_TESTS
     authors
+    encoding
     )
 
 macro(add_import_export_test _TEST)
