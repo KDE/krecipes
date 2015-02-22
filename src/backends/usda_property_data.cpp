@@ -18,15 +18,13 @@
 
 #include <QFile>
 #include <QString>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QTextStream>
 
 namespace USDA {
 
-Q3ValueList<PropertyData> loadProperties()
+QList<PropertyData> loadProperties()
 {
-	Q3ValueList<PropertyData> result;
+	QList<PropertyData> result;
 
 	QString dataFilename = KStandardDirs::locate( "appdata", "data/property-data-" + KGlobal::locale() ->language() + ".txt" );
 	if ( dataFilename.isEmpty() ) {

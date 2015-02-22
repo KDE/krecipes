@@ -12,7 +12,8 @@
 #ifndef USDA_PROPERTY_DATA_H
 #define USDA_PROPERTY_DATA_H
 
-#include <q3valuelist.h>
+#include <QList>
+#include <QString>
 
 #define TOTAL_USDA_PROPERTIES 43
 
@@ -24,7 +25,7 @@ namespace USDA {
 		QString unit;
 	};
 
-	Q3ValueList<PropertyData> loadProperties();
+	QList<PropertyData> loadProperties();
 }
 
 #endif //USDA_PROPERTY_DATA_H
