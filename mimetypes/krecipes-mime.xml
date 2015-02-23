@@ -6,6 +6,7 @@
 		<glob pattern="*.krecbk" />
 		<sub-class-of type="application/x-gzip"/>
 		<comment>Krecipes Backup file</comment>
+		<comment xml:lang="bs">Krecipes rezervna datoteka</comment>
 		<comment xml:lang="ca">Fitxer de còpia de seguretat del Krecipes</comment>
 		<comment xml:lang="cs">Záložní soubor Krecipes</comment>
 		<comment xml:lang="da">Krecipes backup-fil</comment>
