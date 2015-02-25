@@ -15,28 +15,28 @@ sodium:mg
 zinc:mg
 copper:mg
 manganese:mg
-selenium:μg
+selenium:µg
 vitamin C:mg
 thiamin:mg
 riboflavin:mg
 niacin:mg
 pantothenic acid:mg
 vitamin B:mg
-folate:μg
-folic acid:μg
-food folate:μg
-folate (DFE):μg
-vitamin B12:μg
+folate:µg
+folic acid:µg
+food folate:µg
+folate (DFE):µg
+vitamin B12:µg
 vitamin A:IU
-vitamin A (RAE):μg
-retinol:μg
+vitamin A (RAE):µg
+retinol:µg
 vitamin E:g
-vitamin K:μg
-alpha-carotene:μg
-beta-carotene:μg
-beta-cryptoxanthin:μg
-lycopene:μg
-lutein+zeazanthin:μg
+vitamin K:µg
+alpha-carotene:µg
+beta-carotene:µg
+beta-cryptoxanthin:µg
+lycopene:µg
+lutein+zeazanthin:µg
 saturated fat:g
 monounsaturated fat:g
 polyunsaturated fat:g
