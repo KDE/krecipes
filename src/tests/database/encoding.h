@@ -23,8 +23,8 @@ private slots:
 	void initTestCase();
 	void cleanupTestCase();
 	void testSourceEncoding();
-	void testInsertProperty();
-	void testRetrieveProperty();
+	void testInsertPropertyLatin1();
+	void testRetrievePropertyLatin1();
 private:
 	RecipeDB * createDatabase( const QString & configFilename );
 	RecipeDB * m_sqliteDatabase;

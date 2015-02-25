@@ -48,12 +48,12 @@ void TestDatabaseEncoding::testSourceEncoding()
 	QCOMPARE( moose0.length(), 5 );
 	QCOMPARE( moose0.at(0), QChar(0xb5) );  // "micro" symbol
 	QCOMPARE( moose0, moose1 );
-	QCOMPARE( moose0, moose2 );
+	QCOMPARE( moose0, moose2 );  // This is the important bit: the string is representable in latin1
 	
 	qDebug() << "ORG" << moose0;
 }
 
-void TestDatabaseEncoding::testInsertProperty()
+void TestDatabaseEncoding::testInsertPropertyLatin1()
 {
 	QString moose1 = QString::fromUtf8("µøøse");
 	QVERIFY( m_sqliteDatabase->ok() );
@@ -66,7 +66,7 @@ void TestDatabaseEncoding::testInsertProperty()
 	}
 }
 
-void TestDatabaseEncoding::testRetrieveProperty()
+void TestDatabaseEncoding::testRetrievePropertyLatin1()
 {
 	QString moose1 = QString::fromUtf8("µøøse");
 	QVERIFY( m_sqliteDatabase->ok() );
