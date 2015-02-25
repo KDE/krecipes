@@ -35,7 +35,6 @@
 
 IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget( parent )
 {
-
 	// Store pointer to database
 	database = db;
 

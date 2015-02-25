@@ -423,11 +423,10 @@ void EditPropertiesDialog::addPropertyToIngredient( void )
 
 	if ( propertyDialog->exec() == QDialog::Accepted )
 	{
-
 		int propertyID = propertyDialog->propertyID();
 		int perUnitsID = -1;
 		if ( propertyID != -1 ) // check if the property is not -1 ... (not selected)
-			propertyDialog->perUnitsID();
+			perUnitsID = propertyDialog->perUnitsID();
 		if ( !( db->ingredientContainsProperty( ingredientID, propertyID, perUnitsID ) ) ) {
 			if ( ( propertyID >= 0 ) && ( perUnitsID >= 0 ) )  
 				db->addPropertyToIngredient( ingredientID, propertyID, 0, perUnitsID ); // Add result chosen property to ingredient in database, with amount 0 by default
