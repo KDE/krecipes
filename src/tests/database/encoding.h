@@ -25,6 +25,8 @@ private slots:
 	void testSourceEncoding();
 	void testInsertPropertyLatin1();
 	void testRetrievePropertyLatin1();
+	void testInsertPropertyUTF8();
+	void testRetrievePropertyUTF8();
 private:
 	RecipeDB * createDatabase( const QString & configFilename );
 	RecipeDB * m_sqliteDatabase;

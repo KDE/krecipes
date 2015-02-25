@@ -49,8 +49,6 @@ void TestDatabaseEncoding::testSourceEncoding()
 	QCOMPARE( moose0.at(0), QChar(0xb5) );  // "micro" symbol
 	QCOMPARE( moose0, moose1 );
 	QCOMPARE( moose0, moose2 );  // This is the important bit: the string is representable in latin1
-	
-	qDebug() << "ORG" << moose0;
 }
 
 void TestDatabaseEncoding::testInsertPropertyLatin1()
@@ -79,8 +77,60 @@ void TestDatabaseEncoding::testRetrievePropertyLatin1()
 	IngredientProperty p = m_sqliteDatabase->propertyName( i );
 	QCOMPARE( p.units, QString("g") );
 	QCOMPARE( p.name, moose1 );
+
+	if ( i > 0 ) {
+		m_sqliteDatabase->removeProperty( i );
+	}
+
+}
+
+void TestDatabaseEncoding::testInsertPropertyUTF8()
+{
+	QString moose1 = QString::fromUtf8("µøøse");  // That's a string that fix in latin1
+	QString moose2 = QString::fromUtf8("ሐረር ቢራ");  // Harar Beer, from Ethiopia, does not fit in latin1
+	QString moose3 = QString::fromUtf8("μøøse");  // That's a mu-oose, not a micro-oose
+	QVERIFY( m_sqliteDatabase->ok() );
+
+	QTextCodec *codec = QTextCodec::codecForName("latin-1");
+	QVERIFY2( codec, "No codec" );
+	QVERIFY2( codec->canEncode(moose1), "Can't encode micro-oose" );
+	QVERIFY2( !codec->canEncode(moose2), "Can encode harar beer (unexpected)" );
+	QVERIFY2( !codec->canEncode(moose3), "Can encode mu-oose (unexpected)" );
 	
-	qDebug() << "ORG" << moose1 << "GOT" << p.units;
+	QVERIFY( moose1 == QString::fromLatin1(moose1.toLatin1()) );  // Converts OK
+	QVERIFY( moose2 != QString::fromLatin1(moose2.toLatin1()) );  // Lossy conversion
+	QVERIFY( moose3 != QString::fromLatin1(moose3.toLatin1()) );  // Lossy conversion
+	
+	// Both of the non-latin1 properties can be added
+	RecipeDB::IdType i = m_sqliteDatabase->addProperty( moose2, QString("mL"));
+	QVERIFY( i > 0 );
+	if ( i > 0 ) {
+		m_sqliteDatabase->removeProperty( i );
+	}
+
+	i = m_sqliteDatabase->addProperty( moose3, QString("g"));
+	QVERIFY( i > 0 );
+	if ( i > 0 ) {
+		m_sqliteDatabase->removeProperty( i );
+	}
+}
+
+void TestDatabaseEncoding::testRetrievePropertyUTF8()
+{
+	QString moose2 = QString::fromUtf8("ሐረር ቢራ");  // Harar Beer, from Ethiopia, does not fit in latin1
+	QVERIFY( m_sqliteDatabase->ok() );
+	RecipeDB::IdType i = m_sqliteDatabase->addProperty( moose2, QString("mL"));
+
+	QVERIFY( i > 0 );
+	
+	IngredientProperty p = m_sqliteDatabase->propertyName( i );
+	QVERIFY2( p.units == QString("mL"), "Units have changed." );
+	QVERIFY2( p.name == moose2, "Property name has been mangled." );
+
+	if ( i > 0 ) {
+		m_sqliteDatabase->removeProperty( i );
+	}
+
 }
 
 
