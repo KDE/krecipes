@@ -29,6 +29,7 @@
 		<glob pattern="*.kreml" />
 		<sub-class-of type="text/xml" />
 		<comment>Krecipes Exported Recipes</comment>
+		<comment xml:lang="bs">Krecipes izvezeni recepti</comment>
 		<comment xml:lang="ca">Receptes exportades del Krecipes</comment>
 		<comment xml:lang="cs">Exportované recepty Krecipes</comment>
 		<comment xml:lang="da">Krecipes eksporterede opskrifter</comment>
@@ -51,6 +52,7 @@
 		<glob pattern="*.kre" />
 		<sub-class-of type="application/x-tarz"/>
 		<comment>Krecipes Exported Recipes (compressed data)</comment>
+		<comment xml:lang="bs">Krecipes izvezeni recepti (kompresovani podaci)</comment>
 		<comment xml:lang="ca">Receptes exportades del Krecipes (dades comprimides)</comment>
 		<comment xml:lang="cs">Exportované recepty Krecipes (zkomprimovaná data)</comment>
 		<comment xml:lang="da">Krecipes eksporterede opskrifter (komprimerede data)</comment>
