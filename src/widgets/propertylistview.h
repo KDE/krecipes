@@ -59,7 +59,7 @@ class ConstraintsListItem: public Q3CheckListItem
 public:
 	ConstraintsListItem( Q3ListView* klv, const IngredientProperty &pty ) : Q3CheckListItem( klv, QString(), Q3CheckListItem::CheckBox )
 	{
-		// Initialize the constraint data with the the property data
+		// Initialize the constraint data with the property data
 		ctStored = new Constraint();
 		ctStored->id = pty.id;
 		ctStored->name = pty.name;

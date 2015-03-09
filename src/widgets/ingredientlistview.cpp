@@ -26,7 +26,7 @@
 IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, const Element &ing ) : Q3CheckListItem( qlv, QString(), Q3CheckListItem::CheckBox ),
 	m_listview(qlv)
 {
-	// Initialize the ingredient data with the the property data
+	// Initialize the ingredient data with the property data
 	ingStored = new Element();
 	ingStored->id = ing.id;
 	ingStored->name = ing.name;
@@ -35,7 +35,7 @@ IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, 
 IngredientCheckListItem::IngredientCheckListItem( IngredientCheckListView* qlv, Q3ListViewItem *after, const Element &ing ) : Q3CheckListItem( qlv, after, QString(), Q3CheckListItem::CheckBox ),
 	m_listview(qlv)
 {
-	// Initialize the ingredient data with the the property data
+	// Initialize the ingredient data with the property data
 	ingStored = new Element();
 	ingStored->id = ing.id;
 	ingStored->name = ing.name;
