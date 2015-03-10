@@ -19,9 +19,11 @@
 		<comment xml:lang="pl">Plik kopii zapasowej KPrzepisy</comment>
 		<comment xml:lang="pt">Cópia de Segurança do Krecipes</comment>
 		<comment xml:lang="pt_BR">Arquivo de backup do Krecipes</comment>
+		<comment xml:lang="ru">файл резервной копии Krecipes</comment>
 		<comment xml:lang="sk">Záložný súbor Krecipes</comment>
 		<comment xml:lang="sl">Datoteka z varnostno kopijo Krecipes</comment>
 		<comment xml:lang="sv">Krecept säkerhetskopieringsfil</comment>
+		<comment xml:lang="tr">Krecipes Yedekleme dosyası</comment>
 		<comment xml:lang="uk">файл резервної копії Krecipes</comment>
 	</mime-type>
 
@@ -42,9 +44,11 @@
 		<comment xml:lang="pl">Wyeksportowane przepisy KPrzepisów</comment>
 		<comment xml:lang="pt">Receitas Exportadas pelo Krecipes</comment>
 		<comment xml:lang="pt_BR">Receitas exportadas do Krecipes</comment>
+		<comment xml:lang="ru">экспортированные рецепты Krecipes</comment>
 		<comment xml:lang="sk">Exportované recepty Krecipes</comment>
 		<comment xml:lang="sl">Izvoženi recepti Krecipes</comment>
 		<comment xml:lang="sv">Krecept exporterade recept</comment>
+		<comment xml:lang="tr">Krecipes Dışa Aktarılan Tarifleri</comment>
 		<comment xml:lang="uk">експортовані рецепти Krecipes</comment>
 	</mime-type>
 
@@ -65,9 +69,11 @@
 		<comment xml:lang="pl">Wyeksportowane przepisy KPrzepisów (spakowane dane)</comment>
 		<comment xml:lang="pt">Receitas Exportadas pelo Krecipes (dados comprimidos)</comment>
 		<comment xml:lang="pt_BR">Receitas exportadas do Krecipes (dados compactados)</comment>
+		<comment xml:lang="ru">экспортированные рецепты Krecipes (сжатые данные)</comment>
 		<comment xml:lang="sk">Exportované recepty Krecipes (komprimované dáta)</comment>
 		<comment xml:lang="sl">Izvoženi recepti Krecipes (stisnjeni podatki)</comment>
 		<comment xml:lang="sv">Krecept exporterade recept (komprimerad data)</comment>
+		<comment xml:lang="tr">Krecipes Dışa Aktarılan Tarifleri (sıkıştırılmış veri)</comment>
 		<comment xml:lang="uk">експортовані рецепти Krecipes (стиснені дані)</comment>
 	</mime-type>
 
