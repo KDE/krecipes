@@ -20,7 +20,7 @@
 #include "convert_sqlite3.h"
 #include "datablocks/elementlist.h"
 
-static const char *version = "2.0.0";
+static const char *version = "2.1.0";
 
 static KCmdLineOptions options;
 
