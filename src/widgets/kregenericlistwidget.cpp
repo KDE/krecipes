@@ -1,15 +1,17 @@
 /***************************************************************************
-*   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2012-2015 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "kregenericlistwidget.h"
 
 #include "ui_kregenericlistwidget.h"
+
+//#include <kdebug.h>
 
 #include <KApplication>
 #include <KIcon>
@@ -227,6 +229,27 @@ QVariant KreGenericListWidget::selectedRowData( int column, int role )
 
 }
 
+QVariant KreGenericListWidget::getData( int row, int column, int role )
+{
+	QModelIndex index = m_proxyModel->index( row, column, currentParent() );
+	if ( index.isValid() ) {
+		return index.data( role );
+	} else {
+		return QVariant();
+	}
+}
+
+QStandardItem * KreGenericListWidget::getItem( int row, int column )
+{
+	QModelIndex proxy_index = m_proxyModel->index( row, column, currentParent() );
+	QModelIndex source_index = m_proxyModel->mapToSource( proxy_index );
+	if ( source_index.isValid() ) {
+		return m_sourceModel->itemFromIndex( source_index );
+	} else {
+		return 0;
+	}
+}
+
 void KreGenericListWidget::contextMenuSlot( const QPoint & point)
 {
 	QPoint globalPoint( ui->m_treeView->mapToGlobal(point) );
@@ -238,5 +261,9 @@ void KreGenericListWidget::contextMenuSlot( const QPoint & point)
 		globalPoint );
 }
 
+QStandardItemModel * KreGenericListWidget::model()
+{
+	return m_sourceModel;
+}
 
 #include "kregenericlistwidget.moc"

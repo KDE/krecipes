@@ -215,7 +215,9 @@ public:
 	virtual void loadIngredients( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadPossibleUnits( int ingredientID, UnitList *list ) = 0;
 	virtual void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 ) = 0;
-	virtual void loadProperties( IngredientPropertyList *list, int ingredientID = -2 ) = 0; // Loads the list of possible properties by default, all the ingredient properties with -1, and the ingredients of given property if id>=0
+	// Loads the list of possible properties by default, all the ingredient properties
+	// with -1, and the ingredients of given property if id>=0
+	virtual int loadProperties( IngredientPropertyList *list, int ingredientID = -2 ) = 0;
 	void loadRecipe( Recipe *recipe, int items, int id );
 
 	virtual void loadRatingCriterion( ElementList *list, int limit = -1, int offset = 0 ) = 0;

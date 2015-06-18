@@ -10,16 +10,18 @@
 ***************************************************************************/
 
 #include "propertiesdialog.h"
+
+//#include <kdebug.h>
+
 #include <klocale.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
-#include <kconfig.h>
 #include <KPushButton>
 
 #include "backends/recipedb.h"
 #include "createpropertydialog.h"
-#include "widgets/propertylistview.h"
-#include "actionshandlers/propertyactionshandler.h"
+#include "widgets/krepropertylistwidget.h"
+#include "actionshandlers/krepropertyactionshandler.h"
 
 //Added by qt3to4:
 #include <QVBoxLayout>
@@ -35,18 +37,10 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 
 	QHBoxLayout* layout = new QHBoxLayout( this );
 
-	propertyListView = new CheckPropertyListView( this, database, true );
-	propertyActionsHandler = new PropertyActionsHandler( propertyListView, database );
-	propertyListView->reload();
+	propertyListWidget = new KrePropertyListWidget( this, database );
+	propertyActionsHandler = new KrePropertyActionsHandler( propertyListWidget, database );
 
-	KConfigGroup config( KGlobal::config(), "Formatting");
-	QStringList hiddenList = config.readEntry("HiddenProperties", QStringList());
-	for ( Q3CheckListItem *item = (Q3CheckListItem*)propertyListView->firstChild(); item; item = (Q3CheckListItem*)item->nextSibling() ) {
-		if ( !hiddenList.contains(item->text(0)) )
-			item->setOn(true);
-	}
-
-	layout->addWidget ( propertyListView );
+	layout->addWidget ( propertyListWidget );
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
 	vboxl->setSpacing( KDialog::spacingHint() );
@@ -73,10 +67,10 @@ PropertiesDialog::~PropertiesDialog()
 
 void PropertiesDialog::reload( void )
 {
-	propertyListView->reload();
+	propertyListWidget->reload( ForceReload );
 }
 
-ActionsHandlerBase* PropertiesDialog::getActionsHandler() const
+KreGenericActionsHandler* PropertiesDialog::getActionsHandler() const
 {
 	return propertyActionsHandler;
 }

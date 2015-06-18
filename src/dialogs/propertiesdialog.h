@@ -20,10 +20,10 @@
 
 class KPushButton;
 class RecipeDB;
-class StdPropertyListView;
-class ActionsHandlerBase;
+class KrePropertyListWidget;
+class KreGenericActionsHandler;
 class KAction;
-class PropertyActionsHandler;
+class KrePropertyActionsHandler;
 
 /**
 @author Unai Garro
@@ -35,7 +35,7 @@ public:
 	PropertiesDialog( QWidget *parent, RecipeDB *db );
 	~PropertiesDialog();
 	void reload( void );
-	ActionsHandlerBase* getActionsHandler() const;
+	KreGenericActionsHandler* getActionsHandler() const;
 	void addAction( KAction * action );
 
 private:
@@ -46,8 +46,8 @@ private:
 	QGridLayout* layout;
 	KPushButton* addPropertyButton;
 	KPushButton* removePropertyButton;
-	StdPropertyListView* propertyListView;
-	PropertyActionsHandler *propertyActionsHandler;
+	KrePropertyListWidget* propertyListWidget;
+	KrePropertyActionsHandler* propertyActionsHandler;
 
 };
 

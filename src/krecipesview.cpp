@@ -479,7 +479,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 			leftPanel->highlightButton( button3 );
 		rightPanel->setHeader( i18n( "Properties" ), "properties" );
 		rightPanel->raise( propertiesPanel );
-		//propertiesPanel->reload();
+		propertiesPanel->reload();
 		emit signalChangeStatusbar( QString("") );
 		break;
 	case UnitsP:

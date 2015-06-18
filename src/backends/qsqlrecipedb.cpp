@@ -1284,8 +1284,9 @@ RecipeDB::IdType QSqlRecipeDB::addProperty( const QString &name, const QString &
 	return last_insert_id;
 }
 
-void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientID )
+int QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientID )
 {
+	int numberOfProps = 0;
 	list->clear();
 	QString command;
 	bool usePerUnit;
@@ -1328,8 +1329,10 @@ void QSqlRecipeDB::loadProperties( IngredientPropertyList *list, int ingredientI
 				prop.ingredientID = propertiesToLoad.value( 7 ).toInt();
 
 			list->append( prop );
+			numberOfProps++;
 		}
 	}
+	return numberOfProps;
 }
 
 void QSqlRecipeDB::changePropertyAmountToIngredient( int ingredientID, int propertyID, double amount, int per_units )
