@@ -216,6 +216,17 @@ int KreGenericListWidget::selectedRowId()
 		return -1;
 }
 
+QVariant KreGenericListWidget::selectedRowData( int column, int role )
+{
+	int row = currentRow();
+	QModelIndex index = m_proxyModel->index( row, column, currentParent() );
+	if ( index.isValid() )
+		return index.data( role );
+	else
+		return QVariant();
+
+}
+
 void KreGenericListWidget::contextMenuSlot( const QPoint & point)
 {
 	QPoint globalPoint( ui->m_treeView->mapToGlobal(point) );

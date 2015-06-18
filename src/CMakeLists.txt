@@ -60,7 +60,7 @@ set(krecipesactionshandlers_SRCS
    actionshandlers/ingredientactionshandler.cpp
    actionshandlers/headeractionshandler.cpp
    actionshandlers/propertyactionshandler.cpp
-   actionshandlers/unitactionshandler.cpp
+   actionshandlers/kreunitactionshandler.cpp
    actionshandlers/prepmethodactionshandler.cpp
    actionshandlers/krecategoryactionshandler.cpp
    actionshandlers/kreauthoractionshandler.cpp
@@ -68,6 +68,7 @@ set(krecipesactionshandlers_SRCS
    #FIXME: The classes below are deprecated and must be removed sooner or later.
    actionshandlers/actionshandlerbase.cpp
    actionshandlers/categoryactionshandler.cpp
+   actionshandlers/unitactionshandler.cpp
 )
 
 ############### widgets ##############
@@ -78,7 +79,7 @@ set(krecipeswidgets_SRCS
    widgets/kremenu.cpp
    widgets/paneldeco.cpp
    widgets/ingredientlistview.cpp
-   widgets/unitlistview.cpp
+   widgets/kreunitlistwidget.cpp
    widgets/propertylistview.cpp
    widgets/prepmethodlistview.cpp
    widgets/krecategorieslistwidget.cpp
@@ -100,6 +101,8 @@ set(krecipeswidgets_SRCS
    widgets/criteriacombobox.cpp
    widgets/ingredientinputwidget.cpp
    widgets/unitcombobox.cpp
+   widgets/unittypedelegate.cpp
+   widgets/amountunitinput.cpp
    widgets/amountunitinput.cpp
    widgets/weightinput.cpp
    widgets/thumbbar.cpp
@@ -109,6 +112,7 @@ set(krecipeswidgets_SRCS
    widgets/dblistviewbase.cpp #replaced by kregenericlistwidget.cpp
    widgets/categorylistview.cpp #replaced by krecategorieslistwidget.cpp
    widgets/conversiontable.cpp #replaced by kreconversiontable.cpp
+   widgets/unitlistview.cpp #replaced by kreunitlistwidget.cpp
 
 )
 

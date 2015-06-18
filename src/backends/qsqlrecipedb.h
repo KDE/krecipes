@@ -141,7 +141,7 @@ public:
 	void loadRecipes( RecipeList *, int items = All, QList<int> ids = QList<int>() );
 	void loadRecipeList( ElementList *list, int categoryID = -1, bool recursive = false );
 	void loadUncategorizedRecipes( ElementList *list );
-	void loadUnits( UnitList *list, Unit::Type = Unit::All, int limit = -1, int offset = 0 );
+	int loadUnits( UnitList *list, Unit::Type = Unit::All, int limit = -1, int offset = 0 );
 	void loadUnitRatios( UnitRatioList *ratioList, Unit::Type );
 	void loadYieldTypes( ElementList *list, int limit, int offset );
 

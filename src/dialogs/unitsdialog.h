@@ -20,8 +20,9 @@
 
 class RecipeDB;
 class KreConversionTable;
-class StdUnitListView;
-class UnitActionsHandler;
+class KreUnitListWidget;
+class UnitActionsHandler; //TODO: Remove, obsolete.
+class KreUnitActionsHandler;
 class KAction;
 class KPushButton;
 class KTabWidget;
@@ -39,7 +40,7 @@ public:
 	{
 		return QSize( 300, 200 );
 	}
-	UnitActionsHandler* getActionsHandler() const;
+	KreUnitActionsHandler* getActionsHandler() const;
 	void addAction( KAction * action );
 
 public slots:
@@ -47,8 +48,8 @@ public slots:
 
 private:
 	// Widgets
-	StdUnitListView *unitListView;
-	UnitActionsHandler *unitActionsHandler;
+	KreUnitListWidget *unitListWidget;
+	KreUnitActionsHandler *unitActionsHandler;
 	KreConversionTable *massConversionTable;
 	KreConversionTable *volumeConversionTable;
 	KPushButton *newUnitButton;

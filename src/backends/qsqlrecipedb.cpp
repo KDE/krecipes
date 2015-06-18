@@ -1055,8 +1055,9 @@ void QSqlRecipeDB::addUnitToIngredient( int ingredientID, int unitID )
 	QSqlQuery ingredientToCreate( command, *database);
 }
 
-void QSqlRecipeDB::loadUnits( UnitList *list, Unit::Type type, int limit, int offset )
+int QSqlRecipeDB::loadUnits( UnitList *list, Unit::Type type, int limit, int offset )
 {
+	int numberOfUnits = 0;
 	list->clear();
 
 	QString command;
@@ -1078,8 +1079,11 @@ void QSqlRecipeDB::loadUnits( UnitList *list, Unit::Type type, int limit, int of
 			unit.setPluralAbbrev(unescapeAndDecode( unitToLoad.value( 4 ).toByteArray() ));
 			unit.setType((Unit::Type)unitToLoad.value( 5 ).toInt());
 			list->append( unit );
+			numberOfUnits++;
 		}
 	}
+
+	return numberOfUnits;
 }
 
 void QSqlRecipeDB::removeUnitFromIngredient( int ingredientID, int unitID )

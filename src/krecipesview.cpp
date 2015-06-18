@@ -26,7 +26,8 @@
 
 #include "actionshandlers/kreauthoractionshandler.h"
 #include "actionshandlers/recipeactionshandler.h"
-#include "actionshandlers/unitactionshandler.h"
+#include "actionshandlers/unitactionshandler.h" //TODO: Remove, obsolete.
+#include "actionshandlers/kreunitactionshandler.h"
 #include "actionshandlers/krecategoryactionshandler.h"
 #include "setupassistant.h"
 #include "convert_sqlite3.h"

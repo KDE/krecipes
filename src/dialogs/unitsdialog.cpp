@@ -20,8 +20,10 @@
 #include "backends/recipedb.h"
 #include "widgets/conversiontable.h" //TODO: Remove, deprecated.
 #include "widgets/kreconversiontable.h"
-#include "widgets/unitlistview.h"
-#include "actionshandlers/unitactionshandler.h"
+#include "widgets/unitlistview.h" //TODO: Remove, deprecated.
+#include "widgets/kreunitlistwidget.h" //TODO: Remove, deprecated.
+#include "actionshandlers/unitactionshandler.h" //TODO: Remove, deprecated.
+#include "actionshandlers/kreunitactionshandler.h"
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -45,9 +47,9 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	unitTab = new QWidget( tabWidget );
 	QHBoxLayout* layout = new QHBoxLayout( unitTab );
 
-	unitListView = new StdUnitListView( unitTab, database, true );
-	unitActionsHandler = new UnitActionsHandler( unitListView, database );
-	layout->addWidget( unitListView );
+	unitListWidget = new KreUnitListWidget( unitTab, database );
+	unitActionsHandler = new KreUnitActionsHandler( unitListWidget, database );
+	layout->addWidget( unitListWidget );
 
 	QVBoxLayout* vboxl = new QVBoxLayout();
 
@@ -99,11 +101,11 @@ UnitsDialog::~UnitsDialog()
 
 void UnitsDialog::reload( ReloadFlags flag )
 {
-	unitListView->reload( flag );
+	unitListWidget->reload( flag );
 	loadConversionTables();
 }
 
-UnitActionsHandler* UnitsDialog::getActionsHandler() const
+KreUnitActionsHandler* UnitsDialog::getActionsHandler() const
 {
 	if ( tabWidget->currentWidget() == unitTab )
 		return unitActionsHandler;

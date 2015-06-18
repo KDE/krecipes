@@ -35,7 +35,10 @@ public:
     bool operator<(const Unit &u) const;
 
     Type type() const;
+    QString typeString() const;
     void setType(Type type);
+
+    static QString typeToString( Type unitType );
 
     int id() const;
     void setId(int id);

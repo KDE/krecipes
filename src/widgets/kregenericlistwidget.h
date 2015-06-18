@@ -53,6 +53,7 @@ public:
 	QModelIndex currentParent() const;
 	void edit( int row );
 	int selectedRowId();
+	QVariant selectedRowData( int column, int role = Qt::EditRole );
 
 signals:
 	void contextMenuRequested( const QModelIndex & index, const QPoint & point);

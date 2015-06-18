@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright © 2004 Jason Kivlighn <jkivlighn@gmail.com>                 *
  *   Copyright © 2010 Martin Engelmann <murphi.oss@googlemail.com>         *
+ *   Copyright © José Manuel Santamaría Lema <panfaust@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,6 +10,8 @@
  ***************************************************************************/
 
 #include "unit.h"
+
+#include <KLocale>
 
 class Unit::Private
 {
@@ -70,6 +73,22 @@ Unit& Unit::operator=(const Unit & rhs)
 Unit::Type Unit::type() const
 {
     return d->type;
+}
+
+QString Unit::typeString() const
+{
+    return typeToString(d->type);
+}
+
+QString Unit::typeToString(Type unitType)
+{
+    if (unitType == Unit::Mass) {
+        return i18nc("Unit type mass", "Mass");
+    } else if (unitType == Unit::Volume) {
+        return i18nc("@item:inlistbox Unit type volume", "Volume");
+    } else {
+        return i18nc("@item:inlistbox Unit type other", "Other");
+    }
 }
 
 void Unit::setType(Unit::Type type)
