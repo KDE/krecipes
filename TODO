@@ -1,19 +1,15 @@
 Note that this is only a draft, to get a rough idea about what should be done.
 
 
-Planned for next 2.0.x releases:
+Planned for next 2.x.x releases:
 
- * Only simple bug fixes. If a bug fix is somewhat complex it would be included
-   in future major releases.
+ * Remove more KDE/Qt 3 support stuff.
+ * Fix bugs.
 
+Planned for the 3.0 branch:
+ * Port to KDE Frameworks
 
-Planned for the 2.1 branch:
-
- * Remove KDE/Qt 3 support stuff (or at least a significant part of it).
- * Remove the internal SQLite backend, Qt 4 supports SQLite.
-
-
-Planned for the 2.2 branch:
+Planned for the 3.1 branch:
 
  [Mandatory]
  * The database version number should be a string instead of a float.
@@ -48,7 +44,7 @@ Planned for the 2.2 branch:
  * Port the current xslt stuff to grantlee?
 
 
-Planned for the 2.3 branch:
+Planned for the 3.2 branch:
 
  [Brainstorming]
  * Allow the user to select the encoding for mmf importer/exporter, note that
@@ -66,7 +62,7 @@ Planned for the 2.3 branch:
  * Try apidox.
 
 
-Planned for 2.4 branch:
+Planned for 3.3 branch:
 
  [Brainstorming]
  * Akonadi backend?
