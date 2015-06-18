@@ -16,18 +16,12 @@
 #include <kdebug.h>
 
 #include <KLocale>
-//#include <kmessagebox.h>
 #include <KConfigGroup>
 #include <KGlobal>
-//#include <kmenu.h>
-//#include <kdebug.h>
-//#include <QPointer>
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 
-#include "widgets/propdisplayeddelegate.h"
 #include "backends/recipedb.h"
-//#include "dialogs/createpropertydialog.h"
 #include "datablocks/ingredientpropertylist.h"
 
 
@@ -135,104 +129,4 @@ void KrePropertyListWidget::removeProperty( int id )
 	Q_UNUSED( id )
 	reload( ForceReload );
 }
-
-/*void HidePropertyCheckListItem::stateChange( bool on )
-{
-	if ( !m_holdSettings ) {
-		KConfigGroup config = KGlobal::config()->group("Formatting");
-
-		config.sync();
-		QStringList hiddenList = config.readEntry("HiddenProperties", QStringList());
-		if ( on )
-			hiddenList.removeAll(m_property.name);
-		else if ( !hiddenList.contains(m_property.name) )
-			hiddenList.append(m_property.name);
-
-		config.writeEntry("HiddenProperties",hiddenList);
-	}
-}*/
-
-/*PropertyListView::PropertyListView( QWidget *parent, RecipeDB *db ) :
-	DBListViewBase( parent, db, 0)
-{
-	setAllColumnsShowFocus( true );
-	setDefaultRenameAction( Q3ListView::Reject );
-
-	connect( db, SIGNAL( propertyCreated( const IngredientProperty & ) ), SLOT( createProperty( const IngredientProperty & ) ) );
-	connect( db, SIGNAL( propertyRemoved( int ) ), SLOT( removeProperty( int ) ) );
-}*/
-
-/*void PropertyListView::reload()
-{
-	clear(); // Clear the view
-
-	m_loading = true;
-
-	IngredientPropertyList propertyList;
-	database->loadProperties( &propertyList );
-
-	//Populate this data into the K3ListView
-	IngredientPropertyList::const_iterator prop_it;
-	for ( prop_it = propertyList.constBegin(); prop_it != propertyList.constEnd(); ++prop_it )
-		createProperty( *prop_it );
-
-	m_loading = false;
-}*/
-
-/*void PropertyListView::load(int, int)
-{
-	reload();
-}*/
-
-/*void StdPropertyListView::removeProperty( int id )
-{
-	Q3ListViewItem * item = findItem( QString::number( id ), 2 );
-
-	Q_ASSERT( item );
-
-	delete item;
-}*/
-
-/*void StdPropertyListView::createProperty( const IngredientProperty &property )
-{
-	( void ) new Q3ListViewItem( this, property.name, property.units, QString::number( property.id ) );
-}*/
-
-
-
-/*PropertyConstraintListView::PropertyConstraintListView( QWidget *parent, RecipeDB *db ) : PropertyListView( parent, db )
-{
-	addColumn( i18nc( "@title:column", "Enabled" ) );
-	addColumn( i18nc( "@title:column", "Property" ) );
-	addColumn( i18nc( "@title:column", "Min. Value" ) );
-	addColumn( i18nc( "@title:column", "Max. Value" ) );
-	addColumn( "Id", 0 ); //hidden, only for internal purposes
-
-	setRenameable( 0, true );
-	setRenameable( 1, true );
-}*/
-
-/*void PropertyConstraintListView::removeProperty( int id )
-{
-	Q3ListViewItem * item = findItem( QString::number( id ), 4 );
-
-	Q_ASSERT( item );
-
-	delete item;
-}*/
-
-/*void PropertyConstraintListView::createProperty( const IngredientProperty &property )
-{
-	( void ) new ConstraintsListItem( this, property );
-}*/
-
-
-/*CheckPropertyListView::CheckPropertyListView( QWidget *parent, RecipeDB *db, bool editable ) : StdPropertyListView( parent, db, editable )
-{
-}*/
-
-/*void CheckPropertyListView::createProperty( const IngredientProperty &property )
-{
-	( void ) new HidePropertyCheckListItem( this, property, (m_loading)?false:true );
-}*/
 

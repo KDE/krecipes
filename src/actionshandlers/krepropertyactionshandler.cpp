@@ -13,20 +13,13 @@
 #include <kdebug.h>
 
 #include <KLocale>
-//#include <K3ListView>
-//#include <KMenu>
-//#include <QPointer>
 #include <KMessageBox>
-//class Q3ListViewItem;
 #include <QModelIndex>
 #include <QStandardItemModel>
-
-//#include "datablocks/elementlist.h"
 
 #include "backends/recipedb.h"
 
 #include "dialogs/createpropertydialog.h"
-//#include "dialogs/dependanciesdialog.h"
 
 #include "widgets/kregenericlistwidget.h"
 
@@ -106,7 +99,6 @@ void KrePropertyActionsHandler::saveElement( const QModelIndex & topLeft,
 		} else if ( !hiddenList.contains(propName) ) {
 			hiddenList.append( propName );
 		}
-		kDebug() << hiddenList;
 
 		config.writeEntry( "HiddenProperties", hiddenList );
 	} else {	

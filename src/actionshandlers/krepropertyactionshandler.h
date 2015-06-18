@@ -12,9 +12,6 @@
 
 #include "actionshandlers/kregenericactionshandler.h"
 
-//class DBListViewBase;
-//class Q3ListViewItem;
-
 
 class KrePropertyActionsHandler : public KreGenericActionsHandler
 {
@@ -34,8 +31,6 @@ protected slots:
 private:
 	bool checkBounds( const QString &name );
 
-/*private slots:
-	void saveElement( Q3ListViewItem* i );*/
 };
 
 #endif //KREPROPERTYACTIONSHANDLER_H
