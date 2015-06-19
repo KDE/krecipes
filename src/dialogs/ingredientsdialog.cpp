@@ -108,11 +108,10 @@ void IngredientsDialog::reload( ReloadFlags flag )
 
 KreGenericActionsHandler * IngredientsDialog::getActionsHandler() const
 {
-	//if ( tabWidget->currentWidget() == ingredientTab )
+	if ( tabWidget->currentWidget() == ingredientTab )
 		return ingredientActionsHandler;
-	//FIXME: this should be fixed when the groups list is ported to pure Qt 4
-	//else //if ( tabWidget->currentWidget() == groupsDialog )
-	//	return groupsDialog->getActionsHandler();
+	else //if ( tabWidget->currentWidget() == groupsDialog )
+		return groupsDialog->getActionsHandler();
 }
 
 void IngredientsDialog::addAction( KAction * action )

@@ -18,22 +18,18 @@
 #include <kdialog.h>
 #include <kvbox.h>
 
-#include "actionshandlers/headeractionshandler.h"
+#include "actionshandlers/kreheaderactionshandler.h"
+#include "widgets/kreheaderlistwidget.h"
 
-#include "widgets/krelistview.h"
-#include "widgets/headerlistview.h"
 
 IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, const char *name ) : QWidget(parent), database(db)
 {
 	setObjectName( name );
 	QHBoxLayout* layout = new QHBoxLayout;
 
-	headerListView = new KreListView ( this, QString(), true, 0 );
-	StdHeaderListView *list_view = new StdHeaderListView( headerListView, database, true );
-	headerActionsHandler = new HeaderActionsHandler( list_view, database );
-	headerListView->setListView( list_view );
-	headerListView->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding ) );
-	layout->addWidget(headerListView);
+	headerListWidget= new KreHeaderListWidget( this, database );
+	headerActionsHandler = new KreHeaderActionsHandler( headerListWidget, database );
+	layout->addWidget(headerListWidget);
 
 	QVBoxLayout *buttonLayout = new QVBoxLayout;
 	KPushButton *addHeaderButton = new KPushButton( this );
@@ -57,10 +53,10 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 
 void IngredientGroupsDialog::reload( ReloadFlags flag )
 {
-	( ( StdHeaderListView* ) headerListView->listView() ) ->reload(flag);
+	headerListWidget->reload( flag );
 }
 
-ActionsHandlerBase* IngredientGroupsDialog::getActionsHandler() const
+KreGenericActionsHandler* IngredientGroupsDialog::getActionsHandler() const
 {
 	return headerActionsHandler;
 }

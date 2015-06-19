@@ -10,14 +10,14 @@
 #ifndef INGREDIENTGROUPSDIALOG_H
 #define INGREDIENTGROUPSDIALOG_H
 
-#include <qwidget.h>
+#include <QWidget>
 
-#include "widgets/dblistviewbase.h"
+#include "widgets/kregenericlistwidget.h"
 
-class KreListView;
-class ActionsHandlerBase;
+class KreHeaderListWidget;
+class KreGenericActionsHandler;
+class KreHeaderActionsHandler;
 class KAction;
-class HeaderActionsHandler;
 class RecipeDB;
 
 class IngredientGroupsDialog : public QWidget
@@ -27,13 +27,13 @@ public:
 
 	void reload( ReloadFlags flag = Load );
 
-	ActionsHandlerBase* getActionsHandler() const;
+	KreGenericActionsHandler* getActionsHandler() const;
 
 	void addAction( KAction * action );
 
 private:
-	KreListView *headerListView;
-	HeaderActionsHandler *headerActionsHandler;
+	KreHeaderListWidget *headerListWidget;
+	KreHeaderActionsHandler *headerActionsHandler;
 	RecipeDB *database;
 };
 

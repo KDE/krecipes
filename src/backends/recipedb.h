@@ -211,7 +211,7 @@ public:
 	virtual void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true ) = 0;
 	void loadCachedCategories( CategoryTree **list, int limit, int offset, int parent_id, bool recurse );
 	virtual void loadCategories( ElementList *list, int limit = -1, int offset = 0 ) = 0;
-	virtual void loadIngredientGroups( ElementList *list ) = 0;
+	virtual int loadIngredientGroups( ElementList *list ) = 0;
 	virtual int loadIngredients( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadPossibleUnits( int ingredientID, UnitList *list ) = 0;
 	virtual int loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 ) = 0;
@@ -316,6 +316,7 @@ public:
 	int prepMethodCount();
 	int unitCount();
 	int categoryCount();
+	int ingredientGroupCount();
 
 	virtual bool checkIntegrity( void ) = 0;
 

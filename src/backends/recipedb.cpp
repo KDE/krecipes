@@ -623,6 +623,11 @@ int RecipeDB::unitCount()
 	return getCount("units");
 }
 
+int RecipeDB::ingredientGroupCount()
+{
+	return getCount("ingredient_groups");
+}
+
 void RecipeDB::importSamples()
 {
 	kDebug();

@@ -58,7 +58,7 @@ set(krecipesactionshandlers_SRCS
    actionshandlers/recipeactionshandler.cpp
    actionshandlers/kregenericactionshandler.cpp
    actionshandlers/kreingredientactionshandler.cpp
-   actionshandlers/headeractionshandler.cpp
+   actionshandlers/kreheaderactionshandler.cpp
    actionshandlers/krepropertyactionshandler.cpp
    actionshandlers/kreunitactionshandler.cpp
    actionshandlers/kreprepmethodactionshandler.cpp
@@ -72,6 +72,7 @@ set(krecipesactionshandlers_SRCS
    actionshandlers/propertyactionshandler.cpp
    actionshandlers/prepmethodactionshandler.cpp
    actionshandlers/ingredientactionshandler.cpp
+   actionshandlers/headeractionshandler.cpp
 )
 
 ############### widgets ##############
@@ -99,7 +100,7 @@ set(krecipeswidgets_SRCS
    widgets/inglistviewitem.cpp
    widgets/kdateedit.cpp
    widgets/kdatepickerpopup.cpp
-   widgets/headerlistview.cpp
+   widgets/kreheaderlistwidget.cpp
    widgets/kwidgetlistbox.cpp
    widgets/criteriacombobox.cpp
    widgets/ingredientinputwidget.cpp
@@ -119,6 +120,7 @@ set(krecipeswidgets_SRCS
    widgets/propertylistview.cpp #replaced by krepropertylistwidget.cpp
    widgets/prepmethodlistview.cpp #replaced by kreprepmethodlistwidget.cpp
    widgets/ingredientlistview.cpp #replaced by kreingredientlistwidget.cpp
+   widgets/headerlistview.cpp #replaced by kreheaderlistwidget.cpp
 
 )
 

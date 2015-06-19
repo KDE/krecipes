@@ -433,8 +433,9 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 	}
 }
 
-void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
+int QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 {
+	int numberOfIngGroups = 0;
 	list->clear();
 
 	QString command = "SELECT id,name FROM ingredient_groups ORDER BY name;";
@@ -446,8 +447,10 @@ void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 			group.id = m_query->value( 0 ).toInt();
 			group.name = unescapeAndDecode( m_query->value( 1 ).toByteArray() );
 			list->append( group );
+			numberOfIngGroups++;
 		}
 	}
+	return numberOfIngGroups;
 }
 
 int QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
