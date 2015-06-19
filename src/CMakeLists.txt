@@ -57,7 +57,7 @@ set(krecipesthreadedqueries_SRCS
 set(krecipesactionshandlers_SRCS
    actionshandlers/recipeactionshandler.cpp
    actionshandlers/kregenericactionshandler.cpp
-   actionshandlers/ingredientactionshandler.cpp
+   actionshandlers/kreingredientactionshandler.cpp
    actionshandlers/headeractionshandler.cpp
    actionshandlers/krepropertyactionshandler.cpp
    actionshandlers/kreunitactionshandler.cpp
@@ -71,6 +71,7 @@ set(krecipesactionshandlers_SRCS
    actionshandlers/unitactionshandler.cpp
    actionshandlers/propertyactionshandler.cpp
    actionshandlers/prepmethodactionshandler.cpp
+   actionshandlers/ingredientactionshandler.cpp
 )
 
 ############### widgets ##############
@@ -80,7 +81,7 @@ set(krecipeswidgets_SRCS
    widgets/krelistview.cpp
    widgets/kremenu.cpp
    widgets/paneldeco.cpp
-   widgets/ingredientlistview.cpp
+   widgets/kreingredientlistwidget.cpp
    widgets/kreunitlistwidget.cpp
    widgets/krepropertylistwidget.cpp
    widgets/kreprepmethodlistwidget.cpp
@@ -117,6 +118,7 @@ set(krecipeswidgets_SRCS
    widgets/unitlistview.cpp #replaced by kreunitlistwidget.cpp
    widgets/propertylistview.cpp #replaced by krepropertylistwidget.cpp
    widgets/prepmethodlistview.cpp #replaced by kreprepmethodlistwidget.cpp
+   widgets/ingredientlistview.cpp #replaced by kreingredientlistwidget.cpp
 
 )
 

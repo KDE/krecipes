@@ -450,8 +450,9 @@ void QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 	}
 }
 
-void QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
+int QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 {
+	int numberOfIngredients = 0;
 	list->clear();
 
 	QString command = "SELECT id,name FROM ingredients ORDER BY name"
@@ -464,8 +465,10 @@ void QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 			ing.id = m_query->value( 0 ).toInt();
 			ing.name = unescapeAndDecode( m_query->value( 1 ).toByteArray() );
 			list->append( ing );
+			numberOfIngredients++;
 		}
 	}
+	return numberOfIngredients;
 }
 
 int QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )

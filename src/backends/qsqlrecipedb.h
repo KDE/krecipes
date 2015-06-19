@@ -133,7 +133,7 @@ public:
 	void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true );
 	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
 	void loadIngredientGroups( ElementList *list );
-	void loadIngredients( ElementList *list, int limit = -1, int offset = 0 );
+	int loadIngredients( ElementList *list, int limit = -1, int offset = 0 );
 	void loadPossibleUnits( int ingredientID, UnitList *list );
 	int loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	// Loads the list of possible properties by default, all the ingredient

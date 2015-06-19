@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2015 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -11,21 +12,21 @@
 
 #include "ingredientsdialog.h"
 
+//FIXME: Check which ones are actually needed.
 #include "backends/recipedb.h"
 #include "createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"
-#include "widgets/ingredientlistview.h"
+#include "widgets/kreingredientlistwidget.h"
 #include "dialogs/ingredientgroupsdialog.h"
 #include "dialogs/editpropertiesdialog.h"
-#include "actionshandlers/ingredientactionshandler.h"
+#include "widgets/kregenericlistwidget.h"
+#include "actionshandlers/kreingredientactionshandler.h"
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include <q3header.h>
 #include <KTabWidget>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -50,12 +51,9 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	listLayout = new QVBoxLayout;
 
-	ingredientListView = new KreListView ( ingredientTab, QString(), true, 0 );
-	StdIngredientListView *list_view = new StdIngredientListView( ingredientListView, database, true );
-	ingredientActionsHandler = new IngredientActionsHandler( list_view, database );
-	ingredientListView->setListView( list_view );
-	listLayout->addWidget( ingredientListView );
-	ingredientListView->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
+	ingredientListWidget = new KreIngredientListWidget( ingredientTab, database );
+	ingredientActionsHandler = new KreIngredientActionsHandler( ingredientListWidget, database );
+	listLayout->addWidget( ingredientListWidget );
 
 	QVBoxLayout *buttonLayout = new QVBoxLayout();
 
@@ -90,7 +88,6 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	connect( removeIngredientButton, SIGNAL( clicked() ), ingredientActionsHandler, SLOT( remove() ) );
 	connect( propertyButton, SIGNAL( clicked() ), this, SLOT( showPropertyEdit() ) );
 
-	DependanciesDialog d( this, ListInfo() );
 }
 
 
@@ -100,7 +97,7 @@ IngredientsDialog::~IngredientsDialog()
 
 void IngredientsDialog::reloadIngredientList( ReloadFlags flag )
 {
-	( ( StdIngredientListView* ) ingredientListView->listView() ) ->reload(flag);
+	ingredientListWidget->reload( flag );
 }
 
 void IngredientsDialog::reload( ReloadFlags flag )
@@ -109,12 +106,13 @@ void IngredientsDialog::reload( ReloadFlags flag )
 	groupsDialog->reload( flag );
 }
 
-ActionsHandlerBase * IngredientsDialog::getActionsHandler() const
+KreGenericActionsHandler * IngredientsDialog::getActionsHandler() const
 {
-	if ( tabWidget->currentWidget() == ingredientTab )
+	//if ( tabWidget->currentWidget() == ingredientTab )
 		return ingredientActionsHandler;
-	else //if ( tabWidget->currentWidget() == groupsDialog )
-		return groupsDialog->getActionsHandler();
+	//FIXME: this should be fixed when the groups list is ported to pure Qt 4
+	//else //if ( tabWidget->currentWidget() == groupsDialog )
+	//	return groupsDialog->getActionsHandler();
 }
 
 void IngredientsDialog::addAction( KAction * action )
@@ -125,14 +123,16 @@ void IngredientsDialog::addAction( KAction * action )
 
 void IngredientsDialog::showPropertyEdit()
 {
-	Q3ListViewItem * ing_it = ingredientListView->listView() ->selectedItem(); // Find selected ingredient
-	if ( ing_it ) {
-		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( ing_it->text(1).toInt(),ing_it->text(0),database,this );
+	int id = ingredientListWidget->selectedRowId();
+	QString ingredientName = ingredientListWidget->getData(
+		ingredientListWidget->currentRow(), 1 ).toString();
+	if (id != -1 ) {
+		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( id, ingredientName, database, this );
 		d->exec();
 		delete d;
-	}
-	else
+	} else {
 		KMessageBox::information( this, i18nc( "@info", "No ingredient selected." ), QString() );
+	}
 }
 
 #include "ingredientsdialog.moc"
