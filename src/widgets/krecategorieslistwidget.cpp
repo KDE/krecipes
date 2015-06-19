@@ -26,6 +26,9 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 	KreGenericListWidget( parent, db )
 {
 
+	//This is an unusual column to filter by
+	m_proxyModel->setFilterKeyColumn( 0 );
+
 	//The QTreeView.
 	ui->m_treeView->setRootIsDecorated( true );
 	ui->m_treeView->showColumn( 0 );
