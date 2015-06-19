@@ -135,7 +135,7 @@ public:
 	void loadIngredientGroups( ElementList *list );
 	void loadIngredients( ElementList *list, int limit = -1, int offset = 0 );
 	void loadPossibleUnits( int ingredientID, UnitList *list );
-	void loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
+	int loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	// Loads the list of possible properties by default, all the ingredient
         // properties with -1, and the ingredients of given property if id>=0
 	int loadProperties( IngredientPropertyList *list, int ingredientID = -2 );

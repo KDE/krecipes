@@ -468,9 +468,11 @@ void QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 	}
 }
 
-void QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
+int QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 {
 	list->clear();
+
+	int numberOfPrepMethods = 0;
 
 	QString command = "SELECT id,name FROM prep_methods ORDER BY name"
 	  +((limit==-1)?"":" LIMIT "+QString::number(limit)+" OFFSET "+QString::number(offset));
@@ -482,8 +484,11 @@ void QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 			prep_method.id = m_query->value( 0 ).toInt();
 			prep_method.name = unescapeAndDecode( m_query->value( 1 ).toByteArray() );
 			list->append( prep_method );
+			numberOfPrepMethods++;
 		}
 	}
+
+	return numberOfPrepMethods;
 }
 
 void QSqlRecipeDB::loadYieldTypes( ElementList *list, int limit, int offset )
