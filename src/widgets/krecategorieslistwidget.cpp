@@ -76,6 +76,7 @@ void KreCategoriesListWidget::populate( QStandardItem * item, int id )
 
 		//The "Category" item.
 		QStandardItem *itemCategory = new QStandardItem( child_it->category.name );
+		itemCategory->setData( KIcon("folder-yellow"), Qt::DecorationRole );
 		itemCategory->setEditable( true );
 	
 		//Insert the items as children
@@ -113,6 +114,7 @@ void KreCategoriesListWidget::load( int limit, int offset )
 
 		//The "Category" item.
 		QStandardItem *itemCategory = new QStandardItem( child_it->category.name );
+		itemCategory->setData( KIcon("folder-yellow"), Qt::DecorationRole );
 		itemCategory->setEditable( true );
 
 		//Insert the items in the model.
