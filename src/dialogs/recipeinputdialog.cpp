@@ -1181,6 +1181,9 @@ void RecipeInputDialog::newRecipe( void )
 	emit enableSaveOption( true );
 	emit createButton( this, titleEdit->text() );
 	unsavedChanges = true;
+
+	// Enable the changed signals.
+	enableChangedSignal();
 }
 
 bool RecipeInputDialog::everythingSaved()
