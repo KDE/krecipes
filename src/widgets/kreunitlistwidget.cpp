@@ -48,6 +48,7 @@ void KreUnitListWidget::load( int limit, int offset )
 
 	UnitTypeDelegate * unitTypeDelegate = new UnitTypeDelegate;
 	ui->m_treeView->setItemDelegateForColumn(5, unitTypeDelegate);
+	KComboBox * dummy = new KComboBox;
 
 	int current_row = 0;
 	QModelIndex index;
@@ -59,6 +60,7 @@ void KreUnitListWidget::load( int limit, int offset )
 		// Write the name of the unit (singular) in the model.
 		index = m_sourceModel->index( current_row, 1 );
 		m_sourceModel->setData( index, QVariant(it->name()), Qt::EditRole );
+		m_sourceModel->setData( index, dummy->sizeHint(), Qt::SizeHintRole );
 		m_sourceModel->itemFromIndex( index )->setEditable( true );
 		// Write the singular abbreviation in the model.
 		index = m_sourceModel->index( current_row, 2 );

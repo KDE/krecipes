@@ -16,7 +16,7 @@
 //#include <kdebug.h>
 
 
-UnitTypeDelegate::UnitTypeDelegate(QObject *parent): QItemDelegate(parent)
+UnitTypeDelegate::UnitTypeDelegate(QObject *parent): QStyledItemDelegate(parent)
 {
 }
 

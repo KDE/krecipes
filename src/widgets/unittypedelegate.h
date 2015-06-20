@@ -11,9 +11,9 @@
 #ifndef UNITTYPEDELEGATE_H
 #define UNITTYPEDELEGATE_H
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
-class UnitTypeDelegate : public QItemDelegate
+class UnitTypeDelegate : public QStyledItemDelegate
 {
 	Q_OBJECT
 
