@@ -1,0 +1,2 @@
+This folder contains *.ui files of dialogs which may be reworked or ported to 
+pure Qt 4 (i.e. without using Qt 3 suport classes) in the future.
