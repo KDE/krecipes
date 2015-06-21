@@ -176,6 +176,9 @@
          <property name="text">
           <string>Remove</string>
          </property>
+         <property name="icon">
+          <iconset theme="list-remove"/>
+         </property>
          <property name="shortcut">
           <string/>
          </property>
@@ -185,6 +188,9 @@
         <widget class="KPushButton" name="buttonEdit">
          <property name="text">
           <string>Edit...</string>
+         </property>
+         <property name="icon">
+          <iconset theme="document-edit"/>
          </property>
          <property name="shortcut">
           <string/>
@@ -201,6 +207,11 @@
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
  <customwidgets>
   <customwidget>
+   <class>K3ListView</class>
+   <extends>Q3ListView</extends>
+   <header>k3listview.h</header>
+  </customwidget>
+  <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
@@ -215,11 +226,6 @@
    <class>Q3ListView</class>
    <extends>Q3Frame</extends>
    <header>q3listview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>K3ListView</class>
-   <extends>Q3ListView</extends>
-   <header>k3listview.h</header>
   </customwidget>
  </customwidgets>
  <includes>
