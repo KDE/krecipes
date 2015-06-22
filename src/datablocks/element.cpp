@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2015 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -10,6 +11,8 @@
 ***************************************************************************/
 
 #include "element.h"
+
+#include <QDebug>
 
 Element::Element() :
 		id( -1 )
@@ -39,4 +42,11 @@ Element& Element::operator=( const Element &el )
 bool Element::operator==( const Element &el ) const
 {
 	return ( el.id == id );
+}
+
+QDebug operator<<( QDebug dbg, const Element & element )
+{
+	dbg << "Element( id=" << element.id << ", "
+		<< "name=\"" << element.name << "\" )";
+	return dbg;
 }
