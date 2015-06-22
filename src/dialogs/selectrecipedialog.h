@@ -2,6 +2,7 @@
 *   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
 *   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
 *   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
+*   Copyright © 2015 José Manuel Santamaría Lema <panfaust@gmail.com>     *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -13,20 +14,18 @@
 #define SELECTRECIPEDIALOG_H
 
 
+#include "widgets/kregenericlistwidget.h"
+
 #include <qwidget.h>
 #include <QLabel>
-#include <q3intdict.h>
 
 #include <kcombobox.h>
 #include <klineedit.h>
-#include <k3listview.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kmenu.h>
 #include <kvbox.h>
 
-#include "actionshandlers/recipeactionshandler.h"
-#include "widgets/dblistviewbase.h"
 
 class KHBox;
 class QFrame;
@@ -39,10 +38,9 @@ class QVBoxLayout;
 class RecipeDB;
 class Recipe;
 class AdvancedSearchDialog;
-class RecipeFilter;
-class RecipeListView;
+class KreRecipesListWidget;
+class KreRecipeActionsHandler;
 class CategoryComboBox;
-class RecipeActionsHandler;
 
 
 class BasicSearchTab : public QFrame
@@ -52,11 +50,11 @@ public:
 	BasicSearchTab( QWidget * parent );
 	~BasicSearchTab(){};
 
-	void setActionsHandler( RecipeActionsHandler * actionHandler );
+	void setActionsHandler( KreRecipeActionsHandler * actionHandler );
 protected:
 	virtual void showEvent( QShowEvent * event );
 private:
-	RecipeActionsHandler * actionHandler;
+	KreRecipeActionsHandler * actionHandler;
 };
 
 
@@ -74,7 +72,7 @@ public:
 	//Public Methods
 	void getCurrentRecipe( Recipe *recipe );
 
-	RecipeActionsHandler * getActionsHandler() const;
+	KreRecipeActionsHandler * getActionsHandler() const;
 	void addSelectRecipeAction( KAction * action );
 	void addFindRecipeAction( KAction * action );
 	void addCategoryAction( KAction * action );
@@ -88,7 +86,7 @@ private:
 	KTabWidget *tabWidget;
 	BasicSearchTab *basicSearchTab;
 	KHBox *searchBar;
-	RecipeListView* recipeListView;
+	KreRecipesListWidget * recipeListWidget;
 	KHBox *buttonBar;
 	KPushButton *openButton;
 	KPushButton *removeButton;
@@ -99,8 +97,10 @@ private:
 	AdvancedSearchDialog *advancedSearch;
 	// Internal Data
 	RecipeDB *database;
-	RecipeActionsHandler *actionHandler;
-	RecipeFilter *recipeFilter;
+	KreRecipeActionsHandler *actionHandler;
+
+	QList<int> selectedRecipesIds;
+	QList<int> selectedCategoriesIds;
 
 signals:
 	void recipeSelected( int id, int action );
@@ -108,14 +108,13 @@ signals:
 	void recipeSelected( bool );
 
 private slots:
-	void filterComboCategory( int row );
-	void refilter();
-	void ensurePopulated();
+
+	void selectionChanged( const QList<int> & recipes,
+		const QList<int> & categories );
 
 public slots:
 	void haveSelectedItems();
 	void reload( ReloadFlags flag = Load );
-	void clearSearch();
 };
 
 #endif

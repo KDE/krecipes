@@ -2,7 +2,7 @@
 *   Copyright © 2003-2004 Unai Garro <ugarro@gmail.com>                      *
 *   Copyright © 2003-2004 Cyril Bosselut <bosselut@b1project.com>            *
 *   Copyright © 2003-2004 Jason Kivlighn <jkivlighn@gmail.com>               *
-*   Copyright © 2009-2012 José Manuel Santamaría Lema <panfaust@gmail.com>   *
+*   Copyright © 2009-2015 José Manuel Santamaría Lema <panfaust@gmail.com>   *
 *                                                                            *
 *   This program is free software; you can redistribute it and/or modify     *
 *   it under the terms of the GNU General Public License as published by     *
@@ -11,8 +11,6 @@
 ******************************************************************************/
 
 #include "krecipesview.h"
-
-//Added by qt3to4:
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -25,8 +23,7 @@
 #include <QFrame>
 
 #include "actionshandlers/kreauthoractionshandler.h"
-#include "actionshandlers/recipeactionshandler.h"
-#include "actionshandlers/unitactionshandler.h" //TODO: Remove, obsolete.
+#include "actionshandlers/krerecipeactionshandler.h"
 #include "actionshandlers/kreunitactionshandler.h"
 #include "actionshandlers/krecategoryactionshandler.h"
 #include "setupassistant.h"
@@ -440,6 +437,7 @@ void KrecipesView::slotSetPanel( KrePanel p, bool highlightLeftButton )
 			leftPanel->highlightButton( button0 );
 		rightPanel->setHeader( i18n( "Find/Edit Recipes" ), "system-search" );
 		rightPanel->raise( selectPanel );
+		selectPanel->reload( Load );
 		break;
 	case ShoppingP:
 		if ( highlightLeftButton )

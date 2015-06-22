@@ -56,6 +56,16 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 
 }
 
+void KreCategoriesListWidget::expandAll()
+{
+	ui->m_treeView->expandAll();
+}
+
+void KreCategoriesListWidget::collapseAll()
+{
+	ui->m_treeView->collapseAll();
+}
+
 void KreCategoriesListWidget::createCategory( const Element & category, int parent_id )
 {
           Q_UNUSED(category);

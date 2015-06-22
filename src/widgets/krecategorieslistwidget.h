@@ -26,6 +26,9 @@ class KreCategoriesListWidget : public KreGenericListWidget
 public:
 	KreCategoriesListWidget( QWidget *parent, RecipeDB *db );
 
+	void expandAll();
+	void collapseAll();
+
 protected slots:
 	virtual void createCategory( const Element & category, int parent_id );
 	virtual void removeCategory( int id );
