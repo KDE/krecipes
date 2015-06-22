@@ -231,6 +231,7 @@ void Krecipes::setupActions()
 
 	KAction *action = KStandardAction::openNew( this, SLOT( fileNew() ), actionCollection() );
 	action->setText( i18n( "&New Recipe" ) );
+	action->setToolTip( i18n( "&New Recipe" ) );
 
 	saveAction = KStandardAction::save( this, SLOT( fileSave() ), actionCollection() );
 
