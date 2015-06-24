@@ -10,15 +10,9 @@
 #ifndef ADVANCEDSEARCHDIALOG_H
 #define ADVANCEDSEARCHDIALOG_H
 
-#include <qwidget.h>
-//Added by qt3to4:
-#include <QHBoxLayout>
-#include <QGridLayout>
-#include <QFormLayout>
-#include <QFrame>
-#include <QLabel>
-#include <QVBoxLayout>
+#include <QWidget>
 
+class QFormLayout;
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
