@@ -47,6 +47,7 @@ public:
 	KreGenericListWidget( QWidget *parent, RecipeDB *db );
 	virtual ~KreGenericListWidget();
 
+	void clear();
 	void setSearchAsYouType( bool value );
 	void setCurrentLimit( int value );
 	void reload( ReloadFlags flags );

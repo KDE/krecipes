@@ -89,11 +89,11 @@ set(krecipeswidgets_SRCS
    widgets/kreprepmethodlistwidget.cpp
    widgets/krecategorieslistwidget.cpp
    widgets/kreauthorlistwidget.cpp
-   widgets/recipelistview.cpp
    widgets/krerecipeslistwidget.cpp
    widgets/categorycombobox.cpp
    widgets/kretextedit.cpp
    widgets/kregenericlistwidget.cpp
+   widgets/kresearchresultlistwidget.cpp
    widgets/kreconversiontable.cpp
    widgets/fractioninput.cpp
    widgets/ingredientcombobox.cpp

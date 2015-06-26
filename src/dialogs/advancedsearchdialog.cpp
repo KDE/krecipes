@@ -1,5 +1,6 @@
 /***************************************************************************
 *   Copyright © 2003-2004 Jason Kivlighn <jkivlighn@gmail.com>	           *
+*   Copyright © 2015 José Manuel Santamaría Lema <panfaust@gmail.com>      *
 *		                                                           *
 *   This program is free software; you can redistribute it and/or modify   *
 *   it under the terms of the GNU General Public License as published by   *
@@ -8,6 +9,9 @@
 ***************************************************************************/
 
 #include "advancedsearchdialog.h"
+
+#include "widgets/kresearchresultlistwidget.h"
+#include "actionshandlers/krerecipeactionshandler.h"
 
 #include <KPushButton>
 #include <qwidget.h>
@@ -529,27 +533,18 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	leftFrame->setLayout( layout7 );
 	splitter->addWidget( leftFrame );
 	
-	resultsListView = new K3ListView( this); 
-	resultsListView->setObjectName( "resultsListView" );
-	resultsListView->setSelectionMode( Q3ListView::Extended );
-	splitter->addWidget( resultsListView );
+	resultsListWidget = new KreSearchResultListWidget( this, database );
+	resultsListWidget->setObjectName( "resultsListWidget" );
+	splitter->addWidget( resultsListWidget );
 	splitter->setChildrenCollapsible( false );
 	AdvancedSearchDialogLayout->addWidget( splitter );
-	//KDE4 port
-	//QWidget::setWindowState( WState_Polished );
 
-	resultsListView->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+	resultsListWidget->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
 	scrollArea1->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
 
 	splitter->setStretchFactor( 1, 2 );
 
-	KConfigGroup config = KGlobal::config()->group( "Advanced" );
-	bool show_id = config.readEntry( "ShowID", false );
-	
-	resultsListView->addColumn( i18nc("@title:column Recipe title", "Title" ) );
-	resultsListView->addColumn( "Id" , show_id ? -1 : 0 );
-
-	actionHandler = new RecipeActionsHandler( resultsListView, database );
+	actionHandler = new KreRecipeActionsHandler( resultsListWidget, database );
 
 	connect( titleEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
 	connect( ingredientsAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
@@ -613,8 +608,6 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
 	connect( actionHandler, SIGNAL( recipesSelected( const QList<int> &, int ) ), SIGNAL( recipesSelected( const QList<int> &, int ) ) );
 
-	connect( database, SIGNAL( recipeRemoved( int ) ), SLOT( removeRecipe( int ) ) );
-
 	clear();
 }
 
@@ -632,22 +625,9 @@ void AdvancedSearchDialog::showEvent( QShowEvent * event )
 	actionHandler->selectionChangedSlot();
 }
 
-void AdvancedSearchDialog::removeRecipe( int id )
-{
-	Q3ListViewItemIterator iterator( resultsListView );
-	while ( iterator.current() ) {
-		if ( iterator.current()->rtti() == 1000 ) {
-			RecipeListItem * recipe_it = ( RecipeListItem* ) iterator.current();
-			if ( recipe_it->recipeID() == id )
-				delete recipe_it;
-		}
-		++iterator;
-	}
-}
-
 void AdvancedSearchDialog::clear()
 {
-	resultsListView->clear();
+	resultsListWidget->clear();
 	authorsAllEdit->clear();
 	authorsWithoutEdit->clear();
 	authorsAnyEdit->clear();
@@ -980,14 +960,12 @@ void AdvancedSearchDialog::search()
 
 
 	//now display the recipes left
-	resultsListView->clear();
-	actionHandler->selectionChangedSlot();
-	for ( RecipeList::const_iterator it = allRecipes.constBegin(); it != allRecipes.constEnd(); ++it ) {
-		( void ) new RecipeListItem( resultsListView, *it );
-	}
-
-	if ( !resultsListView->firstChild() ) {
-		( void ) new Q3ListViewItem( resultsListView, "--- "+i18nc("@item:inlistbox", "No matching recipes found")+" ---");
+	resultsListWidget->clear();
+	if ( allRecipes.isEmpty() ) {
+		resultsListWidget->showNotFoundMessage(
+			"--- "+i18nc("@item:inlistbox", "No matching recipes found")+" ---" );
+	} else {
+		resultsListWidget->displayRecipes( allRecipes );
 	}
 
 	KApplication::restoreOverrideCursor();
@@ -1050,7 +1028,7 @@ void AdvancedSearchDialog::slotRemoveRatingCriteria()
 
 void AdvancedSearchDialog::haveSelectedItems()
 {
-	if ( resultsListView->selectedItems().isEmpty() )
+	if ( resultsListWidget->selectedRecipes().isEmpty() )
 		emit recipeSelected( false );
 	else
 		emit recipeSelected( true );

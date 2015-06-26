@@ -53,14 +53,14 @@ signals:
 
 protected slots:
 	//Operations with categories.
-	void createCategorySlot( const Element & category, int parent_id );
-	void removeCategorySlot( int id );
+	virtual void createCategorySlot( const Element & category, int parent_id );
+	virtual void removeCategorySlot( int id );
 
 	//Operations with recipes.
-	void createRecipeSlot( const Element & recipe, const ElementList & categories );
-	void modifyRecipeSlot( const Element & recipe, const ElementList & categories );
-	void removeRecipeFromCategorySlot( int recipe_id, int category_id );
-	void removeRecipeSlot( int id );
+	virtual void createRecipeSlot( const Element & recipe, const ElementList & categories );
+	virtual void modifyRecipeSlot( const Element & recipe, const ElementList & categories );
+	virtual void removeRecipeFromCategorySlot( int recipe_id, int category_id );
+	virtual void removeRecipeSlot( int id );
 
 	//Selection changed.
 	void selectionChangedSlot(const QItemSelection & current, const QItemSelection & previous);
@@ -74,7 +74,6 @@ protected:
 
 	void populate ( QStandardItem * item, int id );
 
-private:
 	void addRecipeItem( const Element & recipe, 
 		QModelIndex categoryIndex, RecipeStatus status = Categorized );
 

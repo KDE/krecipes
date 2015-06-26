@@ -12,6 +12,9 @@
 
 #include <QWidget>
 
+//FIXME: Port criteriaListView
+class K3ListView;
+
 class QFormLayout;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -27,14 +30,14 @@ class KComboBox;
 class QSpinBox;
 class QDateTimeEdit;
 class KPushButton;
-class K3ListView;
+class KreSearchResultListWidget;
 class QRadioButton;
 class QGroupBox;
 class KAction;
 
 class KDateEdit;
 class RecipeDB;
-class RecipeActionsHandler;
+class KreRecipeActionsHandler;
 class FractionInput;
 class CriteriaComboBox;
 
@@ -47,8 +50,11 @@ public:
 	AdvancedSearchDialog( QWidget *parent, RecipeDB * );
 	~AdvancedSearchDialog();
 
-	RecipeActionsHandler *actionHandler;
+	KreRecipeActionsHandler *actionHandler;
 	void addAction( KAction * action );
+
+public slots:
+	void haveSelectedItems();
 
 protected:
 	virtual void showEvent( QShowEvent * event );
@@ -89,7 +95,7 @@ protected:
 	QFrame* instructionsFrame;
 	KPushButton* clearButton;
 	KPushButton* findButton;
-	K3ListView* resultsListView;
+	KreSearchResultListWidget* resultsListWidget;
 	QCheckBox *requireAllTitle;
 	QCheckBox *requireAllInstructions;
 	KDateEdit *createdStartDateEdit;
@@ -169,10 +175,6 @@ private slots:
 	void activateRatingOptionCriterion();
 	void slotAddRatingCriteria();
 	void slotRemoveRatingCriteria();
-	void haveSelectedItems();
-
-	//called by a signal from the database when a recipe is removed
-	void removeRecipe( int id );
 
 private:
 	QStringList split( const QString &text, bool sql_wildcards = false ) const;

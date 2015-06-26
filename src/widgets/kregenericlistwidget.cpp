@@ -75,6 +75,11 @@ KreGenericListWidget::~KreGenericListWidget()
 	delete ui;
 }
 
+void KreGenericListWidget::clear()
+{
+	m_sourceModel->setRowCount( 0 );
+}
+
 void KreGenericListWidget::setSearchAsYouType( bool value )
 {
 	disconnect( ui->m_searchBox );

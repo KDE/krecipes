@@ -94,11 +94,15 @@ void KreRecipeActionsHandler::showPopup( const QModelIndex & index, const QPoint
 		== KreRecipesListWidget::RecipeItem ) {
 			if ( index.data(KreRecipesListWidget::CategorizedRole)
 			== KreRecipesListWidget::Uncategorized ) {
-				m_categorizeAction->setVisible( true );
-				m_removeFromCategoryAction->setVisible( false );
+				if ( m_categorizeAction )
+					m_categorizeAction->setVisible( true );
+				if ( m_removeFromCategoryAction )
+					m_removeFromCategoryAction->setVisible( false );
 			} else {
-				m_categorizeAction->setVisible( false );
-				m_removeFromCategoryAction->setVisible( true );
+				if ( m_categorizeAction )
+					m_categorizeAction->setVisible( false );
+				if ( m_removeFromCategoryAction )
+					m_removeFromCategoryAction->setVisible( true );
 			}
                 	m_recipesMenu->exec( point );
 		} else if ( index.data(KreRecipesListWidget::ItemTypeRole) 

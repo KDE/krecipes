@@ -147,10 +147,14 @@ void SelectRecipeDialog::reload( ReloadFlags flag )
 
 void SelectRecipeDialog::haveSelectedItems()
 {
-	if ( !selectedRecipesIds.isEmpty() ) {
-		emit recipeSelected( true );
-	} else {
-		emit recipeSelected( false );
+	if ( tabWidget->currentWidget() == basicSearchTab ) {
+		if ( !selectedRecipesIds.isEmpty() ) {
+			emit recipeSelected( true );
+		} else {
+			emit recipeSelected( false );
+		}
+	} else { //advanced search tab
+		advancedSearch->haveSelectedItems();
 	}
 }
 
@@ -167,9 +171,7 @@ KreRecipeActionsHandler* SelectRecipeDialog::getActionsHandler() const
 	if ( tabWidget->currentWidget() == basicSearchTab ) {
 		return actionHandler;
 	} else {
-		//FIXME: this must be fixed when the advanced search dialog is ported
-		//return advancedSearch->actionHandler;
-		return 0;
+		return advancedSearch->actionHandler;
 	}
 }
 
@@ -180,8 +182,7 @@ void SelectRecipeDialog::addSelectRecipeAction( KAction * action )
 
 void SelectRecipeDialog::addFindRecipeAction( KAction * action )
 {
-	//FIXME: This must be added again once the advanced search dialog is ported
-	//advancedSearch->addAction( action );
+	advancedSearch->addAction( action );
 }
 
 void SelectRecipeDialog::addCategoryAction( KAction * action )
