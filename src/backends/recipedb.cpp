@@ -1066,7 +1066,7 @@ void RecipeDB::fixUSDAPropertyUnits()
 	IngredientPropertyList property_list;
 	loadProperties( &property_list );
 
-	QList<USDA::PropertyData> property_data_list = USDA::loadProperties();
+	const QList<USDA::PropertyData> property_data_list = USDA::loadProperties();
 
 	for ( QList<USDA::PropertyData>::const_iterator it = property_data_list.begin(); it != property_data_list.end(); ++it ) {
 		int id = property_list.findByName( (*it).name );
