@@ -14,6 +14,7 @@
 		<comment xml:lang="el">Krecipes εφεδρικό αρχείο</comment>
 		<comment xml:lang="en_GB">Krecipes Backup file</comment>
 		<comment xml:lang="es">Archivo de copia de respaldo de Krecipes</comment>
+		<comment xml:lang="et">Krecipesi varukoopiafail</comment>
 		<comment xml:lang="fi">Krecipes-varmuuskopiotiedosto</comment>
 		<comment xml:lang="gl">Copia de seguranza de Krecipes</comment>
 		<comment xml:lang="it">Copia di sicurezza di Krecipes</comment>
@@ -41,6 +42,7 @@
 		<comment xml:lang="el">Krecipes εξαχθείσες συνταγές</comment>
 		<comment xml:lang="en_GB">Krecipes Exported Recipes</comment>
 		<comment xml:lang="es">Recetas exportadas de Krecipes</comment>
+		<comment xml:lang="et">Krecipesi eksporditud retseptid</comment>
 		<comment xml:lang="fi">Viedyt Krecipes-reseptit</comment>
 		<comment xml:lang="gl">Receitas exportadas de Krecipes</comment>
 		<comment xml:lang="it">Ricette di Krecipes esportate</comment>
@@ -68,6 +70,7 @@
 		<comment xml:lang="el">Krecipes εξαχθείσες συνταγές (συμπιεσμένα δεδομένα)</comment>
 		<comment xml:lang="en_GB">Krecipes Exported Recipes (compressed data)</comment>
 		<comment xml:lang="es">Recetas exportadas de Krecipes (datos comprimidos)</comment>
+		<comment xml:lang="et">Krecipese eksporditud retseptid (tihendatud andmed)</comment>
 		<comment xml:lang="fi">Viedyt Krecipes-reseptit(pakattuna)</comment>
 		<comment xml:lang="gl">Receitas exportadas de Krecipes (datos comprimidos)</comment>
 		<comment xml:lang="it">Ricette di Krecipes esportate (dati compressi)</comment>
