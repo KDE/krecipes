@@ -17,7 +17,8 @@ to use the Krecipes backup feature. If you want to use "krecipes
   - libsqlite3-dev or libsqlite0-dev
   - libxml2-dev
   - libxslt1-dev
- 
+  - libqtwebkit-dev
+
 ** Building The Latest Release
  
  Just untar the package first:
