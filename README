@@ -13,7 +13,6 @@ to use the Krecipes backup feature. If you want to use "krecipes
  If you're using an APT based GNU/Linux distribution you may want to install
  the following packages: 
   - kdelibs5-dev
-  - libqimageblitz-dev 
   - libsqlite3-dev or libsqlite0-dev
   - libxml2-dev
   - libxslt1-dev
