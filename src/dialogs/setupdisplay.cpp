@@ -562,7 +562,7 @@ void SetupDisplay::setShown( int id )
 void SetupDisplay::setFont()
 {
 	KreDisplayItem *item = *node_item_map->find( m_currNodeId );
-	if ( KFontDialog::getFont( item->font, false, view() ) == QDialog::Accepted ) {
+	if ( KFontDialog::getFont( item->font, KFontChooser::NoDisplayFlags, view() ) == QDialog::Accepted ) {
 		m_currentItem = item;
 		loadFont(m_currNodeId,item->font);
 		m_currentItem = 0;
