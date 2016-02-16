@@ -149,7 +149,9 @@ void KreCategoryActionsHandler::saveElement( const QModelIndex & topLeft, const 
 
 	RecipeDB::IdType existing_id = m_database->findExistingCategoryByName( newCategoryName );
 	RecipeDB::IdType cat_id = m_listWidget->selectedRowId();
-	if ( existing_id != RecipeDB::InvalidId && existing_id != cat_id ) { 
+
+	if ( existing_id != RecipeDB::InvalidId && cat_id != RecipeDB::InvalidId
+	&& existing_id != cat_id ) {
 		//category already exists with this label... merge the two
 		switch ( KMessageBox::warningContinueCancel( m_listWidget,
 		i18n( "This category already exists. Continuing will merge these two"
