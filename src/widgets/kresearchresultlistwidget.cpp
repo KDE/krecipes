@@ -86,16 +86,18 @@ void KreSearchResultListWidget::displayRecipes( const RecipeList & recipes )
 	m_proxyModel->sort( 0 );
 }
 
-		
+
 void KreSearchResultListWidget::modifyRecipeSlot( const Element & recipe, const ElementList & categories)
 {
 	Q_UNUSED(categories)
 
 	//Get the index.
-	QModelIndex index = m_recipeIdToIndexMap.values( recipe.id ).first();
+	QList<QPersistentModelIndex> index_list = m_recipeIdToIndexMap.values( recipe.id );
 
 	//Change the "Recipe" item.
-	m_sourceModel->setData( index, recipe.name, Qt::EditRole );
+	if ( !index_list.isEmpty() ) {
+		m_sourceModel->setData( index_list.first(), recipe.name, Qt::EditRole );
+	}
 
 }
 
