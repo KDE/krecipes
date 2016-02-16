@@ -54,7 +54,7 @@ public:
 	void reload( ReloadFlags flags );
 	int currentRow();
 	QModelIndex currentParent() const;
-	void edit( int row );
+	virtual void edit( int row );
 	int selectedRowId();
 	QVariant selectedRowData( int column, int role = Qt::EditRole );
 	QVariant getData( int row, int column, int role = Qt::EditRole );

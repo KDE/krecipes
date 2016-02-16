@@ -26,6 +26,8 @@ class KreCategoriesListWidget : public KreGenericListWidget
 public:
 	KreCategoriesListWidget( QWidget *parent, RecipeDB *db );
 
+	void edit( int row );
+
 	void expandAll();
 	void collapseAll();
 

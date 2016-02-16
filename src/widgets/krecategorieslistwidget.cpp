@@ -60,6 +60,12 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 
 }
 
+void KreCategoriesListWidget::edit( int row )
+{
+	QModelIndex index = m_proxyModel->index( row, 0 );
+	ui->m_treeView->edit( index );
+}
+
 void KreCategoriesListWidget::expandAll()
 {
 	ui->m_treeView->expandAll();
