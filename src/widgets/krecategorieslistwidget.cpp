@@ -147,5 +147,10 @@ int KreCategoriesListWidget::idColumn()
 	return 1;
 }
 
+void KreCategoriesListWidget::setFilter( const QString & filter )
+{
+	KreGenericListWidget::setFilter( filter );
+	this->expandAll();
+}
 
 #include "krecategorieslistwidget.moc"

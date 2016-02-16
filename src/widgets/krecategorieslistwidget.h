@@ -30,6 +30,7 @@ public:
 	void collapseAll();
 
 protected slots:
+	void setFilter( const QString & filter );
 	virtual void createCategory( const Element & category, int parent_id );
 	virtual void removeCategory( int id );
 

@@ -67,7 +67,7 @@ signals:
 
 protected slots:
 	void setFilter();
-	void setFilter( const QString & filter );
+	virtual void setFilter( const QString & filter );
 	void activatePreviousPage();
 	void activateNextPage();
 	void contextMenuSlot( const QPoint & point );
