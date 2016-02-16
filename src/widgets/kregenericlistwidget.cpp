@@ -207,9 +207,9 @@ QModelIndex KreGenericListWidget::currentParent() const
 	return ui->m_treeView->currentIndex().parent();
 }
 
-void KreGenericListWidget::edit( int row )
+void KreGenericListWidget::edit( int row, const QModelIndex & parent )
 {
-	QModelIndex index = m_proxyModel->index( row, 1 );
+	QModelIndex index = m_proxyModel->index( row, 1, parent );
 	ui->m_treeView->edit( index );
 }
 

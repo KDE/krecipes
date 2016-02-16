@@ -46,8 +46,9 @@ KreGenericActionsHandler::KreGenericActionsHandler( KreGenericListWidget * listW
 void KreGenericActionsHandler::rename()
 {
 	int row = m_listWidget->currentRow();
+	QModelIndex parent = m_listWidget->currentParent();
 	if ( row != -1 )
-		m_listWidget->edit( row );
+		m_listWidget->edit( row, parent );
 }
 
 void KreGenericActionsHandler::addAction( KAction * action )

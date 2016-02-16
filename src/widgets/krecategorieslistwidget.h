@@ -17,6 +17,7 @@
 
 class Element;
 class QStandardItem;
+class QModelIndex;
 
 
 class KreCategoriesListWidget : public KreGenericListWidget
@@ -26,7 +27,7 @@ class KreCategoriesListWidget : public KreGenericListWidget
 public:
 	KreCategoriesListWidget( QWidget *parent, RecipeDB *db );
 
-	void edit( int row );
+	void edit( int row, const QModelIndex & parent );
 
 	void expandAll();
 	void collapseAll();
