@@ -16,6 +16,7 @@
 // whenever we can get rid of the obsolete DBListviewBase.
 #include "dblistviewbase.h"
 
+class QAbstractItemModel;
 class QStandardItemModel;
 class QStandardItem;
 class QSortFilterProxyModel;
@@ -58,7 +59,7 @@ public:
 	QVariant selectedRowData( int column, int role = Qt::EditRole );
 	QVariant getData( int row, int column, int role = Qt::EditRole );
 	QStandardItem * getItem( int row, int column );
-	QStandardItemModel * model();
+	QAbstractItemModel * model();
 
 signals:
 	void contextMenuRequested( const QModelIndex & index, const QPoint & point);

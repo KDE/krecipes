@@ -24,20 +24,16 @@
 
 #include <QPointer>
 #include <QModelIndex>
+#include <QStandardItemModel>
 
 
 KreCategoryActionsHandler::KreCategoryActionsHandler( KreCategoriesListWidget * listWidget, RecipeDB * db ):
 	KreGenericActionsHandler( listWidget, db ),
-	m_clipboardRow(),
-	m_parentRow( -1 ),
+	m_clipboard_id( RecipeDB::InvalidId ),
 	m_pasteAction( 0 ),
 	m_pasteAsSubAction( 0 )
 {
 	connect( m_contextMenu, SIGNAL( aboutToShow() ), SLOT( preparePopup() ) );
-	/*connect( parentListView,
-		SIGNAL( moved( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) ),
-		SLOT( changeCategoryParent( Q3ListViewItem *, Q3ListViewItem *, Q3ListViewItem * ) )
-	);*/
 }
 
 void KreCategoryActionsHandler::setCategoryPasteAction( KAction * action )
@@ -73,70 +69,22 @@ void KreCategoryActionsHandler::createNew()
 
 void KreCategoryActionsHandler::cut()
 {
-/*
-	//restore a never used cut
-	if ( clipboard_item ) {
-		if ( clipboard_parent )
-			clipboard_parent->insertItem( clipboard_item );
-		else
-			parentListView->insertItem( clipboard_item );
-		clipboard_item = 0;
-	}
-
-	Q3ListViewItem *item = parentListView->currentItem();
-
-	if ( item ) {
-		clipboard_item = item;
-		clipboard_parent = item->parent();
-
-		if ( item->parent() )
-			item->parent() ->takeItem( item );
-		else
-			parentListView->takeItem( item );
-	}
-*/
+	m_clipboard_id = m_listWidget->selectedRowId();
+	m_listWidget->model()->removeRow( m_listWidget->currentRow(), m_listWidget->currentParent() );
 }
 
 void KreCategoryActionsHandler::paste()
 {
-/*
-	Q3ListViewItem * item = parentListView->currentItem();
-	if ( item && clipboard_item ) {
-		if ( item->parent() )
-			item->parent() ->insertItem( clipboard_item );
-		else
-			parentListView->insertItem( clipboard_item );
-
-		database->modCategory( clipboard_item->text( 1 ).toInt(), item->parent() ? item->parent() ->text( 1 ).toInt() : -1 );
-		clipboard_item = 0;
-	}
-*/
+	m_database->modCategory( m_clipboard_id, RecipeDB::InvalidId );
+	m_clipboard_id = RecipeDB::InvalidId;
 }
 
 void KreCategoryActionsHandler::pasteAsSub()
 {
-/*
-	Q3ListViewItem * item = parentListView->currentItem();
-
-	if ( item && clipboard_item ) {
-		item->insertItem( clipboard_item );
-		database->modCategory( clipboard_item->text( 1 ).toInt(), item->text( 1 ).toInt() );
-		clipboard_item = 0;
-	}
-*/
+	RecipeDB::IdType parent_id = m_listWidget->selectedRowId();
+	m_database->modCategory( m_clipboard_id, parent_id );
+	m_clipboard_id = RecipeDB::InvalidId;
 }
-
-/*void CategoryActionsHandler::changeCategoryParent(Q3ListViewItem *item,
-	Q3ListViewItem * afterFirst, Q3ListViewItem * afterNow )
-{
-	int new_parent_id = -1;
-	if ( Q3ListViewItem * parent = item->parent() )
-		new_parent_id = parent->text( 1 ).toInt();
-
-	int cat_id = item->text( 1 ).toInt();
-
-	database->modCategory( cat_id, new_parent_id, false );
-}*/
 
 void KreCategoryActionsHandler::remove()
 {
@@ -184,8 +132,8 @@ bool KreCategoryActionsHandler::checkBounds( const QString &name )
 void KreCategoryActionsHandler::preparePopup()
 {
 	//only enable the paste actions if we have something to paste.
-	m_pasteAction->setEnabled( !m_clipboardRow.isEmpty() );
-	m_pasteAsSubAction->setEnabled( !m_clipboardRow.isEmpty() );
+	m_pasteAction->setEnabled( m_clipboard_id != RecipeDB::InvalidId );
+	m_pasteAsSubAction->setEnabled( m_clipboard_id != RecipeDB::InvalidId );
 }
 
 void KreCategoryActionsHandler::saveElement( const QModelIndex & topLeft, const QModelIndex & bottomRight )

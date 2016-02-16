@@ -32,6 +32,8 @@ public:
 protected slots:
 	void setFilter( const QString & filter );
 	virtual void createCategory( const Element & category, int parent_id );
+	virtual void modifyCategory( const Element & category );
+	virtual void modifyCategory( int category_id, int new_parent_id );
 	virtual void removeCategory( int id );
 
 protected:

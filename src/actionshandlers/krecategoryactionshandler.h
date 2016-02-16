@@ -14,13 +14,11 @@
 
 #include "actionshandlers/kregenericactionshandler.h"
 
+#include "recipedb.h"
 #include <QList>
 
-//class StdCategoryListView;
-//class Q3ListViewItem;
 class KAction;
 class KreCategoriesListWidget;
-class RecipeDB;
 class QStandardItem;
 
 
@@ -40,8 +38,6 @@ public slots:
 	void cut();
 	void paste();
 	void pasteAsSub();
-	//void changeCategoryParent(Q3ListViewItem *item,
-	//	Q3ListViewItem * /*afterFirst*/, Q3ListViewItem * /*afterNow*/ );
 	void remove();
 
 private slots:
@@ -50,11 +46,8 @@ private slots:
 		const QModelIndex & bottomRight);
 
 private:
-	bool checkBounds( const QString &name );	
-	//Q3ListViewItem *clipboard_item;
-	//Q3ListViewItem *clipboard_parent;
-	QList<QStandardItem*> m_clipboardRow;
-	int m_parentRow;
+	bool checkBounds( const QString &name );
+	RecipeDB::IdType m_clipboard_id;
 	KAction * m_pasteAction;
 	KAction * m_pasteAsSubAction;
 

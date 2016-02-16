@@ -266,9 +266,9 @@ void KreGenericListWidget::contextMenuSlot( const QPoint & point)
 		globalPoint );
 }
 
-QStandardItemModel * KreGenericListWidget::model()
+QAbstractItemModel * KreGenericListWidget::model()
 {
-	return m_sourceModel;
+	return m_proxyModel;
 }
 
 #include "kregenericlistwidget.moc"

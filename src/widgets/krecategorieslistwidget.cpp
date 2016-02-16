@@ -51,6 +51,10 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 
 	connect( m_database, SIGNAL( categoryCreated( const Element &, int) ), 
 		SLOT( createCategory( const Element &, int ) ) );
+	connect( m_database, SIGNAL( categoryModified( const Element & ) ),
+		SLOT( modifyCategory( const Element & ) ) );
+	connect( m_database, SIGNAL( categoryModified( int, int ) ),
+		SLOT( modifyCategory( int, int ) ) );
 	connect( m_database, SIGNAL( categoryRemoved( int ) ), 
 		SLOT( removeCategory( int ) ) );
 
@@ -101,6 +105,20 @@ void KreCategoriesListWidget::populate( QStandardItem * item, int id )
 
 }
 
+void KreCategoriesListWidget::modifyCategory( const Element & category )
+{
+	//FIXME: too slow
+	Q_UNUSED( category );
+	reload( ForceReload );
+}
+
+void KreCategoriesListWidget::modifyCategory( int category_id, int new_parent_id )
+{
+	//FIXME: too slow
+	Q_UNUSED( category_id );
+	Q_UNUSED( new_parent_id );
+	reload( ForceReload );
+}
 void KreCategoriesListWidget::removeCategory( int id )
 {
           Q_UNUSED(id);
