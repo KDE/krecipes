@@ -16,8 +16,8 @@
 #include <KApplication>
 #include <KIcon>
 #include <KPixmapSequenceWidget>
+#include <KRecursiveFilterProxyModel>
 #include <QStandardItemModel>
-#include <QSortFilterProxyModel>
 #include <QGridLayout>
 #include <QTimer>
 
@@ -36,7 +36,7 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 
 	//The data models
 	m_sourceModel = new QStandardItemModel( 0, 2, this ); 
-	m_proxyModel = new QSortFilterProxyModel( this );
+	m_proxyModel = new KRecursiveFilterProxyModel( this );
 	m_proxyModel->setDynamicSortFilter( true );
 	m_proxyModel->setFilterKeyColumn( 1 );
 	m_proxyModel->setSourceModel( m_sourceModel );
