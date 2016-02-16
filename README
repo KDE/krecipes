@@ -100,6 +100,12 @@ to use the Krecipes backup feature. If you want to use "krecipes
  You can see the features ("Merge Similar Categories..." and "Merge Similar
  Ingredients...") in the "Tools" menu.
 
+ Also you can show the database ID's of the recipes/ingredients/whatever with:
+ 
+ [Advanced]
+ ShowID=true
+
+ This may be useful for debugging purposes.
 
 ** The NukeDB tool
 
