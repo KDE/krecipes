@@ -1,5 +1,5 @@
 /***************************************************************************
-*   Copyright © 2015 José Manuel Santamaría Lema <panfaust@gmail.com>      *
+*   Copyright © 2015-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
 *                                                                          *
 *   This program is free software; you can redistribute it and/or modify   *
 *   it under the terms of the GNU General Public License as published by   *
@@ -49,16 +49,25 @@ void KreSearchResultListWidget::showNotFoundMessage(const QString & message )
 
 void KreSearchResultListWidget::displayRecipes( const RecipeList & recipes )
 {
-	clear();
+	int row_count = m_sourceModel->rowCount();
+	bool append_mode = (row_count != 0);
 
-	//Allocate memory for the items.
-	m_sourceModel->setRowCount( recipes.count() );
+	//Allocate memory for the items if we are not adding them
+	if ( !append_mode ) {
+		m_sourceModel->setRowCount( recipes.count() );
+	}
 
 	//Display the recipes in the items.
 	RecipeList::const_iterator it; 
 	QModelIndex index;
-	int row_count = 0;
 	for ( it = recipes.constBegin(); it != recipes.constEnd(); ++it ) {
+		if ( append_mode ){
+			QStandardItem *itemId = new QStandardItem;
+			QStandardItem *itemRecipe = new QStandardItem;
+			m_sourceModel->setItem( row_count, 1, itemId);
+			m_sourceModel->setItem( row_count, 0, itemRecipe);
+		}
+
 		//The "Id" item.
 		index = m_sourceModel->index( row_count, 1 );
 		m_sourceModel->setData( index, it->recipeID, Qt::EditRole );
@@ -84,6 +93,25 @@ void KreSearchResultListWidget::displayRecipes( const RecipeList & recipes )
 
 	//Sort the results.
 	m_proxyModel->sort( 0 );
+}
+
+
+ElementList KreSearchResultListWidget::displayedRecipes()
+{
+	ElementList result;
+
+	int row_count = m_sourceModel->rowCount();
+	QModelIndex index;
+	for (int row = 0; row < row_count; row++)
+	{
+		Element recipe;
+		index = m_sourceModel->index( row, 0 );
+		recipe.id = m_sourceModel->data( index, IdRole ).toInt();
+		recipe.name = m_sourceModel->data( index, Qt::EditRole ).toString();
+		result.append(recipe);
+	}
+
+	return result;
 }
 
 

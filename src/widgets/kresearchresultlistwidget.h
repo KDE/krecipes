@@ -26,6 +26,8 @@ public:
 	void showNotFoundMessage( const QString & message );
 	void displayRecipes( const RecipeList & recipes );
 
+	ElementList displayedRecipes();
+
 protected slots:
 	//Operations with categories.
 	void createCategorySlot( const Element & /*category*/, int /*parent_id*/ ){};

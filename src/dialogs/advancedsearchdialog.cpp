@@ -12,6 +12,7 @@
 
 #include "widgets/kresearchresultlistwidget.h"
 #include "actionshandlers/krerecipeactionshandler.h"
+#include "datablocks/recipelist.h"
 
 #include <KPushButton>
 #include <qwidget.h>
@@ -965,6 +966,7 @@ void AdvancedSearchDialog::search()
 		resultsListWidget->showNotFoundMessage(
 			"--- "+i18nc("@item:inlistbox", "No matching recipes found")+" ---" );
 	} else {
+		resultsListWidget->clear();
 		resultsListWidget->displayRecipes( allRecipes );
 	}
 
