@@ -56,7 +56,7 @@ public:
 	void clear();
 	void setSearchAsYouType( bool value );
 	void setCurrentLimit( int value );
-	void reload( ReloadFlags flags );
+	void reload( ReloadFlags flags = ForceReload );
 	int currentRow();
 	QList<int> currentRows();
 	QModelIndex currentParent() const;
