@@ -337,7 +337,6 @@ set(krecipes_SRCS
    setupassistant.cpp
    shoppingcalculator.cpp
    kstartuplogo.cpp
-   recipefilter.cpp
    convert_sqlite3.cpp
    #klomanager.cpp
 )
