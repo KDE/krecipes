@@ -35,6 +35,7 @@ public:
 
 	KreCategoriesListWidget( QWidget *parent, RecipeDB *db,
 		bool itemsCheckable = false );
+	~KreCategoriesListWidget();
 
 	void checkCategories( const ElementList & items_on );
 
@@ -47,7 +48,7 @@ public:
 
 protected slots:
 	void setFilter( const QString & filter );
-	virtual void createCategory( const Element & category, int parent_id );
+	virtual void createCategorySlot( const Element & category, int parent_id );
 	virtual void modifyCategory( const Element & category );
 	virtual void modifyCategory( int category_id, int new_parent_id );
 	virtual void removeCategory( int id );
