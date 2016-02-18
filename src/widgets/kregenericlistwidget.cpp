@@ -214,6 +214,20 @@ int KreGenericListWidget::currentRow ()
 		return -1;
 }
 
+QList<int> KreGenericListWidget::currentRows()
+{
+	QList<int> result;
+	QModelIndexList index_list = ui->m_treeView->selectionModel()->selectedRows();
+
+	QModelIndexList::iterator it;
+	for ( it = index_list.begin(); it != index_list.end(); it++)
+	{
+		result << it->row();
+	}
+
+	return result;
+}
+
 QModelIndex KreGenericListWidget::currentParent() const
 {
 	return ui->m_treeView->currentIndex().parent();

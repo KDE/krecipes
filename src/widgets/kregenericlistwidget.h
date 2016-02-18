@@ -58,6 +58,7 @@ public:
 	void setCurrentLimit( int value );
 	void reload( ReloadFlags flags );
 	int currentRow();
+	QList<int> currentRows();
 	QModelIndex currentParent() const;
 	virtual void edit( int row, const QModelIndex & parent );
 	int selectedRowId();
