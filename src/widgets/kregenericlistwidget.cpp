@@ -17,6 +17,8 @@
 #include <KIcon>
 #include <KPixmapSequenceWidget>
 #include <KRecursiveFilterProxyModel>
+#include <KLocalizedString>
+
 #include <QStandardItemModel>
 #include <QGridLayout>
 #include <QTimer>
@@ -58,6 +60,10 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	layout->addWidget( m_anim );
 	ui->m_treeView->setLayout( layout );
 
+	//The title label is hidden by default, if you change it with setListTitle(string)
+	//it will be automatically displayed.
+	ui->m_titleLabel->setVisible( false );
+
 	//The filter text box.
 	KConfigGroup configPerformance( KGlobal::config(), "Performance" );
 	setSearchAsYouType( configPerformance.readEntry( "SearchAsYouType", true ) );
@@ -73,6 +79,12 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 KreGenericListWidget::~KreGenericListWidget()
 {
 	delete ui;
+}
+
+void KreGenericListWidget::setListTitle( const QString & text )
+{
+	ui->m_titleLabel->setText( text );
+	ui->m_titleLabel->setVisible( true );
 }
 
 void KreGenericListWidget::clear()

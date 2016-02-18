@@ -16,6 +16,9 @@
 // whenever we can get rid of the obsolete DBListviewBase.
 #include "dblistviewbase.h"
 
+class KPixmapSequenceWidget;
+class KLocalizedString;
+
 class QAbstractItemModel;
 class QStandardItemModel;
 class QStandardItem;
@@ -24,8 +27,6 @@ class QString;
 class QModelIndex;
 class QPoint;
 class QModelIndex;
-
-class KPixmapSequenceWidget;
 
 class Element;
 class RecipeDB;
@@ -47,6 +48,10 @@ class KreGenericListWidget : public QWidget
 public:
 	KreGenericListWidget( QWidget *parent, RecipeDB *db );
 	virtual ~KreGenericListWidget();
+
+	//Sets the list title, if text is empty it will hide the label
+	//containing the title.
+	void setListTitle( const QString & text );
 
 	void clear();
 	void setSearchAsYouType( bool value );
