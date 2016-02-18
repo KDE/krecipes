@@ -1,11 +1,11 @@
 /***************************************************************************
-*   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2012-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "krecategorieslistwidget.h"
 #include "ui_kregenericlistwidget.h"
@@ -22,9 +22,16 @@
 #include "backends/recipedb.h"
 
 
-KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db ):
-	KreGenericListWidget( parent, db )
+KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db, bool itemsCheckable):
+	KreGenericListWidget( parent, db ),
+	m_itemsCheckable( itemsCheckable )
 {
+
+	if ( itemsCheckable ) {
+		m_checkedCategories = new ElementList;
+	} else {
+		m_checkedCategories = 0;
+	}
 
 	//This is an unusual column to filter by
 	m_proxyModel->setFilterKeyColumn( 0 );
@@ -58,8 +65,26 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db 
 	connect( m_database, SIGNAL( categoryRemoved( int ) ), 
 		SLOT( removeCategory( int ) ) );
 
+	connect( this, SIGNAL( itemsChanged( const QModelIndex &, const QModelIndex & ) ),
+		SLOT( itemsChangedSlot( const QModelIndex &, const QModelIndex & ) ) );
 }
 
+void KreCategoriesListWidget::checkCategories( const ElementList & items_on )
+{
+	ElementList::const_iterator it;
+	for ( it = items_on.begin(); it != items_on.end(); it++ ) {
+		QPersistentModelIndex index = m_categoryIdToIndexMap[it->id];
+		QStandardItem * item = m_sourceModel->itemFromIndex( index );
+		item->setCheckState( Qt::Checked );
+	}
+}
+
+ElementList KreCategoriesListWidget::checkedCategories()
+{
+	return *m_checkedCategories;
+}
+
+#include "kdebug.h"
 void KreCategoriesListWidget::edit( int row, const QModelIndex & parent )
 {
 	QModelIndex index = m_proxyModel->index( row, 0, parent );
@@ -95,18 +120,26 @@ void KreCategoriesListWidget::populate( QStandardItem * item, int id )
 		//The "Id" item.
 		QStandardItem *itemId = new QStandardItem;
 		itemId->setData( QVariant(child_it->category.id), Qt::EditRole );
+		itemId->setData( child_it->category.id, IdRole );
 		itemId->setEditable( false );
 
 		//The "Category" item.
 		QStandardItem *itemCategory = new QStandardItem( child_it->category.name );
 		itemCategory->setData( KIcon("folder-yellow"), Qt::DecorationRole );
+		itemCategory->setData( child_it->category.id, IdRole );
 		itemCategory->setEditable( true );
+		if ( m_itemsCheckable ) {
+			itemCategory->setCheckable( true );
+		}
 	
 		//Insert the items as children
 		item->setChild( current_row, 0, itemCategory );
 		item->setChild( current_row, 1, itemId );
 		populate( itemCategory, child_it->category.id );
 		++current_row;
+
+		//Update the persistent index map.
+		m_categoryIdToIndexMap[child_it->category.id] = itemCategory->index();
 	}
 
 }
@@ -147,17 +180,25 @@ void KreCategoriesListWidget::load( int limit, int offset )
 		//The "Id" item.
 		QStandardItem *itemId = new QStandardItem;
 		itemId->setData( QVariant(child_it->category.id), Qt::EditRole );
+		itemId->setData( child_it->category.id, IdRole );
 		itemId->setEditable( false );
 
 		//The "Category" item.
 		QStandardItem *itemCategory = new QStandardItem( child_it->category.name );
 		itemCategory->setData( KIcon("folder-yellow"), Qt::DecorationRole );
+		itemCategory->setData( child_it->category.id, IdRole );
 		itemCategory->setEditable( true );
+		if ( m_itemsCheckable ) {
+			itemCategory->setCheckable( true );
+		}
 
 		//Insert the items in the model.
 		QList<QStandardItem*> items;
 		items << itemCategory << itemId;
 		m_sourceModel->appendRow( items );
+
+		//Update the persistent index map.
+		m_categoryIdToIndexMap[child_it->category.id] = itemCategory->index();
 
 		//Populate the current element.
 		populate( itemCategory, child_it->category.id );
@@ -175,6 +216,24 @@ void KreCategoriesListWidget::setFilter( const QString & filter )
 {
 	KreGenericListWidget::setFilter( filter );
 	this->expandAll();
+}
+
+void KreCategoriesListWidget::itemsChangedSlot( const QModelIndex & topLeft,
+	const QModelIndex & bottomRight )
+{
+	Q_UNUSED( bottomRight )
+	QModelIndex sourceIndex = m_proxyModel->mapToSource( topLeft );
+	if ( m_sourceModel->itemFromIndex( sourceIndex )->checkState() == Qt::Checked ) {
+		Element el;
+		el.id = m_proxyModel->data( topLeft, IdRole).toInt();
+		el.name = m_proxyModel->data( topLeft, Qt::EditRole).toString();
+		(*m_checkedCategories) << el;
+	} else {
+		Element el;
+		el.id = m_proxyModel->data( topLeft, IdRole).toInt();
+		el.name = m_proxyModel->data( topLeft, Qt::EditRole).toString();
+		m_checkedCategories->removeOne( el );
+	}
 }
 
 #include "krecategorieslistwidget.moc"

@@ -27,10 +27,6 @@ class KreRecipesListWidget : public KreCategoriesListWidget
 public:
 	enum ItemType{ CategoryItem=0, RecipeItem=1, OtherItem=2 };
 	enum RecipeStatus{ Categorized=1, Uncategorized=0 };
-	enum UserRoles{ 
-		ItemTypeRole=Qt::UserRole, 
-		IdRole=Qt::UserRole+1, 
-		CategorizedRole=Qt::UserRole+2 };
 
 	KreRecipesListWidget( QWidget *parent, RecipeDB *db );
 
@@ -83,7 +79,6 @@ protected:
 	QList< QPair<int,int> > m_recipesWithCategories;
 
 	QMultiHash<int,QPersistentModelIndex> m_recipeIdToIndexMap;
-	QHash<int,QPersistentModelIndex> m_categoryIdToIndexMap;
 
 	QPersistentModelIndex m_uncategorizedItemIndex;
 };
