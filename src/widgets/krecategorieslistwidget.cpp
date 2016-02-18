@@ -130,7 +130,11 @@ void KreCategoriesListWidget::createCategorySlot( const Element & category, int 
 	QStandardItem * parentItem = m_sourceModel->itemFromIndex( parentIndex );
 	QList<QStandardItem*> items;
 	items << itemCategory << itemId;
-	parentItem->appendRow( items );
+	if ( parentItem ) {
+		parentItem->appendRow( items );
+	} else {
+		m_sourceModel->appendRow( items );
+	}
 
 	//Update the persistent index map.
 	m_categoryIdToIndexMap[category.id] = itemCategory->index();
