@@ -24,7 +24,7 @@
 #include <KTabWidget>
 
 #include <QStackedWidget>
-#include <Q3ValueList>
+#include <QList>
 #include <QLabel>
 #include <QVBoxLayout>
 
@@ -87,7 +87,7 @@ MealInput::~MealInput()
 
 void MealInput::reload( ReloadFlags flag )
 {
-	Q3ValueList<DishInput*>::iterator it;
+	QList<DishInput*>::iterator it;
 	for ( it = dishInputList.begin(); it != dishInputList.end(); ++it ) {
 		DishInput *di = ( *it );
 		di->reload(flag);
@@ -113,15 +113,11 @@ void MealInput::changeDishNumber( int dn )
 		}
 	}
 	else if ( dn < dishNumber ) {
-		Q3ValueList <DishInput*>::Iterator it;
 		while ( dishNumber != dn ) {
-			it = dishInputList.fromLast();
-			DishInput *lastDish = ( *it );
-			dishInputList.remove( it );
+			DishInput *lastDish = dishInputList.takeLast();
 
-			if ( ( *it ) == ( DishInput* ) dishStack->currentWidget() ) {
-				it--;
-				dishStack->setCurrentWidget( *it );
+			if ( lastDish == ( DishInput* ) dishStack->currentWidget() ) {
+				dishStack->setCurrentWidget( dishInputList.last() );
 			}
 			delete lastDish;
 			dishNumber--;
@@ -133,12 +129,12 @@ void MealInput::changeDishNumber( int dn )
 void MealInput::nextDish( void )
 {
 	// First get the place of the current dish input in the list
-	Q3ValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->currentWidget() ) );
+	int pos = dishInputList.indexOf(  (DishInput*)dishStack->currentWidget() );
 
 	//Show the next dish if it exists
-	it++;
-	if ( it != dishInputList.end() ) {
-		dishStack->setCurrentWidget( *it );
+	pos++;
+	if ( pos < dishInputList.size() ) {
+		dishStack->setCurrentWidget( dishInputList.at(pos) );
 	}
 
 }
@@ -146,19 +142,19 @@ void MealInput::nextDish( void )
 void MealInput::prevDish( void )
 {
 	// First get the place of the current dish input in the list
-	Q3ValueList <DishInput*>::iterator it = dishInputList.find( ( DishInput* ) ( dishStack->currentWidget() ) );
+	int pos = dishInputList.indexOf(  (DishInput*)dishStack->currentWidget() );
 
 	//Show the previous dish if it exists
-	it--;
-	if ( it != dishInputList.end() ) {
-		dishStack->setCurrentWidget( *it );
+	pos--;
+	if ( pos >= 0 ) {
+		dishStack->setCurrentWidget( dishInputList.at(pos) );
 	}
 }
 
 void MealInput::showDish( int dn )
 {
-	Q3ValueList <DishInput*>::iterator it = dishInputList.at( dn );
-	if ( it != dishInputList.end() )
-		dishStack->setCurrentWidget( *it );
+	if ( (dn >= 0) && (dn < dishInputList.size()) ) {
+		dishStack->setCurrentWidget( dishInputList.at(dn) );
+	}
 }
 

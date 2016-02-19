@@ -16,8 +16,6 @@
 
 #include "widgets/dblistviewbase.h"
 
-#include <q3valuelist.h>
-
 class DishInput;
 class DishTitle;
 class MealInput;
@@ -51,7 +49,7 @@ public:
 	void showDish( int dn );
 
 	// Public widgets and variables
-	Q3ValueList <DishInput*> dishInputList; // The list of dishes
+	QList <DishInput*> dishInputList; // The list of dishes
 
 private:
 	// Widgets
