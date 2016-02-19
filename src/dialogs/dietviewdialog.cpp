@@ -10,12 +10,10 @@
 
 #include "dietviewdialog.h"
 
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <KHTMLView>
+#include <KLocale>
+#include <KStandardDirs>
 #include <KStandardGuiItem>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <KVBox>
 
 DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, int dayNumber, int mealNumber, const QList <int> &dishNumbers )

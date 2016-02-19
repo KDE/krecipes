@@ -10,16 +10,13 @@
 #ifndef DIETVIEWDIALOG_H
 #define DIETVIEWDIALOG_H
 
-#include <QPushButton>
-
-#include <qwidget.h>
-
-#include <khtml_part.h>
-#include <khtmlview.h>
-#include <kdialog.h>
-#include <kvbox.h>
 
 #include "datablocks/recipelist.h"
+
+#include <KHTMLPart>
+
+#include <QList>
+
 
 class DietViewDialog: public KDialog
 {
