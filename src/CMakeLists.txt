@@ -133,8 +133,12 @@ set(krecipeswidgets_SRCS
 set(krecipesdialogs_SRCS
    dialogs/advancedsearchdialog.cpp
    dialogs/recipeimportdialog.cpp
-   dialogs/dietwizard/dietviewdialog.cpp
+
+   #Diet wizard
    dialogs/dietwizard/dietwizarddialog.cpp
+   dialogs/dietwizard/dietviewdialog.cpp
+   dialogs/dietwizard/dishtitle.cpp
+
    dialogs/recipeinputdialog.cpp
    dialogs/recipeviewdialog.cpp
    dialogs/selectrecipedialog.cpp
