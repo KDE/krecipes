@@ -133,7 +133,8 @@ set(krecipeswidgets_SRCS
 set(krecipesdialogs_SRCS
    dialogs/advancedsearchdialog.cpp
    dialogs/recipeimportdialog.cpp
-   dialogs/dietwizarddialog.cpp
+   dialogs/dietwizard/dietviewdialog.cpp
+   dialogs/dietwizard/dietwizarddialog.cpp
    dialogs/recipeinputdialog.cpp
    dialogs/recipeviewdialog.cpp
    dialogs/selectrecipedialog.cpp
@@ -152,7 +153,6 @@ set(krecipesdialogs_SRCS
    dialogs/authorsdialog.cpp
    dialogs/selectauthorsdialog.cpp
    dialogs/resizerecipedialog.cpp
-   dialogs/dietviewdialog.cpp
    dialogs/ingredientmatcherdialog.cpp
    dialogs/prepmethodsdialog.cpp
    dialogs/createcategorydialog.cpp
