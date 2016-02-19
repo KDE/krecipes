@@ -137,6 +137,7 @@ set(krecipesdialogs_SRCS
    #Diet wizard
    dialogs/dietwizard/dietwizarddialog.cpp
    dialogs/dietwizard/dietviewdialog.cpp
+   dialogs/dietwizard/mealinput.cpp
    dialogs/dietwizard/dishinput.cpp
    dialogs/dietwizard/dishtitle.cpp
 
