@@ -163,42 +163,4 @@ private slots:
 
 };
 
-class DishInput: public QWidget
-{
-	Q_OBJECT
-
-public:
-	DishInput( QWidget *parent, RecipeDB *database, const QString &title );
-	~DishInput();
-	// Methods
-	bool isCategoryFilteringEnabled( void ) const;
-	void loadConstraints( ConstraintList *constraints ) const;
-	void loadEnabledCategories( ElementList* categories );
-	void reload( ReloadFlags flag = Load );
-	void setDishTitle( const QString & text );
-	void clear();
-
-
-private:
-	// Variables
-	bool categoryFiltering;
-	// Widgets
-	QGroupBox *listBox;
-	DishTitle *dishTitle;
-	KVBox *categoriesBox;
-	QCheckBox *categoriesEnabledBox;
-	CategoryCheckListView *categoriesView;
-	PropertyConstraintListView *constraintsView;
-	KDoubleNumInput *constraintsEditBox1;
-	KDoubleNumInput *constraintsEditBox2;
-	RecipeDB *database;
-
-private slots:
-	void enableCategories( bool enable );
-	void insertConstraintsEditBoxes( Q3ListViewItem* it );
-	void hideConstraintInputs();
-	void setMinValue( double minValue );
-	void setMaxValue( double maxValue );
-};
-
 #endif
