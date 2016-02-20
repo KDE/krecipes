@@ -19,7 +19,6 @@
 #include <k3listview.h>
 #include <knuminput.h>
 #include <kpushbutton.h>
-#include <kled.h>
 
 #include <QLabel>
 #include <qmap.h>
@@ -38,6 +37,7 @@ class KTabWidget;
 class QDateTimeEdit;
 class QTextEdit;
 class KTextBrowser;
+class KLed;
 
 class KreTextEdit;
 class KWidgetListbox;
@@ -51,7 +51,6 @@ class FractionInput;
 class Ingredient;
 class Rating;
 class IngredientInputWidget;
-class ClickableLed;
 
 #include "ui_ratingdisplaywidget.h"
 
@@ -122,7 +121,7 @@ private:
 	K3ListView* ingredientList;
 	QFrame *ingredientsTab;
 	IngredientInputWidget *ingInput;
-	ClickableLed *propertyStatusLed;
+	KLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;
 	KPushButton *propertyStatusButton;
 	//QTextEdit *statusTextView;
@@ -205,19 +204,6 @@ signals:
 
 };
 
-class ClickableLed : public KLed
-{
-Q_OBJECT
-
-public:
-	ClickableLed( QWidget *parent );
-
-protected:
-	virtual void mouseReleaseEvent( QMouseEvent* );
-
-signals:
-	void clicked();
-};
 
 class ImageDropLabel : public QLabel
 {

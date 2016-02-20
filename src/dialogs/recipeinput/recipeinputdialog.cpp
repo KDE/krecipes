@@ -68,14 +68,6 @@
 
 #include "profiling.h"
 
-ClickableLed::ClickableLed( QWidget *parent ) : KLed(parent)
-{
-}
-
-void ClickableLed::mouseReleaseEvent( QMouseEvent* )
-{
-	emit clicked();
-}
 
 ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabel( parent ),
 		sourcePhoto( _sourcePhoto )
@@ -362,7 +354,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	QLabel *propertyLabel = new QLabel( i18nc( "@label", "Property Status:"), ingredientsTab );
 	propertyStatusLabel = new QLabel( ingredientsTab );
-	propertyStatusLed = new ClickableLed( ingredientsTab );
+	propertyStatusLed = new KLed( ingredientsTab );
 	propertyStatusLed->setFixedSize( QSize(16,16) );
 	propertyStatusButton = new KPushButton( i18nc( "@action:button", "Details..."), ingredientsTab );
 	//QPushButton *propertyUpdateButton = new QPushButton( i18n("Update"), ingredientsTab );
