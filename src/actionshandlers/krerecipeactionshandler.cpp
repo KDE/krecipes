@@ -14,7 +14,7 @@
 
 //#include "kdebug.h"
 
-#include "dialogs/selectcategoriesdialog.h"
+#include "dialogs/recipeinput/selectcategoriesdialog.h"
 #include "widgets/krerecipeslistwidget.h"
 #include "exporters/cookmlexporter.h"
 #include "exporters/xsltexporter.h"

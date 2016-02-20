@@ -141,7 +141,14 @@ set(krecipesdialogs_SRCS
    dialogs/dietwizard/dishinput.cpp
    dialogs/dietwizard/dishtitle.cpp
 
-   dialogs/recipeinputdialog.cpp
+   #Recipe input
+   dialogs/recipeinput/recipeinputdialog.cpp
+   dialogs/recipeinput/selectauthorsdialog.cpp
+   dialogs/recipeinput/resizerecipedialog.cpp
+   dialogs/recipeinput/editratingdialog.cpp
+   dialogs/recipeinput/ingredientparserdialog.cpp
+   dialogs/recipeinput/selectcategoriesdialog.cpp
+
    dialogs/recipeviewdialog.cpp
    dialogs/selectrecipedialog.cpp
    dialogs/ingredientsdialog.cpp
@@ -154,11 +161,8 @@ set(krecipesdialogs_SRCS
    dialogs/dependanciesdialog.cpp
    dialogs/shoppinglistdialog.cpp
    dialogs/shoppinglistviewdialog.cpp
-   dialogs/selectcategoriesdialog.cpp
    dialogs/categorieseditordialog.cpp
    dialogs/authorsdialog.cpp
-   dialogs/selectauthorsdialog.cpp
-   dialogs/resizerecipedialog.cpp
    dialogs/ingredientmatcherdialog.cpp
    dialogs/prepmethodsdialog.cpp
    dialogs/createcategorydialog.cpp
@@ -168,9 +172,7 @@ set(krecipesdialogs_SRCS
    dialogs/dbimportdialog.cpp
    dialogs/createunitdialog.cpp
    dialogs/setupdisplay.cpp
-   dialogs/ingredientparserdialog.cpp
    dialogs/ingredientgroupsdialog.cpp
-   dialogs/editratingdialog.cpp
    dialogs/similarcategoriesdialog.cpp
    dialogs/conversiondialog.cpp
    dialogs/createingredientweightdialog.cpp
@@ -178,7 +180,8 @@ set(krecipesdialogs_SRCS
    dialogs/createunitconversiondialog.cpp)
 
 kde4_add_ui_files(krecipesdialogs_SRCS
-   dialogs/resizerecipedialog.ui
+   dialogs/recipeinput/resizerecipedialog.ui
+   dialogs/recipeinput/ratingdisplaywidget.ui
    )
 
 
@@ -349,7 +352,6 @@ set(krecipes_SRCS
 
 
 kde4_add_ui_files(krecipes_SRCS
-   widgets/ratingdisplaywidget.ui
    widgets/kregenericlistwidget.ui
 )
 

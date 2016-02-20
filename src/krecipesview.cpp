@@ -30,7 +30,7 @@
 #include "convert_sqlite3.h"
 #include "kstartuplogo.h"
 
-#include "dialogs/recipeinputdialog.h"
+#include "dialogs/recipeinput/recipeinputdialog.h"
 #include "dialogs/recipeviewdialog.h"
 #include "dialogs/selectrecipedialog.h"
 #include "dialogs/ingredientsdialog.h"

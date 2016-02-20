@@ -32,7 +32,7 @@
 #include <KTempDir>
 #include <KStandardDirs>
 
-#include "dialogs/selectcategoriesdialog.h"
+#include "dialogs/recipeinput/selectcategoriesdialog.h"
 
 #include "exporters/cookmlexporter.h"
 #include "exporters/xsltexporter.h"

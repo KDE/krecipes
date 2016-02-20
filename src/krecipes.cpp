@@ -13,7 +13,7 @@
 #include "krecipesview.h"
 
 #include "dialogs/recipeviewdialog.h"
-#include "dialogs/recipeinputdialog.h"
+#include "dialogs/recipeinput/recipeinputdialog.h"
 #include "dialogs/selectrecipedialog.h"
 #include "dialogs/ingredientsdialog.h"
 #include "dialogs/propertiesdialog.h"
