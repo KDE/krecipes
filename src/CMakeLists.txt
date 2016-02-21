@@ -80,6 +80,7 @@ set(krecipesactionshandlers_SRCS
 
 set(krecipeswidgets_SRCS
    widgets/clickablelabel.cpp
+   widgets/imagedroplabel.cpp
    widgets/krelistview.cpp
    widgets/kremenu.cpp
    widgets/paneldeco.cpp
