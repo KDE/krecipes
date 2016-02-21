@@ -52,18 +52,7 @@ class FractionInput;
 class Ingredient;
 class Rating;
 class IngredientInputWidget;
-
-#include "ui_ratingdisplaywidget.h"
-
-class RatingDisplayWidget : public QWidget, public Ui::RatingDisplayWidget
-{
-public:
-	RatingDisplayWidget( QWidget *parent ) : QWidget( parent ) {
-		setupUi( this );
-	}
-RatingList::iterator rating_it;
-};
-
+class RatingDisplayWidget;
 
 /**
 @author Unai Garro

@@ -13,6 +13,7 @@
 #include "recipeinputdialog.h"
 
 #include "widgets/imagedroplabel.h"
+#include "ratingdisplaywidget.h"
 
 #include <QString>
 
