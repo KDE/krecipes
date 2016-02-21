@@ -149,6 +149,7 @@ set(krecipesdialogs_SRCS
    dialogs/recipeinput/editratingdialog.cpp
    dialogs/recipeinput/ingredientparserdialog.cpp
    dialogs/recipeinput/selectcategoriesdialog.cpp
+   dialogs/recipeinput/ingredientseditor.cpp
 
    dialogs/recipeviewdialog.cpp
    dialogs/selectrecipedialog.cpp
@@ -183,6 +184,7 @@ set(krecipesdialogs_SRCS
 kde4_add_ui_files(krecipesdialogs_SRCS
    dialogs/recipeinput/resizerecipedialog.ui
    dialogs/recipeinput/ratingdisplaywidget.ui
+   dialogs/recipeinput/ingredientseditor.ui
    )
 
 
