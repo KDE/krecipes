@@ -11,7 +11,7 @@
 #ifndef RATING_H
 #define RATING_H
 
-#include <QtCore/QList>
+#include <QtCore/QLinkedList>
 #include <QtCore/QString>
 
 #include <QtGui/QPixmap>
@@ -54,7 +54,7 @@ public:
     bool setIdOfRatingCriteria(const QString & name, int id);
 };
 
-class RatingList : public QList< Rating >
+class RatingList : public QLinkedList<Rating>
 {
 public:
     double average();
