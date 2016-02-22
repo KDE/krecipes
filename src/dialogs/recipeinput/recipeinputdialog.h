@@ -41,7 +41,6 @@ class KTextBrowser;
 class KLed;
 
 class KreTextEdit;
-class KWidgetListbox;
 class KDialog;
 class KPushButton;
 
@@ -53,6 +52,7 @@ class Ingredient;
 class Rating;
 class IngredientInputWidget;
 class RatingDisplayWidget;
+class RatingListEditor;
 
 /**
 @author Unai Garro
@@ -132,8 +132,7 @@ private:
 	QToolButton* showButton;
 	QToolButton* resizeButton;
 
-
-	KWidgetListbox *ratingListDisplayWidget;
+	RatingListEditor * ratingListEditor;
 
 	QMap<int,QString> propertyStatusMapRed;
 	QMap<int,QString> propertyStatusMapYellow;
@@ -144,7 +143,6 @@ private:
 	void showCategories( void );
 	void showAuthors( void );
 	int ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const;
-	void addRating( const Rating &rating, RatingDisplayWidget *item );
 	QString statusMessage() const;
 	QString conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const;
 
@@ -167,9 +165,6 @@ private slots:
 	void prepTitleChanged( const QString &title );
 	void recipeRemoved( int id );
 	void slotIngredientParser();
-	void slotAddRating();
-	void slotEditRating();
-	void slotRemoveRating();
 	void addIngredient( const Ingredient &ing, bool noHeader = false );
 	void addIngredientHeader( const Element &header );
 	void updatePropertyStatus();

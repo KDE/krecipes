@@ -151,6 +151,7 @@ set(krecipesdialogs_SRCS
    dialogs/recipeinput/selectcategoriesdialog.cpp
    dialogs/recipeinput/ingredientseditor.cpp
    dialogs/recipeinput/ratingdisplaywidget.cpp
+   dialogs/recipeinput/ratinglisteditor.cpp
 
    dialogs/recipeviewdialog.cpp
    dialogs/selectrecipedialog.cpp

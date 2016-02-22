@@ -13,7 +13,7 @@
 #include "recipeinputdialog.h"
 
 #include "widgets/imagedroplabel.h"
-#include "ratingdisplaywidget.h"
+#include "ratinglisteditor.h"
 
 #include <QString>
 
@@ -374,12 +374,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	// ------- Recipe Ratings Tab -----------
 
-	KVBox *ratingsTab = new KVBox( this );
-	ratingListDisplayWidget = new KWidgetListbox(ratingsTab);
-	KPushButton *addRatingButton = new KPushButton(i18nc( "@action:button", "Add Rating..." ),ratingsTab);
-	addRatingButton->setIcon( KIcon( "list-add" ) );
-
-	connect( addRatingButton, SIGNAL(clicked()), this, SLOT(slotAddRating()) );
+	ratingListEditor = new RatingListEditor( &loadedRecipe->ratingList, database );
+	connect( ratingListEditor, SIGNAL(changed()), this, SLOT(recipeChanged()) );
 
 	// ------- END OF Recipe Ratings Tab -----------
 
@@ -387,7 +383,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	tabWidget->insertTab( -1, recipeTab, i18nc( "@title:tab", "Recipe" ) );
 	tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
 	tabWidget->insertTab( -1, instructionsTab, i18nc( "@title:tab", "Instructions" ) );
-	tabWidget->insertTab( -1, ratingsTab, i18nc( "@title:tab", "Ratings" ) );
+	tabWidget->insertTab( -1, ratingListEditor, i18nc( "@title:tab", "Ratings" ) );
 
 
 	// Functions Box
@@ -537,7 +533,6 @@ void RecipeInputDialog::reload( void )
 	yieldNumInput->setValue( 1, 0 );
 	yieldTypeEdit->setText("");
 	ingredientList->clear();
-	ratingListDisplayWidget->clear();
 	ingInput->clear();
 
 	//Load Values in Interface
@@ -617,13 +612,7 @@ void RecipeInputDialog::reload( void )
 	showAuthors();
 
 	// Show ratings
-	for ( RatingList::iterator rating_it = loadedRecipe->ratingList.begin(); rating_it != loadedRecipe->ratingList.end(); ++rating_it ) {
-		RatingDisplayWidget *item = new RatingDisplayWidget( this );
-		item->rating_it = rating_it;
-		addRating(*rating_it,item);
-		ratingListDisplayWidget->insertItem(item);
-	}
-	ratingListDisplayWidget->ensureCellVisible(0,0);
+	ratingListEditor->refresh();
 
 	// Update yield type auto completion
 	KCompletion *completion = yieldTypeEdit->completionObject();
@@ -1121,7 +1110,7 @@ void RecipeInputDialog::newRecipe( void )
 
 	instructionsEdit->selectAll();
 
-	ratingListDisplayWidget->clear();
+	ratingListEditor->clear();
 
 	//Set back to the first page
 	tabWidget->setCurrentIndex( 0 );
@@ -1349,79 +1338,6 @@ void RecipeInputDialog::slotIngredientParser()
 		}
 	}
 	delete dlg;
-}
-
-void RecipeInputDialog::slotAddRating()
-{
-	ElementList criteriaList;
-	database->loadRatingCriterion(&criteriaList);
-
-	QPointer<EditRatingDialog> ratingDlg = new EditRatingDialog( criteriaList, this );
-	if ( ratingDlg->exec() == QDialog::Accepted ) {
-		Rating r = ratingDlg->rating();
-
-		foreach( RatingCriteria rc, r.ratingCriterias() ) {
-			int criteria_id = database->findExistingRatingByName(rc.name());
-			if ( criteria_id == -1 ) {
-				criteria_id = database->createNewRating(rc.name());
-			}
-			r.setIdOfRatingCriteria(rc.name(), criteria_id);
-		}
-
-		RatingDisplayWidget *item = new RatingDisplayWidget( this );
-		loadedRecipe->ratingList.append(r);
-		item->rating_it = --(loadedRecipe->ratingList.end());
-		addRating(r,item);
-		ratingListDisplayWidget->insertItem(item,0);
-		emit( recipeChanged() ); //Indicate that the recipe changed
-	}
-
-	delete ratingDlg;
-}
-
-void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *item )
-{
-	item->displayRating( rating );
-	connect(item, SIGNAL(editButtonClicked()), this, SLOT(slotEditRating()));
-	connect(item, SIGNAL(removeButtonClicked()), this, SLOT(slotRemoveRating()));
-}
-
-void RecipeInputDialog::slotEditRating()
-{
-	RatingDisplayWidget *sender = (RatingDisplayWidget*)QObject::sender();
-
-	ElementList criteriaList;
-	database->loadRatingCriterion(&criteriaList);
-
-	QPointer<EditRatingDialog> ratingDlg = new EditRatingDialog (criteriaList,*sender->rating_it,this);
-	if ( ratingDlg->exec() == QDialog::Accepted ) {
-		Rating r = ratingDlg->rating();
-
-		foreach ( RatingCriteria rc, r.ratingCriterias() ) {
-			int criteria_id = database->findExistingRatingByName(rc.name());
-			if ( criteria_id == -1 ) {
-				criteria_id = database->createNewRating(rc.name());
-			}
-			r.setIdOfRatingCriteria(rc.name(), criteria_id);
-		}
-
-		(*sender->rating_it) = r;
-		addRating(r,sender);
-		emit recipeChanged(); //Indicate that the recipe changed
-	}
-
-	delete ratingDlg;
-}
-
-void RecipeInputDialog::slotRemoveRating()
-{
-	RatingDisplayWidget *sender = (RatingDisplayWidget*)QObject::sender();
-	loadedRecipe->ratingList.erase(sender->rating_it);
-
-	//FIXME: sender is removed but never deleted (sender->deleteLater() doesn't work)
-	ratingListDisplayWidget->removeItem(sender);
-
-	emit recipeChanged(); //Indicate that the recipe changed
 }
 
 void RecipeInputDialog::addIngredient( const Ingredient &ing, bool noHeader )
