@@ -107,7 +107,11 @@ void KreRecipesListWidget::createRecipeSlot( const Element & recipe, const Eleme
 {
 	if ( categories.isEmpty() ) {
 		//Add the recipe to the "Uncategorized" item if needed.
-		addRecipeItem( recipe, m_uncategorizedItemIndex, Uncategorized );
+		if ( m_uncategorizedItemIndex.isValid() ) {
+			addRecipeItem( recipe, m_uncategorizedItemIndex, Uncategorized );
+		} else {
+			kDebug() << "WARNING: Model index invalid";
+		}
 	} else {
 		//Add the recipe to the corresponding category folders.
 		ElementList::const_iterator el_it;
