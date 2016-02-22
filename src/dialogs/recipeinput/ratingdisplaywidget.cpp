@@ -12,8 +12,34 @@
 
 #include "ratingdisplaywidget.h"
 
+#include "datablocks/rating.h"
+
 RatingDisplayWidget::RatingDisplayWidget( QWidget *parent ) 
 	: QWidget( parent )
 {
-	setupUi( this );
+	ui = new Ui::RatingDisplayWidget;
+	ui->setupUi( this );
+	connect( ui->buttonEdit, SIGNAL(clicked()),
+		this, SIGNAL(editButtonClicked()) );
+	connect( ui->buttonRemove, SIGNAL(clicked()),
+		this, SIGNAL(removeButtonClicked()) );
+}
+
+void RatingDisplayWidget::displayRating( const Rating & rating )
+{
+	int average = qRound(rating.average());
+	if ( average >= 0 )
+		ui->iconLabel->setPixmap( UserIcon(QString("rating%1").arg(average) ) );
+	else //no rating criteria, therefore no average (we don't want to automatically assume a zero average)
+		ui->iconLabel->clear();
+
+	ui->raterName->setText(rating.rater());
+	ui->comment->setText(rating.comment());
+
+	ui->criteriaListView->clear();
+	foreach ( RatingCriteria rc, rating.ratingCriterias() ) {
+		Q3ListViewItem * it = new Q3ListViewItem(ui->criteriaListView,rc.name());
+		it->setPixmap( 1, Rating::starsPixmap( rc.stars() ) );
+	}
+
 }

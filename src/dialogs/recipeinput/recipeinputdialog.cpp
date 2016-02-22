@@ -1381,32 +1381,14 @@ void RecipeInputDialog::slotAddRating()
 
 void RecipeInputDialog::addRating( const Rating &rating, RatingDisplayWidget *item )
 {
-	int average = qRound(rating.average());
-	if ( average >= 0 )
-		item->iconLabel->setPixmap( UserIcon(QString("rating%1").arg(average) ) );
-	else //no rating criteria, therefore no average (we don't want to automatically assume a zero average)
-		item->iconLabel->clear();
-
-	item->raterName->setText(rating.rater());
-	item->comment->setText(rating.comment());
-
-	item->criteriaListView->clear();
-	foreach ( RatingCriteria rc, rating.ratingCriterias() ) {
-		Q3ListViewItem * it = new Q3ListViewItem(item->criteriaListView,rc.name());
-		it->setPixmap( 1, Rating::starsPixmap( rc.stars() ) );
-	}
-
-	item->buttonEdit->disconnect();
-	item->buttonRemove->disconnect();
-	connect(item->buttonEdit, SIGNAL(clicked()),
-		this, SLOT(slotEditRating()));
-	connect(item->buttonRemove, SIGNAL(clicked()),
-		this, SLOT(slotRemoveRating()));
+	item->displayRating( rating );
+	connect(item, SIGNAL(editButtonClicked()), this, SLOT(slotEditRating()));
+	connect(item, SIGNAL(removeButtonClicked()), this, SLOT(slotRemoveRating()));
 }
 
 void RecipeInputDialog::slotEditRating()
 {
-	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
+	RatingDisplayWidget *sender = (RatingDisplayWidget*)QObject::sender();
 
 	ElementList criteriaList;
 	database->loadRatingCriterion(&criteriaList);
@@ -1433,7 +1415,7 @@ void RecipeInputDialog::slotEditRating()
 
 void RecipeInputDialog::slotRemoveRating()
 {
-	RatingDisplayWidget *sender = (RatingDisplayWidget*)(QObject::sender()->parent());
+	RatingDisplayWidget *sender = (RatingDisplayWidget*)QObject::sender();
 	loadedRecipe->ratingList.erase(sender->rating_it);
 
 	//FIXME: sender is removed but never deleted (sender->deleteLater() doesn't work)

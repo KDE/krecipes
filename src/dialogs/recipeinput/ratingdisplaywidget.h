@@ -14,12 +14,28 @@
 
 #include "datablocks/rating.h"
 
-class RatingDisplayWidget : public QWidget, public Ui::RatingDisplayWidget
+class Rating;
+
+namespace Ui {
+	class RatingDisplayWidget;
+}
+
+class RatingDisplayWidget : public QWidget
 {
+Q_OBJECT
 
 public:
-	RatingDisplayWidget( QWidget *parent );
+	RatingDisplayWidget( QWidget *parent = 0);
 	RatingList::iterator rating_it;
+
+	void displayRating(const Rating & rating);
+
+signals:
+	void editButtonClicked();
+	void removeButtonClicked();
+
+private:
+	Ui::RatingDisplayWidget * ui;
 
 };
 
