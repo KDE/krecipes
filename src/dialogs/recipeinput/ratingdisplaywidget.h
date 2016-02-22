@@ -10,6 +10,9 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
+#ifndef RATINGDISPLAYWIDGET_H
+#define RATINGDISPLAYWIDGET_H
+
 #include "ui_ratingdisplaywidget.h"
 
 #include "datablocks/rating.h"
@@ -39,3 +42,4 @@ private:
 
 };
 
+#endif
