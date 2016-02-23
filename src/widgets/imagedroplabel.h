@@ -20,7 +20,8 @@ class ImageDropLabel : public QLabel
 	Q_OBJECT
 
 public:
-	ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto );
+	ImageDropLabel( QWidget *parent = 0 );
+	void setPhoto ( QPixmap * photo );
 
 signals:
 	void changed();
@@ -30,7 +31,7 @@ protected:
 	void dropEvent( QDropEvent* event );
 
 private:
-	QPixmap &sourcePhoto;
+	QPixmap * m_sourcePhoto;
 };
 
 #endif

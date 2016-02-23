@@ -143,6 +143,7 @@ set(krecipesdialogs_SRCS
 
    #Recipe input
    dialogs/recipeinput/recipeinputdialog.cpp
+   dialogs/recipeinput/recipegeneralinfoeditor.cpp
    dialogs/recipeinput/selectauthorsdialog.cpp
    dialogs/recipeinput/resizerecipedialog.cpp
    dialogs/recipeinput/editratingdialog.cpp
@@ -183,9 +184,14 @@ set(krecipesdialogs_SRCS
    dialogs/createunitconversiondialog.cpp)
 
 kde4_add_ui_files(krecipesdialogs_SRCS
+   dialogs/recipeinput/recipegeneralinfoeditor.ui
    dialogs/recipeinput/resizerecipedialog.ui
    dialogs/recipeinput/ratingdisplaywidget.ui
    dialogs/recipeinput/ingredientseditor.ui
+   )
+
+qt4_add_resources(krecipesdialogs_SRCS
+   ../pics/resources.qrc
    )
 
 

@@ -13,7 +13,8 @@
 #include "recipeinputdialog.h"
 
 #include "widgets/imagedroplabel.h"
-#include "ratinglisteditor.h"
+#include "dialogs/recipeinput/ratinglisteditor.h"
+#include "dialogs/recipeinput/recipegeneralinfoeditor.h"
 
 #include <QString>
 
@@ -89,6 +90,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 
 	//------- Recipe Tab -----------------
+
+	m_recipeGeneralInfoEditor = new RecipeGeneralInfoEditor( this );
+
 	// Recipe Photo
 
 	recipeTab = new QFrame( this );
@@ -116,10 +120,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	QPixmap image1( defaultPhoto );
 
-	photoLabel = new ImageDropLabel( recipeTab, sourcePhoto );
+	photoLabel = new ImageDropLabel( recipeTab );
 	photoLabel->setPixmap( image1 );
 	photoLabel->setFixedSize( QSize( 221, 166 ) );
 	photoLabel->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
+	photoLabel->setPhoto( &sourcePhoto );
 	recipeLayout->addWidget( photoLabel, 3, 1, 5, 1, Qt::AlignTop );
 
 	KHBox *photoButtonsBox = new KHBox( recipeTab );
@@ -379,7 +384,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// ------- END OF Recipe Ratings Tab -----------
 
 
-	tabWidget->insertTab( -1, recipeTab, i18nc( "@title:tab", "Recipe" ) );
+	tabWidget->insertTab( -1, m_recipeGeneralInfoEditor, i18nc( "@title:tab", "Recipe" ) );
+	tabWidget->insertTab( -1, recipeTab, i18nc( "@title:tab", "Recipe" ) ); //TODO: Remove
 	tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
 	tabWidget->insertTab( -1, instructionsTab, i18nc( "@title:tab", "Instructions" ) );
 	tabWidget->insertTab( -1, ratingListEditor, i18nc( "@title:tab", "Ratings" ) );

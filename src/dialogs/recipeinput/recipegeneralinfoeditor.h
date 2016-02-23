@@ -10,55 +10,71 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#ifndef RECIPEINPUTDIALOG_H
-#define RECIPEINPUTDIALOG_H
+#ifndef RECIPEGENERALINFOEDITOR_H
+#define RECIPEGENERALINFOEDITOR_H
 
-#include <kdialog.h>
-#include <ktextedit.h>
-#include <klineedit.h>
-#include <kcombobox.h>
-#include <k3listview.h>
-#include <knuminput.h>
-#include <kpushbutton.h>
+//#include <kdialog.h>
+//#include <ktextedit.h>
+//#include <klineedit.h>
+//#include <kcombobox.h>
+//#include <k3listview.h>
+//#include <knuminput.h>
+//#include <kpushbutton.h>
+//
+//#include <QLabel>
+//#include <qmap.h>
+//#include <QToolButton>
+//
+//#include <QDateTimeEdit>
+//#include <QDropEvent>
+//#include <QPixmap>
+//#include <QMouseEvent>
+//#include <QDragEnterEvent>
+//#include <kvbox.h>
+//
+//#include "datablocks/elementlist.h"
+//#include "datablocks/rating.h"
+//class KTabWidget;
+//class QDateTimeEdit;
+//class QTextEdit;
+//class KTextBrowser;
+//class KLed;
+//
+//class KreTextEdit;
+//class KDialog;
+//class KPushButton;
+//
+//class ImageDropLabel;
+//class Recipe;
+//class RecipeDB;
+//class FractionInput;
+//class Ingredient;
+//class Rating;
+//class IngredientInputWidget;
+//class RatingDisplayWidget;
+//class RatingListEditor;
 
-#include <QLabel>
-#include <qmap.h>
-#include <QToolButton>
+#include <QWidget>
 
-#include <QDateTimeEdit>
-#include <QDropEvent>
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
-#include <kvbox.h>
+namespace Ui {
+	class RecipeGeneralInfoEditor;
+}
 
-#include "datablocks/elementlist.h"
-#include "datablocks/rating.h"
-class KTabWidget;
-class QDateTimeEdit;
-class QTextEdit;
-class KTextBrowser;
-class KLed;
+class RecipeGeneralInfoEditor: public QWidget
+{
+	Q_OBJECT
 
-class KreTextEdit;
-class KDialog;
-class KPushButton;
+public:
+	RecipeGeneralInfoEditor( QWidget * parent = 0 );
 
-class ImageDropLabel;
-class Recipe;
-class RecipeDB;
-class FractionInput;
-class Ingredient;
-class Rating;
-class RecipeGeneralInfoEditor;
-class IngredientInputWidget;
-class RatingDisplayWidget;
-class RatingListEditor;
+signals:
+	void changed();
 
-/**
-@author Unai Garro
-*/
-class RecipeInputDialog: public KVBox
+private:
+	Ui::RecipeGeneralInfoEditor * ui;
+};
+
+/*class RecipeInputDialog: public KVBox
 {
 	Q_OBJECT
 
@@ -82,8 +98,6 @@ private:
 	bool unsavedChanges;
 
 	// Widgets
-	RecipeGeneralInfoEditor * m_recipeGeneralInfoEditor;
-
 	KTabWidget* tabWidget;
 	QFrame* recipeTab;
 	QFrame* instructionsTab;
@@ -190,6 +204,6 @@ signals:
 	void titleChanged( const QString &title );
 
 
-};
+};*/
 
 #endif

@@ -16,10 +16,15 @@
 #include <QDropEvent>
 #include <QImage>
 
-ImageDropLabel::ImageDropLabel( QWidget *parent, QPixmap &_sourcePhoto ) : QLabel( parent ),
-		sourcePhoto( _sourcePhoto )
+ImageDropLabel::ImageDropLabel( QWidget *parent ) :
+		QLabel( parent )
 {
 	setAcceptDrops( true );
+}
+
+void ImageDropLabel::setPhoto( QPixmap * photo )
+{
+	m_sourcePhoto = photo;
 }
 
 void ImageDropLabel::dragEnterEvent( QDragEnterEvent* event )
@@ -40,11 +45,11 @@ void ImageDropLabel::dropEvent( QDropEvent* event )
 				Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 			setPixmap( pm_scaled );
 
-			sourcePhoto = pm_scaled; // to save scaled later on
+			*m_sourcePhoto = pm_scaled; // to save scaled later on
 		}
 		else {
-			sourcePhoto = QPixmap::fromImage( image );
-			setPixmap( sourcePhoto );
+			*m_sourcePhoto = QPixmap::fromImage( image );
+			setPixmap( *m_sourcePhoto );
 		}
 
 		emit changed();
