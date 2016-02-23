@@ -43,7 +43,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KLineEdit" name="klineedit"/>
+      <widget class="KLineEdit" name="m_titleEdit"/>
      </item>
     </layout>
    </item>
@@ -89,21 +89,27 @@
           <item>
            <widget class="KPushButton" name="kpushbutton_3">
             <property name="icon">
-             <iconset theme="insert-image"/>
+             <iconset theme="insert-image">
+              <normaloff/>
+             </iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="KPushButton" name="kpushbutton_4">
             <property name="icon">
-             <iconset theme="document-save"/>
+             <iconset theme="document-save">
+              <normaloff/>
+             </iconset>
             </property>
            </widget>
           </item>
           <item>
            <widget class="KPushButton" name="kpushbutton_5">
             <property name="icon">
-             <iconset theme="edit-delete"/>
+             <iconset theme="edit-delete">
+              <normaloff/>
+             </iconset>
             </property>
            </widget>
           </item>

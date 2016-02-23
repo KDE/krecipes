@@ -13,6 +13,8 @@
 #include "recipegeneralinfoeditor.h"
 #include "ui_recipegeneralinfoeditor.h"
 
+#include "datablocks/recipe.h"
+
 //#include "recipeinputdialog.h"
 //
 //#include "widgets/imagedroplabel.h"
@@ -57,7 +59,6 @@
 //#include "ingredientparserdialog.h"
 //#include "editratingdialog.h"
 //#include "dialogs/createunitdialog.h"
-//#include "datablocks/recipe.h"
 //#include "datablocks/rating.h"
 //#include "datablocks/categorytree.h"
 //#include "datablocks/unit.h"
@@ -75,10 +76,28 @@
 //#include "profiling.h"
 
 RecipeGeneralInfoEditor::RecipeGeneralInfoEditor( QWidget * parent ):
-	QWidget( parent )
+	QWidget( parent ),
+	m_recipe( 0 )
 {
+	//Set up GUI
 	ui = new Ui::RecipeGeneralInfoEditor;
 	ui->setupUi( this );
+
+	//Connect signals/slots to detect changes
+	connect( ui->m_titleEdit, SIGNAL(textChanged(const QString&)),
+		this, SLOT(titleChangedSlot(const QString&)) );
+}
+
+void RecipeGeneralInfoEditor::loadRecipe( Recipe * recipe )
+{
+	m_recipe = recipe;
+	ui->m_titleEdit->setText( recipe->title );
+}
+
+void RecipeGeneralInfoEditor::titleChangedSlot( const QString & title )
+{
+	m_recipe->title = title;
+	emit titleChanged( title );
 }
 
 //RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( parent )

@@ -45,7 +45,7 @@
 //class KPushButton;
 //
 //class ImageDropLabel;
-//class Recipe;
+class Recipe;
 //class RecipeDB;
 //class FractionInput;
 //class Ingredient;
@@ -67,11 +67,19 @@ class RecipeGeneralInfoEditor: public QWidget
 public:
 	RecipeGeneralInfoEditor( QWidget * parent = 0 );
 
+	void loadRecipe( Recipe * recipe );
+
 signals:
 	void changed();
+	void titleChanged(const QString & title);
+
+private slots:
+	void titleChangedSlot(const QString & title);
 
 private:
 	Ui::RecipeGeneralInfoEditor * ui;
+
+	Recipe * m_recipe;
 };
 
 /*class RecipeInputDialog: public KVBox

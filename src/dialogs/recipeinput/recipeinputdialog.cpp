@@ -437,6 +437,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	enableChangedSignal(); // Enables the signal "changed()"
 
 	// Connect signals & Slots
+	connect( m_recipeGeneralInfoEditor , SIGNAL( titleChanged( const QString& ) ),
+		this, SLOT( recipeChanged( const QString& ) ) );
+
 	connect( changePhotoButton, SIGNAL( clicked() ), this, SLOT( changePhoto() ) );
 	connect( savePhotoAsButton, SIGNAL( clicked() ), this, SLOT( savePhotoAs() ) );
 	connect( clearPhotoButton, SIGNAL( clicked() ), SLOT( clearPhoto() ) );
@@ -450,7 +453,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
 	connect( yieldTypeEdit, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
 	connect( prepTimeEdit, SIGNAL(dateTimeChanged(const QDateTime &) ), SLOT( recipeChanged() ) );
-	connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( recipeChanged( const QString& ) ) );
+	//connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( recipeChanged( const QString& ) ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
 	connect( addCategoryButton, SIGNAL( clicked() ), this, SLOT( addCategory() ) );
 	connect( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
@@ -535,6 +538,8 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 
 void RecipeInputDialog::reload( void )
 {
+	m_recipeGeneralInfoEditor->loadRecipe( loadedRecipe );
+
 	yieldNumInput->setValue( 1, 0 );
 	yieldTypeEdit->setText("");
 	ingredientList->clear();
@@ -1081,7 +1086,7 @@ void RecipeInputDialog::saveRecipe( void )
 
 	loadedRecipe->photo = sourcePhoto;
 	loadedRecipe->instructions = instructionsEdit->toPlainText();
-	loadedRecipe->title = titleEdit->text();
+	//loadedRecipe->title = titleEdit->text();
 	double amount = 0.0, amountOffset = 0.0;
 	yieldNumInput->value(amount, amountOffset);
 	loadedRecipe->yield.setAmount(amount);
