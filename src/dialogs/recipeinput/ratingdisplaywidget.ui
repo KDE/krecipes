@@ -172,12 +172,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="KPushButton" name="buttonRemove">
+        <widget class="KPushButton" name="buttonEdit">
          <property name="text">
-          <string>Remove</string>
+          <string>Edit...</string>
          </property>
          <property name="icon">
-          <iconset theme="list-remove"/>
+          <iconset theme="document-edit">
+           <normaloff/>
+          </iconset>
          </property>
          <property name="shortcut">
           <string/>
@@ -185,12 +187,14 @@
         </widget>
        </item>
        <item>
-        <widget class="KPushButton" name="buttonEdit">
+        <widget class="KPushButton" name="buttonRemove">
          <property name="text">
-          <string>Edit...</string>
+          <string>Remove</string>
          </property>
          <property name="icon">
-          <iconset theme="document-edit"/>
+          <iconset theme="list-remove">
+           <normaloff/>
+          </iconset>
          </property>
          <property name="shortcut">
           <string/>
