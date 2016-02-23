@@ -1042,12 +1042,4 @@ QString LiteRecipeDB::escape( const QString &s ) const
 	return result;
 }
 
-void LiteRecipeDB::storePhoto( int recipeID, const QByteArray &data )
-{
-	QSqlQuery query( QString(), *database);
-
-	query.prepare( "UPDATE recipes SET photo=\"?\",ctime=ctime,atime=atime,mtime=mtime WHERE id=" + QString::number( recipeID ) );
-	query.addBindValue( KCodecs::base64Encode( data ) );
-	query.exec();
-}
 #include "literecipedb.moc"

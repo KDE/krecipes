@@ -55,8 +55,6 @@ protected:
 	virtual QString escapeAndEncode( const QString &s ) const;
 	virtual QString unescapeAndDecode( const QByteArray &s ) const;
 
-	virtual void storePhoto( int recipeID, const QByteArray &data );
-
 private:
 	virtual void portOldDatabases( float version );
 	virtual QStringList backupCommand() const;
