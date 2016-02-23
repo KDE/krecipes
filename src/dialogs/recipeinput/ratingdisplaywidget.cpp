@@ -27,19 +27,24 @@ RatingDisplayWidget::RatingDisplayWidget( QWidget *parent )
 
 void RatingDisplayWidget::displayRating( const Rating & rating )
 {
+	//Set the icon
 	int average = qRound(rating.average());
 	if ( average >= 0 )
 		ui->iconLabel->setPixmap( UserIcon(QString("rating%1").arg(average) ) );
 	else //no rating criteria, therefore no average (we don't want to automatically assume a zero average)
 		ui->iconLabel->clear();
 
+	//Set the name and comment texts
 	ui->raterName->setText(rating.rater());
 	ui->comment->setText(rating.comment());
 
-	ui->criteriaListView->clear();
+	//Set the list of criteria, stars
+	ui->criteriaTreeWidget->clear();
 	foreach ( RatingCriteria rc, rating.ratingCriterias() ) {
-		Q3ListViewItem * it = new Q3ListViewItem(ui->criteriaListView,rc.name());
-		it->setPixmap( 1, Rating::starsPixmap( rc.stars() ) );
+		QTreeWidgetItem * item = new QTreeWidgetItem;
+		item->setData( 0, Qt::DisplayRole, rc.name() );
+		item->setData( 1, Qt::DecorationRole, Rating::starsPixmap(rc.stars()) );
+		ui->criteriaTreeWidget->addTopLevelItem( item );
 	}
 
 }
