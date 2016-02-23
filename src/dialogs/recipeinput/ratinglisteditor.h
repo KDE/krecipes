@@ -15,11 +15,18 @@
 
 #include <QWidget>
 
+//custom QScrollArea class
+//defined in ratinglisteditor.cpp
+class MyScrollArea;
+
 class RatingList;
 class RecipeDB;
 
-class KWidgetListbox;
 class KPushButton;
+
+class QScrollArea;
+class QFrame;
+class QVBoxLayout;
 
 class RatingListEditor : public QWidget
 {
@@ -41,8 +48,12 @@ private slots:
 	void removeRating();
 
 private:
-	KWidgetListbox * m_ratingListDisplayWidget;
+
 	KPushButton * m_addRatingButton;
+
+	MyScrollArea * m_scrollArea;
+	QFrame * m_frame;
+	QVBoxLayout * m_ratingsLayout;
 
 	RatingList * m_ratingList;
 	RecipeDB * m_database;

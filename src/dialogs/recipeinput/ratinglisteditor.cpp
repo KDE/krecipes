@@ -14,15 +14,40 @@
 
 #include "dialogs/recipeinput/editratingdialog.h"
 #include "dialogs/recipeinput/ratingdisplaywidget.h"
-#include "widgets/kwidgetlistbox.h"
 #include "backends/recipedb.h"
 #include "datablocks/rating.h"
 
-#include <KVBox>
 #include <KPushButton>
 
+#include <QScrollArea>
+#include <QVBoxLayout>
+#include <QFrame>
 #include <QPointer>
 
+
+class MyScrollArea : public QScrollArea
+{
+
+public:
+	void resizeEvent(QResizeEvent * event)
+	{
+		Q_UNUSED( event );
+		QList<RatingDisplayWidget*> widgets = findChildren<RatingDisplayWidget*>();
+		foreach(RatingDisplayWidget * widget, widgets)
+		{
+			widget->resize( this->width(), widget->height() );
+		}
+		int delta;
+		QScrollBar * scrollBar = verticalScrollBar();
+		if ( scrollBar->isVisible() ) {
+			delta = verticalScrollBar()->width();
+		} else {
+			delta = 0;
+		}
+		widget()->resize( this->width() - delta, widget()->height() );
+	};
+
+};
 
 RatingListEditor::RatingListEditor( RatingList * ratingList, RecipeDB * db,
 		QWidget * parent )
@@ -30,24 +55,39 @@ RatingListEditor::RatingListEditor( RatingList * ratingList, RecipeDB * db,
 	m_ratingList( ratingList ),
 	m_database( db )
 {
+	//General layout
 	QVBoxLayout * layout = new QVBoxLayout( this );
 	setLayout( layout );
 
-	m_ratingListDisplayWidget = new KWidgetListbox;
-	layout->addWidget( m_ratingListDisplayWidget );
 
+	//The containers for the various RatingDisplayWidget's
+	m_scrollArea = new MyScrollArea;
+	m_scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+
+	m_frame = new QFrame;
+	m_ratingsLayout = new QVBoxLayout;
+	m_frame->setLayout( m_ratingsLayout );
+
+	m_scrollArea->setWidget( m_frame );
+
+	layout->addWidget( m_scrollArea );
+
+
+	//Add rating button
 	m_addRatingButton = new KPushButton( i18nc("@action:button", "Add Rating...") );
 	m_addRatingButton->setIcon( KIcon("list-add") );
 	layout->addWidget( m_addRatingButton );
-
+	m_addRatingButton->show();
 	connect( m_addRatingButton, SIGNAL(clicked()), this, SLOT(addRating()) );
 
+
+	//Display the rating list in the GUI
 	refresh();
 }
 
 void RatingListEditor::refresh()
 {
-	m_ratingListDisplayWidget->clear();
+	clear();
 	RatingList::iterator it;
 	for ( it = m_ratingList->begin(); it != m_ratingList->end(); ++it ) {
 		//Create the rating display widget
@@ -57,15 +97,23 @@ void RatingListEditor::refresh()
 		//Conect the signals
 		connect(item, SIGNAL(editButtonClicked()), this, SLOT(editRating()));
 		connect(item, SIGNAL(removeButtonClicked()), this, SLOT(removeRating()));
-		//Insert it in the widget list
-		m_ratingListDisplayWidget->insertItem(item);
+		//Insert it in the scroll area
+		m_ratingsLayout->addWidget( item );
+		m_frame->resize( item->width(), m_frame->height() + item->height() );
 	}
-	m_ratingListDisplayWidget->ensureCellVisible(0,0);
+        m_scrollArea->resize( m_scrollArea->size() );
 }
 
 void RatingListEditor::clear()
 {
-	m_ratingListDisplayWidget->clear();
+	//Clear all the rating widgets
+	QList<RatingDisplayWidget*> widgets =
+		m_frame->findChildren<RatingDisplayWidget*>();
+	foreach(RatingDisplayWidget * widget, widgets)
+	{
+		delete widget;
+	}
+	m_frame->resize( 0, 0 );
 }
 
 void RatingListEditor::addRating()
@@ -98,8 +146,9 @@ void RatingListEditor::addRating()
 		connect(item, SIGNAL(editButtonClicked()), this, SLOT(editRating()));
 		connect(item, SIGNAL(removeButtonClicked()), this, SLOT(removeRating()));
 
-		//Insert the rating widget in the list
-		m_ratingListDisplayWidget->insertItem(item,0);
+		//Insert the rating widget in the scroll area
+		m_ratingsLayout->addWidget( item );
+		m_frame->resize( m_frame->width(), m_frame->height() + item->height() );
 
 		//Indicate that the recipe changed
 		emit changed(); 
@@ -150,8 +199,9 @@ void RatingListEditor::removeRating()
 	disconnect(sender, SIGNAL(editButtonClicked()), this, SLOT(editRating()));
 	disconnect(sender, SIGNAL(removeButtonClicked()), this, SLOT(removeRating()));
 
-	//FIXME: sender is removed but never deleted (sender->deleteLater() doesn't work)
-	m_ratingListDisplayWidget->removeItem(sender);
+        m_frame->resize( m_frame->width(), m_frame->height() - sender->height() );
+        m_scrollArea->resize( m_scrollArea->size() );
+	sender->deleteLater();
 
 	emit changed(); //Indicate that the recipe changed
 }
