@@ -15,6 +15,10 @@
 
 #include "datablocks/recipe.h"
 
+#include <KFileDialog>
+#include <KMessageBox>
+#include <kio/netaccess.h>
+
 //#include "recipeinputdialog.h"
 //
 //#include "widgets/imagedroplabel.h"
@@ -45,13 +49,11 @@
 //#include <kapplication.h>
 //#include <kcompletionbox.h>
 //#include <kurl.h>
-//#include <kfiledialog.h>
 //#include <klocale.h>
 //#include <kmessagebox.h>
 //#include <kdebug.h>
 //#include <kled.h>
 //#include <kdialog.h>
-//#include <kio/netaccess.h>
 //#include <kvbox.h>
 //
 //#include "selectauthorsdialog.h"
@@ -86,18 +88,108 @@ RecipeGeneralInfoEditor::RecipeGeneralInfoEditor( QWidget * parent ):
 	//Connect signals/slots to detect changes
 	connect( ui->m_titleEdit, SIGNAL(textChanged(const QString&)),
 		this, SLOT(titleChangedSlot(const QString&)) );
+
+	connect( ui->m_photoLabel, SIGNAL(changed()),
+		this, SIGNAL(changed()) );
+
+	//Connect signals/slots to perform changes
+	connect( ui->m_changePhotoButton, SIGNAL(clicked()),
+		this, SLOT(changePhotoSlot()) );
+
+	connect( ui->m_savePhotoAsButton, SIGNAL(clicked()),
+		this, SLOT(savePhotoAsSlot()) );
+
+	connect( ui->m_clearPhotoButton, SIGNAL(clicked()),
+		this, SLOT(clearPhotoSlot()) );
 }
 
 void RecipeGeneralInfoEditor::loadRecipe( Recipe * recipe )
 {
 	m_recipe = recipe;
+
+	//Set title in the GUI
 	ui->m_titleEdit->setText( recipe->title );
+
+	//Display photo in the GUI
+	ui->m_photoLabel->setPhoto( &recipe->photo );
+	if ( recipe->photo.isNull() ) {
+		ui->m_photoLabel->setPixmap(QPixmap(QString::fromUtf8(":/default_recipe_photo.png")));
+	} else {
+		ui->m_photoLabel->refresh();
+	}
 }
 
 void RecipeGeneralInfoEditor::titleChangedSlot( const QString & title )
 {
 	m_recipe->title = title;
 	emit titleChanged( title );
+}
+
+void RecipeGeneralInfoEditor::changePhotoSlot()
+{
+	// Get the image with a standard filedialog
+	KUrl url = KFileDialog::getOpenUrl( KUrl() , QString(
+		"*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)"
+		).arg( i18n( "Images" ) ), this );
+	if ( url.isEmpty() )
+		return;
+	QString filename;
+	if (!url.isLocalFile()) {
+		if (!KIO::NetAccess::download(url,filename,this)) {
+			KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
+			return;
+		}
+	} else {
+		filename = url.path();
+	}
+
+	//Set the image in the GUI
+	QPixmap pixmap ( filename );
+	if ( !pixmap.isNull() ) {
+		m_recipe->photo = pixmap;
+		ui->m_photoLabel->setPhoto( &(m_recipe->photo) );
+		ui->m_photoLabel->refresh();
+		emit changed();
+	}
+
+	//Delete temp file
+	if (!url.isLocalFile()) {
+		KIO::NetAccess::removeTempFile( filename );
+	}
+}
+
+void RecipeGeneralInfoEditor::savePhotoAsSlot()
+{
+
+	KUrl url = KFileDialog::getSaveUrl( KUrl(),
+		QString( "*.jpg *.jpeg |%1 (*.jpg *.jpeg)" ).arg( i18n( "Images" ) ),
+		this,
+		i18nc("@title:window", "Save photo as..."));
+
+	if ( url.isEmpty() )
+		return;
+
+	QString filename = url.path();
+	QFile outputFile (filename);
+	if (outputFile.exists()) {
+		int r = KMessageBox::warningYesNo(this,
+			i18nc("@info", "The file already exists, do you want to overwrite it?")
+		);
+		if (r == KMessageBox::No)
+			return;
+	}
+
+	if ( !ui->m_photoLabel->pixmap()->save( filename, "JPEG" ) ) {
+		KMessageBox::error(this,
+			i18nc("@info", "The photo cannot be saved in %1", filename) );
+	}
+}
+
+void RecipeGeneralInfoEditor::clearPhotoSlot()
+{
+	m_recipe->photo = QPixmap();
+	ui->m_photoLabel->setPixmap(QPixmap(QString::fromUtf8(":/default_recipe_photo.png")));
+	emit changed();
 }
 
 //RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( parent )
@@ -649,71 +741,6 @@ void RecipeGeneralInfoEditor::titleChangedSlot( const QString & title )
 //	for ( ElementList::const_iterator it = yieldList.constBegin(); it != yieldList.constEnd(); ++it ) {
 //		completion->addItem( (*it).name );
 //	}
-//}
-//
-//void RecipeInputDialog::changePhoto( void )
-//{
-//	// standard filedialog
-//	KUrl url = KFileDialog::getOpenUrl( KUrl() , QString( "*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)" ).arg( i18n( "Images" ) ), this );
-//	if ( url.isEmpty() )
-//		return;
-//	QString filename;
-//	if (!url.isLocalFile()) {
-//		if (!KIO::NetAccess::download(url,filename,this)) {
-//			KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
-//			return;
-//		}
-//	} else {
-//		filename = url.path();
-//	}
-//
-//	QPixmap pixmap ( filename );
-//	if ( !( pixmap.isNull() ) ) {
-//		// If photo is bigger than the label, or smaller in width, than photoLabel, scale it
-//		sourcePhoto = pixmap;
-//		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
-//
-//			QImage pm = sourcePhoto.toImage();
-//			QPixmap pm_scaled;
-//			pm_scaled = pm_scaled.fromImage( pm.scaled( QSize( photoLabel->width(), photoLabel->height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-//			photoLabel->setPixmap( pm_scaled );
-//
-//			sourcePhoto = pm_scaled; // to save scaled later on
-//			photoLabel->setPixmap( pm_scaled );
-//		}
-//		else {
-//			photoLabel->setPixmap( sourcePhoto );
-//		}
-//		emit changed();
-//	}
-//
-//	if (!url.isLocalFile()) {
-//		KIO::NetAccess::removeTempFile( filename );
-//	}
-//}
-//
-//void RecipeInputDialog::savePhotoAs( void )
-//{
-//
-//	KUrl url = KFileDialog::getSaveUrl( KUrl(),
-//		QString( "*.jpg *.jpeg |%1 (*.jpg *.jpeg)" ).arg( i18n( "Images" ) ),
-//		this,
-//		i18nc("@title:window", "Save photo as..."));
-//
-//	if ( url.isEmpty() )
-//		return;
-//	QString filename = url.path();
-//	QFile outputFile (filename);
-//	if (outputFile.exists()) {
-//		int r = KMessageBox::warningYesNo(this,
-//			i18nc("@info", "The file already exists, do you want to overwrite it?")
-//		);
-//		if (r == KMessageBox::No)
-//			return;
-//	}
-//
-//	if ( !loadedRecipe->photo.save( filename, "JPEG" ) )
-//		KMessageBox::error(this, i18nc("@info", "The photo cannot be saved in %1", filename) );
 //}
 //
 //void RecipeInputDialog::clearPhoto( void )

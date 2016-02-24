@@ -21,7 +21,9 @@ class ImageDropLabel : public QLabel
 
 public:
 	ImageDropLabel( QWidget *parent = 0 );
+
 	void setPhoto ( QPixmap * photo );
+	void refresh();
 
 signals:
 	void changed();

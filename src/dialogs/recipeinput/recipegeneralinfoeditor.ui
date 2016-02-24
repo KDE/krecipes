@@ -76,6 +76,15 @@
         </item>
         <item>
          <widget class="ImageDropLabel" name="m_photoLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="acceptDrops">
+           <bool>true</bool>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -87,7 +96,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="KPushButton" name="kpushbutton_3">
+           <widget class="KPushButton" name="m_changePhotoButton">
             <property name="icon">
              <iconset theme="insert-image">
               <normaloff/>
@@ -96,7 +105,7 @@
            </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="kpushbutton_4">
+           <widget class="KPushButton" name="m_savePhotoAsButton">
             <property name="icon">
              <iconset theme="document-save">
               <normaloff/>
@@ -105,7 +114,7 @@
            </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="kpushbutton_5">
+           <widget class="KPushButton" name="m_clearPhotoButton">
             <property name="icon">
              <iconset theme="edit-delete">
               <normaloff/>

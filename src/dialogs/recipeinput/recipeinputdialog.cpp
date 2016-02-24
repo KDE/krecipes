@@ -439,6 +439,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	// Connect signals & Slots
 	connect( m_recipeGeneralInfoEditor , SIGNAL( titleChanged( const QString& ) ),
 		this, SLOT( recipeChanged( const QString& ) ) );
+	connect( m_recipeGeneralInfoEditor, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 
 	connect( changePhotoButton, SIGNAL( clicked() ), this, SLOT( changePhoto() ) );
 	connect( savePhotoAsButton, SIGNAL( clicked() ), this, SLOT( savePhotoAs() ) );
@@ -448,7 +449,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
 	connect( addButton, SIGNAL( clicked() ), ingInput, SLOT( addIngredient() ) );
 	connect( ingParserButton, SIGNAL( clicked() ), this, SLOT( slotIngredientParser() ) );
-	connect( photoLabel, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+	//connect( photoLabel, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
 	connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
 	connect( yieldTypeEdit, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
@@ -1084,7 +1085,7 @@ void RecipeInputDialog::saveRecipe( void )
 	// Nothing except for the ingredient list (loadedRecipe->ingList)
 	// was stored before for performance. (recipeID is already there)
 
-	loadedRecipe->photo = sourcePhoto;
+	//loadedRecipe->photo = sourcePhoto;
 	loadedRecipe->instructions = instructionsEdit->toPlainText();
 	//loadedRecipe->title = titleEdit->text();
 	double amount = 0.0, amountOffset = 0.0;

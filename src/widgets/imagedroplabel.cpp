@@ -12,12 +12,23 @@
 
 #include "imagedroplabel.h"
 
+#include <kio/netaccess.h>
+#include <KMessageBox>
+#include <KUrl>
+
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QImage>
+#include <QSize>
+#include <QFileInfo>
+
+
+#define PHOTO_SIZE QSize(221,166)
+
 
 ImageDropLabel::ImageDropLabel( QWidget *parent ) :
-		QLabel( parent )
+		QLabel( parent ),
+		m_sourcePhoto( 0 )
 {
 	setAcceptDrops( true );
 }
@@ -27,32 +38,63 @@ void ImageDropLabel::setPhoto( QPixmap * photo )
 	m_sourcePhoto = photo;
 }
 
+void ImageDropLabel::refresh()
+{
+	QSize sizeDelta = PHOTO_SIZE - m_sourcePhoto->size();
+	if ( !sizeDelta.isValid() && !m_sourcePhoto->isNull() ) {
+		//The m_sourcePhoto is bigger than this widget
+		//so we scale it
+		QImage image = m_sourcePhoto->toImage();
+		QPixmap pm_scaled;
+		pm_scaled = pm_scaled.fromImage( image.scaled( PHOTO_SIZE,
+			Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+
+		setPixmap( pm_scaled );
+		*m_sourcePhoto = pm_scaled; // to save scaled later on
+	} else {
+		setPixmap( *m_sourcePhoto );
+	}
+}
+
 void ImageDropLabel::dragEnterEvent( QDragEnterEvent* event )
 {
-	if ( event->mimeData()->hasImage() )
+	if ( event->mimeData()->hasUrls() || event->mimeData()->hasImage() )
 		 event->acceptProposedAction();
 }
 
 void ImageDropLabel::dropEvent( QDropEvent* event )
 {
-	QImage image;
-
 	if ( event->mimeData()->hasImage() ) {
-		image = qvariant_cast<QImage>(event->mimeData()->imageData());
-		if ( ( image.width() > width() || image.height() > height() ) || ( image.width() < width() && image.height() < height() ) ) {
-			QPixmap pm_scaled;
-			pm_scaled = pm_scaled.fromImage( image.scaled( QSize( width(), height()),
-				Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-			setPixmap( pm_scaled );
-
-			*m_sourcePhoto = pm_scaled; // to save scaled later on
-		}
-		else {
-			*m_sourcePhoto = QPixmap::fromImage( image );
-			setPixmap( *m_sourcePhoto );
-		}
-
+		*m_sourcePhoto = qvariant_cast<QPixmap>(event->mimeData()->imageData());
+		refresh();
 		emit changed();
+	} else if ( event->mimeData()->hasUrls() ) {
+		QList<QUrl> urlList = event->mimeData()->urls();
+		if ( urlList.count() == 1 ) {
+
+			//Find out the file name
+			KUrl url = urlList.first();
+			QString filename;
+			if (!url.isLocalFile()) {
+				if (!KIO::NetAccess::download(url,filename,this)) {
+					KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
+					return;
+				}
+			} else {
+				filename = url.toLocalFile();
+			}
+
+			//Load the image
+			m_sourcePhoto->load( filename );
+			refresh();
+
+			//Delete temp file
+			if (!url.isLocalFile()) {
+				KIO::NetAccess::removeTempFile( filename );
+			}
+
+			emit changed();
+		}
 	}
 }
 

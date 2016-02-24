@@ -76,6 +76,10 @@ signals:
 private slots:
 	void titleChangedSlot(const QString & title);
 
+	void changePhotoSlot();
+	void savePhotoAsSlot();
+	void clearPhotoSlot();
+
 private:
 	Ui::RecipeGeneralInfoEditor * ui;
 
