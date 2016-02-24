@@ -38,7 +38,6 @@
 
 #include "backends/recipedb.h"
 #include "dialogs/setupdisplay.h"
-#include "image.h"
 
 const char* i18n_strings[] = {
   "I18N_INSTRUCTIONS", I18N_NOOP("Instructions"),
@@ -318,7 +317,7 @@ void XSLTExporter::storePhoto( const Recipe &recipe )
 	QImage image;
 	QString photo_name;
 	if ( recipe.photo.isNull() ) {
-		image = QImage( defaultPhoto );
+		image = QImage( QString::fromUtf8(":/default_recipe_photo.png") );
 		photo_name = "default_photo";
 	}
 	else {

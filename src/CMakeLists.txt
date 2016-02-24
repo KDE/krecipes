@@ -211,6 +211,9 @@ set (krecipesexporters_SRCS
    exporters/mx2exporter.cpp
    )
 
+qt4_add_resources(krecipesexporters_SRCS
+   ../pics/resources.qrc
+   )
 
 ############ datablocks ##############
 

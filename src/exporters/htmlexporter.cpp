@@ -32,7 +32,6 @@
 #include "datablocks/mixednumber.h"
 #include "backends/recipedb.h"
 #include "dialogs/setupdisplay.h"
-#include "image.h"
 
 #include <cmath> //for ceil()
 
@@ -168,7 +167,7 @@ void HTMLExporter::storePhoto( const Recipe &recipe )
 	QImage image;
 	QString photo_name;
 	if ( recipe.photo.isNull() ) {
-		image = QImage( defaultPhoto );
+		image = QImage( QString::fromUtf8(":/default_recipe_photo.png") );
 		photo_name = "default_photo";
 	}
 	else {
