@@ -451,9 +451,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	connect( ingParserButton, SIGNAL( clicked() ), this, SLOT( slotIngredientParser() ) );
 	//connect( photoLabel, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
-	connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
-	connect( yieldTypeEdit, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
-	connect( prepTimeEdit, SIGNAL(dateTimeChanged(const QDateTime &) ), SLOT( recipeChanged() ) );
+	//connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
+	//connect( yieldTypeEdit, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
+	//connect( prepTimeEdit, SIGNAL(dateTimeChanged(const QDateTime &) ), SLOT( recipeChanged() ) );
 	//connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( recipeChanged( const QString& ) ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
 	connect( addCategoryButton, SIGNAL( clicked() ), this, SLOT( addCategory() ) );
@@ -1080,26 +1080,15 @@ bool RecipeInputDialog::save ( void )
 	return true;
 }
 
-void RecipeInputDialog::saveRecipe( void )
+void RecipeInputDialog::saveRecipe()
 {
-	// Nothing except for the ingredient list (loadedRecipe->ingList)
-	// was stored before for performance. (recipeID is already there)
-
-	//loadedRecipe->photo = sourcePhoto;
+	// Some elements wasn't stored before for performance.
+	// (recipeID is already there)
+	m_recipeGeneralInfoEditor->updateRecipe();
 	loadedRecipe->instructions = instructionsEdit->toPlainText();
-	//loadedRecipe->title = titleEdit->text();
-	double amount = 0.0, amountOffset = 0.0;
-	yieldNumInput->value(amount, amountOffset);
-	loadedRecipe->yield.setAmount(amount);
-	loadedRecipe->yield.setAmountOffset(amountOffset);
-	loadedRecipe->yield.setTypeId(createNewYieldIfNecessary(yieldTypeEdit->text()));
-	loadedRecipe->prepTime = prepTimeEdit->time();
 
-	// Now save()
-	kDebug() << "Saving..." ;
+	// Now save
 	database->saveRecipe( loadedRecipe );
-
-
 }
 
 void RecipeInputDialog::newRecipe( void )

@@ -13,6 +13,8 @@
 #ifndef RECIPEGENERALINFOEDITOR_H
 #define RECIPEGENERALINFOEDITOR_H
 
+#include "backends/recipedb.h"
+
 //#include <kdialog.h>
 //#include <ktextedit.h>
 //#include <klineedit.h>
@@ -46,7 +48,6 @@
 //
 //class ImageDropLabel;
 class Recipe;
-class RecipeDB;
 //class FractionInput;
 //class Ingredient;
 //class Rating;
@@ -68,6 +69,7 @@ public:
 	RecipeGeneralInfoEditor( QWidget * parent, RecipeDB * db );
 
 	void loadRecipe( Recipe * recipe );
+	void updateRecipe();
 
 signals:
 	void changed();
@@ -85,6 +87,7 @@ private slots:
 	void editCategoriesSlot();
 
 private:
+	RecipeDB::IdType createNewYieldIfNecessary( const QString &yield );
 	void showAuthors();
 	void showCategories();
 

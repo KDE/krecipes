@@ -93,6 +93,14 @@ RecipeGeneralInfoEditor::RecipeGeneralInfoEditor( QWidget * parent, RecipeDB * d
 	connect( ui->m_photoLabel, SIGNAL(changed()),
 		this, SIGNAL(changed()) );
 
+	connect( ui->m_yieldNumInput, SIGNAL( textChanged(const QString &) ),
+		this, SIGNAL(changed()) );
+	connect( ui->m_yieldTypeEdit, SIGNAL( textChanged(const QString &) ),
+		this, SIGNAL(changed()) );
+
+	connect( ui->m_prepTimeEdit, SIGNAL( timeChanged(const QTime &) ),
+		this, SIGNAL(changed()) );
+
 	//Connect signals/slots to perform changes
 	connect( ui->m_changePhotoButton, SIGNAL(clicked()),
 		this, SLOT(changePhotoSlot()) );
@@ -130,11 +138,42 @@ void RecipeGeneralInfoEditor::loadRecipe( Recipe * recipe )
 
 	//Display categories in the GUI
 	showCategories();
+
+	//Display yield in the GUI
+	ui->m_yieldNumInput->setValue( m_recipe->yield.amount(), m_recipe->yield.amountOffset() );
+	ui->m_yieldTypeEdit->setText( m_recipe->yield.type() );
+
+	//Display preparation time in the GUI
+	ui->m_prepTimeEdit->setTime( m_recipe->prepTime );
+}
+
+void RecipeGeneralInfoEditor::updateRecipe()
+{
+	//Update the edited recipe with the stuff which wasn't saved before
+	m_recipe->title = ui->m_titleEdit->text();
+	double amount = 0.0, amountOffset = 0.0;
+	ui->m_yieldNumInput->value(amount, amountOffset);
+	m_recipe->yield.setAmount(amount);
+	m_recipe->yield.setAmountOffset(amountOffset);
+	m_recipe->yield.setTypeId(createNewYieldIfNecessary(ui->m_yieldTypeEdit->text()));
+	m_recipe->prepTime = ui->m_prepTimeEdit->time();
+}
+
+int RecipeGeneralInfoEditor::createNewYieldIfNecessary( const QString &yield )
+{
+	if ( yield.trimmed().isEmpty() ) { //no yield
+		return RecipeDB::InvalidId;
+	} else {
+		int id = m_database->findExistingYieldTypeByName( yield );
+		if ( id == RecipeDB::InvalidId ) { //creating new
+			id = m_database->createNewYieldType( yield );
+		}
+		return id;
+	}
 }
 
 void RecipeGeneralInfoEditor::titleChangedSlot( const QString & title )
 {
-	m_recipe->title = title;
 	emit titleChanged( title );
 }
 
@@ -1032,21 +1071,6 @@ void RecipeGeneralInfoEditor::showCategories()
 //
 //}
 //
-//int RecipeInputDialog::createNewYieldIfNecessary( const QString &yield )
-//{
-//	if ( yield.trimmed().isEmpty() )  //no yield
-//		return -1;
-//	else
-//	{
-//		int id = database->findExistingYieldTypeByName( yield );
-//		if ( id == -1 ) //creating new
-//		{
-//			id = database->createNewYieldType( yield );
-//		}
-//
-//		return id;
-//	}
-//}
 //
 //void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_text, int col )
 //{
