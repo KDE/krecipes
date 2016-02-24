@@ -91,7 +91,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	//------- Recipe Tab -----------------
 
-	m_recipeGeneralInfoEditor = new RecipeGeneralInfoEditor( this );
+	m_recipeGeneralInfoEditor = new RecipeGeneralInfoEditor( this, database );
 
 	// Recipe Photo
 
@@ -457,7 +457,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	//connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( recipeChanged( const QString& ) ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
 	connect( addCategoryButton, SIGNAL( clicked() ), this, SLOT( addCategory() ) );
-	connect( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
+	//connect( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
 	connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( prepTitleChanged( const QString& ) ) );
 	connect( ingredientList, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( syncListView( Q3ListViewItem*, const QString &, int ) ) );
 

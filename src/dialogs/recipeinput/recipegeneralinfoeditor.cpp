@@ -13,6 +13,7 @@
 #include "recipegeneralinfoeditor.h"
 #include "ui_recipegeneralinfoeditor.h"
 
+#include "dialogs/recipeinput/selectauthorsdialog.h"
 #include "datablocks/recipe.h"
 
 #include <KFileDialog>
@@ -56,7 +57,6 @@
 //#include <kdialog.h>
 //#include <kvbox.h>
 //
-//#include "selectauthorsdialog.h"
 //#include "resizerecipedialog.h"
 //#include "ingredientparserdialog.h"
 //#include "editratingdialog.h"
@@ -77,9 +77,10 @@
 //
 //#include "profiling.h"
 
-RecipeGeneralInfoEditor::RecipeGeneralInfoEditor( QWidget * parent ):
+RecipeGeneralInfoEditor::RecipeGeneralInfoEditor( QWidget * parent, RecipeDB * db ):
 	QWidget( parent ),
-	m_recipe( 0 )
+	m_recipe( 0 ),
+	m_database( db )
 {
 	//Set up GUI
 	ui = new Ui::RecipeGeneralInfoEditor;
@@ -101,6 +102,9 @@ RecipeGeneralInfoEditor::RecipeGeneralInfoEditor( QWidget * parent ):
 
 	connect( ui->m_clearPhotoButton, SIGNAL(clicked()),
 		this, SLOT(clearPhotoSlot()) );
+
+	connect( ui->m_editAuthorsButton, SIGNAL(clicked()),
+		this, SLOT(editAuthorsSlot()) );
 }
 
 void RecipeGeneralInfoEditor::loadRecipe( Recipe * recipe )
@@ -117,6 +121,9 @@ void RecipeGeneralInfoEditor::loadRecipe( Recipe * recipe )
 	} else {
 		ui->m_photoLabel->refresh();
 	}
+
+	//Display authors in the GUI
+	showAuthors();
 }
 
 void RecipeGeneralInfoEditor::titleChangedSlot( const QString & title )
@@ -190,6 +197,35 @@ void RecipeGeneralInfoEditor::clearPhotoSlot()
 	m_recipe->photo = QPixmap();
 	ui->m_photoLabel->setPixmap(QPixmap(QString::fromUtf8(":/default_recipe_photo.png")));
 	emit changed();
+}
+
+void RecipeGeneralInfoEditor::editAuthorsSlot()
+{
+	QPointer<SelectAuthorsDialog> editAuthorsDialog =
+		new SelectAuthorsDialog( this, m_recipe->authorList, m_database );
+
+	if ( editAuthorsDialog->exec() == QDialog::Accepted ) { // user presses Ok
+		m_recipe->authorList.clear();
+		editAuthorsDialog->getSelectedAuthors( &m_recipe->authorList );
+		emit( changed() ); //Indicate that the recipe changed
+	}
+
+	delete editAuthorsDialog;
+
+	// show authors list
+	showAuthors();
+}
+
+void RecipeGeneralInfoEditor::showAuthors()
+{
+	QString authors;
+	ElementList::const_iterator it;
+	for ( it = m_recipe->authorList.constBegin(); it != m_recipe->authorList.constEnd(); ++it ) {
+		if ( !authors.isEmpty() )
+			authors += ", ";
+		authors += it->name;
+	}
+	ui->m_authorsDisplay->setText( authors );
 }
 
 //RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( parent )
@@ -1222,34 +1258,6 @@ void RecipeGeneralInfoEditor::clearPhotoSlot()
 //		categories += ( *cat_it ).name;
 //	}
 //	categoryShow->setText( categories );
-//}
-//
-//void RecipeInputDialog::addAuthor( void )
-//{
-//	QPointer<SelectAuthorsDialog> editAuthorsDialog = new SelectAuthorsDialog( this, loadedRecipe->authorList, database );
-//
-//
-//	if ( editAuthorsDialog->exec() == QDialog::Accepted ) { // user presses Ok
-//		loadedRecipe->authorList.clear();
-//		editAuthorsDialog->getSelectedAuthors( &( loadedRecipe->authorList ) ); // get the category list chosen
-//		emit( recipeChanged() ); //Indicate that the recipe changed
-//	}
-//
-//	delete editAuthorsDialog;
-//
-//	// show authors list
-//	showAuthors();
-//}
-//
-//void RecipeInputDialog::showAuthors( void )
-//{
-//	QString authors;
-//	for ( ElementList::const_iterator author_it = loadedRecipe->authorList.constBegin(); author_it != loadedRecipe->authorList.constEnd(); ++author_it ) {
-//		if ( !authors.isEmpty() )
-//			authors += ',';
-//		authors += ( *author_it ).name;
-//	}
-//	authorShow->setText( authors );
 //}
 //
 //void RecipeInputDialog::enableSaveButton( bool enabled )

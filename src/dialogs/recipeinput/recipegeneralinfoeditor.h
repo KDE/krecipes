@@ -46,7 +46,7 @@
 //
 //class ImageDropLabel;
 class Recipe;
-//class RecipeDB;
+class RecipeDB;
 //class FractionInput;
 //class Ingredient;
 //class Rating;
@@ -65,7 +65,7 @@ class RecipeGeneralInfoEditor: public QWidget
 	Q_OBJECT
 
 public:
-	RecipeGeneralInfoEditor( QWidget * parent = 0 );
+	RecipeGeneralInfoEditor( QWidget * parent, RecipeDB * db );
 
 	void loadRecipe( Recipe * recipe );
 
@@ -80,10 +80,15 @@ private slots:
 	void savePhotoAsSlot();
 	void clearPhotoSlot();
 
+	void editAuthorsSlot();
+
 private:
+	void showAuthors();
+
 	Ui::RecipeGeneralInfoEditor * ui;
 
 	Recipe * m_recipe;
+	RecipeDB * m_database;
 };
 
 /*class RecipeInputDialog: public KVBox
