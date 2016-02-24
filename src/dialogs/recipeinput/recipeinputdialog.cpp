@@ -68,7 +68,6 @@
 #include "widgets/kretextedit.h"
 #include "widgets/inglistviewitem.h"
 #include "widgets/ingredientinputwidget.h"
-#include "image.h" //Initializes default photo
 
 #include "profiling.h"
 
@@ -92,146 +91,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	//------- Recipe Tab -----------------
 
 	m_recipeGeneralInfoEditor = new RecipeGeneralInfoEditor( this, database );
-
-	// Recipe Photo
-
-	recipeTab = new QFrame( this );
-	recipeTab->setFrameStyle( QFrame::NoFrame );
-	recipeTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-
-
-	// Design the Dialog
-	QGridLayout* recipeLayout = new QGridLayout( recipeTab );
-	recipeLayout->cellRect( 1, 1 );
-	recipeLayout->setMargin( 0 );
-	recipeLayout->setSpacing( 0 );
-	recipeTab->setLayout( recipeLayout );
-
-	// Border
-	QSpacerItem* spacer_left = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	recipeLayout->addItem( spacer_left, 1, 0 );
-	QSpacerItem* spacer_right = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	recipeLayout->addItem( spacer_right, 1, 8 );
-	QSpacerItem* spacer_top = new QSpacerItem( 10, 10, QSizePolicy::Minimum , QSizePolicy::Fixed );
-	recipeLayout->addItem( spacer_top, 0, 1 );
-	QSpacerItem* spacer_bottom = new QSpacerItem( 10, 10, QSizePolicy::Minimum , QSizePolicy::MinimumExpanding );
-	recipeLayout->addItem( spacer_bottom, 8, 1 );
-
-
-	QPixmap image1( defaultPhoto );
-
-	photoLabel = new ImageDropLabel( recipeTab );
-	photoLabel->setPixmap( image1 );
-	photoLabel->setFixedSize( QSize( 221, 166 ) );
-	photoLabel->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	photoLabel->setPhoto( &sourcePhoto );
-	recipeLayout->addWidget( photoLabel, 3, 1, 5, 1, Qt::AlignTop );
-
-	KHBox *photoButtonsBox = new KHBox( recipeTab );
-
-	changePhotoButton = new KPushButton( photoButtonsBox );
-	changePhotoButton->setText( "..." );
-	changePhotoButton->setToolTip( i18nc( "@info:tooltip", "Select photo" ) );
-
-	KPushButton *savePhotoAsButton = new KPushButton( photoButtonsBox );
-	savePhotoAsButton->setIcon( KIcon( "document-save" ) );
-	savePhotoAsButton->setToolTip( i18nc( "action:button", "Save photo as..." ) );
-
-	KPushButton *clearPhotoButton = new KPushButton( photoButtonsBox );
-	clearPhotoButton->setIcon( KIcon( "edit-clear" ) );
-	clearPhotoButton->setToolTip( i18nc( "@info:tooltip", "Clear photo" ) );
-
-	recipeLayout->addWidget( photoButtonsBox, 7, 1, 1, 1, Qt::AlignTop );
-
-
-	//Title->photo spacer
-	QSpacerItem* title_photo = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	recipeLayout->addItem( title_photo, 2, 3 );
-
-
-	// Title
-	KVBox *titleBox = new KVBox( recipeTab );
-	titleBox->setSpacing( 5 );
-	titleLabel = new QLabel( i18nc( "@label", "Recipe Name" ), titleBox );
-	titleEdit = new KLineEdit( titleBox );
-	titleEdit->setMinimumSize( QSize( 360, 30 ) );
-	titleEdit->setMaximumSize( QSize( 10000, 30 ) );
-	titleEdit->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
-	recipeLayout->addWidget( titleBox, 1, 1, 1, 7, 0 );
-
-
-	// Photo ->author spacer
-	QSpacerItem* title_spacer = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	recipeLayout->addItem( title_spacer, 2, 1 );
-
-	// Author(s) & Categories
-	KVBox *authorBox = new KVBox( recipeTab ); // contains label and authorInput (input widgets)
-	authorBox->setSpacing( 5 );
-	recipeLayout->addWidget( authorBox, 3, 4 );
-	authorLabel = new QLabel( i18nc( "@label", "Authors" ), authorBox );
-	KHBox *authorInput = new KHBox( authorBox ); // Contains input + button
-
-
-	authorShow = new KLineEdit( authorInput );
-	authorShow->setReadOnly( true );
-
-
-	addAuthorButton = new KPushButton( authorInput );
-	addAuthorButton->setIcon( KIcon( "list-add" ) );
-
-
-	QSpacerItem* author_category = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	recipeLayout->addItem( author_category, 3, 5 );
-
-	KVBox *categoryBox = new KVBox( recipeTab ); // Contains the label and categoryInput (input widgets)
-	categoryBox->setSpacing( 5 );
-	categoryLabel = new QLabel( i18nc( "@label", "Categories" ), categoryBox );
-	KHBox *categoryInput = new KHBox( categoryBox ); // Contains the input widgets
-
-	categoryShow = new KLineEdit( categoryInput );
-	categoryShow->setReadOnly( true );
-	recipeLayout->addWidget( categoryBox, 4, 4 );
-
-	addCategoryButton = new KPushButton( categoryInput );
-	addCategoryButton->setIcon( KIcon( "list-add" ) );
-
-	//Category ->Servings spacer
-	QSpacerItem* category_yield = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	recipeLayout->addItem( category_yield, 5, 4 );
-
-	KVBox *serv_prep_box = new KVBox( recipeTab );
-	serv_prep_box->setSpacing( 5 );
-
-	// Backup options
-	QGroupBox *yieldGBox = new QGroupBox( serv_prep_box );
-	yieldGBox->setTitle( i18nc(
-		"@label How much food you will produce with a given cooking recipe "
-		"(e.g. 2 servings or 3 bottles)", "Yield" ) );
-	QGridLayout *yieldGBoxLayout = new QGridLayout;
-	yieldGBox->setLayout( yieldGBoxLayout );
-
-	yieldLabel = new QLabel( i18nc( "@label The amount for yield", "Amount" ) );
-	yieldGBoxLayout->addWidget( yieldLabel, 0, 0 );
-	QLabel *yieldTypeLabel = new QLabel( i18nc(
-		"@label The type of yield (e.g. servings, bottles...", "Type" ) );
-	yieldGBoxLayout->addWidget( yieldTypeLabel, 0, 1 );
-	yieldNumInput = new FractionInput;
-	yieldGBoxLayout->addWidget( yieldNumInput, 1, 0 );
-	yieldNumInput->setAllowRange(true);
-	yieldTypeEdit = new KLineEdit;
-	yieldGBoxLayout->addWidget( yieldTypeEdit, 1, 1 );
-
-	KHBox *prepTimeBox = new KHBox( serv_prep_box );
-	//prepTimeBox->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed ) );
-	prepTimeBox->setSpacing( 5 );
-
-	QLabel * prepTimeLabel = new QLabel( i18nc( "@label", "Preparation Time" ), prepTimeBox );
-	prepTimeLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-	prepTimeEdit = new QDateTimeEdit( prepTimeBox );
-	prepTimeEdit->setMinimumTime( QTime( 0, 0 ) );
-	prepTimeEdit->setDisplayFormat( "hh:mm");
-
-	recipeLayout->addWidget( serv_prep_box, 6, 4, 2, 1, 0);
 
 	//------- END OF Recipe Tab ---------------
 
@@ -385,7 +244,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 
 	tabWidget->insertTab( -1, m_recipeGeneralInfoEditor, i18nc( "@title:tab", "Recipe" ) );
-	tabWidget->insertTab( -1, recipeTab, i18nc( "@title:tab", "Recipe" ) ); //TODO: Remove
 	tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
 	tabWidget->insertTab( -1, instructionsTab, i18nc( "@title:tab", "Instructions" ) );
 	tabWidget->insertTab( -1, ratingListEditor, i18nc( "@title:tab", "Ratings" ) );
@@ -441,24 +299,13 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 		this, SLOT( recipeChanged( const QString& ) ) );
 	connect( m_recipeGeneralInfoEditor, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 
-	connect( changePhotoButton, SIGNAL( clicked() ), this, SLOT( changePhoto() ) );
-	connect( savePhotoAsButton, SIGNAL( clicked() ), this, SLOT( savePhotoAs() ) );
-	connect( clearPhotoButton, SIGNAL( clicked() ), SLOT( clearPhoto() ) );
 	connect( upButton, SIGNAL( clicked() ), this, SLOT( moveIngredientUp() ) );
 	connect( downButton, SIGNAL( clicked() ), this, SLOT( moveIngredientDown() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
 	connect( addButton, SIGNAL( clicked() ), ingInput, SLOT( addIngredient() ) );
 	connect( ingParserButton, SIGNAL( clicked() ), this, SLOT( slotIngredientParser() ) );
-	//connect( photoLabel, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
-	//connect( yieldNumInput, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
-	//connect( yieldTypeEdit, SIGNAL( textChanged( const QString & ) ), this, SLOT( recipeChanged() ) );
-	//connect( prepTimeEdit, SIGNAL(dateTimeChanged(const QDateTime &) ), SLOT( recipeChanged() ) );
-	//connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( recipeChanged( const QString& ) ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
-	connect( addCategoryButton, SIGNAL( clicked() ), this, SLOT( addCategory() ) );
-	//connect( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
-	connect( titleEdit, SIGNAL( textChanged( const QString& ) ), this, SLOT( prepTitleChanged( const QString& ) ) );
 	connect( ingredientList, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( syncListView( Q3ListViewItem*, const QString &, int ) ) );
 
 	connect ( ingInput, SIGNAL( ingredientEntered(const Ingredient&) ), this, SLOT( addIngredient(const Ingredient&) ) );
@@ -541,18 +388,9 @@ void RecipeInputDialog::reload( void )
 {
 	m_recipeGeneralInfoEditor->loadRecipe( loadedRecipe );
 
-	yieldNumInput->setValue( 1, 0 );
-	yieldTypeEdit->setText("");
-	ingredientList->clear();
-	ingInput->clear();
-
 	//Load Values in Interface
-	titleEdit->setText( loadedRecipe->title );
 	instructionsEdit->clearCompletionItems();
 	instructionsEdit->setPlainText( loadedRecipe->instructions );
-	yieldNumInput->setValue( loadedRecipe->yield.amount(), loadedRecipe->yield.amountOffset() );
-	yieldTypeEdit->setText( loadedRecipe->yield.type() );
-	prepTimeEdit->setTime( loadedRecipe->prepTime );
 
 	//show ingredient list
 	IngredientList list_copy = loadedRecipe->ingList;
@@ -590,122 +428,9 @@ void RecipeInputDialog::reload( void )
 			instructionsEdit->addCompletionItem( ( *ing_it ).name );
 		}
 	}
-	//
-	//show photo
-	if ( !loadedRecipe->photo.isNull() ) {
-
-		//	 		//get the photo
-		sourcePhoto = loadedRecipe->photo;
-
-		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
-			QImage pm = sourcePhoto.toImage();
-			QPixmap pm_scaled;
-			pm_scaled.fromImage( pm.scaled( QSize( photoLabel->width(), photoLabel->height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-			photoLabel->setPixmap( pm_scaled );
-
-			sourcePhoto = pm_scaled; // to save scaled later on
-		}
-		else {
-			photoLabel->setPixmap( sourcePhoto );
-		}
-	}
-	else {
-		QPixmap photo = QPixmap( defaultPhoto );
-		photoLabel->setPixmap( photo );
-		sourcePhoto = QPixmap();
-	}
-
-
-	// Show categories
-	showCategories();
-
-	// Show authors
-	showAuthors();
 
 	// Show ratings
 	ratingListEditor->refresh();
-
-	// Update yield type auto completion
-	KCompletion *completion = yieldTypeEdit->completionObject();
-	completion->clear();
-	ElementList yieldList;
-	database->loadYieldTypes( &yieldList );
-	for ( ElementList::const_iterator it = yieldList.constBegin(); it != yieldList.constEnd(); ++it ) {
-		completion->addItem( (*it).name );
-	}
-}
-
-void RecipeInputDialog::changePhoto( void )
-{
-	// standard filedialog
-	KUrl url = KFileDialog::getOpenUrl( KUrl() , QString( "*.png *.jpg *.jpeg *.xpm *.gif|%1 (*.png *.jpg *.jpeg *.xpm *.gif)" ).arg( i18n( "Images" ) ), this );
-	if ( url.isEmpty() )
-		return;
-	QString filename;
-	if (!url.isLocalFile()) {
-		if (!KIO::NetAccess::download(url,filename,this)) {
-			KMessageBox::error(this, KIO::NetAccess::lastErrorString() );
-			return;
-		}
-	} else {
-		filename = url.path();
-	}
-
-	QPixmap pixmap ( filename );
-	if ( !( pixmap.isNull() ) ) {
-		// If photo is bigger than the label, or smaller in width, than photoLabel, scale it
-		sourcePhoto = pixmap;
-		if ( ( sourcePhoto.width() > photoLabel->width() || sourcePhoto.height() > photoLabel->height() ) || ( sourcePhoto.width() < photoLabel->width() && sourcePhoto.height() < photoLabel->height() ) ) {
-
-			QImage pm = sourcePhoto.toImage();
-			QPixmap pm_scaled;
-			pm_scaled = pm_scaled.fromImage( pm.scaled( QSize( photoLabel->width(), photoLabel->height() ), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-			photoLabel->setPixmap( pm_scaled );
-
-			sourcePhoto = pm_scaled; // to save scaled later on
-			photoLabel->setPixmap( pm_scaled );
-		}
-		else {
-			photoLabel->setPixmap( sourcePhoto );
-		}
-		emit changed();
-	}
-
-	if (!url.isLocalFile()) {
-		KIO::NetAccess::removeTempFile( filename );
-	}
-}
-
-void RecipeInputDialog::savePhotoAs( void )
-{
-
-	KUrl url = KFileDialog::getSaveUrl( KUrl(),
-		QString( "*.jpg *.jpeg |%1 (*.jpg *.jpeg)" ).arg( i18n( "Images" ) ),
-		this,
-		i18nc("@title:window", "Save photo as..."));
-
-	if ( url.isEmpty() )
-		return;
-	QString filename = url.path();
-	QFile outputFile (filename);
-	if (outputFile.exists()) {
-		int r = KMessageBox::warningYesNo(this,
-			i18nc("@info", "The file already exists, do you want to overwrite it?")
-		);
-		if (r == KMessageBox::No)
-			return;
-	}
-
-	if ( !loadedRecipe->photo.save( filename, "JPEG" ) )
-		KMessageBox::error(this, i18nc("@info", "The photo cannot be saved in %1", filename) );
-}
-
-void RecipeInputDialog::clearPhoto( void )
-{
-	sourcePhoto = QPixmap();
-	photoLabel->setPixmap( QPixmap( defaultPhoto ) );
-
-	emit changed();
 }
 
 void RecipeInputDialog::moveIngredientUp( void )
@@ -919,22 +644,6 @@ void RecipeInputDialog::removeIngredient( void )
 
 }
 
-int RecipeInputDialog::createNewYieldIfNecessary( const QString &yield )
-{
-	if ( yield.trimmed().isEmpty() )  //no yield
-		return -1;
-	else
-	{
-		int id = database->findExistingYieldTypeByName( yield );
-		if ( id == -1 ) //creating new
-		{
-			id = database->createNewYieldType( yield );
-		}
-
-		return id;
-	}
-}
-
 void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_text, int col )
 {
 	if ( it->rtti() != INGLISTVIEWITEM_RTTI && it->rtti() != INGSUBLISTVIEWITEM_RTTI )
@@ -1048,7 +757,7 @@ void RecipeInputDialog::recipeChanged( void )
 	if ( changedSignalEnabled ) {
 		// Enable Save Button
 		emit enableSaveOption( true );
-		emit createButton( this, titleEdit->text() );
+		emit createButton( this, loadedRecipe->title );
 		unsavedChanges = true;
 
 	}
@@ -1067,12 +776,6 @@ void RecipeInputDialog::enableChangedSignal( bool en )
 
 bool RecipeInputDialog::save ( void )
 {
-	//check bounds first
-	if ( titleEdit->text().length() > int(database->maxRecipeTitleLength()) ) {
-		KMessageBox::error( this, i18ncp( "@info", "Recipe title cannot be longer than 1 character.", "Recipe title cannot be longer than %1 characters." , database->maxRecipeTitleLength() ), i18n( "Unable to save recipe" ) );
-		return false;
-	}
-
 	emit enableSaveOption( false );
 	saveRecipe();
 	unsavedChanges = false;
@@ -1094,19 +797,14 @@ void RecipeInputDialog::saveRecipe()
 void RecipeInputDialog::newRecipe( void )
 {
 	loadedRecipe->empty();
-	QPixmap image( defaultPhoto );
-	photoLabel->setPixmap( image );
-	sourcePhoto = QPixmap();
 
-	instructionsEdit->setPlainText( i18nc( "@label:textbox", "Write the recipe instructions here" ) );
-	instructionsEdit->clearCompletionItems();
-	titleEdit->setText( i18nc( "@label:textbox", "Write the recipe title here" ) );
+	loadedRecipe->title = i18nc( "@label:textbox", "Write the recipe title here" );
+
+	loadedRecipe->instructions = i18nc( "@label:textbox", "Write the recipe instructions here" );
+
 	ingredientList->clear();
-	authorShow->clear();
-	categoryShow->clear();
-	yieldNumInput->setValue( 1, 0 );
-	yieldTypeEdit->setText("");
-	prepTimeEdit->setTime( QTime( 0, 0 ) );
+
+	m_recipeGeneralInfoEditor->loadRecipe( loadedRecipe );
 
 	instructionsEdit->selectAll();
 
@@ -1117,10 +815,6 @@ void RecipeInputDialog::newRecipe( void )
 
 	ingInput->clear();
 
-	//Set focus to the title
-	titleEdit->setFocus();
-	titleEdit->selectAll();
-
 	//clear status info
 	propertyStatusMapRed.clear();
 	propertyStatusMapYellow.clear();
@@ -1128,7 +822,7 @@ void RecipeInputDialog::newRecipe( void )
 
 	// Enable Save Button
 	emit enableSaveOption( true );
-	emit createButton( this, titleEdit->text() );
+	emit createButton( this, loadedRecipe->title );
 	unsavedChanges = true;
 
 	// Enable the changed signals.
@@ -1138,64 +832,6 @@ void RecipeInputDialog::newRecipe( void )
 bool RecipeInputDialog::everythingSaved()
 {
 	return ( !( unsavedChanges ) );
-}
-
-void RecipeInputDialog::addCategory( void )
-{
-	QPointer<SelectCategoriesDialog> editCategoriesDialog = new SelectCategoriesDialog( this, loadedRecipe->categoryList, database );
-
-	if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
-		loadedRecipe->categoryList.clear();
-		editCategoriesDialog->getSelectedCategories( &( loadedRecipe->categoryList ) ); // get the category list chosen
-		emit( recipeChanged() ); //Indicate that the recipe changed
-
-	}
-
-	delete editCategoriesDialog;
-
-	// show category list
-	showCategories();
-
-
-}
-
-void RecipeInputDialog::showCategories( void )
-{
-	QString categories;
-	for ( ElementList::const_iterator cat_it = loadedRecipe->categoryList.constBegin(); cat_it != loadedRecipe->categoryList.constEnd(); ++cat_it ) {
-		if ( !categories.isEmpty() )
-			categories += ',';
-		categories += ( *cat_it ).name;
-	}
-	categoryShow->setText( categories );
-}
-
-void RecipeInputDialog::addAuthor( void )
-{
-	QPointer<SelectAuthorsDialog> editAuthorsDialog = new SelectAuthorsDialog( this, loadedRecipe->authorList, database );
-
-
-	if ( editAuthorsDialog->exec() == QDialog::Accepted ) { // user presses Ok
-		loadedRecipe->authorList.clear();
-		editAuthorsDialog->getSelectedAuthors( &( loadedRecipe->authorList ) ); // get the category list chosen
-		emit( recipeChanged() ); //Indicate that the recipe changed
-	}
-
-	delete editAuthorsDialog;
-
-	// show authors list
-	showAuthors();
-}
-
-void RecipeInputDialog::showAuthors( void )
-{
-	QString authors;
-	for ( ElementList::const_iterator author_it = loadedRecipe->authorList.constBegin(); author_it != loadedRecipe->authorList.constEnd(); ++author_it ) {
-		if ( !authors.isEmpty() )
-			authors += ',';
-		authors += ( *author_it ).name;
-	}
-	authorShow->setText( authors );
 }
 
 void RecipeInputDialog::enableSaveButton( bool enabled )
@@ -1260,14 +896,23 @@ void RecipeInputDialog::showRecipe( void )
 	emit showRecipe( loadedRecipe->recipeID );
 }
 
+void RecipeInputDialog::addCategory( void )
+{
+       QPointer<SelectCategoriesDialog> editCategoriesDialog = new SelectCategoriesDialog( this, loadedRecipe->categoryList, database );
+
+       if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
+		loadedRecipe->categoryList.clear();
+		editCategoriesDialog->getSelectedCategories( &( loadedRecipe->categoryList ) ); // get the category list chosen
+		emit( recipeChanged() ); //Indicate that the recipe changed
+       }
+
+       delete editCategoriesDialog;
+}
+
 
 void RecipeInputDialog::resizeRecipe( void )
 {
-	double amount = 0.0, amountOffset = 0.0;
-	yieldNumInput->value(amount, amountOffset);
-	loadedRecipe->yield.setAmount(amount);
-	loadedRecipe->yield.setAmountOffset(amountOffset);
-	loadedRecipe->yield.setType(yieldTypeEdit->text());
+	m_recipeGeneralInfoEditor->updateRecipe();
 	QPointer<ResizeRecipeDialog> dlg = new ResizeRecipeDialog( this, loadedRecipe );
 
 	if ( dlg->exec() == QDialog::Accepted )

@@ -82,33 +82,12 @@ private:
 	bool unsavedChanges;
 
 	// Widgets
+	KTabWidget* tabWidget;
+
 	RecipeGeneralInfoEditor * m_recipeGeneralInfoEditor;
 
-	KTabWidget* tabWidget;
-	QFrame* recipeTab;
 	QFrame* instructionsTab;
-
-	//Recipe Photo
-	ImageDropLabel *photoLabel;
-	QPixmap sourcePhoto;
-	KPushButton *changePhotoButton;
-
-	//Recipe Body
 	KreTextEdit* instructionsEdit;
-	QLabel* titleLabel;
-	KLineEdit* titleEdit;
-
-	//Additional recipe data
-	QLabel* yieldLabel;
-	FractionInput* yieldNumInput;
-	KLineEdit* yieldTypeEdit;
-	QDateTimeEdit *prepTimeEdit;
-	QLabel* authorLabel;
-	KLineEdit* authorShow;
-	KPushButton* addAuthorButton;
-	QLabel* categoryLabel;
-	KLineEdit* categoryShow;
-	KPushButton* addCategoryButton;
 
 	//Ingredient inputs
 	K3ListView* ingredientList;
@@ -128,6 +107,8 @@ private:
 	KPushButton* addButton;
 	KPushButton* ingParserButton;
 
+	RatingListEditor * ratingListEditor;
+
 	//Function buttons
 	QFrame* functionsBox;
 	QToolButton* saveButton;
@@ -135,16 +116,11 @@ private:
 	QToolButton* showButton;
 	QToolButton* resizeButton;
 
-	RatingListEditor * ratingListEditor;
-
 	QMap<int,QString> propertyStatusMapRed;
 	QMap<int,QString> propertyStatusMapYellow;
 
 	// Internal functions
-	int createNewYieldIfNecessary( const QString &yield );
 	void saveRecipe( void );
-	void showCategories( void );
-	void showAuthors( void );
 	int ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const;
 	QString statusMessage() const;
 	QString conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const;
@@ -152,9 +128,6 @@ private:
 	// Signals & Slots
 
 private slots:
-	void changePhoto( void );
-	void savePhotoAs( void );
-	void clearPhoto( void );
 	void moveIngredientUp( void );
 	void moveIngredientDown( void );
 	void removeIngredient( void );
@@ -162,7 +135,6 @@ private slots:
 	void recipeChanged( void );
 	void recipeChanged( const QString &t );
 	void enableChangedSignal( bool en = true );
-	void addAuthor( void );
 	void enableSaveButton( bool enabled );
 	void closeOptions( void );
 	void prepTitleChanged( const QString &title );
