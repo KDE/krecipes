@@ -14,6 +14,7 @@
 #include "ui_recipegeneralinfoeditor.h"
 
 #include "dialogs/recipeinput/selectauthorsdialog.h"
+#include "selectcategoriesdialog.h"
 #include "datablocks/recipe.h"
 
 #include <KFileDialog>
@@ -66,7 +67,6 @@
 //#include "datablocks/unit.h"
 //#include "datablocks/weight.h"
 //#include "backends/recipedb.h"
-//#include "selectcategoriesdialog.h"
 //#include "dialogs/createunitconversiondialog.h"
 //#include "dialogs/editpropertiesdialog.h"
 //#include "widgets/fractioninput.h"
@@ -105,6 +105,9 @@ RecipeGeneralInfoEditor::RecipeGeneralInfoEditor( QWidget * parent, RecipeDB * d
 
 	connect( ui->m_editAuthorsButton, SIGNAL(clicked()),
 		this, SLOT(editAuthorsSlot()) );
+
+	connect( ui->m_editCategoriesButton, SIGNAL(clicked()),
+		this, SLOT(editCategoriesSlot()) );
 }
 
 void RecipeGeneralInfoEditor::loadRecipe( Recipe * recipe )
@@ -124,6 +127,9 @@ void RecipeGeneralInfoEditor::loadRecipe( Recipe * recipe )
 
 	//Display authors in the GUI
 	showAuthors();
+
+	//Display categories in the GUI
+	showCategories();
 }
 
 void RecipeGeneralInfoEditor::titleChangedSlot( const QString & title )
@@ -228,6 +234,34 @@ void RecipeGeneralInfoEditor::showAuthors()
 	ui->m_authorsDisplay->setText( authors );
 }
 
+void RecipeGeneralInfoEditor::editCategoriesSlot()
+{
+	QPointer<SelectCategoriesDialog> editCategoriesDialog =
+		new SelectCategoriesDialog( this, m_recipe->categoryList, m_database );
+
+	if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
+		m_recipe->categoryList.clear();
+		editCategoriesDialog->getSelectedCategories( &m_recipe->categoryList );
+		emit( changed() ); //Indicate that the recipe changed
+	}
+
+	delete editCategoriesDialog;
+
+	// show category list
+	showCategories();
+}
+
+void RecipeGeneralInfoEditor::showCategories()
+{
+	QString categories;
+	ElementList::const_iterator it;
+	for ( it = m_recipe->categoryList.constBegin(); it != m_recipe->categoryList.constEnd(); ++it ) {
+		if ( !categories.isEmpty() )
+			categories += ", ";
+		categories += it->name;
+	}
+	ui->m_categoriesDisplay->setText( categories );
+}
 //RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( parent )
 //{
 //
@@ -1228,36 +1262,6 @@ void RecipeGeneralInfoEditor::showAuthors()
 //bool RecipeInputDialog::everythingSaved()
 //{
 //	return ( !( unsavedChanges ) );
-//}
-//
-//void RecipeInputDialog::addCategory( void )
-//{
-//	QPointer<SelectCategoriesDialog> editCategoriesDialog = new SelectCategoriesDialog( this, loadedRecipe->categoryList, database );
-//
-//	if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
-//		loadedRecipe->categoryList.clear();
-//		editCategoriesDialog->getSelectedCategories( &( loadedRecipe->categoryList ) ); // get the category list chosen
-//		emit( recipeChanged() ); //Indicate that the recipe changed
-//
-//	}
-//
-//	delete editCategoriesDialog;
-//
-//	// show category list
-//	showCategories();
-//
-//
-//}
-//
-//void RecipeInputDialog::showCategories( void )
-//{
-//	QString categories;
-//	for ( ElementList::const_iterator cat_it = loadedRecipe->categoryList.constBegin(); cat_it != loadedRecipe->categoryList.constEnd(); ++cat_it ) {
-//		if ( !categories.isEmpty() )
-//			categories += ',';
-//		categories += ( *cat_it ).name;
-//	}
-//	categoryShow->setText( categories );
 //}
 //
 //void RecipeInputDialog::enableSaveButton( bool enabled )

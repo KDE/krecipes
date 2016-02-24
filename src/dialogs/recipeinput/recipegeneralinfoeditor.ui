@@ -178,12 +178,16 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="KLineEdit" name="klineedit_3"/>
+            <widget class="KLineEdit" name="m_categoriesDisplay">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item>
-            <widget class="KPushButton" name="kpushbutton_2">
+            <widget class="KPushButton" name="m_editCategoriesButton">
              <property name="icon">
-              <iconset theme="list-add">
+              <iconset theme="document-edit">
                <normaloff/>
               </iconset>
              </property>

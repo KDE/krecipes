@@ -82,8 +82,11 @@ private slots:
 
 	void editAuthorsSlot();
 
+	void editCategoriesSlot();
+
 private:
 	void showAuthors();
+	void showCategories();
 
 	Ui::RecipeGeneralInfoEditor * ui;
 
