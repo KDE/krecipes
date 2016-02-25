@@ -51,8 +51,8 @@ public:
 	IngredientList nextGroup();
 
 private:
-	Q3ValueList<IngredientList::const_iterator> _groupMembers( int id, IngredientList::const_iterator begin ) const;
-	Q3ValueList<IngredientList::const_iterator> usedGroups;
+	QList<IngredientList::const_iterator> _groupMembers( int id, IngredientList::const_iterator begin ) const;
+	QList<IngredientList::const_iterator> usedGroups;
 };
 
 #endif

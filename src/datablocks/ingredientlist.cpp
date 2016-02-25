@@ -223,11 +223,11 @@ IngredientList IngredientList::groupMembers( int id, IngredientList::const_itera
 	return matches;
 }
 
-Q3ValueList<IngredientList::const_iterator> IngredientList::_groupMembers( int id, IngredientList::const_iterator begin ) const
+QList<IngredientList::const_iterator> IngredientList::_groupMembers( int id, IngredientList::const_iterator begin ) const
 {
 	bool first_found = false;
 
-	Q3ValueList<IngredientList::const_iterator> matches;
+	QList<IngredientList::const_iterator> matches;
 	for ( IngredientList::const_iterator it = begin; it != end(); ++it ) {
 		if ( ( *it ).groupID == id ) {
 			matches << it;
@@ -247,9 +247,9 @@ IngredientList IngredientList::firstGroup()
 	if ( isEmpty() )
 		return IngredientList();
 
-	Q3ValueList<IngredientList::const_iterator> members = _groupMembers( ( *begin() ).groupID, begin() );
+	QList<IngredientList::const_iterator> members = _groupMembers( ( *begin() ).groupID, begin() );
 
-	for ( Q3ValueList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
+	for ( QList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
 		usedGroups << *members_it;
 	}
 
@@ -260,9 +260,9 @@ IngredientList IngredientList::nextGroup()
 {
 	for ( IngredientList::const_iterator it = begin(); it != end(); ++it ) {
 		if ( usedGroups.find( it ) == usedGroups.end() ) {
-			Q3ValueList<IngredientList::const_iterator> members = _groupMembers( ( *it ).groupID, it );
+			QList<IngredientList::const_iterator> members = _groupMembers( ( *it ).groupID, it );
 
-			for ( Q3ValueList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
+			for ( QList<IngredientList::const_iterator>::const_iterator members_it = members.begin(); members_it != members.end(); ++members_it ) {
 				usedGroups << *members_it;
 			}
 
