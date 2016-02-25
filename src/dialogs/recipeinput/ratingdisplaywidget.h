@@ -29,7 +29,6 @@ Q_OBJECT
 
 public:
 	RatingDisplayWidget( QWidget *parent = 0);
-	RatingList::iterator rating_it;
 
 	void displayRating(const Rating & rating);
 

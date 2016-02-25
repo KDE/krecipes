@@ -92,7 +92,7 @@ void RatingListEditor::refresh()
 	for ( it = m_ratingList->begin(); it != m_ratingList->end(); ++it ) {
 		//Create the rating display widget
 		RatingDisplayWidget *item = new RatingDisplayWidget( this );
-		item->rating_it = it;
+		m_ratingListIteratorMap[item] = it;
 		item->displayRating( *it );
 		//Conect the signals
 		connect(item, SIGNAL(editButtonClicked()), this, SLOT(editRating()));
@@ -141,7 +141,7 @@ void RatingListEditor::addRating()
 
 		//Create the rating widget.
 		RatingDisplayWidget *item = new RatingDisplayWidget( this );
-		item->rating_it = --(m_ratingList->end());
+		m_ratingListIteratorMap[item] = --(m_ratingList->end());
 		item->displayRating( r );
 		connect(item, SIGNAL(editButtonClicked()), this, SLOT(editRating()));
 		connect(item, SIGNAL(removeButtonClicked()), this, SLOT(removeRating()));
@@ -160,11 +160,12 @@ void RatingListEditor::addRating()
 void RatingListEditor::editRating()
 {
 	RatingDisplayWidget *sender = (RatingDisplayWidget*)QObject::sender();
+	RatingList::iterator rating_it = m_ratingListIteratorMap[sender];
 
 	ElementList criteriaList;
 	m_database->loadRatingCriterion(&criteriaList);
 
-	QPointer<EditRatingDialog> ratingDlg = new EditRatingDialog (criteriaList,*sender->rating_it,this);
+	QPointer<EditRatingDialog> ratingDlg = new EditRatingDialog (criteriaList,*rating_it,this);
 	if ( ratingDlg->exec() == QDialog::Accepted ) {
 		Rating r = ratingDlg->rating();
 
@@ -179,7 +180,7 @@ void RatingListEditor::editRating()
 		}
 
 		//Update the rating values.
-		(*sender->rating_it) = r;
+		*rating_it = r;
 
 		//Show the changes in the GUI
 		sender->displayRating( r );
@@ -194,7 +195,7 @@ void RatingListEditor::editRating()
 void RatingListEditor::removeRating()
 {
 	RatingDisplayWidget *sender = (RatingDisplayWidget*)QObject::sender();
-	m_ratingList->erase(sender->rating_it);
+	m_ratingList->erase( m_ratingListIteratorMap[sender] );
 
 	disconnect(sender, SIGNAL(editButtonClicked()), this, SLOT(editRating()));
 	disconnect(sender, SIGNAL(removeButtonClicked()), this, SLOT(removeRating()));

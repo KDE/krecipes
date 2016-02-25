@@ -13,14 +13,17 @@
 #ifndef RATINGLISTEDITOR_H
 #define RATINGLISTEDITOR_H
 
+#include "datablocks/rating.h"
+
 #include <QWidget>
+#include <QHash>
 
 //custom QScrollArea class
 //defined in ratinglisteditor.cpp
 class MyScrollArea;
 
-class RatingList;
 class RecipeDB;
+class RatingDisplayWidget;
 
 class KPushButton;
 
@@ -57,6 +60,7 @@ private:
 
 	RatingList * m_ratingList;
 	RecipeDB * m_database;
+	QHash <RatingDisplayWidget*,RatingList::iterator> m_ratingListIteratorMap;
 };
 
 #endif
