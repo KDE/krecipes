@@ -627,6 +627,7 @@ void QSqlRecipeDB::loadRecipeMetadata( Recipe *recipe )
 
 void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 {
+	transaction();
 	// Check if it's a new recipe or it exists (supossedly) already.
 
 	bool newRecipe;
@@ -865,6 +866,8 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		emit recipeCreated( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
 	else
 		emit recipeModified( Element( recipe->title.left( maxRecipeTitleLength() ), recipeID ), recipe->categoryList );
+
+	commit();
 }
 
 void QSqlRecipeDB::loadRecipeList( ElementList *list, int categoryID, bool recursive )
