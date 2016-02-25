@@ -43,7 +43,11 @@
       </widget>
      </item>
      <item>
-      <widget class="KLineEdit" name="m_titleEdit"/>
+      <widget class="KLineEdit" name="m_titleEdit">
+       <property name="placeholderText">
+        <string>Write the recipe title here</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

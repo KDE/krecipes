@@ -798,22 +798,18 @@ void RecipeInputDialog::newRecipe( void )
 {
 	loadedRecipe->empty();
 
-	loadedRecipe->title = i18nc( "@label:textbox", "Write the recipe title here" );
-
-	loadedRecipe->instructions = i18nc( "@label:textbox", "Write the recipe instructions here" );
-
-	ingredientList->clear();
-
 	m_recipeGeneralInfoEditor->loadRecipe( loadedRecipe );
 
+	ingredientList->clear();
+	ingInput->clear();
+
+	instructionsEdit->setText( i18nc( "@label:textbox", "Write the recipe instructions here" ) );
 	instructionsEdit->selectAll();
 
 	ratingListEditor->clear();
 
 	//Set back to the first page
 	tabWidget->setCurrentIndex( 0 );
-
-	ingInput->clear();
 
 	//clear status info
 	propertyStatusMapRed.clear();
