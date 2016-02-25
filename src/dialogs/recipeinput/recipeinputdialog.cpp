@@ -398,7 +398,7 @@ void RecipeInputDialog::reload( void )
 		Q3ListViewItem * lastElement = ingredientList->lastItem();
 		Q3ListViewItem *ing_header = 0;
 
-		QString group = group_list[ 0 ].group;
+		QString group = group_list.first().group;
 		if ( !group.isEmpty() ) {
 			if ( lastElement && lastElement->parent() )
 				lastElement = lastElement->parent();

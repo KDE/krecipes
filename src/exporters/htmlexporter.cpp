@@ -262,7 +262,7 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	int count = 0;
 	IngredientList list_copy = recipe.ingList; //simple workaround until I fix iterating over the list dealing with groups
 	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
-		QString group = group_list[ 0 ].group; //just use the first's name... they're all the same
+		QString group = group_list.first().group; //just use the first's name... they're all the same
 
 		bool loneHeader = false;
 		if ( count != 0 && count % per_col == 0 ) {

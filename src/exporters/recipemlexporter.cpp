@@ -155,7 +155,7 @@ QString RecipeMLExporter::createContent( const RecipeList& recipes )
 		for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
 			QDomElement ing_root;
 
-			QString group = group_list[ 0 ].group; //just use the first's name... they're all the same
+			QString group = group_list.first().group; //just use the first's name... they're all the same
 			if ( !group.isEmpty() ) {
 				QDomElement ingdiv_tag = doc.createElement( "ing-div" );
 				QDomElement title_tag = doc.createElement( "title" );

@@ -108,10 +108,10 @@ void MMFExporter::writeMMFIngredients( QString &content, const Recipe &recipe )
 
 	IngredientList list_copy = recipe.ingList;
 	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
-		if ( group_list[ 0 ].groupID == -1 )  //we already handled this group
+		if ( group_list.first().groupID == -1 )  //we already handled this group
 			continue;
 
-		QString group = group_list[ 0 ].group.left( 76 ); //just use the first's name... they're all the same
+		QString group = group_list.first().group.left( 76 ); //just use the first's name... they're all the same
 		if ( !group.isEmpty() ) {
 			int length = group.length();
 			QString filler_lt = QString().fill( '-', ( 76 - length ) / 2 );
