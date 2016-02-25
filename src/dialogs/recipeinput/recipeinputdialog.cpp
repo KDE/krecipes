@@ -757,16 +757,16 @@ void RecipeInputDialog::recipeChanged( void )
 	if ( changedSignalEnabled ) {
 		// Enable Save Button
 		emit enableSaveOption( true );
-		emit createButton( this, loadedRecipe->title );
 		unsavedChanges = true;
 
 	}
 
 }
 
-void RecipeInputDialog::recipeChanged( const QString & /*t*/ )
+void RecipeInputDialog::recipeChanged( const QString & t )
 {
-	recipeChanged(); // jumps to the real slot function
+	emit createButton( this, t );
+	recipeChanged();
 }
 
 void RecipeInputDialog::enableChangedSignal( bool en )
@@ -818,7 +818,7 @@ void RecipeInputDialog::newRecipe( void )
 
 	// Enable Save Button
 	emit enableSaveOption( true );
-	emit createButton( this, loadedRecipe->title );
+	emit createButton( this, i18n( "New Recipe" ) );
 	unsavedChanges = true;
 
 	// Enable the changed signals.
