@@ -104,6 +104,12 @@ void RatingListEditor::refresh()
         m_scrollArea->resize( m_scrollArea->size() );
 }
 
+void RatingListEditor::showEvent( QShowEvent * event ) {
+	// This is needed to adjust properly the size of
+	// the QFrame containing the various RatinDisplayWidget's
+	m_scrollArea->resizeEvent( 0 );
+}
+
 void RatingListEditor::clear()
 {
 	//Clear all the rating widgets

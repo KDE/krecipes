@@ -42,6 +42,8 @@ public:
 	void refresh();
 	void clear();
 
+	void showEvent( QShowEvent * event );
+
 signals:
 	void changed();
 
