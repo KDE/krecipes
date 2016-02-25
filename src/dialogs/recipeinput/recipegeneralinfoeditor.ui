@@ -101,6 +101,9 @@
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="KPushButton" name="m_changePhotoButton">
+            <property name="toolTip">
+             <string>Select recipe photo</string>
+            </property>
             <property name="icon">
              <iconset theme="insert-image">
               <normaloff/>
@@ -110,6 +113,9 @@
           </item>
           <item>
            <widget class="KPushButton" name="m_savePhotoAsButton">
+            <property name="toolTip">
+             <string>Save photo as...</string>
+            </property>
             <property name="icon">
              <iconset theme="document-save">
               <normaloff/>
@@ -119,6 +125,9 @@
           </item>
           <item>
            <widget class="KPushButton" name="m_clearPhotoButton">
+            <property name="toolTip">
+             <string>Delete recipe photo</string>
+            </property>
             <property name="icon">
              <iconset theme="edit-delete">
               <normaloff/>
@@ -156,6 +165,9 @@
            </item>
            <item>
             <widget class="KPushButton" name="m_editAuthorsButton">
+             <property name="toolTip">
+              <string>Edit autors</string>
+             </property>
              <property name="icon">
               <iconset theme="document-edit">
                <normaloff/>
@@ -190,6 +202,9 @@
            </item>
            <item>
             <widget class="KPushButton" name="m_editCategoriesButton">
+             <property name="toolTip">
+              <string>Edit categories</string>
+             </property>
              <property name="icon">
               <iconset theme="document-edit">
                <normaloff/>
