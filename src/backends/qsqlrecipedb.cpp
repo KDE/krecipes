@@ -856,6 +856,9 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		command = QString( "DELETE FROM ratings WHERE recipe_id=%1 AND id NOT IN( %2 )" )
 			  .arg( recipeID ).arg( ids.join(",") );
 		recipeToSave.exec( command );
+	} else if ( recipe->ratingList.isEmpty() ) { //if there are no ratings right now, delete'em all
+		command = QString( "DELETE FROM ratings WHERE recipe_id=%1" ).arg( recipeID );
+		recipeToSave.exec( command );
 	}
 
 	if ( newRecipe )
