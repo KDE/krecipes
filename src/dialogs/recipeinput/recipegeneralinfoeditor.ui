@@ -166,7 +166,7 @@
            <item>
             <widget class="KPushButton" name="m_editAuthorsButton">
              <property name="toolTip">
-              <string>Edit autors</string>
+              <string>Edit authors</string>
              </property>
              <property name="icon">
               <iconset theme="document-edit">
