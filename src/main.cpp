@@ -1,6 +1,7 @@
 /***************************************************************************
 *   Copyright © 2003-2005 Unai Garro <ugarro@gmail.com>                   *
 *   Copyright © 2003-2005 Jason Kivlighn <jkivlighn@gmail.com>            *
+*   Copyright © 2016 José Manuel Santamaría Lema <panfaust@gail.com>      *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -16,11 +17,16 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <QSplashScreen>
+#include <QLabel>
 
 #include "convert_sqlite3.h"
 #include "datablocks/elementlist.h"
 
 static const char *version = "2.2-git";
+static const char *splash_version_major = "2.2";
+//Put here somehing like "git", "alpha2", "beta1" ...
+static const char *splash_version_revision = "git";
 
 static KCmdLineOptions options;
 
@@ -84,9 +90,50 @@ int main( int argc, char **argv )
 			return 0;
 		}
 
+		//Create splash screen
+		QPixmap pixmap( ":/startlogo.png" );
+		QSplashScreen splash( pixmap );
+
+		//Set up the QLabel's showing the program version
+		QPalette palette;
+		palette.setColor( QPalette::WindowText, Qt::white );
+		palette.setColor( QPalette::Window, Qt::black );
+
+		//Major version
+		QLabel * majorVerLabel = new QLabel( &splash );
+		majorVerLabel->setPalette( palette );
+		majorVerLabel->setGeometry( QRect(520, 20, 66, 41) );
+		majorVerLabel->setAlignment( Qt::AlignCenter );
+		QFont font;
+		font.setFamily( "Sans Serif" );
+		font.setPointSize( 25 );
+		font.setBold( true );
+		font.setWeight( 75 );
+		majorVerLabel->setFont( font );
+		majorVerLabel->setText( splash_version_major );
+
+		//Revision
+		QLabel * revLabel = new QLabel( &splash );
+		revLabel->setPalette( palette );
+		revLabel->setGeometry( QRect(520, 50, 66, 31) );
+		revLabel->setAlignment( Qt::AlignCenter );
+		font.setFamily( "Sans Serif" );
+		font.setPointSize( 10 );
+		font.setBold( true );
+		revLabel->setFont( font );
+		revLabel->setText( splash_version_revision );
+
+		//Show the splash screen
+		splash.show();
+		splash.showMessage( "Loading" );
+		app.processEvents();
+
 		Krecipes * widget = new Krecipes;
 		app.setTopWidget( widget );
 		widget->show();
+
+		//Finish the splash screen
+		splash.finish( widget );
 
 		args->clear();
 	}

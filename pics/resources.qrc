@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>startlogo.png</file>
     <file>default_recipe_photo.png</file>
   </qresource>
 </RCC>

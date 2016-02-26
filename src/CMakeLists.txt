@@ -358,7 +358,6 @@ set(krecipes_SRCS
    #propertycalculator.cpp
    setupassistant.cpp
    shoppingcalculator.cpp
-   kstartuplogo.cpp
    convert_sqlite3.cpp
    #klomanager.cpp
 )

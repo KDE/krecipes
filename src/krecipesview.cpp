@@ -28,7 +28,6 @@
 #include "actionshandlers/krecategoryactionshandler.h"
 #include "setupassistant.h"
 #include "convert_sqlite3.h"
-#include "kstartuplogo.h"
 
 #include "dialogs/recipeinput/recipeinputdialog.h"
 #include "dialogs/recipeviewdialog.h"
@@ -65,13 +64,7 @@ KrecipesView::KrecipesView( QWidget *parent )
 	wizard();
 	kDebug() << "Wizard finished correctly" ;
 
-	// Show Splash Screen
-
-	KStartupLogo* start_logo = 0L;
-	start_logo = new KStartupLogo();
-	start_logo -> setHideEnabled( true );
-	start_logo->show();
-	start_logo->raise();
+	kapp->processEvents();
 
 	// Initialize Database
 
@@ -80,6 +73,8 @@ KrecipesView::KrecipesView( QWidget *parent )
 	START_TIMER("Initializing database")
 	initDatabase();
 	END_TIMER()
+
+	kapp->processEvents();
 
 	// Design the GUI
 	QHBoxLayout *layout = new QHBoxLayout;
@@ -164,6 +159,8 @@ KrecipesView::KrecipesView( QWidget *parent )
 	contextButton->setFlat( true );
 	END_TIMER()
 
+	kapp->processEvents();
+
 	KConfigGroup config(KGlobal::config(), "Performance" );
 	int limit = config.readEntry( "CategoryLimit", -1 );
 	database->updateCategoryCache(limit);
@@ -174,69 +171,85 @@ KrecipesView::KrecipesView( QWidget *parent )
 	rightPanel->addStackWidget( inputPanel );
 	END_TIMER()
 
+	kapp->processEvents();
+
 	START_TIMER("Creating recipe view")
 	viewPanel = new RecipeViewDialog( rightPanel, database );
 	rightPanel->addStackWidget( viewPanel );
 	END_TIMER()
 
+	kapp->processEvents();
+
 	START_TIMER("Creating recipe selection dialog")
 	selectPanel = new SelectRecipeDialog( rightPanel, database );
 	rightPanel->addStackWidget( selectPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
 
 	START_TIMER("Creating ingredients component")
 	ingredientsPanel = new IngredientsDialog( rightPanel, database );
 	rightPanel->addStackWidget( ingredientsPanel );
 	END_TIMER()
 
+	kapp->processEvents();
+
 	START_TIMER("Creating properties component")
 	propertiesPanel = new PropertiesDialog( rightPanel, database );
 	rightPanel->addStackWidget( propertiesPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
 
 	START_TIMER("Creating units component")
 	unitsPanel = new UnitsDialog( rightPanel, database );
 	rightPanel->addStackWidget( unitsPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
 
 	START_TIMER("Creating shopping list dialog")
 	shoppingListPanel = new ShoppingListDialog( rightPanel, database );
 	rightPanel->addStackWidget( shoppingListPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
 
 	START_TIMER("Creating diet wizard dialog")
 	dietPanel = new DietWizardDialog( rightPanel, database );
 	rightPanel->addStackWidget( dietPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
 
 	START_TIMER("Creating categories component")
 	categoriesPanel = new CategoriesEditorDialog( rightPanel, database );
 	rightPanel->addStackWidget( categoriesPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
 
 	START_TIMER("Creating authors component")
 	authorsPanel = new AuthorsDialog( rightPanel, database );
 	rightPanel->addStackWidget( authorsPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
 
 	START_TIMER("Creating prep methods component")
 	prepMethodsPanel = new PrepMethodsDialog( rightPanel, database );
 	rightPanel->addStackWidget( prepMethodsPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
 
 	START_TIMER("Creating ingredients matcher dialog")
 	ingredientMatcherPanel = new IngredientMatcherDialog( rightPanel, database );
 	rightPanel->addStackWidget( ingredientMatcherPanel );
-
 	END_TIMER()
+
+	kapp->processEvents();
+
 
 	database->clearCategoryCache();
 
@@ -305,9 +318,6 @@ KrecipesView::KrecipesView( QWidget *parent )
 	connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
 	
 	connect( ingredientMatcherPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
-
-	// Close Splash Screen
-	delete start_logo;
 
 #ifndef NDEBUG
 	kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec";
