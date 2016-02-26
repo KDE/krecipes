@@ -35,7 +35,8 @@
 int QSqlRecipeDB::m_refCount = 0;
 
 QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QString &pass, const QString &name, int port ) : RecipeDB(),
-	connectionName( QString("krecipes %1 c%2").arg((size_t)QThread::currentThreadId()).arg(m_refCount) )
+	connectionName( QString("krecipes %1 c%2").arg((size_t)QThread::currentThreadId()).arg(m_refCount) ),
+	m_transactionsEnabled( true )
 {
 	kDebug();
 	DBuser = user;
@@ -176,12 +177,26 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 
 void QSqlRecipeDB::transaction()
 {
-	database->transaction();
+	if ( m_transactionsEnabled ) {
+		database->transaction();
+	}
 }
 
 void QSqlRecipeDB::commit()
 {
-	database->commit();
+	if ( m_transactionsEnabled ) {
+		database->commit();
+	}
+}
+
+void QSqlRecipeDB::disableTransactions()
+{
+	m_transactionsEnabled = false;
+}
+
+void QSqlRecipeDB::enableTransactions()
+{
+	m_transactionsEnabled = true;
 }
 
 void QSqlRecipeDB::initializeData( void )

@@ -22,6 +22,8 @@
 #include "datablocks/categorytree.h"
 #include "datablocks/unit.h"
 
+#include "profiling.h"
+
 BaseImporter::BaseImporter() :
 		m_recipe_list( new RecipeList ),
 		m_cat_structure( 0 ),
@@ -198,6 +200,10 @@ void BaseImporter::importIngredient( IngredientData &ing, RecipeDB *db, KProgres
 
 void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KProgressDialog *progress_dialog )
 {
+	START_TIMER("recipe import")
+	db->transaction();
+	db->disableTransactions();
+
 	// Load Current Settings
 	KConfigGroup config = KGlobal::config()->group( "Import" );
 	bool overwrite = config.readEntry( "OverwriteExisting", false );
@@ -209,6 +215,9 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 			if ( progress_dialog->wasCancelled() ) {
 				KMessageBox::information( kapp->mainWidget(), i18n( "All recipes up unto this point have been successfully imported." ) );
 				//db->blockSignals(false);
+				db->enableTransactions();
+				db->commit();
+				END_TIMER()
 				return ;
 			}
 		}
@@ -300,6 +309,9 @@ void BaseImporter::importRecipes( RecipeList &selected_recipes, RecipeDB *db, KP
 
 		recipe_it_old = recipe_it; //store to delete once we've got the next recipe
 	}
+	db->enableTransactions();
+	db->commit();
+	END_TIMER()
 }
 
 void BaseImporter::setCategoryStructure( CategoryTree *cat_structure )

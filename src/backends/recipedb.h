@@ -155,8 +155,13 @@ public:
 	/** Convenience method.  Calls the above with arguments from KConfig. */
 	static RecipeDB* createDatabase();
 
+	//FIXME: Actually this functions shouldn't be exposed here since RecipeDB is suposed
+	//to represent a generic database which may be not be based on SQL. Not a big problem
+	//for now. In any case, please try to not use this functions unless you really need it.
 	virtual void transaction() = 0;
 	virtual void commit() = 0;
+	virtual void enableTransactions() = 0;
+	virtual void disableTransactions() = 0;
 
 	virtual void addIngredientWeight( const Weight & ) = 0;
 	virtual RecipeDB::IdType addProperty( const QString &name, const QString &units ) = 0;

@@ -83,6 +83,8 @@ public:
 
 	virtual void transaction();
 	virtual void commit();
+	virtual void enableTransactions();
+	virtual void disableTransactions();
 
 	void addIngredientWeight( const Weight & );
 	RecipeDB::IdType addProperty( const QString &name, const QString &units );
@@ -235,6 +237,8 @@ private:
 	QString m_command;
 
 	static int m_refCount;
+
+	bool m_transactionsEnabled;
 };
 
 
