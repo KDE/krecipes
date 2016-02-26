@@ -34,6 +34,9 @@
 
 #include "datablocks/elementlist.h"
 #include "datablocks/rating.h"
+
+class IngredientsEditor;
+
 class KTabWidget;
 class QDateTimeEdit;
 class QTextEdit;
@@ -92,6 +95,7 @@ private:
 	//Ingredient inputs
 	K3ListView* ingredientList;
 	QFrame *ingredientsTab;
+	IngredientsEditor * ingredientsEditor;
 	IngredientInputWidget *ingInput;
 	KLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;

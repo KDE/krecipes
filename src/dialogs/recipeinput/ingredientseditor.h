@@ -13,6 +13,9 @@
 
 #include <QWidget>
 
+class IngredientList;
+
+
 namespace Ui{
 	class IngredientsEditor;
 }
@@ -25,8 +28,12 @@ public:
 	IngredientsEditor( QWidget * parent = 0 );
 	~IngredientsEditor() {};
 
+	void loadIngredients( IngredientList * ingredientList );
+
 private:
 	Ui::IngredientsEditor * ui;
+
+	IngredientList * m_ingredientList;
 
 };
 

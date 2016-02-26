@@ -10,6 +10,8 @@
 #include "ingredientseditor.h"
 #include "ui_ingredientseditor.h"
 
+#include "datablocks/ingredientlist.h"
+
 IngredientsEditor::IngredientsEditor( QWidget * parent)
 		: QWidget( parent )
 {
@@ -17,4 +19,8 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 	ui->setupUi( this );
 }
 
-
+void IngredientsEditor::loadIngredients( IngredientList * ingredientList )
+{
+	m_ingredientList = ingredientList;
+	//TODO
+}

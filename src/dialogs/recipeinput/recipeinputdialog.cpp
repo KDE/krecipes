@@ -15,6 +15,7 @@
 #include "widgets/imagedroplabel.h"
 #include "dialogs/recipeinput/ratinglisteditor.h"
 #include "dialogs/recipeinput/recipegeneralinfoeditor.h"
+#include "ingredientseditor.h"
 
 #include <QString>
 
@@ -245,6 +246,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	tabWidget->insertTab( -1, m_recipeGeneralInfoEditor, i18nc( "@title:tab", "Recipe" ) );
 	tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
+	//TODO: uncomment this to try the new ingredients editor
+	//ingredientsEditor = new IngredientsEditor;
+	//tabWidget->insertTab( -1, ingredientsEditor, i18nc( "@title:tab", "Ingredients" ) );
 	tabWidget->insertTab( -1, instructionsTab, i18nc( "@title:tab", "Instructions" ) );
 	tabWidget->insertTab( -1, ratingListEditor, i18nc( "@title:tab", "Ratings" ) );
 
@@ -391,6 +395,9 @@ void RecipeInputDialog::reload( void )
 	//Load Values in Interface
 	instructionsEdit->clearCompletionItems();
 	instructionsEdit->setPlainText( loadedRecipe->instructions );
+
+	//show ingredient list
+	ingredientsEditor->loadIngredients( &loadedRecipe->ingList );
 
 	//show ingredient list
 	IngredientList list_copy = loadedRecipe->ingList;
