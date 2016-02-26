@@ -55,4 +55,5 @@ private:
 	QList<IngredientList::const_iterator> usedGroups;
 };
 
+QDebug operator<<( QDebug dbg, const IngredientList & ingList );
 #endif

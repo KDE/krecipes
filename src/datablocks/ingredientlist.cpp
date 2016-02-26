@@ -14,6 +14,8 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
+#include <QDebug>
+
 IngredientList::IngredientList() : Q3ValueList<Ingredient>()
 {}
 
@@ -270,4 +272,18 @@ IngredientList IngredientList::nextGroup()
 		}
 	}
 	return IngredientList();
+}
+
+
+QDebug operator<<( QDebug dbg, const IngredientList & ingList )
+{
+	dbg << "IngredientList[ \n";
+
+	IngredientList::const_iterator it;
+	for ( it = ingList.constBegin(); it != ingList.constEnd(); it++ ) {
+		dbg << *it << '\n';
+	}
+	dbg << "]";
+
+	return dbg;
 }
