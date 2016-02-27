@@ -58,6 +58,9 @@ public:
 
 	void setAmount( const QString &range, bool *ok = 0 );
 
+	QString amountString(bool forceFloatFormat = false ) const;
+	QString amountUnitString() const;
+
 	/** Compare two elements by their id and groupID */
 	bool operator==( const Ingredient & ) const;
 

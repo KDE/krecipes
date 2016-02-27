@@ -15,6 +15,7 @@
 #include <QStringList>
 #include <KGlobal>
 #include <KLocale>
+#include <KConfigGroup>
 #include <QDebug>
 
 #include "mixednumber.h"
@@ -112,6 +113,36 @@ void Ingredient::setAmount( const QString &range, bool *ok )
 	amount = min;
 	if ( max > 0 )
 		amount_offset = max - min;
+}
+
+QString Ingredient::amountString( bool forceFloatFormat ) const
+{
+	KConfigGroup config(KGlobal::config(),"Formatting");
+	bool useFractions = !forceFloatFormat && config.readEntry("Fraction", false);
+	QString result;
+	if ( useFractions ) {
+		MixedNumber mixedNumber( amount );
+		result = mixedNumber.toString( MixedNumber::MixedNumberFormat );
+	} else {
+		result = KGlobal::locale()->formatNumber( amount );
+	}
+	if ( amount_offset > 0 ) {
+		result += " - ";
+		if ( useFractions ) {
+			MixedNumber mixedNumber( amount + amount_offset );
+			result += mixedNumber.toString( MixedNumber::MixedNumberFormat );
+		} else {
+			result += KGlobal::locale()->formatNumber( amount + amount_offset );
+		}
+	}
+	return result;
+}
+
+QString Ingredient::amountUnitString() const
+{
+	KConfigGroup config(KGlobal::config(),"Formatting");
+	bool useAbrev = config.readEntry("AbbreviateUnits", false);
+	return units.determineName( amount+amount_offset, useAbrev );
 }
 
 //compare also using the group id because there may be the same ingredient in a list multiple times, but each in a different group
