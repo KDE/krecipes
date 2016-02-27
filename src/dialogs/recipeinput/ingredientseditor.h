@@ -15,6 +15,8 @@
 
 class IngredientList;
 
+class QStandardItemModel;
+
 
 namespace Ui{
 	class IngredientsEditor;
@@ -31,10 +33,13 @@ public:
 	void loadIngredients( IngredientList * ingredientList );
 
 private:
+	void resizeColumnsToContents();
+
 	Ui::IngredientsEditor * ui;
 
 	IngredientList * m_ingredientList;
 
+	QStandardItemModel * m_sourceModel;
 };
 
 #endif
