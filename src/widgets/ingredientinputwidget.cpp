@@ -435,7 +435,7 @@ void IngredientInputWidget::addIngredient()
 				return;
 		}
 
-		QList<IngredientData> list;
+		Ingredient::SubstitutesList list;
 		for ( QList<IngredientInput*>::const_iterator it = m_ingInputs.constBegin(); it != m_ingInputs.constEnd(); ++it ) {
 			Ingredient ing = (*it)->ingredient();
 			ing.ingredientID = createNewIngredientIfNecessary(ing.name,database);
