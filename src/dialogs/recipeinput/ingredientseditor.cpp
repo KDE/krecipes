@@ -26,6 +26,7 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 	m_sourceModel = new QStandardItemModel;
 	ui->m_treeView->setModel( m_sourceModel );
 
+
 	//The horizontal column labels.
 	QStringList horizontalLabels;
 	horizontalLabels << i18nc( "@title:column", "Ingredient" )
@@ -35,12 +36,20 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 		<< i18nc( "@title:column", "Id" );
 	m_sourceModel->setHorizontalHeaderLabels( horizontalLabels );
 
+
+	//Connect signals/slots
+	connect( ui->m_moveUpButton, SIGNAL(clicked()),
+		this, SLOT(moveIngredientUpSlot()) );
+	connect( ui->m_moveDownButton, SIGNAL(clicked()),
+		this, SLOT(moveIngredientDownSlot()) );
+
+	connect( ui->m_deleteButton, SIGNAL(clicked()),
+		this, SLOT(removeIngredientSlot()) );
 }
 
 void IngredientsEditor::loadIngredients( IngredientList * ingredientList )
 {
 	m_ingredientList = ingredientList;
-	//kDebug() << *ingredientList;
 
 	m_sourceModel->setRowCount( 0 );
 	m_sourceModel->setRowCount( ingredientList->count() );
@@ -149,4 +158,78 @@ void IngredientsEditor::resizeColumnsToContents()
 	for ( int i = 0; i < columnCount; ++i ) {
 		ui->m_treeView->resizeColumnToContents( i );
 	}
+}
+
+
+void IngredientsEditor::moveColumn( int offset )
+{
+	QModelIndex index = ui->m_treeView->currentIndex();
+	int row = index.row();
+	int col = index.column();
+	if ( index.parent() != QModelIndex() ) {
+		QStandardItem * parentItem = m_sourceModel->itemFromIndex( index.parent() );
+		int rowCount = parentItem->rowCount();
+		//Abort if we are moving the elements beyond the limit of the list
+		//e.g. moving up the first element or moving down the last one
+		if ( (row+offset < 0) || (row+offset > rowCount-1) ) {
+			return;
+		}
+		//Move the item
+		QList<QStandardItem*> itemList;
+		itemList = parentItem->takeRow(row);
+		parentItem->insertRow( row += offset, itemList );
+		//Re-select it in the QTreeView
+		index = m_sourceModel->indexFromItem( parentItem->child( row, col ) );
+		ui->m_treeView->setCurrentIndex( index );
+	} else {
+		int rowCount = m_sourceModel->rowCount();
+		//Abort if we are moving the elements beyond the limit of the list
+		//e.g. moving up the first element or moving down the last one
+		if ( (row+offset < 0) || (row+offset > rowCount-1) ) {
+			return;
+		}
+		//Check if we have children and save it to re-add them after the moving
+		bool gotChildren = false;
+		QList< QList<QStandardItem*> > childRowItems;
+		if ( m_sourceModel->hasChildren( index ) ) {
+			QStandardItem * item = m_sourceModel->itemFromIndex( index );
+			for ( int i = 0; i < item->rowCount(); ++i ) {
+				childRowItems << m_sourceModel->itemFromIndex(index)->takeRow( 0 );
+			}
+			gotChildren = true;
+		}
+		//Move the item
+		QList<QStandardItem*> itemList;
+		itemList = m_sourceModel->takeRow(row);
+		m_sourceModel->insertRow( row += offset, itemList );
+		//Restore the children
+		QStandardItem * item = m_sourceModel->item( row, 0 );
+		if ( gotChildren ) {
+			int childRow = 0;
+			QList< QList<QStandardItem*> >::const_iterator it;
+			for ( it = childRowItems.constBegin(); it != childRowItems.constEnd(); ++it ) {
+				item->insertRow( childRow, *it );
+				++childRow;
+			}
+		}
+		//Re-select the moved ingredient in the QTreeView
+		ui->m_treeView->expandAll();
+		ui->m_treeView->setCurrentIndex( m_sourceModel->index( row, col ) );
+	}
+}
+
+void IngredientsEditor::moveIngredientUpSlot()
+{
+	moveColumn( -1 );
+}
+
+void IngredientsEditor::moveIngredientDownSlot()
+{
+	moveColumn( +1 );
+}
+
+void IngredientsEditor::removeIngredientSlot()
+{
+	QModelIndex index = ui->m_treeView->currentIndex();
+	m_sourceModel->removeRow( index.row(), index.parent() );
 }
