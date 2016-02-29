@@ -127,6 +127,9 @@ set(krecipeswidgets_SRCS
 
 )
 
+kde4_add_ui_files(krecipeswidgets_SRCS
+   widgets/kregenericlistwidget.ui
+)
 
 ############## dialogs ###############
 
@@ -257,12 +260,18 @@ kde4_add_library(krecipescommon STATIC
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
    ${datablocks_SRCS} ${krecipesthreadedqueries_SRCS}
    ${validators_SRCS}
+   ${krecipesactionshandlers_SRCS}
+   ${krecipeswidgets_SRCS}
+   ${krecipesdialogs_SRCS}
    klomanager.cpp propertycalculator.cpp)
+
 
 target_link_libraries(krecipescommon
    ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
    ${QT_QTSQL_LIBRARY}
-   ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES})
+   ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES}
+   ${QT_QTWEBKIT_LIBRARY} ${KDE4_KDEWEBKIT_LIBS}
+   )
 
 ############### tests ################
 
@@ -285,6 +294,10 @@ set(DATABLOCKS_TESTS
 set(DATABASE_TESTS
     authors
     encoding
+    )
+
+set(UI_TESTS
+    ingredientseditor
     )
 
 macro(add_import_export_test _TEST)
@@ -311,6 +324,11 @@ macro(add_database_test _TEST)
     target_link_libraries(krecipes-database-${_TEST} ${UNIT_TEST_LIBRARIES})
 endmacro(add_database_test)
 
+macro(add_ui_test _TEST)
+    kde4_add_unit_test(krecipes-ui-${_TEST} tests/ui/${_TEST}.cpp)
+    target_link_libraries(krecipes-ui-${_TEST} ${UNIT_TEST_LIBRARIES})
+endmacro(add_ui_test)
+
 set(UNIT_TEST_LIBRARIES krecipescommon
     ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTSQL_LIBRARY}  ${QT_QTTEST_LIBRARY}
@@ -325,6 +343,9 @@ foreach(_TEST ${DATABLOCKS_TESTS})
 endforeach(_TEST)
 foreach(_TEST ${DATABASE_TESTS})
     add_database_test(${_TEST})
+endforeach(_TEST)
+foreach(_TEST ${UI_TESTS})
+    add_ui_test(${_TEST})
 endforeach(_TEST)
 
 
@@ -362,19 +383,16 @@ set(krecipes_SRCS
    #klomanager.cpp
 )
 
-
-kde4_add_ui_files(krecipes_SRCS
-   widgets/kregenericlistwidget.ui
-)
+qt4_add_resources(krecipes_SRCS
+   ../pics/resources.qrc
+   )
 
 qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
 
 
 kde4_add_executable(krecipes
    ${krecipes_SRCS}
-   ${krecipeswidgets_SRCS}
-   ${krecipesdialogs_SRCS}
-   ${krecipesactionshandlers_SRCS})
+   )
 
 target_link_libraries(krecipes krecipescommon ${KDE4_KHTML_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${QT_QTSQL_LIBRARY} ${LIBXSLT_LIBRARIES} ${LIBXML2_LIBRARIES} ${QT_QTWEBKIT_LIBRARY} ${KDE4_KDEWEBKIT_LIBS})
 
