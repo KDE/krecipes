@@ -272,7 +272,6 @@ void IngredientsEditor::updateIngredientList()
 	int rowCount = m_sourceModel->rowCount();
 	for ( int i = 0; i < rowCount; ++i ) {
 		QModelIndex index;
-		kDebug() << m_sourceModel->data( index, Qt::EditRole );
 		//Dump the contents of the current row to a ingredient Object
 		Ingredient ingredient;
 		//Ingredient Id
