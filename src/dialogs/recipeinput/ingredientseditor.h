@@ -12,9 +12,11 @@
 
 
 #include <QWidget>
-#include <QHash>
 
+#include "backends/recipedb.h"
 #include "datablocks/ingredientlist.h"
+
+#include <QHash>
 
 class IngredientList;
 
@@ -34,7 +36,17 @@ public:
 	IngredientsEditor( QWidget * parent = 0 );
 	~IngredientsEditor() {};
 
-	void loadIngredients( IngredientList * ingredientList );
+	enum UserRoles {
+		IdRole = Qt::UserRole,
+		GroupIdRole = Qt::UserRole+1,
+		GroupNameRole = Qt::UserRole+2,
+		UnitsIdRole = Qt::UserRole+3,
+		IsHeaderRole = Qt::UserRole+4
+	};
+
+	void loadIngredientList( IngredientList * ingredientList );
+
+	void updateIngredientList();
 
 private slots:
 	void removeIngredientSlot();
@@ -51,9 +63,7 @@ private:
 
 	QStandardItemModel * m_sourceModel;
 
-	//FIXME: Use this to update the list on the fly or remove
-	QHash<QPersistentModelIndex,IngredientList::iterator> m_indexToListIteratorMap;
-	QHash<QPersistentModelIndex,Ingredient::SubstitutesList::iterator> m_indexToSubsListIteratorMap;
+	QHash<QString,RecipeDB::IdType> m_prepMethodNameToId;
 };
 
 #endif

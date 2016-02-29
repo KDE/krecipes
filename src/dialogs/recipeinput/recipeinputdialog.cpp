@@ -397,7 +397,7 @@ void RecipeInputDialog::reload( void )
 	instructionsEdit->setPlainText( loadedRecipe->instructions );
 
 	//show ingredient list
-	ingredientsEditor->loadIngredients( &loadedRecipe->ingList );
+	ingredientsEditor->loadIngredientList( &loadedRecipe->ingList );
 
 	//show ingredient list
 	IngredientList list_copy = loadedRecipe->ingList;
@@ -797,7 +797,12 @@ void RecipeInputDialog::saveRecipe()
 	m_recipeGeneralInfoEditor->updateRecipe();
 	loadedRecipe->instructions = instructionsEdit->toPlainText();
 
-	// Now save
+	// Dump the contents of the ingredient list editor to
+	// loadedRecipe->ingredientList
+	ingredientsEditor->updateIngredientList();
+
+	// The recipe instructions and ratings are now already updated
+	// in loadedRecipe, save everything in the database
 	database->saveRecipe( loadedRecipe );
 }
 
