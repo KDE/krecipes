@@ -15,7 +15,8 @@
 
 #include <QStandardItemModel>
 
-//#include "kdebug.h"
+//FIXME: Remove this when this class is finished
+#include "kdebug.h"
 
 IngredientsEditor::IngredientsEditor( QWidget * parent)
 		: QWidget( parent )
@@ -38,6 +39,16 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 
 
 	//Connect signals/slots
+	connect( ui->m_addIngredientButton, SIGNAL(clicked()),
+		this, SLOT(addIngredientSlot()) );
+	connect( ui->m_addAltButton, SIGNAL(clicked()),
+		this, SLOT(addAltIngredientSlot()) );
+	connect( ui->m_addHeaderButton, SIGNAL(clicked()),
+		this, SLOT(addHeaderSlot()) );
+
+	connect( ui->m_ingParserButton, SIGNAL(clicked()),
+		this, SLOT(ingParserSlot()) );
+
 	connect( ui->m_moveUpButton, SIGNAL(clicked()),
 		this, SLOT(moveIngredientUpSlot()) );
 	connect( ui->m_moveDownButton, SIGNAL(clicked()),
@@ -189,6 +200,33 @@ void IngredientsEditor::resizeColumnsToContents()
 	}
 }
 
+void IngredientsEditor::addIngredientSlot()
+{
+	kDebug() << "here";
+	//TODO
+	//Don't forget emit changed();
+}
+
+void IngredientsEditor::addAltIngredientSlot()
+{
+	kDebug() << "here";
+	//TODO
+	//Don't forget emit changed();
+}
+
+void IngredientsEditor::addHeaderSlot()
+{
+	kDebug() << "here";
+	//TODO
+	//Don't forget emit changed();
+}
+
+void IngredientsEditor::ingParserSlot()
+{
+	kDebug() << "here";
+	//TODO
+	//Don't forget emit changed();
+}
 
 void IngredientsEditor::moveColumn( int offset )
 {
@@ -249,18 +287,29 @@ void IngredientsEditor::moveColumn( int offset )
 
 void IngredientsEditor::moveIngredientUpSlot()
 {
-	moveColumn( -1 );
+	QModelIndex index = ui->m_treeView->currentIndex();
+	if ( index != QModelIndex() ) {
+		moveColumn( -1 );
+		emit changed();
+	}
 }
 
 void IngredientsEditor::moveIngredientDownSlot()
 {
-	moveColumn( +1 );
+	QModelIndex index = ui->m_treeView->currentIndex();
+	if ( index != QModelIndex() ) {
+		moveColumn( +1 );
+		emit changed();
+	}
 }
 
 void IngredientsEditor::removeIngredientSlot()
 {
 	QModelIndex index = ui->m_treeView->currentIndex();
-	m_sourceModel->removeRow( index.row(), index.parent() );
+	if ( index != QModelIndex() ) {
+		m_sourceModel->removeRow( index.row(), index.parent() );
+		emit changed();
+	}
 }
 
 void IngredientsEditor::updateIngredientList()

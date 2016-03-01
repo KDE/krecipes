@@ -303,6 +303,8 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 		this, SLOT( recipeChanged( const QString& ) ) );
 	connect( m_recipeGeneralInfoEditor, SIGNAL( changed() ), this, SIGNAL( changed() ) );
 
+	connect( ingredientsEditor, SIGNAL(changed()), this, SLOT(recipeChanged()) );
+
 	connect( upButton, SIGNAL( clicked() ), this, SLOT( moveIngredientUp() ) );
 	connect( downButton, SIGNAL( clicked() ), this, SLOT( moveIngredientDown() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );

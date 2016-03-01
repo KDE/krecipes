@@ -48,10 +48,20 @@ public:
 
 	void updateIngredientList();
 
+signals:
+	void changed();
+
 private slots:
-	void removeIngredientSlot();
+	void addIngredientSlot();
+	void addAltIngredientSlot();
+	void addHeaderSlot();
+
+	void ingParserSlot();
+
 	void moveIngredientUpSlot();
 	void moveIngredientDownSlot();
+
+	void removeIngredientSlot();
 
 private:
 	void resizeColumnsToContents();
