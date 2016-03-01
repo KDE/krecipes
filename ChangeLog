@@ -1,3 +1,24 @@
+Changes from 2.1.0 to 2.2.0:
+  * Removed many Qt3 support usage, mainly in the code involved in the GUI list
+    displaying.
+  * Use transactions when saving a recipe, improving performance when saving a
+    recipe.
+  * Use transactions when importing recipes, improving performance a lot.
+    BUG: 350075
+  * Fix the recipe photo storing for SQLite.
+    BUG: 260997
+  * Fix the rating saving when all the ratings are deleted.
+  * Fixed the date picker popup to suggest only dates in the past.
+    BUG: 355395
+
+Changes from 2.0.0 to 2.1.0:
+  * Removed some Qt3 support usage.
+  * Removed the internal SQLite backend, today Qt already provides one.
+  * Created the NukeDB program, a development tool to fill the Krecipes
+    database with large amounts of data in order to test the behaviour of
+    Krecipes with tons of data.
+  * Several fixes and changes made by the KDE Gardening Team. Thanks!
+
 Changes from 2.0-beta2 to 2.0.0:
   * When configuring the database with the setup assistant, the import of
     sample data and USDA database is now done in single large transactions,
