@@ -6,53 +6,116 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>585</width>
-    <height>314</height>
+    <width>551</width>
+    <height>350</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
-    <widget class="QTreeView" name="m_treeView">
-     <property name="rootIsDecorated">
-      <bool>false</bool>
-     </property>
-    </widget>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="m_addIngredientButton">
+         <property name="text">
+          <string>Add Ingredient</string>
+         </property>
+         <property name="icon">
+          <iconset theme="list-add">
+           <normaloff/>
+          </iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="m_addAltButton">
+         <property name="text">
+          <string>Add alternative</string>
+         </property>
+         <property name="icon">
+          <iconset theme="view-list-details">
+           <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="KPushButton" name="m_addHeaderButton">
+         <property name="text">
+          <string>Add Header</string>
+         </property>
+         <property name="icon">
+          <iconset theme="list-add"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="m_ingParserButton">
+         <property name="text">
+          <string>Paste from text</string>
+         </property>
+         <property name="icon">
+          <iconset theme="edit-paste">
+           <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTreeView" name="m_treeView">
+       <property name="rootIsDecorated">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="m_addButton">
-       <property name="text">
-        <string>Add Ingredient</string>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <property name="icon">
-        <iconset theme="list-add">
-         <normaloff/>
-        </iconset>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>36</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_addAltButton">
-       <property name="text">
-        <string>Add as alternative</string>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>18</width>
+         <height>30</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_moveUpButton">
        <property name="icon">
-        <iconset theme="view-list-details">
+        <iconset theme="arrow-up">
          <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="m_ingParserButton">
-       <property name="text">
-        <string>Paste from text</string>
-       </property>
+      <widget class="QPushButton" name="m_moveDownButton">
        <property name="icon">
-        <iconset theme="edit-paste">
+        <iconset theme="arrow-down">
          <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
        </property>
       </widget>
@@ -64,52 +127,14 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_moveUpButton">
-       <property name="text">
-        <string>Move up</string>
-       </property>
-       <property name="icon">
-        <iconset theme="arrow-up">
-         <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_moveDownButton">
-       <property name="text">
-        <string>Move down</string>
-       </property>
-       <property name="icon">
-        <iconset theme="arrow-down">
-         <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
+         <width>18</width>
+         <height>30</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="m_deleteButton">
-       <property name="text">
-        <string>Delete Ingredient</string>
-       </property>
        <property name="icon">
         <iconset theme="list-remove">
          <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
@@ -120,6 +145,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
