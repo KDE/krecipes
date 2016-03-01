@@ -124,9 +124,6 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids )
 		return false;
 	}
 
-	delete recipeView;              // Temporary workaround
-	recipeView = new KHTMLPart( khtmlpartBox ); // to avoid the problem of caching images of KHTMLPart
-
 	//KDE4 port
 	KParts::OpenUrlArguments argsUrl (recipeView->arguments());
 	argsUrl.setReload( true ); // Don't use the cache
