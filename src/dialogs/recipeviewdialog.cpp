@@ -43,6 +43,11 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 	// Initialize UI Elements
 	khtmlpartBox = new KVBox( this );
 	recipeView = new KHTMLPart( khtmlpartBox );
+	recipeView->setJScriptEnabled(false);
+	recipeView->setJavaEnabled(false);
+	recipeView->setMetaRefreshEnabled(false);
+	recipeView->setPluginsEnabled(false);
+	recipeView->setOnlyLocalReferences(true);
 
 	connect( database, SIGNAL(recipeRemoved(int)), SLOT(recipeRemoved(int)) );
 
