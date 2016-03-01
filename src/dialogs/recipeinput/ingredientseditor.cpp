@@ -245,7 +245,7 @@ void IngredientsEditor::ingParserSlot()
 	//Don't forget emit changed();
 }
 
-void IngredientsEditor::moveColumn( int offset )
+void IngredientsEditor::moveRow( int offset )
 {
 	QModelIndex index = ui->m_treeView->currentIndex();
 	int row = index.row();
@@ -306,7 +306,7 @@ void IngredientsEditor::moveIngredientUpSlot()
 {
 	QModelIndex index = ui->m_treeView->currentIndex();
 	if ( index != QModelIndex() ) {
-		moveColumn( -1 );
+		moveRow( -1 );
 		emit changed();
 	}
 }
@@ -315,7 +315,7 @@ void IngredientsEditor::moveIngredientDownSlot()
 {
 	QModelIndex index = ui->m_treeView->currentIndex();
 	if ( index != QModelIndex() ) {
-		moveColumn( +1 );
+		moveRow( +1 );
 		emit changed();
 	}
 }

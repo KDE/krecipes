@@ -68,7 +68,7 @@ private slots:
 
 private:
 	void resizeColumnsToContents();
-	void moveColumn( int offset );
+	void moveRow( int offset );
 
 	Ui::IngredientsEditor * ui;
 
