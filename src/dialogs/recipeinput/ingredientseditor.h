@@ -18,6 +18,7 @@
 
 #include <QHash>
 
+class RecipeDB;
 class IngredientList;
 
 class QStandardItemModel;
@@ -44,6 +45,8 @@ public:
 		IsHeaderRole = Qt::UserRole+4
 	};
 
+	void setDatabase( RecipeDB * database );
+
 	void loadIngredientList( IngredientList * ingredientList );
 
 	void updateIngredientList();
@@ -69,6 +72,7 @@ private:
 
 	Ui::IngredientsEditor * ui;
 
+	RecipeDB * m_database;
 	IngredientList * m_ingredientList;
 
 	QStandardItemModel * m_sourceModel;

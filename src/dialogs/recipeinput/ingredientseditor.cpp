@@ -10,6 +10,7 @@
 #include "ingredientseditor.h"
 #include "ui_ingredientseditor.h"
 
+#include "dialogs/recipeinput/ingredientnamedelegate.h"
 #include "datablocks/ingredientlist.h"
 #include "backends/recipedb.h"
 
@@ -19,7 +20,8 @@
 #include "kdebug.h"
 
 IngredientsEditor::IngredientsEditor( QWidget * parent)
-		: QWidget( parent )
+		: QWidget( parent ),
+		m_database( 0 )
 {
 	ui = new Ui::IngredientsEditor;
 	ui->setupUi( this );
@@ -56,6 +58,14 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 
 	connect( ui->m_deleteButton, SIGNAL(clicked()),
 		this, SLOT(removeIngredientSlot()) );
+
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+}
+
+void IngredientsEditor::setDatabase( RecipeDB * database )
+{
+	m_database = database;
 }
 
 void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
@@ -64,6 +74,12 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 
 	m_sourceModel->setRowCount( 0 );
 	m_sourceModel->setRowCount( ingredientList->count() );
+
+	IngredientNameDelegate * ingredientNameDelegate = new IngredientNameDelegate;
+	if ( m_database ) {
+		ingredientNameDelegate->loadAllIngredientsList( m_database );
+	}
+	ui->m_treeView->setItemDelegateForColumn(0, ingredientNameDelegate);
 
 	IngredientList::const_iterator it;
 	int current_row = 0;
@@ -110,6 +126,7 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 		m_sourceModel->itemFromIndex( index )->setEditable( false );
 		//The "Ingredient" item.
 		index = m_sourceModel->index( current_row, 0 );
+		m_sourceModel->setData( index, QVariant(it->ingredientID), IdRole );
 		m_sourceModel->setData( index, QVariant(it->name), Qt::EditRole );
 		m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
 		m_sourceModel->setData( index, QVariant(it->groupID), GroupIdRole );
@@ -319,23 +336,24 @@ void IngredientsEditor::updateIngredientList()
 
 	//Dump the contents of the GUI to the IngredientList
 	int rowCount = m_sourceModel->rowCount();
+	QModelIndex index;
 	for ( int i = 0; i < rowCount; ++i ) {
-		QModelIndex index;
+		index = m_sourceModel->index( i, 0 );
+		//Skip the row if it's a header;
+		bool is_header = m_sourceModel->data( index, IsHeaderRole ).toBool();
+		if ( is_header ) {
+			continue;
+		}
 		//Dump the contents of the current row to a ingredient Object
 		Ingredient ingredient;
 		//Ingredient Id
-		index = m_sourceModel->index( i, 4 );
-		bool is_header = m_sourceModel->data( index, IsHeaderRole ).toBool();
-		if ( is_header ) //Skip the row if it's a header
-			continue;
-		ingredient.ingredientID = m_sourceModel->data( index, Qt::DisplayRole ).toInt();
+		ingredient.ingredientID = m_sourceModel->data( index, IdRole ).toInt();
+		//Ingredient name
+		ingredient.name = m_sourceModel->data( index, Qt::EditRole ).toString();
 		//Ingredient group id
 		ingredient.groupID = m_sourceModel->data( index, GroupIdRole ).toInt();
 		//Ingredient group name
 		ingredient.group = m_sourceModel->data( index, GroupNameRole ).toString();
-		//Ingredient name
-		index = m_sourceModel->index( i, 0 );
-		ingredient.name = m_sourceModel->data( index, Qt::EditRole ).toString();
 		//Ingredient amount
 		index = m_sourceModel->index( i, 1 );
 		QString amountString = m_sourceModel->data( index, Qt::EditRole ).toString();
@@ -370,4 +388,5 @@ void IngredientsEditor::updateIngredientList()
 		//Append the Ingredient Object to the list
 		*m_ingredientList << ingredient;
 	}
+	kDebug() << *m_ingredientList;
 }
