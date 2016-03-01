@@ -737,7 +737,12 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	recipeToSave.exec( command );
 
 	int order_index = 0;
-	for ( IngredientList::const_iterator ing_it = recipe->ingList.constBegin(); ing_it != recipe->ingList.constEnd(); ++ing_it ) {
+	for ( IngredientList::iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
+		if ( ing_it->ingredientID == RecipeDB::InvalidId ) {
+			disableTransactions();
+			ing_it->ingredientID = createNewIngredient( ing_it->name );
+			enableTransactions();
+		}
 		order_index++;
 		QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,NULL);" )
