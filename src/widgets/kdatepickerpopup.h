@@ -1,7 +1,10 @@
 /*
-  This file is part of libkdepim.
+  This file was copied from libkdepim. Modified for Krecipes to suggest dates
+  in the past. See:
+  https://bugs.kde.org/show_bug.cgi?id=355395
 
   Copyright (c) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
+  Copyright (c) 2016 José Manuel Santamaría Lema <panfaust@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -41,7 +44,7 @@ class KDatePicker;
    @li NoDate: A menu-item with "No Date". If chosen, the datepicker will emit
        a null QDate.
    @li DatePicker: Show a KDatePicker-widget.
-   @li Words: Show items like "Today", "Tomorrow" or "Next Week".
+   @li Words: Show items like "Today", "Yesterday" or "Last Week".
 
    When supplying multiple items, separate each item with a bitwise OR.
 
@@ -103,9 +106,9 @@ class KDatePickerPopup: public QMenu
     void slotDateChanged ( const QDate &date );
 
     void slotToday();
-    void slotTomorrow();
-    void slotNextWeek();
-    void slotNextMonth();
+    void slotYesterday();
+    void slotLastWeek();
+    void slotLastMonth();
     void slotNoDate();
 
   private:

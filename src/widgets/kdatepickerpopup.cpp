@@ -1,7 +1,10 @@
 /*
-  This file is part of libkdepim.
+  This file was copied from libkdepim. Modified for Krecipes to suggest dates
+  in the past. See:
+  https://bugs.kde.org/show_bug.cgi?id=355395
 
   Copyright (c) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
+  Copyright (c) 2016 José Manuel Santamaría Lema <panfaust@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -94,9 +97,9 @@ void KDatePickerPopup::buildMenu()
 
   if ( mItems & Words ) {
     addAction( i18nc( "@option today", "&Today" ), this, SLOT( slotToday() ) );
-    addAction( i18nc( "@option tomorrow", "To&morrow" ), this, SLOT( slotTomorrow() ) );
-    addAction( i18nc( "@option next week", "Next &Week" ), this, SLOT( slotNextWeek() ) );
-    addAction( i18nc( "@option next month", "Next M&onth" ), this, SLOT( slotNextMonth() ) );
+    addAction( i18nc( "@option yesterday", "&Yesterday" ), this, SLOT( slotYesterday() ) );
+    addAction( i18nc( "@option last week", "Last &Week" ), this, SLOT( slotLastWeek() ) );
+    addAction( i18nc( "@option last month", "Last M&onth" ), this, SLOT( slotLastMonth() ) );
 
     if ( mItems & NoDate ) {
       addSeparator();
@@ -137,9 +140,9 @@ void KDatePickerPopup::slotToday()
   emit dateChanged( QDate::currentDate() );
 }
 
-void KDatePickerPopup::slotTomorrow()
+void KDatePickerPopup::slotYesterday()
 {
-  emit dateChanged( QDate::currentDate().addDays( 1 ) );
+  emit dateChanged( QDate::currentDate().addDays( -1 ) );
 }
 
 void KDatePickerPopup::slotNoDate()
@@ -147,14 +150,14 @@ void KDatePickerPopup::slotNoDate()
   emit dateChanged( QDate() );
 }
 
-void KDatePickerPopup::slotNextWeek()
+void KDatePickerPopup::slotLastWeek()
 {
-  emit dateChanged( QDate::currentDate().addDays( 7 ) );
+  emit dateChanged( QDate::currentDate().addDays( -7 ) );
 }
 
-void KDatePickerPopup::slotNextMonth()
+void KDatePickerPopup::slotLastMonth()
 {
-  emit dateChanged( QDate::currentDate().addMonths( 1 ) );
+  emit dateChanged( QDate::currentDate().addMonths( -1 ) );
 }
 
 #include "kdatepickerpopup.moc"
