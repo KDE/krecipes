@@ -19,6 +19,7 @@
 #include <KSharedConfigPtr>
 
 #include <QtTest/QTest>
+#include <QDebug>
 
 
 RecipeDB * TestDatabaseAuthors::createDatabase(const QString & configFilename )
@@ -26,6 +27,7 @@ RecipeDB * TestDatabaseAuthors::createDatabase(const QString & configFilename )
 	RecipeDB * database;
 
 	QString configFilePath = ":/" + configFilename;
+	qDebug() << "opening database configured in" << configFilePath;
 
 	QStringList strList;
 	strList << configFilePath;
@@ -54,6 +56,7 @@ RecipeDB * TestDatabaseAuthors::createDatabase(const QString & configFilename )
 void TestDatabaseAuthors::initTestCase()
 {
 	m_sqliteDatabase = createDatabase( "sqliterc" );
+	qDebug() << m_sqliteDatabase->dbErr;
         QVERIFY( m_sqliteDatabase->ok() );
 	m_sqliteDatabase->transaction();
 	m_sqliteDatabase->wipeDatabase();
@@ -62,6 +65,7 @@ void TestDatabaseAuthors::initTestCase()
 
 #ifdef KRE_TESTS_MYSQL
 	m_mysqlDatabase = createDatabase( "mysqlrc" );
+	qDebug() << m_mysqlDatabase->dbErr;
         QVERIFY( m_mysqlDatabase->ok() );
 	m_mysqlDatabase->transaction();
 	m_mysqlDatabase->wipeDatabase();
@@ -71,6 +75,7 @@ void TestDatabaseAuthors::initTestCase()
 
 #ifdef KRE_TESTS_POSTGRESQL
 	m_postgresqlDatabase = createDatabase( "postgresqlrc" );
+	qDebug() << m_postgresqlDatabase->dbErr;
         QVERIFY( m_postgresqlDatabase->ok() );
 	m_postgresqlDatabase->transaction();
 	m_postgresqlDatabase->wipeDatabase();
