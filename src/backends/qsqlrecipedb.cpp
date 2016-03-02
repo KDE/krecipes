@@ -292,16 +292,41 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 	// Read the ingredients
 	if ( items & RecipeDB::Ingredients ) {
 		for ( RecipeList::iterator recipe_it = rlist->begin(); recipe_it != rlist->end(); ++recipe_it ) {
+			QSqlQuery ingredientQuery( *database);
 			if ( items & RecipeDB::NamesOnly ) {
-				if ( items & IngredientAmounts )
-					command = QString( "SELECT il.ingredient_id,i.name,il.substitute_for,il.amount,il.amount_offset,u.id,u.type FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index" ).arg( (*recipe_it).recipeID );
-				else
-					command = QString( "SELECT il.ingredient_id,i.name,il.substitute_for FROM ingredients i, ingredient_list il WHERE il.recipe_id=%1 AND i.id=il.ingredient_id" ).arg( (*recipe_it).recipeID );
+				if ( items & IngredientAmounts ) {
+					ingredientQuery.prepare(
+						"SELECT il.ingredient_id, i.name, il.substitute_for, "
+							"il.amount, il.amount_offset, u.id, u.type "
+						"FROM ingredients i "
+							"JOIN ingredient_list il ON i.id=il.ingredient_id "
+							"LEFT JOIN units u ON u.id=il.unit_id "
+						"WHERE il.recipe_id=? "
+						"ORDER BY il.order_index" );
+					ingredientQuery.addBindValue( recipe_it->recipeID );
+				} else {
+					ingredientQuery.prepare(
+						"SELECT il.ingredient_id, i.name, il.substitute_for "
+						"FROM ingredients i "
+							"JOIN ingredient_list il ON i.id=il.ingredient_id "
+						"WHERE il.recipe_id=?" );
+					ingredientQuery.addBindValue( recipe_it->recipeID );
+				}
+			} else {
+				ingredientQuery.prepare(
+					"SELECT il.ingredient_id, i.name, il.substitute_for, "
+						"il.amount, il.amount_offset, "
+						"u.id, u.name, u.plural, u.name_abbrev, u.plural_abbrev, u.type, "
+						"il.group_id, il.id "
+					"FROM ingredients i "
+						"JOIN ingredient_list il ON i.id=il.ingredient_id "
+						"LEFT JOIN units u ON u.id=il.unit_id "
+					"WHERE il.recipe_id=? "
+					"ORDER BY il.order_index" );
+				ingredientQuery.addBindValue( recipe_it->recipeID );
 			}
-			else
-				command = QString( "SELECT il.ingredient_id,i.name,il.substitute_for,il.amount,il.amount_offset,u.id,u.name,u.plural,u.name_abbrev,u.plural_abbrev,u.type,il.group_id,il.id FROM ingredients i, ingredient_list il, units u WHERE il.recipe_id=%1 AND i.id=il.ingredient_id AND u.id=il.unit_id ORDER BY il.order_index" ).arg( (*recipe_it).recipeID );
+			ingredientQuery.exec();
 
-			QSqlQuery ingredientQuery( command, *database);
 			if ( ingredientQuery.isActive() ) {
 				RecipeList::Iterator it = recipeIterators[ (*recipe_it).recipeID ];
 				while ( ingredientQuery.next() ) {
@@ -320,18 +345,23 @@ void QSqlRecipeDB::loadRecipes( RecipeList *rlist, int items, QList<int> ids )
 					else  {
 						ing.amount = ingredientQuery.value( 3 ).toString().toDouble();
 						ing.amount_offset = ingredientQuery.value( 4 ).toString().toDouble();
-						ing.units.setId(ingredientQuery.value( 5 ).toInt());
-						ing.units.setName(unescapeAndDecode( ingredientQuery.value( 6 ).toByteArray() ));
-						ing.units.setPlural(unescapeAndDecode( ingredientQuery.value( 7 ).toByteArray() ));
-						ing.units.setNameAbbrev(unescapeAndDecode( ingredientQuery.value( 8 ).toByteArray() ));
-						ing.units.setPluralAbbrev(unescapeAndDecode( ingredientQuery.value( 9 ).toByteArray() ));
-						ing.units.setType((Unit::Type)ingredientQuery.value( 10 ).toInt());
+						QVariant unitIdValue = ingredientQuery.value( 5 );
+						if ( unitIdValue.isNull() ) {
+							ing.units.setId( RecipeDB::InvalidId );
+						} else {
+							ing.units.setId( unitIdValue.toInt() );
+							ing.units.setName(unescapeAndDecode( ingredientQuery.value( 6 ).toByteArray() ));
+							ing.units.setPlural(unescapeAndDecode( ingredientQuery.value( 7 ).toByteArray() ));
+							ing.units.setNameAbbrev(unescapeAndDecode( ingredientQuery.value( 8 ).toByteArray() ));
+							ing.units.setPluralAbbrev(unescapeAndDecode( ingredientQuery.value( 9 ).toByteArray() ));
+							ing.units.setType((Unit::Type)ingredientQuery.value( 10 ).toInt());
 
-						//if we don't have both name and plural, use what we have as both
-						if ( ing.units.name().isEmpty() )
-							ing.units.setName(ing.units.plural());
-						else if ( ing.units.plural().isEmpty() )
-							ing.units.setPlural(ing.units.name());
+							//if we don't have both name and plural, use what we have as both
+							if ( ing.units.name().isEmpty() )
+								ing.units.setName(ing.units.plural());
+							else if ( ing.units.plural().isEmpty() )
+								ing.units.setPlural(ing.units.name());
+						}
 
 						ing.groupID = ingredientQuery.value( 11 ).toInt();
 						if ( ing.groupID != -1 ) {
@@ -751,7 +781,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		          .arg( ( *ing_it ).ingredientID )
 		          .arg( ( *ing_it ).amount )
 		          .arg( ( *ing_it ).amount_offset )
-		          .arg( ( *ing_it ).units.id() )
+		          .arg( (ing_it->units.id()==RecipeDB::InvalidId)? QString("NULL"): QString(ing_it->units.id()) )
 		          .arg( order_index )
 		          .arg( ( *ing_it ).groupID );
 		recipeToSave.exec( command );
