@@ -219,9 +219,38 @@ void IngredientsEditor::resizeColumnsToContents()
 
 void IngredientsEditor::addIngredientSlot()
 {
-	kDebug() << "here";
-	//TODO
-	//Don't forget emit changed();
+	//Create the row items
+	QStandardItem * ingNameItem = new QStandardItem;
+	QStandardItem * ingAmountItem = new QStandardItem;
+	QStandardItem * ingUnitItem = new QStandardItem;
+	QStandardItem * ingPrepMethodItem = new QStandardItem;
+	QStandardItem * ingIdItem = new QStandardItem;
+	ingIdItem->setData( QVariant(RecipeDB::InvalidId), Qt::DisplayRole );
+	ingIdItem->setEditable( false );
+
+	//Enter the items in the model
+	QList<QStandardItem*> itemList;
+	itemList << ingNameItem << ingAmountItem << ingUnitItem << ingPrepMethodItem
+		<< ingIdItem;
+	m_sourceModel->appendRow( itemList );
+
+	//Set the group id
+	QModelIndex ingNameIndex = m_sourceModel->indexFromItem( ingNameItem );
+	if ( ingNameIndex.row() == 0 ) {
+		m_sourceModel->setData( ingNameIndex, QVariant(RecipeDB::InvalidId), GroupIdRole );
+	} else {
+		QModelIndex ingAboveIndex = m_sourceModel->index( ingNameIndex.row()-1, 0);
+		QVariant aboveGroupId = m_sourceModel->data( ingAboveIndex, GroupIdRole );
+		QVariant aboveGroupName = m_sourceModel->data( ingAboveIndex, GroupNameRole );
+		m_sourceModel->setData( ingNameIndex, aboveGroupId, GroupIdRole );
+	}
+
+	//Set the units id
+	QModelIndex ingUnitIndex = m_sourceModel->indexFromItem( ingUnitItem );
+	m_sourceModel->setData( ingUnitIndex, QVariant(RecipeDB::InvalidId), UnitsIdRole );
+
+	//Edit the ingredient name
+	ui->m_treeView->edit( ingNameIndex );
 }
 
 void IngredientsEditor::addAltIngredientSlot()
