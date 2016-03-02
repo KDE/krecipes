@@ -2,4 +2,4 @@
 Type=SQLite
 
 [Server]
-DBFile=/tmp/krecipes-unit-tests.krecdb
+DBFile=:memory:
