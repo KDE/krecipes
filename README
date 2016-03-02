@@ -86,6 +86,29 @@ to use the Krecipes backup feature. If you want to use "krecipes
  instance:
  $ ctest -VV -R krecipes-database-encoding
 
+ Tests needing a MySQL or PostgreSQL setup are disabled by default, you can
+ enable them with:
+ -DTESTS_MYSQL=ON -DTESTS_POSTGRESQL=ON
+
+ The MySQL and PostgreSQL configurations for tests can be changed in
+ src/tests/database/mysqlrc and src/tests/database/mysqlrc
+
+ To set up MySQL on ubuntu:
+   $ apt-get install mysql-server (you will be asked for MySQL's root password)
+   $ mysql -u root -p (and type the password you have chosen)
+   mysql> create database kreunittests;
+   mysql> create user kreunittests identified by 'write_mysql_user_password_here';
+   mysql> use kreunittests;
+   mysql> grant all on * to kreunittests;
+
+ To set up PostgreSQL for tests on ubuntu:
+   $ apt-get install postgresql
+   $ sudo su postgres
+   $ psql
+   postgres=# create database kreunittests;
+   postgres=# create user kreunittests password 'write_postgres_user_pass_here';
+   edit '/etc/postgresql/9.4/main/pg_hba.conf' and add this line:
+   local   all     kreunittests    password
 
 ** Hidden features
 
