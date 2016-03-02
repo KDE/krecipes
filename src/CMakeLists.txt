@@ -301,6 +301,16 @@ set(UI_TESTS
     ingredientseditor
     )
 
+option(TESTS_MYSQL "Enable tests on MySQL" OFF)
+option(TESTS_POSTGRESQL "Enable tests on PostgreSQL" OFF)
+
+if(TESTS_MYSQL)
+  add_definitions(-DKRE_TESTS_MYSQL)
+endif()
+if(TESTS_POSTGRESQL)
+  add_definitions(-DKRE_TESTS_POSTGRESQL)
+endif()
+
 macro(add_import_export_test _TEST)
     if(KDE4_BUILD_TESTS)
         kde4_add_executable(krecipes-import-export-${_TEST} tests/import-export/${_TEST}.cpp)
@@ -321,7 +331,12 @@ macro(add_datablocks_test _TEST)
 endmacro(add_datablocks_test)
 
 macro(add_database_test _TEST)
-    kde4_add_unit_test(krecipes-database-${_TEST} tests/database/${_TEST}.cpp)
+    set(krecipes-database-${_TEST}_SRCS
+        tests/database/${_TEST}.cpp)
+    qt4_add_resources(krecipes-database-${_TEST}_SRCS
+        tests/database/dbconfigs.qrc)
+    kde4_add_unit_test(krecipes-database-${_TEST}
+         ${krecipes-database-${_TEST}_SRCS})
     target_link_libraries(krecipes-database-${_TEST} ${UNIT_TEST_LIBRARIES})
 endmacro(add_database_test)
 

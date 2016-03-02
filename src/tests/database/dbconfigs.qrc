@@ -1,0 +1,7 @@
+<RCC>
+  <qresource>
+    <file>sqliterc</file>
+    <file>mysqlrc</file>
+    <file>postgresqlrc</file>
+  </qresource>
+</RCC>

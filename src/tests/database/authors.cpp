@@ -25,8 +25,7 @@ RecipeDB * TestDatabaseAuthors::createDatabase(const QString & configFilename )
 {
 	RecipeDB * database;
 
-	QString configFilePath =
-		KStandardDirs::locateLocal( "appdata", configFilename );
+	QString configFilePath = ":/" + configFilename;
 
 	QStringList strList;
 	strList << configFilePath;
@@ -61,19 +60,23 @@ void TestDatabaseAuthors::initTestCase()
 	m_sqliteDatabase->commit();
 	//m_sqliteDatabase->checkIntegrity();
 
+#ifdef KRE_TESTS_MYSQL
 	m_mysqlDatabase = createDatabase( "mysqlrc" );
         QVERIFY( m_mysqlDatabase->ok() );
 	m_mysqlDatabase->transaction();
 	m_mysqlDatabase->wipeDatabase();
 	m_mysqlDatabase->commit();
 	//m_mysqlDatabase->checkIntegrity();
+#endif
 
+#ifdef KRE_TESTS_POSTGRESQL
 	m_postgresqlDatabase = createDatabase( "postgresqlrc" );
         QVERIFY( m_postgresqlDatabase->ok() );
 	m_postgresqlDatabase->transaction();
 	m_postgresqlDatabase->wipeDatabase();
 	m_postgresqlDatabase->commit();
 	//m_postgresqlDatabase->checkIntegrity();
+#endif
 }
 
 
@@ -82,12 +85,16 @@ void TestDatabaseAuthors::cleanupTestCase()
 	if ( m_sqliteDatabase ) {
 		delete m_sqliteDatabase;
 	}
+#ifdef KRE_TESTS_MYSQL
 	if ( m_mysqlDatabase ) {
 		delete m_mysqlDatabase;
 	}
+#endif
+#ifdef KRE_TESTS_POSTGRESQL
 	if ( m_postgresqlDatabase ) {
 		delete m_postgresqlDatabase;
 	}
+#endif
 }
 
 
@@ -108,17 +115,20 @@ void TestDatabaseAuthors::testCreateSQLite()
 }
 
 
+#ifdef KRE_TESTS_MYSQL
 void TestDatabaseAuthors::testCreateMySQL()
 {
 	createAuthors( m_mysqlDatabase );
 }
+#endif
 
 
+#ifdef KRE_TESTS_POSTGRESQL
 void TestDatabaseAuthors::testCreatePostgreSQL()
 {
 	createAuthors( m_postgresqlDatabase );
 }
-
+#endif
 
 QTEST_MAIN(TestDatabaseAuthors)
 

@@ -22,9 +22,17 @@ class TestDatabaseAuthors : public QObject
 private slots:
 	void initTestCase();
 	void cleanupTestCase();
+
 	void testCreateSQLite();
+
+#ifdef KRE_TESTS_MYSQL
 	void testCreateMySQL();
+#endif
+
+#ifdef KRE_TESTS_POSTGRESQL
 	void testCreatePostgreSQL();
+#endif
+
 	//void testModify();
 	//void testDelete();
 private:
@@ -32,8 +40,14 @@ private:
 	inline void createAuthors( RecipeDB * database );
 
 	RecipeDB * m_sqliteDatabase;
+
+#ifdef KRE_TESTS_MYSQL
 	RecipeDB * m_mysqlDatabase;
+#endif
+
+#ifdef KRE_TESTS_POSTGRESQL
 	RecipeDB * m_postgresqlDatabase;
+#endif
 };
 
 #endif // TEST_DATABASE_AUTHORS_H
