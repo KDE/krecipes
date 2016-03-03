@@ -232,10 +232,9 @@ void IngredientsEditor::addIngredientSlot()
 {
 	//Add a new row
 	int columnCount = m_sourceModel->columnCount();
-	QStandardItem * items = new QStandardItem[columnCount];
 	QList <QStandardItem*> listItems;
 	for ( int i = 0; i < columnCount; ++i ) {
-		listItems << &items[i];
+		listItems << new QStandardItem;
 	}
 	m_sourceModel->appendRow( listItems );
 
