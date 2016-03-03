@@ -68,6 +68,7 @@ private slots:
 
 private:
 	void setRowData( int row, const Ingredient & ingredient );
+	void setRowData( int row, const Element & header );
 
 	void resizeColumnsToContents();
 	void moveRow( int offset );

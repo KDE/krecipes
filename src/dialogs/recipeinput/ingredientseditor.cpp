@@ -89,31 +89,13 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 	for ( it = ingredientList->begin(); it != ingredientList->end(); ++it ) {
 		//Check if we have to add a header
 		if ( it->groupID != lastGroupId ) {
-			m_sourceModel->insertRows( current_row, 1 );
-			//The "Id" item.
-			index = m_sourceModel->index( current_row, 4 );
-			m_sourceModel->setData( index, QVariant(it->groupID), Qt::EditRole );
-			m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
-			m_sourceModel->itemFromIndex( index )->setEditable( false );
-			//The "Header" item.
-			index = m_sourceModel->index( current_row, 0 );
-			m_sourceModel->setData( index, QVariant(it->group), Qt::EditRole );
-			m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
-			QStandardItem * headerItem = m_sourceModel->itemFromIndex( index );
-			headerItem->setEditable( true );
-			QFont font = headerItem->font();
-			font.setBold( true );
-			font.setUnderline( true );
-			headerItem->setFont( font );
-			//Set the rest of the empty columns (headers have no amount, units
-			// or preparation method) as read only
-			QStandardItem * item;
-			for ( int i = 1; i <= 3; ++i ) {
-				index = m_sourceModel->index( current_row, i );
-				item = m_sourceModel->itemFromIndex( index );
-				item->setEditable( false );
-				item->setData( QVariant(true), IsHeaderRole );
-			}
+			//Prepare the header data
+			Element header;
+			header.id = it->groupID;
+			header.name = it->group;
+			//Add data to the model
+			m_sourceModel->insertRow( current_row );
+			setRowData( current_row, header );
 			//Increase row count
 			++current_row;
 		}
@@ -216,6 +198,39 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	}
 }
 
+void IngredientsEditor::setRowData( int row, const Element & header )
+{
+	QModelIndex index;
+	//The "Id" item.
+	index = m_sourceModel->index( row, 4 );
+	m_sourceModel->setData( index, QVariant(header.id), Qt::EditRole );
+	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
+	m_sourceModel->setData( index, QVariant(header.id), GroupIdRole );
+	m_sourceModel->setData( index, QVariant(header.name), GroupNameRole );
+	m_sourceModel->itemFromIndex( index )->setEditable( false );
+	//The "Header" item.
+	index = m_sourceModel->index( row, 0 );
+	m_sourceModel->setData( index, QVariant(header.name), Qt::EditRole );
+	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
+	m_sourceModel->setData( index, QVariant(header.id), GroupIdRole );
+	m_sourceModel->setData( index, QVariant(header.name), GroupNameRole );
+	QStandardItem * headerItem = m_sourceModel->itemFromIndex( index );
+	headerItem->setEditable( true );
+	QFont font = headerItem->font();
+	font.setBold( true );
+	font.setUnderline( true );
+	headerItem->setFont( font );
+	//Set the rest of the empty columns (headers have no amount, units
+	// or preparation method) as read only
+	QStandardItem * item;
+	for ( int i = 1; i <= 3; ++i ) {
+		index = m_sourceModel->index( row, i );
+		item = m_sourceModel->itemFromIndex( index );
+		item->setEditable( false );
+		item->setData( QVariant(true), IsHeaderRole );
+	}
+}
+
 void IngredientsEditor::resizeColumnsToContents()
 {
 	int columnCount = m_sourceModel->columnCount();
@@ -231,19 +246,14 @@ void IngredientsEditor::resizeColumnsToContents()
 void IngredientsEditor::addIngredientSlot()
 {
 	//Add a new row
-	int columnCount = m_sourceModel->columnCount();
-	QList <QStandardItem*> listItems;
-	for ( int i = 0; i < columnCount; ++i ) {
-		listItems << new QStandardItem;
-	}
-	m_sourceModel->appendRow( listItems );
+	int rowCount = m_sourceModel->rowCount();
+	m_sourceModel->insertRow( rowCount );
 
 	//Prepare the new ingredient data
-	int lastRow = m_sourceModel->rowCount(); --lastRow;
 	Ingredient ingredient;
 	ingredient.ingredientID = RecipeDB::InvalidId;
 	ingredient.units.setId( RecipeDB::InvalidId );
-	QModelIndex ingNameIndex = m_sourceModel->index( lastRow, 0 );
+	QModelIndex ingNameIndex = m_sourceModel->index( rowCount, 0 );
 	if ( ingNameIndex.row() == 0 ) {
 		ingredient.groupID = RecipeDB::InvalidId;
 	} else {
@@ -253,7 +263,7 @@ void IngredientsEditor::addIngredientSlot()
 	}
 
 	//Add the data to the model
-	setRowData( lastRow, ingredient );
+	setRowData( rowCount, ingredient );
 
 	//Edit the ingredient name
 	ui->m_treeView->edit( ingNameIndex );
@@ -268,9 +278,17 @@ void IngredientsEditor::addAltIngredientSlot()
 
 void IngredientsEditor::addHeaderSlot()
 {
-	kDebug() << "here";
-	//TODO
-	//Don't forget emit changed();
+	//Prepare header data
+	Element header;
+	header.id = RecipeDB::InvalidId;
+	//Create a new row
+	int rowCount = m_sourceModel->rowCount();
+	m_sourceModel->insertRow( rowCount );
+	//Put data in the row
+	setRowData( rowCount, header );
+	//Edit the header name
+	QModelIndex headerNameIndex = m_sourceModel->index( rowCount, 0 );
+	ui->m_treeView->edit( headerNameIndex );
 }
 
 void IngredientsEditor::ingParserSlot()
