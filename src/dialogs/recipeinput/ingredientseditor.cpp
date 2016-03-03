@@ -222,6 +222,10 @@ void IngredientsEditor::resizeColumnsToContents()
 	for ( int i = 0; i < columnCount; ++i ) {
 		ui->m_treeView->resizeColumnToContents( i );
 	}
+	//Put some extra space for the ingredient name column,
+	//this way it won't look ugly when edited
+	int columnWidth = ui->m_treeView->columnWidth( 0 );
+	ui->m_treeView->setColumnWidth( 0, columnWidth + 15 );
 }
 
 void IngredientsEditor::addIngredientSlot()
