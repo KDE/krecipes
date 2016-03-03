@@ -74,8 +74,8 @@ private:
 
 	Ui::IngredientsEditor * ui;
 
-	RecipeDB * m_database;
 	IngredientList * m_ingredientList;
+	RecipeDB * m_database;
 
 	QStandardItemModel * m_sourceModel;
 
