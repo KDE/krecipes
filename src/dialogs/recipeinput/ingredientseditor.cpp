@@ -21,6 +21,7 @@
 
 IngredientsEditor::IngredientsEditor( QWidget * parent)
 		: QWidget( parent ),
+		m_ingredientList( 0 ),
 		m_database( 0 )
 {
 	ui = new Ui::IngredientsEditor;

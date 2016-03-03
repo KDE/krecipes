@@ -818,6 +818,8 @@ void RecipeInputDialog::newRecipe( void )
 	ingredientList->clear();
 	ingInput->clear();
 
+	ingredientsEditor->loadIngredientList( &loadedRecipe->ingList );
+
 	instructionsEdit->setText( i18nc( "@label:textbox", "Write the recipe instructions here" ) );
 	instructionsEdit->selectAll();
 
