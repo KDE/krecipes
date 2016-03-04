@@ -129,14 +129,6 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids )
 		return false;
 	}
 
-	//KDE4 port
-	KParts::OpenUrlArguments argsUrl (recipeView->arguments());
-	argsUrl.setReload( true ); // Don't use the cache
-	recipeView->setArguments( argsUrl );
-	
-	KParts::BrowserArguments args;
-	recipeView->browserExtension()->setBrowserArguments(args);
-
 	KUrl url;
 	url.setPath( tmp_filename );
 	recipeView->openUrl( url );
