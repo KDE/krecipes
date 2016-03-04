@@ -22,7 +22,7 @@ class RecipeDB;
 class IngredientList;
 
 class QStandardItemModel;
-class QPersistentModelIndex;
+class QModelIndex;
 
 
 namespace Ui{
@@ -69,6 +69,8 @@ private slots:
 private:
 	void setRowData( int row, const Ingredient & ingredient );
 	void setRowData( int row, const Element & header );
+	void setRowDataAlternative( int row, const IngredientData & ingredient,
+		const QModelIndex & parent );
 
 	void resizeColumnsToContents();
 	void moveRow( int offset );

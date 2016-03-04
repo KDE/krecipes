@@ -127,6 +127,7 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	m_sourceModel->setData( index, QVariant(ingredient.group), GroupNameRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	QStandardItem * ingItem = m_sourceModel->itemFromIndex( index );
+	QPersistentModelIndex ingIndex = index;
 	ingItem->setEditable( true );
 	//The "Amount" item.
 	index = m_sourceModel->index( row, 1 );
@@ -161,40 +162,25 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 
 	//Add the susbtitutes, if any
-	Ingredient::SubstitutesList::const_iterator sub_it;
-	Ingredient::SubstitutesList::const_iterator sub_it_begin = ingredient.substitutes.constBegin();
-	Ingredient::SubstitutesList::const_iterator sub_it_end = ingredient.substitutes.constEnd();
-	ingItem->setRowCount( ingredient.substitutes.count() );
-	int sub_row_count = 0;
-	for ( sub_it = sub_it_begin; sub_it != sub_it_end; ++sub_it ) {
-		//Ingredient name
-		QStandardItem * subItem = new QStandardItem;
-		subItem->setData( QVariant(ingredient.name), Qt::EditRole );
-		subItem->setData( QVariant( /*i18n("OR") + " " +*/ sub_it->name), Qt::DisplayRole );
-		subItem->setData( QVariant(sub_it->ingredientID), IdRole );
-		ingItem->setChild( sub_row_count, 0, subItem );
-		//Ingredient amount
-		//(substitutes can't have an amount so adding a dummy item)
-		QStandardItem * subItemAmount = new QStandardItem;
-		subItemAmount->setEditable( false );
-		ingItem->setChild( sub_row_count, 1, subItemAmount );
-		//Ingredient units
-		//(substitutes can't have an amount so adding a dummy item)
-		QStandardItem * subItemUnits = new QStandardItem;
-		subItemUnits->setEditable( false );
-		ingItem->setChild( sub_row_count, 2, subItemUnits );
-		//Preparation method
-		//(substitutes can't have a preparation method so adding a dummy item)
-		QStandardItem * subItemPrep = new QStandardItem;
-		subItemPrep->setEditable( false );
-		ingItem->setChild( sub_row_count, 3, subItemPrep );
-		//Substitute ingredient ID
-		QStandardItem * subItemId = new QStandardItem;
-		subItemId->setEditable( false );
-		subItemId->setData( QVariant(sub_it->ingredientID), Qt::DisplayRole );
-		ingItem->setChild( sub_row_count, 4, subItemId );
-		//Increase substitutes row count
-		++sub_row_count;
+	int substitute_row = 0;
+	Ingredient::SubstitutesList::const_iterator sub_it = ingredient.substitutes.constBegin();
+	while ( sub_it != ingredient.substitutes.constEnd() ) {
+		//Append a new blank row. NOTE: this
+		//ingItem->setRowCount( ingredient.substitutes.count() );
+		//doesn't work so we have to do it this way.
+		QList<QStandardItem*> itemList;
+		QStandardItem * childItem;
+		int columnCount = m_sourceModel->columnCount();
+		for ( int i = 0; i < columnCount; ++i ) {
+			childItem = new QStandardItem;
+			itemList << childItem;
+		}
+		ingItem->appendRow( itemList );
+		//Set data for the row we have just created
+		setRowDataAlternative( substitute_row, *sub_it, ingIndex );
+		//Increase iterator and number of row
+		++substitute_row;
+		++sub_it;
 	}
 }
 
@@ -229,6 +215,33 @@ void IngredientsEditor::setRowData( int row, const Element & header )
 		item->setEditable( false );
 		item->setData( QVariant(true), IsHeaderRole );
 	}
+}
+
+void IngredientsEditor::setRowDataAlternative( int row, const IngredientData & ingredient,
+	const QModelIndex & parent )
+{
+	QStandardItem * parentItem = m_sourceModel->itemFromIndex( parent );
+	//Ingredient name
+	QStandardItem * subItem = parentItem->child( row, 0 );
+	subItem->setData( QVariant(ingredient.name), Qt::EditRole );
+	subItem->setData( QVariant( /*i18n("OR") + " " +*/ ingredient.name), Qt::DisplayRole );
+	subItem->setData( QVariant(ingredient.ingredientID), IdRole );
+	//Ingredient amount
+	//(substitutes can't have an amount so adding a dummy item)
+	QStandardItem * subItemAmount = parentItem->child( row, 1 );
+	subItemAmount->setEditable( false );
+	//Ingredient units
+	//(substitutes can't have an amount so adding a dummy item)
+	QStandardItem * subItemUnits = parentItem->child( row, 2 );
+	subItemUnits->setEditable( false );
+	//Preparation method
+	//(substitutes can't have a preparation method so adding a dummy item)
+	QStandardItem * subItemPrep = parentItem->child( row, 3 );
+	subItemPrep->setEditable( false );
+	//Substitute ingredient ID
+	QStandardItem * subItemId = parentItem->child( row, 4 );
+	subItemId->setEditable( false );
+	subItemId->setData( QVariant(ingredient.ingredientID), Qt::DisplayRole );
 }
 
 void IngredientsEditor::resizeColumnsToContents()
@@ -271,9 +284,45 @@ void IngredientsEditor::addIngredientSlot()
 
 void IngredientsEditor::addAltIngredientSlot()
 {
-	kDebug() << "here";
-	//TODO
-	//Don't forget emit changed();
+	//Get selected index and abort if nothing is selected
+	QModelIndex currentIndex = ui->m_treeView->currentIndex();
+	if ( currentIndex == QModelIndex() ) {
+		return;
+	}
+
+	//Find out the index of the parent ingredient
+	int selectedRow;
+	if ( currentIndex.parent() == QModelIndex() ) {
+		selectedRow = currentIndex.row();
+	} else {
+		selectedRow = currentIndex.parent().row();
+	}
+	QModelIndex parentIngIndex = m_sourceModel->index( selectedRow, 0 );
+
+	//Add a child row to the parent ingredient
+	QStandardItem * parentIngItem = m_sourceModel->itemFromIndex( parentIngIndex );
+	int rowCount = parentIngItem->rowCount();
+	kDebug() << rowCount << parentIngIndex;
+	QList<QStandardItem*> itemList;
+	QStandardItem * childItem;
+	int columnCount = m_sourceModel->columnCount();
+	for ( int i = 0; i < columnCount; ++i ) {
+		childItem = new QStandardItem;
+		itemList << childItem;
+	}
+	parentIngItem->appendRow( itemList );
+
+	//Prepare data
+	IngredientData ingredient;
+	ingredient.ingredientID = RecipeDB::InvalidId;
+
+	//Set data in the model
+	parentIngIndex = m_sourceModel->index( selectedRow, 0 );
+	setRowDataAlternative( rowCount, ingredient, parentIngIndex );
+
+	//Edit the ingredient name
+	QModelIndex ingNameIndex = m_sourceModel->indexFromItem( itemList.first() );
+	ui->m_treeView->edit( ingNameIndex );
 }
 
 void IngredientsEditor::addHeaderSlot()
