@@ -62,6 +62,8 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 
 	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
 		this, SIGNAL(changed()) );
+	connect( ui->m_treeView, SIGNAL(doubleClicked(const QModelIndex&)),
+		this, SIGNAL(changed()) );
 }
 
 void IngredientsEditor::setDatabase( RecipeDB * database )
