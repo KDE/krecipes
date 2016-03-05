@@ -767,11 +767,17 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	recipeToSave.exec( command );
 
 	int order_index = 0;
+	QHash<QString,IdType> newIngredients;
 	for ( IngredientList::iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
 		if ( ing_it->ingredientID == RecipeDB::InvalidId ) {
-			disableTransactions();
-			ing_it->ingredientID = createNewIngredient( ing_it->name );
-			enableTransactions();
+			if ( newIngredients.contains(ing_it->name) ) {
+				ing_it->ingredientID = newIngredients[ing_it->name];
+			} else {
+				disableTransactions();
+				ing_it->ingredientID = createNewIngredient( ing_it->name );
+				newIngredients[ing_it->name] = ing_it->ingredientID;
+				enableTransactions();
+			}
 		}
 		order_index++;
 		QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
