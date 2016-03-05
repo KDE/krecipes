@@ -264,6 +264,7 @@ void IngredientsEditor::addIngredientSlot()
 
 	//Edit the ingredient name
 	ui->m_treeView->setCurrentIndex( ingNameIndex );
+	ui->m_treeView->scrollTo( ingNameIndex );
 	ui->m_treeView->edit( ingNameIndex );
 }
 
@@ -308,6 +309,7 @@ void IngredientsEditor::addAltIngredientSlot()
 	//Edit the ingredient name
 	QModelIndex ingNameIndex = m_sourceModel->indexFromItem( itemList.first() );
 	ui->m_treeView->setCurrentIndex( ingNameIndex );
+	ui->m_treeView->scrollTo( ingNameIndex );
 	ui->m_treeView->edit( ingNameIndex );
 }
 
@@ -324,6 +326,7 @@ void IngredientsEditor::addHeaderSlot()
 	//Edit the header name
 	QModelIndex headerNameIndex = m_sourceModel->index( rowCount, 0 );
 	ui->m_treeView->setCurrentIndex( headerNameIndex );
+	ui->m_treeView->scrollTo( headerNameIndex );
 	ui->m_treeView->edit( headerNameIndex );
 }
 
