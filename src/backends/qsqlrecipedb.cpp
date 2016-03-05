@@ -768,6 +768,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 	int order_index = 0;
 	QHash<QString,IdType> newIngredients;
+	QHash<QString,IdType> newHeaders;
 	for ( IngredientList::iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
 		if ( ing_it->ingredientID == RecipeDB::InvalidId ) {
 			if ( newIngredients.contains(ing_it->name) ) {
@@ -779,6 +780,17 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 				enableTransactions();
 			}
 		}
+		if ( (ing_it->groupID == RecipeDB::InvalidId) && !ing_it->group.isEmpty() ) {
+			if ( newHeaders.contains(ing_it->group) ) {
+				ing_it->groupID = newHeaders[ing_it->group];
+			} else {
+				disableTransactions();
+				ing_it->groupID = createNewIngGroup( ing_it->group );
+				newHeaders[ing_it->group] = ing_it->groupID;
+				enableTransactions();
+			}
+		}
+
 		order_index++;
 		QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 		command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,NULL);" )
