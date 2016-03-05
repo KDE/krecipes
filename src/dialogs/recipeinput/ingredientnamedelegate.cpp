@@ -68,7 +68,7 @@ QWidget * IngredientNameDelegate::createEditor(QWidget *parent, const QStyleOpti
 
 void IngredientNameDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-	QString text = index.model()->data( index, Qt::EditRole ).toString();
+	QString text = index.data( Qt::EditRole ).toString();
 	KComboBox *comboBox = static_cast<KComboBox*>( editor );
 	comboBox->setEditText( text );
 }
