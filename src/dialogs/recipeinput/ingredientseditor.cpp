@@ -255,8 +255,6 @@ void IngredientsEditor::addIngredientSlot()
 	ingredient.ingredientID = RecipeDB::InvalidId;
 	ingredient.units.setId( RecipeDB::InvalidId );
 	QModelIndex ingNameIndex = m_sourceModel->index( rowCount, 0 );
-	//FIXME: set this properly
-	ingredient.groupID = RecipeDB::InvalidId;
 
 	//Add the data to the model
 	setRowData( rowCount, ingredient );
