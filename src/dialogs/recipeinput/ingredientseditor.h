@@ -39,10 +39,8 @@ public:
 
 	enum UserRoles {
 		IdRole = Qt::UserRole,
-		GroupIdRole = Qt::UserRole+1,
-		GroupNameRole = Qt::UserRole+2,
-		UnitsIdRole = Qt::UserRole+3,
-		IsHeaderRole = Qt::UserRole+4
+		IsHeaderRole = Qt::UserRole+1,
+		UnitsIdRole = Qt::UserRole+2
 	};
 
 	void setDatabase( RecipeDB * database );

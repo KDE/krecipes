@@ -116,8 +116,6 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	index = m_sourceModel->index( row, 4 );
 	m_sourceModel->setData( index, QVariant(ingredient.ingredientID), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.groupID), GroupIdRole );
-	m_sourceModel->setData( index, QVariant(ingredient.group), GroupNameRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( false );
 	//The "Ingredient" item.
@@ -125,8 +123,6 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	m_sourceModel->setData( index, QVariant(ingredient.ingredientID), IdRole );
 	m_sourceModel->setData( index, QVariant(ingredient.name), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.groupID), GroupIdRole );
-	m_sourceModel->setData( index, QVariant(ingredient.group), GroupNameRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	QStandardItem * ingItem = m_sourceModel->itemFromIndex( index );
 	QPersistentModelIndex ingIndex = index;
@@ -135,16 +131,12 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	index = m_sourceModel->index( row, 1 );
 	m_sourceModel->setData( index, QVariant(ingredient.amountString()), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.groupID), GroupIdRole );
-	m_sourceModel->setData( index, QVariant(ingredient.group), GroupNameRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 	//The "Units" item.
 	index = m_sourceModel->index( row, 2 );
 	m_sourceModel->setData( index, QVariant(ingredient.amountUnitString()), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.groupID), GroupIdRole );
-	m_sourceModel->setData( index, QVariant(ingredient.group), GroupNameRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 	//The "PreparationMethod" item.
@@ -158,8 +150,6 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	if ( !ingredient.prepMethodList.isEmpty() )
 		m_sourceModel->setData( index, QVariant(prepMethodListString), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.groupID), GroupIdRole );
-	m_sourceModel->setData( index, QVariant(ingredient.group), GroupNameRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 
@@ -193,15 +183,11 @@ void IngredientsEditor::setRowData( int row, const Element & header )
 	index = m_sourceModel->index( row, 4 );
 	m_sourceModel->setData( index, QVariant(header.id), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(header.id), GroupIdRole );
-	m_sourceModel->setData( index, QVariant(header.name), GroupNameRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( false );
 	//The "Header" item.
 	index = m_sourceModel->index( row, 0 );
 	m_sourceModel->setData( index, QVariant(header.name), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(header.id), GroupIdRole );
-	m_sourceModel->setData( index, QVariant(header.name), GroupNameRole );
 	QStandardItem * headerItem = m_sourceModel->itemFromIndex( index );
 	headerItem->setEditable( true );
 	QFont font = headerItem->font();
@@ -269,13 +255,8 @@ void IngredientsEditor::addIngredientSlot()
 	ingredient.ingredientID = RecipeDB::InvalidId;
 	ingredient.units.setId( RecipeDB::InvalidId );
 	QModelIndex ingNameIndex = m_sourceModel->index( rowCount, 0 );
-	if ( ingNameIndex.row() == 0 ) {
-		ingredient.groupID = RecipeDB::InvalidId;
-	} else {
-		QModelIndex ingAboveIndex = m_sourceModel->index( ingNameIndex.row()-1, 0);
-		ingredient.groupID = m_sourceModel->data( ingAboveIndex, GroupIdRole ).toInt();
-		ingredient.group = m_sourceModel->data( ingAboveIndex, GroupNameRole ).toString();
-	}
+	//FIXME: set this properly
+	ingredient.groupID = RecipeDB::InvalidId;
 
 	//Add the data to the model
 	setRowData( rowCount, ingredient );
@@ -460,7 +441,7 @@ void IngredientsEditor::updateIngredientList()
 		//Skip the row if it's a header;
 		bool is_header = m_sourceModel->data( index, IsHeaderRole ).toBool();
 		if ( is_header ) {
-			lastHeaderKnown.id = index.data( GroupIdRole ).toInt();
+			lastHeaderKnown.id = index.data( IdRole ).toInt();
 			lastHeaderKnown.name = index.data( Qt::EditRole ).toString();
 			continue;
 		}
