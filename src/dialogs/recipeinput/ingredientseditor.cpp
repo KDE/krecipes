@@ -453,11 +453,15 @@ void IngredientsEditor::updateIngredientList()
 	//Dump the contents of the GUI to the IngredientList
 	int rowCount = m_sourceModel->rowCount();
 	QModelIndex index;
+	Element lastHeaderKnown;
+	lastHeaderKnown.id = RecipeDB::InvalidId;
 	for ( int i = 0; i < rowCount; ++i ) {
 		index = m_sourceModel->index( i, 0 );
 		//Skip the row if it's a header;
 		bool is_header = m_sourceModel->data( index, IsHeaderRole ).toBool();
 		if ( is_header ) {
+			lastHeaderKnown.id = index.data( GroupIdRole ).toInt();
+			lastHeaderKnown.name = index.data( Qt::EditRole ).toString();
 			continue;
 		}
 		//Dump the contents of the current row to a ingredient Object
@@ -467,9 +471,9 @@ void IngredientsEditor::updateIngredientList()
 		//Ingredient name
 		ingredient.name = m_sourceModel->data( index, Qt::EditRole ).toString();
 		//Ingredient group id
-		ingredient.groupID = m_sourceModel->data( index, GroupIdRole ).toInt();
+		ingredient.groupID = lastHeaderKnown.id;
 		//Ingredient group name
-		ingredient.group = m_sourceModel->data( index, GroupNameRole ).toString();
+		ingredient.group = lastHeaderKnown.name;
 		//Ingredient amount
 		index = m_sourceModel->index( i, 1 );
 		QString amountString = m_sourceModel->data( index, Qt::EditRole ).toString();
