@@ -182,11 +182,13 @@ void IngredientsEditor::setRowData( int row, const Element & header )
 	//The "Id" item.
 	index = m_sourceModel->index( row, 4 );
 	m_sourceModel->setData( index, QVariant(header.id), Qt::EditRole );
+	m_sourceModel->setData( index, QVariant(header.id), IdRole );
 	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( false );
 	//The "Header" item.
 	index = m_sourceModel->index( row, 0 );
 	m_sourceModel->setData( index, QVariant(header.name), Qt::EditRole );
+	m_sourceModel->setData( index, QVariant(header.id), IdRole );
 	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
 	QStandardItem * headerItem = m_sourceModel->itemFromIndex( index );
 	headerItem->setEditable( true );
