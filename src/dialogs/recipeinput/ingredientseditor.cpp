@@ -81,6 +81,7 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 	IngredientNameDelegate * ingredientNameDelegate = new IngredientNameDelegate;
 	if ( m_database ) {
 		ingredientNameDelegate->loadAllIngredientsList( m_database );
+		ingredientNameDelegate->loadAllHeadersList( m_database );
 	}
 	ui->m_treeView->setItemDelegateForColumn(0, ingredientNameDelegate);
 

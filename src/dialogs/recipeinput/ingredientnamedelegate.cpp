@@ -29,7 +29,7 @@ void IngredientNameDelegate::loadAllIngredientsList( RecipeDB * database )
 	//FIXME: it would be nice if we could get this hashmap directly from RecipeDB
 	ElementList::const_iterator it = m_ingredientList.constBegin();
 	while ( it != m_ingredientList.constEnd() ) {
-		m_nameToIdMap[it->name] = it->id;
+		m_ingredientNameToIdMap[it->name] = it->id;
 		++it;
 	}
 	connect( database, SIGNAL(ingredientCreated(const Element&)),
@@ -38,31 +38,77 @@ void IngredientNameDelegate::loadAllIngredientsList( RecipeDB * database )
 		this, SLOT(ingredientRemovedSlot(int)) );
 }
 
+void IngredientNameDelegate::loadAllHeadersList( RecipeDB * database )
+{
+	//FIXME: This doesn't respect the limits configured in the program
+	database->loadIngredientGroups( &m_headerList );
+	//FIXME: it would be nice if we could get this hashmap directly from RecipeDB
+	ElementList::const_iterator it = m_headerList.constBegin();
+	while ( it != m_headerList.constEnd() ) {
+		m_headerNameToIdMap[it->name] = it->id;
+		++it;
+	}
+	connect( database, SIGNAL(ingGroupCreated(const Element&)),
+		this, SLOT(headerCreatedSlot(const Element&)) );
+	connect( database, SIGNAL(ingGroupRemoved(int)),
+		this, SLOT(headerRemovedSlot(int)) );
+}
+
+
 void IngredientNameDelegate::ingredientCreatedSlot( const Element & element )
 {
-	m_nameToIdMap[element.name] = element.id;
+	m_ingredientNameToIdMap[element.name] = element.id;
 	m_ingredientList << element;
 }
 
 void IngredientNameDelegate::ingredientRemovedSlot( int id )
 {
-	m_nameToIdMap.remove( m_nameToIdMap.keys(id).first() );
+	m_ingredientNameToIdMap.remove( m_ingredientNameToIdMap.keys(id).first() );
 }
 
-QWidget * IngredientNameDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+void IngredientNameDelegate::headerCreatedSlot( const Element & element )
 {
+	m_headerNameToIdMap[element.name] = element.id;
+	m_headerList << element;
+}
+
+void IngredientNameDelegate::headerRemovedSlot( int id )
+{
+	m_headerNameToIdMap.remove( m_headerNameToIdMap.keys(id).first() );
+}
+
+
+QWidget * IngredientNameDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */,
+	const QModelIndex & index ) const
+{
+	//Set up the combo box
 	KComboBox * editor = new KComboBox( parent );
 	editor->setAutoFillBackground( true );
 	editor->setEditable( true );
 	editor->setCompletionMode( KGlobalSettings::CompletionPopup );
+
+	//Fill the items and the completion objects
 	int i = 0;
-	ElementList::const_iterator it = m_ingredientList.constBegin();
-	while ( it != m_ingredientList.constEnd() ) {
+	ElementList::const_iterator it;
+	ElementList::const_iterator list_end;
+	if ( index.data(IngredientsEditor::IsHeaderRole).toBool() ) {
+		it = m_headerList.constBegin();
+		list_end = m_headerList.constEnd();
+		QFont font = editor->font();
+		font.setBold( true );
+		font.setUnderline( true );
+		editor->setFont( font );
+	} else {
+		it = m_ingredientList.constBegin();
+		list_end = m_ingredientList.constEnd();
+	}
+	while ( it != list_end ) {
 		editor->insertItem( i, it->name );
 		editor->completionObject()->addItem( it->name );
 		++i;
 		++it;
 	}
+
 	return editor;
 }
 
@@ -78,10 +124,21 @@ void IngredientNameDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
 	KComboBox *comboBox = static_cast<KComboBox*>( editor );
 	QString text = comboBox->currentText();
 	model->setData( index, text, Qt::EditRole );
-	if ( m_nameToIdMap.contains(text) ) {
-		model->setData( index, m_nameToIdMap[text], IngredientsEditor::IdRole );
+
+	if ( index.data(IngredientsEditor::IsHeaderRole).toBool() ) {
+		//The edited item is a header
+		if ( m_headerNameToIdMap.contains(text) ) {
+			model->setData( index, m_headerNameToIdMap[text], IngredientsEditor::IdRole );
+		} else {
+			model->setData( index, RecipeDB::InvalidId, IngredientsEditor::IdRole );
+		}
 	} else {
-		model->setData( index, RecipeDB::InvalidId, IngredientsEditor::IdRole );
+		//The edited item is an ingredient
+		if ( m_ingredientNameToIdMap.contains(text) ) {
+			model->setData( index, m_ingredientNameToIdMap[text], IngredientsEditor::IdRole );
+		} else {
+			model->setData( index, RecipeDB::InvalidId, IngredientsEditor::IdRole );
+		}
 	}
 }
 
