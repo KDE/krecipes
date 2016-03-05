@@ -441,6 +441,15 @@ void IngredientsEditor::updateIngredientList()
 	//Clear the IngredientList.
 	m_ingredientList->clear();
 
+	//Close open editor (if any) and submit data to the model
+	QModelIndex currentIndex = ui->m_treeView->currentIndex();
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+	ui->m_treeView->setCurrentIndex( QModelIndex() );
+	ui->m_treeView->setCurrentIndex( currentIndex );
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
 	//Dump the contents of the GUI to the IngredientList
 	int rowCount = m_sourceModel->rowCount();
 	QModelIndex index;
