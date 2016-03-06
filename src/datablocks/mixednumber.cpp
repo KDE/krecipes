@@ -148,9 +148,6 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 
 	int space_index = input.indexOf( " " );
 	int slash_index = input.indexOf( "/" );
-	if ( space_index > slash_index ) {
-		return QValidator::Invalid;
-	}
 
 	if ( (space_index == -1) && (slash_index == -1) ) {  //input contains no fractional part
 		if ( input.endsWith( decimal_symbol ) )
@@ -212,6 +209,11 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 			}
 		}
 	} else if ( (space_index != -1) && (slash_index != -1) ) { //input contains a mixed number
+
+		if ( space_index > slash_index ) {
+			return QValidator::Invalid;
+		}
+
 		if ( input.endsWith( "/" ) )
 		{
 			return QValidator::Intermediate;
