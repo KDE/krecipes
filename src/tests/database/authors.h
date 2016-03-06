@@ -1,11 +1,11 @@
-/***************************************************************************
- *   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+/****************************************************************************
+ *   Copyright © 2012-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+ *                                                                          *
+ *   This program is free software; you can redistribute it and/or modify   *
+ *   it under the terms of the GNU General Public License as published by   *
+ *   the Free Software Foundation; either version 2 of the License, or      *
+ *   (at your option) any later version.                                    *
+ ****************************************************************************/
 
 
 #ifndef TEST_DATABASE_AUTHORS_H
@@ -23,13 +23,16 @@ private slots:
 	void initTestCase();
 	void cleanupTestCase();
 
+	void testCreateSQLite_data();
 	void testCreateSQLite();
 
 #ifdef KRE_TESTS_MYSQL
+	void testCreateMySQL_data();
 	void testCreateMySQL();
 #endif
 
 #ifdef KRE_TESTS_POSTGRESQL
+	void testCreatePostgreSQL_data();
 	void testCreatePostgreSQL();
 #endif
 
@@ -38,6 +41,7 @@ private slots:
 private:
 	RecipeDB * createDatabase( const QString & configFilename );
 	inline void createAuthors( RecipeDB * database );
+	inline void createAuthors_data();
 
 	RecipeDB * m_sqliteDatabase;
 

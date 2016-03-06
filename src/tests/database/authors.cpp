@@ -1,11 +1,11 @@
-/***************************************************************************
- *   Copyright © 2012 José Manuel Santamaría Lema <panfaust@gmail.com>     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- ***************************************************************************/
+/****************************************************************************
+ *   Copyright © 2012-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+ *                                                                          *
+ *   This program is free software; you can redistribute it and/or modify   *
+ *   it under the terms of the GNU General Public License as published by   *
+ *   the Free Software Foundation; either version 2 of the License, or      *
+ *   (at your option) any later version.                                    *
+ ****************************************************************************/
 
 
 #include "authors.h"
@@ -102,17 +102,30 @@ void TestDatabaseAuthors::cleanupTestCase()
 #endif
 }
 
+void TestDatabaseAuthors::createAuthors_data()
+{
+	QTest::addColumn<QString>("authorName");
+
+	QTest::newRow("normal") << "Ethan";
+	QTest::newRow("SQL injection") << "Eth'an";
+}
 
 void TestDatabaseAuthors::createAuthors( RecipeDB * database )
 {
-	RecipeDB::IdType last_insert_id = database->createNewAuthor( "Ethan" );
+	QFETCH( QString, authorName );
+
+	RecipeDB::IdType last_insert_id = database->createNewAuthor( authorName );
 	QVERIFY( last_insert_id != RecipeDB::InvalidId );
 
-	RecipeDB::IdType author_id = database->findExistingAuthorByName( "Ethan" );
+	RecipeDB::IdType author_id = database->findExistingAuthorByName( authorName );
 	QVERIFY( author_id != RecipeDB::InvalidId );
 	QCOMPARE( last_insert_id, author_id);
 }
 
+void TestDatabaseAuthors::testCreateSQLite_data()
+{
+	createAuthors_data();
+}
 
 void TestDatabaseAuthors::testCreateSQLite()
 {
@@ -121,6 +134,11 @@ void TestDatabaseAuthors::testCreateSQLite()
 
 
 #ifdef KRE_TESTS_MYSQL
+void TestDatabaseAuthors::testCreateMySQL_data()
+{
+	createAuthors_data();
+}
+
 void TestDatabaseAuthors::testCreateMySQL()
 {
 	createAuthors( m_mysqlDatabase );
@@ -129,6 +147,11 @@ void TestDatabaseAuthors::testCreateMySQL()
 
 
 #ifdef KRE_TESTS_POSTGRESQL
+void TestDatabaseAuthors::testCreatePostgreSQL_data()
+{
+	createAuthors_data();
+}
+
 void TestDatabaseAuthors::testCreatePostgreSQL()
 {
 	createAuthors( m_postgresqlDatabase );
