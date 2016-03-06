@@ -212,6 +212,11 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 			}
 		}
 	} else if ( (space_index != -1) && (slash_index != -1) ) { //input contains a mixed number
+		if ( input.endsWith( "/" ) )
+		{
+			return QValidator::Intermediate;
+		}
+
 		whole = input.mid( 0, space_index ).toInt( &num_ok );
 		if ( !num_ok ) {
 			return QValidator::Invalid;
