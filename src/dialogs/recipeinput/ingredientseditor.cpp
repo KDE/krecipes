@@ -11,6 +11,7 @@
 #include "ui_ingredientseditor.h"
 
 #include "dialogs/recipeinput/ingredientnamedelegate.h"
+#include "dialogs/recipeinput/amountdelegate.h"
 #include "datablocks/ingredientlist.h"
 #include "backends/recipedb.h"
 
@@ -78,12 +79,17 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 	m_sourceModel->setRowCount( 0 );
 	m_sourceModel->setRowCount( ingredientList->count() );
 
+	//Set ingredient name delegate
 	IngredientNameDelegate * ingredientNameDelegate = new IngredientNameDelegate;
 	if ( m_database ) {
 		ingredientNameDelegate->loadAllIngredientsList( m_database );
 		ingredientNameDelegate->loadAllHeadersList( m_database );
 	}
 	ui->m_treeView->setItemDelegateForColumn(0, ingredientNameDelegate);
+
+	//Set amount delegate
+	AmountDelegate * amountDelegate = new AmountDelegate;
+	ui->m_treeView->setItemDelegateForColumn(1, amountDelegate);
 
 	IngredientList::const_iterator it;
 	int current_row = 0;
