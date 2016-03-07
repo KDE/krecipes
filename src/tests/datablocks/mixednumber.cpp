@@ -78,6 +78,25 @@ void TestMixedNumber::testFromString_data()
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
+	QTest::newRow("invalid6")
+	/* Number string		validator state*/
+	<< "3/0.4"			<< INV
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+	QTest::newRow("invalid7")
+	/* Number string		validator state*/
+	<< "3/.4"			<< INV
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+	QTest::newRow("invalid8")
+	/* Number string		validator state*/
+	<< "3/0"			<< INV
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+
 	QTest::newRow("intermediate1")
 	/* Number string		validator state*/
 	<< "1/"			<< ITM
