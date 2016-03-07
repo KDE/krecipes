@@ -250,6 +250,7 @@ set(datablocks_SRCS
 
 set(validators_SRCS
    validators/mixednumbervalidator.cpp
+   validators/mixednumberrangevalidator.cpp
    )
 
 
