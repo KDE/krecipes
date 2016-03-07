@@ -29,6 +29,7 @@ QString beautify( const QString &num )
 }
 
 MixedNumber::MixedNumber() :
+		m_isValid( true ),
 		m_whole( 0 ),
 		m_numerator( 0 ),
 		m_denominator( 1 ),
@@ -36,6 +37,7 @@ MixedNumber::MixedNumber() :
 {}
 
 MixedNumber::MixedNumber( int whole, int numerator, int denominator ) :
+		m_isValid( true ),
 		m_whole( whole ),
 		m_numerator( numerator ),
 		m_denominator( denominator ),
@@ -93,6 +95,7 @@ MixedNumber::MixedNumber( double decimal, double precision ) :
 		}
 	}
 
+	m_isValid = true;
 	m_numerator = high.numerator();
 	m_denominator = high.denominator();
 	m_whole = intPart;
@@ -100,6 +103,46 @@ MixedNumber::MixedNumber( double decimal, double precision ) :
 
 MixedNumber::~MixedNumber()
 {}
+
+bool MixedNumber::isValid() const
+{
+	return m_isValid;
+}
+
+int MixedNumber::whole() const
+{
+	return m_whole;
+}
+
+void MixedNumber::setWhole( int n )
+{
+	m_whole = n;
+}
+
+int MixedNumber::numerator() const
+{
+	return m_numerator;
+}
+
+void MixedNumber::setNumerator( int n )
+{
+	m_numerator = n;
+}
+
+int MixedNumber::denominator() const
+{
+	return m_denominator;
+}
+
+void MixedNumber::setDenominator( int n )
+{
+	if ( n == 0 ) {
+		m_isValid = false;
+	} else {
+		m_isValid = true;
+	}
+	m_denominator = n;
+}
 
 QValidator::State MixedNumber::getNumerator( const QString &input, int space_index, int slash_index, int &result )
 {
@@ -124,6 +167,7 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 {
 	QString input = str.trimmed();
 	if ( input.isEmpty() ) {
+		result.m_isValid = false;
 		return QValidator::Intermediate;
 	}
 
@@ -136,13 +180,16 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 	int denominator;
 
 	if ( input.count(" ") > 1 ) {
+		result.m_isValid = false;
 		return QValidator::Invalid;
 	}
 	if ( input.count("/") > 1 ) {
+		result.m_isValid = false;
 		return QValidator::Invalid;
 	}
 	QString decimal_symbol = ( locale_aware ) ? locale->decimalSymbol() : ".";
 	if ( input.count(".") > 1 ) {
+		result.m_isValid = false;
 		return QValidator::Invalid;
 	}
 
@@ -152,6 +199,7 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 	if ( (space_index == -1) && (slash_index == -1) ) {  //input contains no fractional part
 		if ( input.endsWith( decimal_symbol ) )
 		{
+			result.m_isValid = false;
 			return QValidator::Intermediate;
 		}
 
@@ -164,7 +212,9 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 				double_validator.setLocale( QLocale::c() );
 			//Should return Intermediate or Invalid, whichever it's appropiate.
 			int pos = 0; //we are going to ignore this parameter
-			return double_validator.validate( input, pos );
+			QValidator::State state = double_validator.validate( input, pos );
+			result.m_isValid = (state == QValidator::Acceptable);
+			return state;
 		}
 
 		result = MixedNumber( decimal );
@@ -172,6 +222,7 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 	} else if ( (space_index == -1) && (slash_index != -1) ) {  //input just contains a fraction
 		if ( input.endsWith( "/" ) )
 		{
+			result.m_isValid = false;
 			return QValidator::Intermediate;
 		}
 
@@ -181,12 +232,14 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 		num_state = MixedNumber::getNumerator( input, space_index, slash_index, numerator );
 		kDebug() << num_state;
 		if ( num_state != QValidator::Acceptable ) {
+			result.m_isValid = false;
 			return QValidator::Invalid;
 		}
 
 		QValidator::State den_state;
 		den_state = MixedNumber::getDenominator( input, slash_index, denominator );
 		if ( denominator == 0 ) {
+			result.m_isValid = false;
 			return QValidator::Invalid;
 		} else {
 			result = MixedNumber( whole, numerator, denominator );
@@ -195,6 +248,7 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 	} else if ( (space_index != -1) && (slash_index == -1) ) {  //input contains an incomplete mixed number
 		whole = input.mid( 0, space_index ).toInt( &num_ok );
 		if ( !num_ok ) {
+			result.m_isValid = false;
 			return QValidator::Invalid;
 		} else {
 			QIntValidator int_validator;
@@ -203,42 +257,50 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 			QString buffer = input.mid(space_index+1);
 			state = int_validator.validate( buffer, pos );
 			if ( state == QValidator::Invalid ){
+				result.m_isValid = false;
 				return QValidator::Invalid;
 			} else {
+				result.m_isValid = false;
 				return QValidator::Intermediate;
 			}
 		}
 	} else if ( (space_index != -1) && (slash_index != -1) ) { //input contains a mixed number
 
 		if ( space_index > slash_index ) {
+			result.m_isValid = false;
 			return QValidator::Invalid;
 		}
 
 		if ( input.endsWith( "/" ) )
 		{
+			result.m_isValid = false;
 			return QValidator::Intermediate;
 		}
 
 		whole = input.mid( 0, space_index ).toInt( &num_ok );
 		if ( !num_ok ) {
+			result.m_isValid = false;
 			return QValidator::Invalid;
 		}
 
 		QValidator::State num_state;
 		num_state = MixedNumber::getNumerator( input, space_index, slash_index, numerator );
 		if ( num_state != QValidator::Acceptable ) {
+			result.m_isValid = false;
 			return QValidator::Invalid;
 		}
 
 		QValidator::State den_state;
 		den_state = MixedNumber::getDenominator( input, slash_index, denominator );
 		if ( denominator == 0 ) {
+			result.m_isValid = false;
 			return QValidator::Invalid;
 		} else {
 			result = MixedNumber( whole, numerator, denominator );
 			return den_state;
 		}
 	}
+	result.m_isValid = false;
 	return QValidator::Invalid;
 }
 

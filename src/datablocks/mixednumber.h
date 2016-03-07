@@ -1,11 +1,12 @@
 /***************************************************************************
-*   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                  *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #ifndef MIXEDNUMBER_H
 #define MIXEDNUMBER_H
@@ -48,6 +49,8 @@ public:
 
 	enum Format { DecimalFormat, MixedNumberFormat };
 
+	bool isValid() const;
+
 	/** The input as a decimal. */
 	double toDouble() const;
 
@@ -55,31 +58,16 @@ public:
 	QString toString( Format = MixedNumberFormat, bool locale_aware = true ) const;
 
 	/** The whole part of the input */
-	int whole() const
-	{
-		return m_whole;
-	}
+	int whole() const;
+	void setWhole( int n );
 
 	/** The numerator of the fractional part of the input. */
-	int numerator() const
-	{
-		return m_numerator;
-	}
+	int numerator() const;
+	void setNumerator( int n );
 
 	/** The denominator of the fractional part of the input. */
-	int denominator() const
-	{
-		return m_denominator;
-	}
-
-	void setNumerator( int n )
-	{
-		m_numerator = n;
-	}
-	void setDenominator( int d )
-	{
-		m_denominator = d;
-	}
+	int denominator() const;
+	void setDenominator( int d );
 
 	/** Ensure that the fraction is simplified to its lowest terms. */
 	void simplify();
@@ -96,6 +84,8 @@ private:
 	static QValidator::State getDenominator( const QString &input, int slash_index, int &result );
 
 	int gcd( int, int );
+
+	bool m_isValid;
 
 	int m_whole;
 	int m_numerator;
