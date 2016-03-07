@@ -292,6 +292,7 @@ set(DATABLOCKS_TESTS
     unitratiolist
     weight
     mixednumber
+    mixednumberrange
     )
 
 set(DATABASE_TESTS

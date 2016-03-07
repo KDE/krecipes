@@ -13,6 +13,7 @@
 #include "mixednumber.h"
 
 #include <QPair>
+#include <QValidator>
 
 class MixedNumberRange: public QPair<MixedNumber,MixedNumber>
 {
@@ -23,8 +24,10 @@ public:
 
 	/* toString */
 
-	/*static QValidator::State fromString( const QString &input,
-		MixedNumber &result, bool locale_aware );*/
+	static QValidator::State fromString( const QString &input,
+		MixedNumberRange &result, bool locale_aware );
+
+	bool isValid() const;
 };
 
 #endif
