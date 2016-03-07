@@ -238,6 +238,7 @@ set(datablocks_SRCS
    datablocks/unitratio.cpp
    datablocks/unitratiolist.cpp
    datablocks/mixednumber.cpp
+   datablocks/mixednumberrange.cpp
    datablocks/rating.cpp
    datablocks/ratingcriteria.cpp
    datablocks/weight.cpp
