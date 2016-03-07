@@ -22,7 +22,7 @@ public:
 	MixedNumberRange( const MixedNumber &value1, const MixedNumber&value2 );
 	~MixedNumberRange();
 
-	/* toString */
+	QString toString( MixedNumber::Format format, bool locale_aware ) const;
 
 	static QValidator::State fromString( const QString &input,
 		MixedNumberRange &result, bool locale_aware );
