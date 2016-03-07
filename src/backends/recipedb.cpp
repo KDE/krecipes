@@ -855,7 +855,7 @@ void RecipeDB::importUSDADatabase()
 	getIngredientNameAndID( ings_and_ids );
 
 	QTextStream stream( &file );
-	Q3ValueList<ingredient_nutrient_data> *data = new Q3ValueList<ingredient_nutrient_data>;
+	QList<ingredient_nutrient_data> *data = new QList<ingredient_nutrient_data>;
 
 	kDebug() << "Parsing abbrev.txt" ;
 	while ( !stream.atEnd() ) {
@@ -937,8 +937,8 @@ void RecipeDB::importUSDADatabase()
 	//since this is the only unit used, lets just create it and store its id for speed
 	int unit_g_id = createUnit( QString::fromLatin1("g"), Unit::Mass, this );
 
-	Q3ValueList<ingredient_nutrient_data>::const_iterator it;
-	Q3ValueList<ingredient_nutrient_data>::const_iterator data_end = data->end();
+	QList<ingredient_nutrient_data>::const_iterator it;
+	QList<ingredient_nutrient_data>::const_iterator data_end = data->end();
 	const int total = data->count();
 	int counter = 0;
 
