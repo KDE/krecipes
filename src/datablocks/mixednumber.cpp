@@ -358,6 +358,11 @@ MixedNumber& MixedNumber::operator+=( double d )
 	return *this;
 }
 
+bool MixedNumber::operator>( const MixedNumber & other ) const
+{
+	return ( toDouble() > other.toDouble() );
+}
+
 void MixedNumber::simplify()
 {
 	int divisor = gcd( m_numerator, m_denominator );

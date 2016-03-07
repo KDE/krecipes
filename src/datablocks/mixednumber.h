@@ -46,6 +46,7 @@ public:
 	{
 		return ( toDouble() > d );
 	}
+	bool operator>( const MixedNumber & other ) const;
 
 	enum Format { DecimalFormat, MixedNumberFormat };
 
