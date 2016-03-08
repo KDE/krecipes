@@ -1,34 +1,41 @@
 /***************************************************************************
-*   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                  *
+*   Copyright © 2016 José Manuel Santamaría Lema <panfaust@gmail.com>      *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "fractioninput.h"
 
+#include "datablocks/ingredient.h"
+
 #include <QTimer>
 
-#include <kglobalsettings.h>
-
-#include "datablocks/ingredient.h"
 
 FractionInput::FractionInput( QWidget *parent, MixedNumber::Format format ) : KLineEdit( parent ),
 	m_allowRange(false),
-	m_validateTimer(new QTimer(this)),
 	m_format(format)
 {
 	//setAlignment( Qt::AlignRight );
 
-	connect( this, SIGNAL(textChanged(const QString&)), this, SLOT(slotStartValidateTimer()) );
-	connect( m_validateTimer, SIGNAL(timeout()), this, SLOT(validate()) );
+	setValidator( &m_numberValidator );
 }
 
 FractionInput::~FractionInput()
 {
-	delete m_validateTimer;
+}
+
+void FractionInput::setAllowRange( bool allowRange )
+{
+	m_allowRange = allowRange;
+	if ( allowRange ) {
+		setValidator( &m_rangeValidator );
+	} else {
+		setValidator( &m_numberValidator );
+	}
 }
 
 void FractionInput::setValue( double d, double amount_offset )
@@ -85,36 +92,11 @@ MixedNumber FractionInput::maxValue() const
 
 bool FractionInput::isInputValid() const
 {
-	if ( !m_allowRange && text().contains("-") )
-		return false;
-
-	bool ok;
-	Ingredient i; i.setAmount( text(), &ok );
-
-	return ok;
-}
-
-void FractionInput::slotStartValidateTimer()
-{
-	if ( !m_validateTimer->isActive() )
-		m_validateTimer->setSingleShot( true );
-		m_validateTimer->start( 1000 );
-
-	if ( isInputValid() )
-		emit valueChanged( value() );
-}
-
-void FractionInput::validate()
-{
-	QPalette p = palette();
-
-	if ( isInputValid() ) {
-		//KDE4 port setPaletteForegroundColor( KGlobalSettings::textColor() );
-		p.setColor( foregroundRole(), QPalette::Text );	
-	}
-	else
-		p.setColor( foregroundRole(), Qt::red );	
-	setPalette(p);
+	int pos = 0;
+	QValidator::State state;
+	QString text = this->text();
+	state = validator()->validate( text, pos );
+	return ( state != QValidator::Invalid );
 }
 
 bool FractionInput::isEmpty() const
