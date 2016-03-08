@@ -11,6 +11,8 @@
 
 #include "yield.h"
 
+#include "mixednumberrange.h"
+
 class Yield::Private
 {
 public:
@@ -68,6 +70,16 @@ double Yield::amountOffset() const
 void Yield::setAmountOffset(double amountOffset)
 {
     d->amount_offset = amountOffset;
+}
+
+MixedNumberRange Yield::amountRange() const
+{
+    return MixedNumberRange( d->amount, d->amount_offset );
+}
+
+void Yield::setAmountRange( const MixedNumberRange & value )
+{
+    value.toAmountAndOffset( &d->amount, &d->amount_offset );
 }
 
 QString Yield::type() const

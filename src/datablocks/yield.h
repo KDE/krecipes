@@ -14,6 +14,10 @@
 
 #include <QtCore/QString>
 
+#include "deprecated.h"
+
+class MixedNumberRange;
+
 class Yield
 {
     class Private;
@@ -26,11 +30,16 @@ public:
 
     Yield& operator=(const Yield& other);
 
-    double amount() const;
-    void setAmount(double amount);
+    //Use amountRange and setAmountRange instead
+    /* KRECIPES_DEPRECATED */ double amount() const;
+    /* KRECIPES_DEPRECATED */ void setAmount(double amount);
 
-    double amountOffset() const;
-    void setAmountOffset(double amountOffset);
+    //Use amountRange and setAmountRange instead
+    /* KRECIPES_DEPRECATED */ double amountOffset() const;
+    /* KRECIPES_DEPRECATED */ void setAmountOffset(double amountOffset);
+
+    MixedNumberRange amountRange() const;
+    void setAmountRange( const MixedNumberRange & amount );
 
     QString type() const;
     void setType(const QString& type);
