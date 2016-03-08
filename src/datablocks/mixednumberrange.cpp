@@ -22,6 +22,12 @@ MixedNumberRange::MixedNumberRange( const MixedNumber &value1,
 {
 }
 
+MixedNumberRange::MixedNumberRange( double amount, double offset )
+{
+	this->first = MixedNumber( amount );
+	this->second = MixedNumber( amount+offset );
+}
+
 MixedNumberRange::~MixedNumberRange()
 {
 }
@@ -75,6 +81,12 @@ QString MixedNumberRange::toString( MixedNumber::Format format,
 		result += " - " + this->second.toString( format, locale_aware );
 	}
 	return result;
+}
+
+void MixedNumberRange::toAmountAndOffset( double * amount, double * offset ) const
+{
+	*amount = this->first.toDouble();
+	*offset = this->second.toDouble() - *amount;
 }
 
 bool MixedNumberRange::isValid() const

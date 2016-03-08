@@ -15,17 +15,32 @@
 #include <QPair>
 #include <QValidator>
 
+#include "deprecated.h"
+
 class MixedNumberRange: public QPair<MixedNumber,MixedNumber>
 {
 public:
 	MixedNumberRange();
 	MixedNumberRange( const MixedNumber &value1, const MixedNumber&value2 );
+
+	/* Mark as deprecated because at some point the amount ranges won't be
+	   a couple of (amount+offset) doubles */
+	/* KRECIPES_DEPRECATED */ MixedNumberRange( double amount, double offset );
+
 	~MixedNumberRange();
 
-	QString toString( MixedNumber::Format format, bool locale_aware ) const;
 
 	static QValidator::State fromString( const QString &input,
 		MixedNumberRange &result, bool locale_aware );
+
+
+	QString toString( MixedNumber::Format format, bool locale_aware ) const;
+
+	/* Mark as deprecated because at some point the amount ranges won't be
+	   a couple of (amount+offset) doubles */
+	/* KRECIPES_DEPRECATED */ void toAmountAndOffset( double * amount,
+		double * offset ) const;
+
 
 	bool isValid() const;
 };
