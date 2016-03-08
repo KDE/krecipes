@@ -17,6 +17,10 @@
 #include "datablocks/unit.h"
 #include "datablocks/elementlist.h"
 
+#include "deprecated.h"
+
+class MixedNumberRange;
+
 class QDebug;
 
 //###: Is there a better way to get the behavior of a list of Ingredient
@@ -29,8 +33,14 @@ public:
 
 	int ingredientID;
 	QString name;
-	double amount;
-	double amount_offset;
+
+	/* Deprecated because at some point we should stop to store
+	   amounts as a couple of doubles.
+	   Please use amountRange() and setAmountRange() instead of
+	   accessing this fields directly. */
+	/* KRECIPES_DEPRECATED */ double amount;
+	/* KRECIPES_DEPRECATED */ double amount_offset;
+
 	Unit units;
 	int groupID;
 	QString group;
@@ -38,6 +48,9 @@ public:
 
 	/** Compare two elements by their id */
 	bool operator==( const IngredientData & ) const;
+
+	MixedNumberRange amountRange() const;
+	void setAmountRange( const MixedNumberRange & value );
 
 };
 QDebug operator<<( QDebug dbg, const IngredientData & ing );

@@ -18,7 +18,7 @@
 #include <KConfigGroup>
 #include <QDebug>
 
-#include "mixednumber.h"
+#include "mixednumberrange.h"
 
 IngredientData::IngredientData() : amount( 0 ), amount_offset( 0 ), groupID( -1 )
 {}
@@ -38,6 +38,16 @@ IngredientData::IngredientData( const QString &_name, double _amount, const Unit
 bool IngredientData::operator==( const IngredientData &ing ) const
 {
 	return ( ( ing.ingredientID == ingredientID ) && ( ing.groupID == groupID ) );
+}
+
+MixedNumberRange IngredientData::amountRange() const
+{
+	return MixedNumberRange( amount, amount_offset );
+}
+
+void IngredientData::setAmountRange( const MixedNumberRange & value )
+{
+	value.toAmountAndOffset( &amount, &amount_offset );
 }
 
 Ingredient::Ingredient() : IngredientData()
