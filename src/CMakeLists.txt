@@ -12,7 +12,12 @@ include_directories( ${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}
 
 ########### QT3Support ###############
 
-add_definitions (-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+add_definitions (-DQT3_SUPPORT)
+
+########### Deprecated warnings ###############
+
+add_definitions (-DQT3_SUPPORT_WARNINGS)
+#add_definitions (-DKRECIPES_DEPRECATED_WARNINGS)
 
 ############# backends ###############
 
