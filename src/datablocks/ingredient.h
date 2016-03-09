@@ -69,9 +69,10 @@ public:
 	typedef QLinkedList<IngredientData> SubstitutesList;
 	SubstitutesList substitutes;
 
-	void setAmount( const QString &range, bool *ok = 0 );
-
-	QString amountString(bool forceFloatFormat = false ) const;
+	/* Deprecated because at some point we should stop to store
+	   amounts as a couple of doubles. */
+	/* KRECIPES_DEPRECATED */ void setAmount( const QString &range, bool *ok = 0 );
+	/* KRECIPES_DEPRECATED */ QString amountString(bool forceFloatFormat = false ) const;
 	QString amountUnitString() const;
 
 	/** Compare two elements by their id and groupID */
