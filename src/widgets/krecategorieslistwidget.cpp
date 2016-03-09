@@ -265,6 +265,7 @@ void KreCategoriesListWidget::setFilter( const QString & filter )
 void KreCategoriesListWidget::itemsChangedSlot( const QModelIndex & topLeft,
 	const QModelIndex & bottomRight )
 {
+	Q_UNUSED(bottomRight)
 	if ( m_checkedCategories ) {
 		QModelIndex sourceIndex = m_proxyModel->mapToSource( topLeft );
 		if ( m_sourceModel->itemFromIndex( sourceIndex )->checkState() == Qt::Checked ) {

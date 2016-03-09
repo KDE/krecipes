@@ -105,6 +105,7 @@ void RatingListEditor::refresh()
 }
 
 void RatingListEditor::showEvent( QShowEvent * event ) {
+	Q_UNUSED( event );
 	// This is needed to adjust properly the size of
 	// the QFrame containing the various RatinDisplayWidget's
 	m_scrollArea->resizeEvent( 0 );
