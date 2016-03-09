@@ -314,6 +314,7 @@ void XSLTExporter::loadColumns( const QString & object, int cols )
 
 void XSLTExporter::storePhoto( const Recipe &recipe )
 {
+	Q_INIT_RESOURCE(resources);
 	QImage image;
 	QString photo_name;
 	if ( recipe.photo.isNull() ) {

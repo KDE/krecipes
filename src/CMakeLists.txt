@@ -408,12 +408,7 @@ set(krecipes_SRCS
    #klomanager.cpp
 )
 
-qt4_add_resources(krecipes_SRCS
-   ../pics/resources.qrc
-   )
-
 qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
-
 
 kde4_add_executable(krecipes
    ${krecipes_SRCS}

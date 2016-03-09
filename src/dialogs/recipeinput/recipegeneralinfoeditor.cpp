@@ -70,6 +70,7 @@ void RecipeGeneralInfoEditor::loadRecipe( Recipe * recipe )
 	//Set title in the GUI
 	ui->m_titleEdit->setText( recipe->title );
 
+	Q_INIT_RESOURCE(resources);
 	//Display photo in the GUI
 	ui->m_photoLabel->setPhoto( &recipe->photo );
 	if ( recipe->photo.isNull() ) {
