@@ -11,6 +11,7 @@
 #include "fractioninput.h"
 
 #include "datablocks/ingredient.h"
+#include "datablocks/mixednumberrange.h"
 
 #include <QTimer>
 
@@ -38,56 +39,60 @@ void FractionInput::setAllowRange( bool allowRange )
 	}
 }
 
+void FractionInput::setValueRange( const MixedNumberRange & value )
+{
+	setText( value.toString( m_format, true ) );
+}
+
+MixedNumberRange FractionInput::valueRange() const
+{
+	MixedNumberRange result;
+	MixedNumberRange::fromString( text(), result, true );
+	return result;
+}
+
 void FractionInput::setValue( double d, double amount_offset )
 {
-	MixedNumber m( d );
-	setValue( m, amount_offset );
+	MixedNumberRange range ( d, amount_offset );
+	setValueRange( range );
 }
 
 void FractionInput::setValue( const MixedNumber &m, double amount_offset )
 {
-	QString text = m.toString( m_format );
-	if ( amount_offset > 0 ) {
-		text += '-' + MixedNumber(m+amount_offset).toString( m_format );
-	}
-	setText(text);
+	MixedNumber second = m + amount_offset;
+	MixedNumberRange range;
+	range.first = m;
+	range.second = range.first + amount_offset;
+	setValueRange( range );
 }
 
 void FractionInput::value( MixedNumber &amount, double &amount_offset ) const
 {
-	Ingredient i; i.setAmount( text() );
-
-	amount = MixedNumber(i.amount);
-	amount_offset = i.amount_offset;
+	MixedNumberRange range = valueRange();
+	amount = range.first;
+	double dummy;
+	range.toAmountAndOffset( &dummy, &amount_offset );
 }
 
 void FractionInput::value( double &amount, double &amount_offset ) const
 {
-	Ingredient i; i.setAmount( text() );
-
-	amount = i.amount;
-	amount_offset = i.amount_offset;
+	MixedNumberRange range = valueRange();
+	range.toAmountAndOffset( &amount, &amount_offset );
 }
 
 MixedNumber FractionInput::value() const
 {
-	Ingredient i; i.setAmount( text() );
-
-	return MixedNumber(i.amount);
+	return valueRange().first;
 }
 
 MixedNumber FractionInput::minValue() const
 {
-	Ingredient i; i.setAmount( text() );
-
-	return MixedNumber(i.amount);
+	return valueRange().first;
 }
 
 MixedNumber FractionInput::maxValue() const
 {
-	Ingredient i; i.setAmount( text() );
-
-	return MixedNumber(i.amount_offset+i.amount);
+	return valueRange().second;
 }
 
 bool FractionInput::isInputValid() const

@@ -21,6 +21,8 @@
 
 class MixedNumberRangeValidator;
 class MixedNumberValidator;
+class MixedNumberRange;
+class MixedNumber;
 
 
 /** A KLineEdit widget extended to allow input of decimals and fractions or ranges of such.
@@ -37,13 +39,16 @@ public:
 
 	void setAllowRange( bool allowRange );
 
-	void setValue( double amount, double amount_offset = 0 );
-	void setValue( const MixedNumber &, double amount_offset = 0 );
-	void value( MixedNumber &amount, double &amount_offset ) const;
-	void value( double &amount, double &amount_offset ) const;
-	MixedNumber minValue() const;
-	MixedNumber maxValue() const;
-	MixedNumber value() const;
+	void setValueRange( const MixedNumberRange & value );
+	MixedNumberRange valueRange() const;
+
+	/* KRECIPES_DEPRECATED */ void setValue( double amount, double amount_offset = 0 );
+	/* KRECIPES_DEPRECATED */ void setValue( const MixedNumber &, double amount_offset = 0 );
+	/* KRECIPES_DEPRECATED */ void value( MixedNumber &amount, double &amount_offset ) const;
+	/* KRECIPES_DEPRECATED */ void value( double &amount, double &amount_offset ) const;
+	/* KRECIPES_DEPRECATED */ MixedNumber minValue() const;
+	/* KRECIPES_DEPRECATED */ MixedNumber maxValue() const;
+	/* KRECIPES_DEPRECATED */ MixedNumber value() const;
 
 	bool isInputValid() const;
 	bool isEmpty() const;
