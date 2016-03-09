@@ -1,9 +1,18 @@
 Note that this is only a draft, to get a rough idea about what should be done.
 
 
-Planned for next 2.x.x releases:
+Planned for next 2.2.x releases:
 
- * Remove more KDE/Qt 3 support stuff.
+ * Remove more KDE/Qt 3 support stuff: port all the lists displayed in the GUI
+   to the new model/view classes.
+ * Fix bugs.
+
+Planned for next 2.3.x releases:
+
+ * Replace left panel with something better, check what Kontact is using, its
+   left panel is superior (it can use small icons without text, which would be
+   very appropiate for netbooks) and seems easier to maintain.
+ * Remove remaining KDE/Qt3 support.
  * Fix bugs.
 
 Planned for the 3.0 branch:
@@ -13,9 +22,19 @@ Planned for the 3.1 branch:
 
  [Mandatory]
  * The database version number should be a string instead of a float.
- * Replace left panel with something better, check what Kontact is using, its
-   left panel is superior (it can use small icons without text, which would be
-   very appropiate for netbooks) and seems easier to maintain.
+ * Change the program so it stops using a couple of doubles (amount+offset) to
+   deal with ranges, use MixedNumberRange instead; subtasks (in order)
+   - Mark the deprecated functions from FractionInput as such and remove its
+     usage.
+   - Mark the deprecated functions of Ingredient (the functions to read from a
+     string and convert a range to string) as such and remove its usage.
+   - Mark the deprecated functions of Yield as such and remove its usage.
+   - Stop accessing Ingredient::amount and Ingredient::amount_offset variables
+     directly and use the functions working with MixedNumberRange
+   - Delete the (amount+offset) compatibility methods from MixedNumberRange
+   - Change Ingredient and Yield so they would store a MixedNumberRange instead
+     of amount+offset
+   - Change the database schema so it can store mixed numbers properly?
  * Solve the issues reported by krazy.
  * Recheck TODOs and FIXMEs in source code.
  * Remove compiler warnings.
