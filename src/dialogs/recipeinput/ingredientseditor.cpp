@@ -13,6 +13,7 @@
 #include "dialogs/recipeinput/ingredientnamedelegate.h"
 #include "dialogs/recipeinput/amountdelegate.h"
 #include "datablocks/ingredientlist.h"
+#include "datablocks/mixednumberrange.h"
 #include "backends/recipedb.h"
 
 #include <QStandardItemModel>
@@ -136,7 +137,8 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	ingItem->setEditable( true );
 	//The "Amount" item.
 	index = m_sourceModel->index( row, 1 );
-	m_sourceModel->setData( index, QVariant(ingredient.amountString()), Qt::EditRole );
+	m_sourceModel->setData( index,
+		QVariant( ingredient.amountRange().toString(true) ), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
@@ -468,7 +470,9 @@ void IngredientsEditor::updateIngredientList()
 		//Ingredient amount
 		index = m_sourceModel->index( i, 1 );
 		QString amountString = m_sourceModel->data( index, Qt::EditRole ).toString();
-		ingredient.setAmount( amountString );
+		MixedNumberRange range;
+		MixedNumberRange::fromString( amountString, range, true );
+		ingredient.setAmountRange( range );
 		//Ingredient units
 		index = m_sourceModel->index( i, 2 );
 		ingredient.units.setId( m_sourceModel->data( index, UnitsIdRole ).toInt() );
