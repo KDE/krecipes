@@ -1,12 +1,13 @@
 /***************************************************************************
-*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
-*   Copyright © 2003-2005 Jason Kivlighn <jkivlighn@gmail.com>            *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>               *
+*   Copyright © 2003-2005 Jason Kivlighn <jkivlighn@gmail.com>             *
+*   Copyright © 2010-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "kreexporter.h"
 
@@ -19,7 +20,6 @@
 #include <klocale.h>
 #include <kcodecs.h>
 #include <kglobal.h>
-#include <kconfig.h>
 #include <kstandarddirs.h>
 
 #include "backends/recipedb.h"
@@ -32,8 +32,7 @@ KreExporter::KreExporter( CategoryTree *_categories, const QString& filename, co
 	}
 	
 	if ( !compatibleNumbers ) {
-		KConfigGroup config = KGlobal::config()->group("Formatting");
-		m_number_format = ( config.readEntry( "Fraction" , false ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+		m_number_format = MixedNumber::AutoFormat;
 		m_locale_aware_numbers = true;
 	} else {
 		m_number_format = MixedNumber::DecimalFormat;

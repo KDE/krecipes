@@ -1,11 +1,12 @@
 /***************************************************************************
-*   Copyright © 2004 Jason Kivlighn <jkivlighn@gmail.com>                 *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2004 Jason Kivlighn <jkivlighn@gmail.com>                  *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "refineshoppinglistdialog.h"
 
@@ -20,7 +21,6 @@
 #include <klocale.h>
 #include <kapplication.h>
 #include <kcursor.h>
-#include <kconfig.h>
 #include <kglobal.h>
 
 #include "backends/recipedb.h"
@@ -145,12 +145,7 @@ void RefineShoppingListDialog::loadData()
 
 		QString amount_str;
 		if ( ( *it ).amount > 0 ) {
-		             KConfigGroup config( KGlobal::config(), "Formatting" );
-
-			if ( !config.readEntry( "Fraction" ).isEmpty() )
-				amount_str = MixedNumber( ( *it ).amount ).toString();
-			else
-				amount_str = beautify( KGlobal::locale() ->formatNumber( ( *it ).amount, 5 ) );
+			amount_str = MixedNumber( ( *it ).amount ).toString( MixedNumber::AutoFormat, true);
 		}
 
 		Q3ListViewItem *new_item = new Q3ListViewItem( ingListView->listView(), ( *it ).name, amount_str, ( *it ).units.determineName( (*it ).amount, false ) );

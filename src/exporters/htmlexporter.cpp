@@ -1,13 +1,14 @@
 /***************************************************************************
-*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
-*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
-*   Copyright © 2003, 2006 Jason Kivlighn <jkivlighn@gmail.com>           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                         *
+*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>               *
+*   Copyright © 2003, 2006 Jason Kivlighn <jkivlighn@gmail.com>            *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "htmlexporter.h"
 
@@ -18,7 +19,6 @@
 #include <QTextDocument>
 #include <dom/dom_element.h>
 
-#include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -252,8 +252,6 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 	bool useAbbreviations = config.readEntry("AbbreviateUnits", false);
 
-	MixedNumber::Format number_format = ( config.readEntry( "Fraction", false ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-
 	int cols = 2;
 	int per_col = recipe.ingList.count() / cols;
 	if ( recipe.ingList.count() % cols != 0 ) //round up if division is not exact
@@ -287,10 +285,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 					ingredients_html += "<ul>";
 			}
 
-			QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( number_format );
+			QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( MixedNumber::AutoFormat );
 
 			if ( (*ing_it).amount_offset > 0 )
-				amount_str += '-'+MixedNumber( ( *ing_it ).amount + ( *ing_it ).amount_offset ).toString( number_format );
+				amount_str += '-'+MixedNumber( ( *ing_it ).amount + ( *ing_it ).amount_offset ).toString( MixedNumber::AutoFormat );
 			else if ( ( *ing_it ).amount <= 1e-10 )
 				amount_str = "";
 
@@ -309,10 +307,10 @@ void HTMLExporter::populateTemplate( const Recipe &recipe, QString &content )
 			ingredients_html += QString( "<li>%1</li>" ).arg( tmp_format );
 
 			for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ) {
-				QString amount_str = MixedNumber( ( *sub_it ).amount ).toString( number_format );
+				QString amount_str = MixedNumber( ( *sub_it ).amount ).toString( MixedNumber::AutoFormat );
 	
 				if ( (*ing_it).amount_offset > 0 )
-					amount_str += '-'+MixedNumber( ( *sub_it ).amount + ( *sub_it ).amount_offset ).toString( number_format );
+					amount_str += '-'+MixedNumber( ( *sub_it ).amount + ( *sub_it ).amount_offset ).toString( MixedNumber::AutoFormat );
 				else if ( ( *sub_it ).amount <= 1e-10 )
 					amount_str = "";
 	

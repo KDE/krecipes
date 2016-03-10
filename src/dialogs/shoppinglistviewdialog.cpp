@@ -1,13 +1,14 @@
 /***************************************************************************
-*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
-*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
-*   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                 *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                         *
+*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>               *
+*   Copyright © 2003 Jason Kivlighn <jkivlighn@gmail.com>                  *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "shoppinglistviewdialog.h"
 #include "datablocks/ingredientlist.h"
@@ -76,14 +77,12 @@ void ShoppingListViewDialog::display( const IngredientList &ingredientList )
 	KConfigGroup config = KGlobal::config()->group( "Formatting" );
 
 	bool useAbbreviations = config.readEntry("AbbreviateUnits", false );
-	bool useFraction = config.readEntry( "Fraction", false );
 
 	for ( IngredientList::const_iterator ing_it = ingredientList.begin(); ing_it != ingredientList.end(); ++ing_it ) {
 		QString color = ( counter ) ? "#CBCEFF" : "#BFC2F0";
 		counter = !counter;
 
-		MixedNumber::Format number_format = ( useFraction ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-		QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( number_format );
+		QString amount_str = MixedNumber( ( *ing_it ).amount ).toString( MixedNumber::AutoFormat );
 
 		QString unit = ( *ing_it ).units.determineName( ( *ing_it ).amount + ( *ing_it ).amount_offset, useAbbreviations );
 

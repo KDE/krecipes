@@ -1,15 +1,15 @@
 /***************************************************************************
-*   Copyright © 2005 Jason Kivlighn <jkivlighn@gmail.com>                 *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2005 Jason Kivlighn <jkivlighn@gmail.com>                  *
+*   Copyright © 2010-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "plaintextexporter.h"
 
-#include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
 
@@ -62,10 +62,6 @@ QString PlainTextExporter::generateIngredient( const IngredientData &ing, MixedN
 
 QString PlainTextExporter::createContent( const RecipeList& recipes )
 {
-	KConfigGroup config = KGlobal::config()->group( "Formatting" );
-
-	MixedNumber::Format number_format = ( config.readEntry( "Fraction", false ) ) ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
-
 	QString content;
 
 	RecipeList::const_iterator recipe_it;
@@ -104,7 +100,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 				if ( !group.isEmpty() )
 					content += "  ";
 
-				content += generateIngredient(*ing_it,number_format);
+				content += generateIngredient(*ing_it,MixedNumber::AutoFormat);
 
 				if ( (*ing_it).substitutes.count() > 0 )
 					content += ", "+i18n("or");
@@ -114,7 +110,7 @@ QString PlainTextExporter::createContent( const RecipeList& recipes )
 					if ( !group.isEmpty() )
 						content += "  ";
 
-					content += generateIngredient(*sub_it,number_format);
+					content += generateIngredient(*sub_it,MixedNumber::AutoFormat);
 					sub_it++;
 					if ( sub_it != (*ing_it).substitutes.end() )
 						content += ", "+i18n("or");

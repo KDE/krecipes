@@ -1,17 +1,17 @@
 /***************************************************************************
-*   Copyright © 2005 Jason Kivlighn <jkivlighn@gmail.com>                 *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2005 Jason Kivlighn <jkivlighn@gmail.com>                  *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "rezkonvexporter.h"
 
 #include <QRegExp>
 
-#include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kapplication.h>
@@ -213,8 +213,7 @@ void RezkonvExporter::writeIngredients( QString &content, const Recipe &recipe )
 
 void RezkonvExporter::writeSingleIngredient( QString &content, const IngredientData &ing, bool is_sub )
 {
-	KConfigGroup  config(KGlobal::config() , "Formatting" );
-	MixedNumber::Format number_format = config.readEntry( "Fraction" ).isEmpty() ? MixedNumber::MixedNumberFormat : MixedNumber::DecimalFormat;
+	MixedNumber::Format number_format = MixedNumber::configuredFormat();
 
 	//columns 1-7
 	if ( ing.amount > 1e-8 ) {
