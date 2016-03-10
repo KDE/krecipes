@@ -83,6 +83,11 @@ QString MixedNumberRange::toString( MixedNumber::Format format,
 	return result;
 }
 
+QString MixedNumberRange::toString( bool locale_aware ) const
+{
+	return toString( MixedNumber::AutoFormat, locale_aware );
+}
+
 void MixedNumberRange::toAmountAndOffset( double * amount, double * offset ) const
 {
 	*amount = this->first.toDouble();

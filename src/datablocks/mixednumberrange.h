@@ -35,6 +35,7 @@ public:
 
 
 	QString toString( MixedNumber::Format format, bool locale_aware ) const;
+	QString toString( bool locale_aware ) const;
 
 	/* Mark as deprecated because at some point the amount ranges won't be
 	   a couple of (amount+offset) doubles */
