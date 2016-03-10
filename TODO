@@ -35,6 +35,12 @@ Planned for the 3.1 branch:
    - Change Ingredient and Yield so they would store a MixedNumberRange instead
      of amount+offset
    - Change the database schema so it can store mixed numbers properly?
+   - If we change the database schema add a variable in MixedNumber to flag the
+     number as a simple 'double' or as fraction.
+   - If we change the database schema, change the behaviour of
+     MixedNumber::toString( MixedNumber::AutoFormat, ... );
+     so instead of choosing the format configured in the program it would
+     choose the format depending on the given MixedNumber.
  * Solve the issues reported by krazy.
  * Recheck TODOs and FIXMEs in source code.
  * Remove compiler warnings.
