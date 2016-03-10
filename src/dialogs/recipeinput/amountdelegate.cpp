@@ -9,6 +9,8 @@
 
 #include "amountdelegate.h"
 
+#include "widgets/fractioninput.h"
+
 #include <KLineEdit>
 
 
@@ -17,23 +19,26 @@ AmountDelegate::AmountDelegate(QObject *parent): QStyledItemDelegate(parent)
 }
 
 
-QWidget * AmountDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */,
+QWidget * AmountDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem & option ,
 	const QModelIndex & index ) const
 {
-	KLineEdit * editor = new KLineEdit( parent );
-	//TODO
+	Q_UNUSED(option)
+	Q_UNUSED(index)
+	FractionInput * editor = new FractionInput( parent );
 	return editor;
 }
 
 void AmountDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-	//TODO
+	FractionInput * fractionInput = static_cast<FractionInput*>( editor );
+	fractionInput->setText( index.data( Qt::EditRole ).toString() );
 }
 
 void AmountDelegate::setModelData(QWidget *editor, 
 	QAbstractItemModel *model, const QModelIndex &index) const
 {
-	//TODO
+	FractionInput * fractionInput = static_cast<FractionInput*>( editor );
+	model->setData( index, fractionInput->text(), Qt::EditRole );
 }
 
 void AmountDelegate::updateEditorGeometry(QWidget *editor, 
