@@ -16,6 +16,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <KConfigGroup>
 
 #include <QIntValidator>
 #include <QDoubleValidator>
@@ -311,6 +312,10 @@ bool MixedNumber::isFraction( const QString &input )
 
 QString MixedNumber::toString( Format format, bool locale_aware ) const
 {
+	if ( format == AutoFormat ) {
+		format = configuredFormat();
+	}
+
 	if ( format == DecimalFormat ) {
 		if ( locale_aware )
 			return beautify( locale->formatNumber( toDouble(), 5 ) );
@@ -333,6 +338,24 @@ QString MixedNumber::toString( Format format, bool locale_aware ) const
 	if ( m_numerator != 0 )
 		result += QString::number( m_numerator ) + '/' + QString::number( m_denominator );
 
+	return result;
+}
+
+QString MixedNumber::toString( bool locale_aware ) const
+{
+	return toString( MixedNumber::AutoFormat );
+}
+
+MixedNumber::Format MixedNumber::configuredFormat()
+{
+	KConfigGroup config = KGlobal::config()->group( "Formatting" );
+	bool useFraction = config.readEntry( "Fraction", false );
+	MixedNumber::Format result;
+	if ( useFraction ) {
+		result = MixedNumber::MixedNumberFormat;
+	} else {
+		result = MixedNumber::DecimalFormat;
+	}
 	return result;
 }
 

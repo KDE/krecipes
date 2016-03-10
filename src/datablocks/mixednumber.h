@@ -48,15 +48,18 @@ public:
 	}
 	bool operator>( const MixedNumber & other ) const;
 
-	enum Format { DecimalFormat, MixedNumberFormat };
+	enum Format { DecimalFormat, MixedNumberFormat, AutoFormat };
 
 	bool isValid() const;
 
 	/** The input as a decimal. */
 	double toDouble() const;
 
+	static Format configuredFormat();
+
 	/** Returns the fraction as a string */
 	QString toString( Format = MixedNumberFormat, bool locale_aware = true ) const;
+	QString toString( bool locale_aware ) const;
 
 	/** The whole part of the input */
 	int whole() const;
