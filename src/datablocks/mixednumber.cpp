@@ -410,7 +410,12 @@ void MixedNumber::simplify()
 
 double MixedNumber::toDouble() const
 {
-	return static_cast<double>( m_whole ) + ( static_cast<double>( m_numerator ) / static_cast<double>( m_denominator ) );
+	if ( m_isValid ) {
+		return static_cast<double>( m_whole )
+		+ ( static_cast<double>( m_numerator ) / static_cast<double>( m_denominator ) );
+	} else {
+		return 0.0;
+	}
 }
 
 int MixedNumber::gcd( int n, int m )
