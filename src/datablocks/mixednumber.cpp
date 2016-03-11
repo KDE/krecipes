@@ -343,7 +343,7 @@ QString MixedNumber::toString( Format format, bool locale_aware ) const
 
 QString MixedNumber::toString( bool locale_aware ) const
 {
-	return toString( MixedNumber::AutoFormat );
+	return toString( MixedNumber::AutoFormat, locale_aware );
 }
 
 MixedNumber::Format MixedNumber::configuredFormat()
