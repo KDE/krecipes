@@ -43,6 +43,12 @@ void TestMixedNumber::testFromString_data()
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 1		<< 2		<< 0.5		<< false;
 
+	QTest::newRow("decimal2")
+	/* Number string		validator state		isValid?*/
+	<< "2."				<< ACC			<< true
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 2		<< 0		<< 1		<< 2.0		<< false;
+
 	QTest::newRow("mixed")
 	/* Number string		validator state		isValid?*/
 	<< "2 3/4"			<< ACC			<< true
@@ -142,12 +148,6 @@ void TestMixedNumber::testFromString_data()
 	QTest::newRow("intermediate3")
 	/* Number string		validator state		isValid?*/
 	<< "5 2"			<< ITM			<< false
-	/* whole	numerator	denominator	value		is fraction? */
-	<< 0		<< 0		<< 0		<< 0.0		<< false;
-
-	QTest::newRow("intermediate4")
-	/* Number string		validator state		isValid?*/
-	<< "2."				<< ITM			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
