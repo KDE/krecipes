@@ -171,17 +171,21 @@ void TestMixedNumberRange::testFromString()
 	//If the tested data is valid, check each number of the range
 	if ( isValid ) {
 		//Number 1
-		QCOMPARE( numberRange.first.whole(), whole1 );
-		QCOMPARE( numberRange.first.numerator(), numerator1 );
-		QCOMPARE( numberRange.first.denominator(), denominator1 );
-		QCOMPARE( numberRange.first.toDouble(), value1 );
-		QCOMPARE( numberRange.first.isValid(), isValid1 );
+		if ( isValid1 ) {
+			QCOMPARE( numberRange.first.whole(), whole1 );
+			QCOMPARE( numberRange.first.numerator(), numerator1 );
+			QCOMPARE( numberRange.first.denominator(), denominator1 );
+			QCOMPARE( numberRange.first.toDouble(), value1 );
+			QCOMPARE( numberRange.first.isValid(), isValid1 );
+		}
 		//Number 2
-		QCOMPARE( numberRange.second.whole(), whole2 );
-		QCOMPARE( numberRange.second.numerator(), numerator2 );
-		QCOMPARE( numberRange.second.denominator(), denominator2 );
-		QCOMPARE( numberRange.second.toDouble(), value2 );
-		QCOMPARE( numberRange.second.isValid(), isValid2 );
+		if ( isValid2 ) {
+			QCOMPARE( numberRange.second.whole(), whole2 );
+			QCOMPARE( numberRange.second.numerator(), numerator2 );
+			QCOMPARE( numberRange.second.denominator(), denominator2 );
+			QCOMPARE( numberRange.second.toDouble(), value2 );
+			QCOMPARE( numberRange.second.isValid(), isValid2 );
+		}
 
 	}
 }
