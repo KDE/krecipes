@@ -19,7 +19,7 @@
 #include <KConfigGroup>
 
 #include <QIntValidator>
-#include <QDoubleValidator>
+#include <KDoubleValidator>
 
 
 QString beautify( const QString &num )
@@ -191,8 +191,6 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 		return QValidator::Intermediate;
 	}
 
-	KLocale *locale = KGlobal::locale();
-
 	bool num_ok;
 
 	int whole;
@@ -207,27 +205,14 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 		result.m_isValid = false;
 		return QValidator::Invalid;
 	}
-	QString decimal_symbol = ( locale_aware ) ? locale->decimalSymbol() : ".";
-	if ( input.count(".") > 1 ) {
-		result.m_isValid = false;
-		return QValidator::Invalid;
-	}
 
 	int space_index = input.indexOf( " " );
 	int slash_index = input.indexOf( "/" );
 
 	if ( (space_index == -1) && (slash_index == -1) ) {  //input contains no fractional part
-		if ( input.endsWith( decimal_symbol ) )
-		{
-			result.m_isValid = false;
-			return QValidator::Intermediate;
-		}
 
-		QDoubleValidator double_validator;
+		KDoubleValidator double_validator(0);
 		double_validator.setBottom( 0.0 );
-		if (!locale_aware) {
-			double_validator.setLocale( QLocale::c() );
-		}
 		//Should return Intermediate or Invalid, whichever it's appropiate.
 		int pos = 0; //we are going to ignore this parameter
 		QValidator::State state = double_validator.validate( input, pos );
@@ -235,11 +220,10 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 
 		//If the string input is fine, read the number
 		if ( state == QValidator::Acceptable ) {
-			double value;
-			if ( locale_aware ) {
-				value = locale->readNumber( input, &num_ok );
-			} else {
-				value = input.toDouble( &num_ok );
+			double value = input.toDouble( &num_ok );
+			if ( !num_ok ) {
+				result.m_isValid = false;
+				return QValidator::Invalid;
 			}
 			result = MixedNumber( value );
 		}
