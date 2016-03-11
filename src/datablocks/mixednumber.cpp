@@ -38,12 +38,12 @@ MixedNumber::MixedNumber() :
 {}
 
 MixedNumber::MixedNumber( int whole, int numerator, int denominator ) :
-		m_isValid( true ),
 		m_whole( whole ),
 		m_numerator( numerator ),
-		m_denominator( denominator ),
 		locale( KGlobal::locale() )
-{}
+{
+	setDenominator( denominator );
+}
 
 MixedNumber::MixedNumber( double decimal, double precision ) :
 		locale( KGlobal::locale() )
