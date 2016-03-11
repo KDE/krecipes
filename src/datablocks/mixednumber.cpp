@@ -147,21 +147,38 @@ void MixedNumber::setDenominator( int n )
 
 QValidator::State MixedNumber::getNumerator( const QString &input, int space_index, int slash_index, int &result )
 {
+	//Prepare the int validator.
 	QIntValidator int_validator;
 	int_validator.setBottom( 0 );
+	/*QLocale validatorLocale = int_validator.locale();
+	validatorLocale.setNumberOptions( QLocale::RejectGroupSeparator | QLocale::OmitGroupSeparator );
+	int_validator.setLocale( validatorLocale );*/
+	int_validator.setLocale( QLocale::c() ); //Workaround: the code above doesn't work
+
+	//Read the number.
 	QString buffer = input.mid( space_index + 1, slash_index - space_index - 1 );
 	result = buffer.toInt();
+
+	//Return the validator state.
 	int pos = 0; //we are going to ignore this parameter
-	kDebug() << buffer;
 	return int_validator.validate(buffer, pos);
 }
 
 QValidator::State MixedNumber::getDenominator( const QString &input, int slash_index, int &result)
 {
+	//Prepare the int validator.
 	QIntValidator int_validator;
 	int_validator.setBottom( 0 );
+	/*QLocale validatorLocale = int_validator.locale();
+	validatorLocale.setNumberOptions( QLocale::RejectGroupSeparator | QLocale::OmitGroupSeparator );
+	int_validator.setLocale( validatorLocale );*/
+	int_validator.setLocale( QLocale::c() ); //Workaround: the code above doesn't work
+
+	//Read the number.
 	QString buffer = input.mid( slash_index + 1 );
 	result = buffer.toInt();
+
+	//Return the validator state.
 	int pos = 0; //we are going to ignore this parameter
 	return int_validator.validate(buffer, pos);
 }
