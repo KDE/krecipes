@@ -63,6 +63,13 @@ void TestMixedNumberRange::testFromString_data()
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 0		<< 3		<< 4		<< 0.75		<< true;
 
+	QTest::newRow("valid4")
+	/* Number string		validator state		valid range?*/
+	<< "1/2"			<< ACC			<< true
+	/* whole	numerator	denominator	value		valid?*/
+	<< 0		<< 1		<< 2		<< 0.5		<< true
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
 	QTest::newRow("invalid1")
 	/* Number string		validator state		valid range?*/
 	<< "1/ - 3"			<< INV			<< false
