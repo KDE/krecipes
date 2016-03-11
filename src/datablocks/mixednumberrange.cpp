@@ -24,8 +24,16 @@ MixedNumberRange::MixedNumberRange( const MixedNumber &value1,
 
 MixedNumberRange::MixedNumberRange( double amount, double offset )
 {
-	this->first = MixedNumber( amount );
-	this->second = MixedNumber( amount+offset );
+	if ( amount == 0.0 ) {
+		this->first = MixedNumber(0,0,0);
+	} else {
+		this->first = MixedNumber( amount );
+	}
+	if ( offset == 0.0 ) {
+		this->second = MixedNumber(0,0,0);
+	} else {
+		this->second = MixedNumber( amount+offset );
+	}
 }
 
 MixedNumberRange::~MixedNumberRange()
@@ -53,11 +61,24 @@ QValidator::State MixedNumberRange::fromString( const QString & input,
 		if ( state1 != QValidator::Acceptable ) {
 			return QValidator::Invalid;
 		} else {
-			if ( (state2 == QValidator::Acceptable)
-			&& !result.isValid() ) {
+			if ( state2 == QValidator::Acceptable ) {
+				if ( !result.isValid() ) {
+					//Mark the range as invalid invalidating
+					//the first number
+					result.first = MixedNumber(0,0,0);
+					return QValidator::Intermediate;
+				} else {
+					return QValidator::Acceptable;
+				}
+			} else if ( state2 == QValidator::Intermediate ) {
+				//Mark the range as invalid invalidating
+				//the first number
+				result.first = MixedNumber(0,0,0);
 				return QValidator::Intermediate;
 			} else {
-				return state2;
+				result.first = MixedNumber(0,0,0);
+				result.second = MixedNumber(0,0,0);
+				return QValidator::Invalid;
 			}
 		}
 	} else if ( tokensCount == 1 ) {
@@ -66,6 +87,7 @@ QValidator::State MixedNumberRange::fromString( const QString & input,
 		//Convert the token to MixedNumber
 		QValidator::State state1 = MixedNumber::fromString(
 			number1, result.first, locale_aware );
+		result.second = MixedNumber(0,0,0); //invalid mixednumber
 		//Return the validator state
 		return state1;
 	}
@@ -91,12 +113,16 @@ QString MixedNumberRange::toString( bool locale_aware ) const
 void MixedNumberRange::toAmountAndOffset( double * amount, double * offset ) const
 {
 	*amount = this->first.toDouble();
-	*offset = this->second.toDouble() - *amount;
+	if ( this->second.isValid() ) {
+		*offset = this->second.toDouble() - *amount;
+	} else {
+		*offset = 0.0;
+	}
 }
 
 bool MixedNumberRange::isValid() const
 {
 	bool result = this->first.isValid()
-		&& (this->second > this->first);
+		&& ( !this->second.isValid() || (this->second > this->first) );
 	return result;
 }
