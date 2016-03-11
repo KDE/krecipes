@@ -97,6 +97,35 @@ void TestMixedNumber::testFromString_data()
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
+	QTest::newRow("invalid9")
+	/* Number string		validator state		isValid?*/
+	<< "-"				<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+	QTest::newRow("invalid10")
+	/* Number string		validator state		isValid?*/
+	<< "-3"				<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+	QTest::newRow("invalid11")
+	/* Number string		validator state		isValid?*/
+	<< "-2/3"				<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+	QTest::newRow("invalid12")
+	/* Number string		validator state		isValid?*/
+	<< "2/-"				<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+	QTest::newRow("invalid13")
+	/* Number string		validator state		isValid?*/
+	<< "2/-3"				<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("intermediate1")
 	/* Number string		validator state		isValid?*/
@@ -126,6 +155,9 @@ void TestMixedNumber::testFromString_data()
 
 void TestMixedNumber::testFromString()
 {
+	//FIXME: Test this with other locales
+	QLocale::setDefault(QLocale("C"));
+
 	//Fetch data
 	QFETCH( QString, numberString );
 	QFETCH( QValidator::State, validatorState );
