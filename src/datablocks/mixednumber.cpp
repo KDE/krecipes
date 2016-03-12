@@ -19,7 +19,7 @@
 #include <KConfigGroup>
 
 #include <QIntValidator>
-#include <KDoubleValidator>
+#include <QDoubleValidator>
 
 
 QString beautify( const QString &num )
@@ -211,8 +211,9 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 
 	if ( (space_index == -1) && (slash_index == -1) ) {  //input contains no fractional part
 
-		KDoubleValidator double_validator(0);
+		QDoubleValidator double_validator(0);
 		double_validator.setBottom( 0.0 );
+		double_validator.setNotation( QDoubleValidator::StandardNotation );
 		//Should return Intermediate or Invalid, whichever it's appropiate.
 		int pos = 0; //we are going to ignore this parameter
 		QValidator::State state = double_validator.validate( input, pos );
