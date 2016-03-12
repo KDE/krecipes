@@ -173,6 +173,41 @@ void TestMixedNumber::testFromString_data()
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
+
+	/*****************************************************************************/
+	/* Locale specific tests: check expected different behaviors.                */
+	/*****************************************************************************/
+
+	QTest::newRow("decimal_es") /* This is OK in Spanish locale */
+	/* Number string		locales		validator state		isValid?*/
+	<< "0,5"			<< "es"		<< ACC			<< true
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 1		<< 2		<< 0.5		<< false;
+
+	QTest::newRow("decimal_es_inv") /* This should fail with "C" locale */
+	/* Number string		locales		validator state		isValid?*/
+	<< "0,5"			<< "C"		<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 1		<< 2		<< 0.5		<< false;
+
+	QTest::newRow("decimal2") /* This is OK in Spanish locale */
+	/* Number string		locales		validator state		isValid?*/
+	<< "2,"				<< "es"		<< ACC			<< true
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 2		<< 0		<< 1		<< 2.0		<< false;
+
+	QTest::newRow("decimal2_es_inv") /* This should fail with "C" locale */
+	/* Number string		locales		validator state		isValid?*/
+	<< "2,"				<< "C"		<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 2		<< 0		<< 1		<< 2.0		<< false;
+
+	QTest::newRow("thousand separator") /* This shouldn't be taken as one thousand */
+	/* Number string		locales		validator state		isValid?*/
+	<< "1.000"			<< ANY_LOCALE	<< ACC		<< true
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 1		<< 0		<< 1		<< 1.0		<< false;
+
 }
 
 void TestMixedNumber::testFromString()
