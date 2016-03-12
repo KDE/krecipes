@@ -14,15 +14,19 @@
 
 #include <QtTest/QTest>
 #include <QDebug>
+#include <QtGlobal>
 
 Q_DECLARE_METATYPE(QValidator::State);
 #define INV QValidator::Invalid
 #define ITM QValidator::Intermediate
 #define ACC QValidator::Acceptable
 
+#define ANY_LOCALE "C,es"
+
 void TestMixedNumber::testFromString_data()
 {
 	QTest::addColumn<QString>("numberString");
+	QTest::addColumn<QString>("locales");
 	QTest::addColumn<QValidator::State>("validatorState");
 	QTest::addColumn<bool>("isValid");
 	QTest::addColumn<int>("whole");
@@ -32,140 +36,140 @@ void TestMixedNumber::testFromString_data()
 	QTest::addColumn<bool>("isFraction");
 
 	QTest::newRow("null string")
-	/* Number string		validator state		isValid?*/
-	<< QString()			<< ITM			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< QString()			<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value 		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("empty string")
-	/* Number string		validator state		isValid?*/
-	<< ""				<< ITM			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< ""				<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value 		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("fraction")
-	/* Number string		validator state		isValid?*/
-	<< "2/3"			<< ACC			<< true
+	/* Number string		locales		validator state		isValid?*/
+	<< "2/3"			<< ANY_LOCALE	<< ACC			<< true
 	/* whole	numerator	denominator	value 		is fraction? */
 	<< 0		<< 2		<< 3		<< 2.0/3.0	<< true;
 
 	QTest::newRow("decimal")
-	/* Number string		validator state		isValid?*/
-	<< "0.5"			<< ACC			<< true
+	/* Number string		locales		validator state		isValid?*/
+	<< "0.5"			<< ANY_LOCALE	<< ACC			<< true
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 1		<< 2		<< 0.5		<< false;
 
 	QTest::newRow("decimal2")
-	/* Number string		validator state		isValid?*/
-	<< "2."				<< ACC			<< true
+	/* Number string		locales		validator state		isValid?*/
+	<< "2."				<< ANY_LOCALE	<< ACC			<< true
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 2		<< 0		<< 1		<< 2.0		<< false;
 
 	QTest::newRow("mixed")
-	/* Number string		validator state		isValid?*/
-	<< "2 3/4"			<< ACC			<< true
+	/* Number string		locales		validator state		isValid?*/
+	<< "2 3/4"			<< ANY_LOCALE	<< ACC			<< true
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 2		<< 3		<< 4		<< 2.75		<< true;
 
 	QTest::newRow("decimal, scientific notation") /* this should be forbidden */
-	/* Number string		validator state		isValid?*/
-	<< "1e"				<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "1e"				<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid1")
-	/* Number string		validator state		isValid?*/
-	<< "abc"			<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "abc"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid2")
-	/* Number string		validator state		isValid?*/
-	<< "3.."			<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "3.."			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid3")
-	/* Number string		validator state		isValid?*/
-	<< "23/ 4"			<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "23/ 4"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid4")
-	/* Number string		validator state		isValid?*/
-	<< "8//"			<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "8//"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid5")
-	/* Number string		validator state		isValid?*/
-	<< "4 /3"			<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "4 /3"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid6")
-	/* Number string		validator state		isValid?*/
-	<< "3/0.4"			<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "3/0.4"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid7")
-	/* Number string		validator state		isValid?*/
-	<< "3/.4"			<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "3/.4"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid8")
-	/* Number string		validator state		isValid?*/
-	<< "3/0"			<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "3/0"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid9")
-	/* Number string		validator state		isValid?*/
-	<< "-"				<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "-"				<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid10")
-	/* Number string		validator state		isValid?*/
-	<< "-3"				<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "-3"				<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid11")
-	/* Number string		validator state		isValid?*/
-	<< "-2/3"				<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "-2/3"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid12")
-	/* Number string		validator state		isValid?*/
-	<< "2/-"				<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "2/-"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid13")
-	/* Number string		validator state		isValid?*/
-	<< "2/-3"				<< INV			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "2/-3"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("intermediate1")
-	/* Number string		validator state		isValid?*/
-	<< "1/"				<< ITM			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "1/"				<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("intermediate2")
-	/* Number string		validator state		isValid?*/
-	<< "4 3/"			<< ITM			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "4 3/"			<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("intermediate3")
-	/* Number string		validator state		isValid?*/
-	<< "5 2"			<< ITM			<< false
+	/* Number string		locales		validator state		isValid?*/
+	<< "5 2"			<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
@@ -173,11 +177,9 @@ void TestMixedNumber::testFromString_data()
 
 void TestMixedNumber::testFromString()
 {
-	//FIXME: Test this with other locales
-	QLocale::setDefault(QLocale("C"));
-
 	//Fetch data
 	QFETCH( QString, numberString );
+	QFETCH( QString, locales );
 	QFETCH( QValidator::State, validatorState );
 	QFETCH( bool, isValid );
 	QFETCH( int, whole );
@@ -186,21 +188,30 @@ void TestMixedNumber::testFromString()
 	QFETCH( double, value );
 	QFETCH( bool, isFraction );
 
-	//Convert to MixedNumber
-	MixedNumber number;
-	QValidator::State state;
-	state = MixedNumber::fromString( numberString, number, false );
+	QStringList localeList = locales.split(",");
+	foreach ( QString locale, localeList ) {
 
-	//Check the results
-	qDebug() << "Validator state: " << state;
-	QCOMPARE( state, validatorState );
-	QCOMPARE( number.isValid(), isValid );
-	if ( isValid ) {
-		QCOMPARE( number.whole(), whole );
-		QCOMPARE( number.numerator(), numerator );
-		QCOMPARE( number.denominator(), denominator );
-		QCOMPARE( number.toDouble(), value );
-		QCOMPARE( MixedNumber::isFraction(numberString), isFraction );
+		//Set locale
+		QLocale::setDefault(QLocale(locale));
+
+		//Convert to MixedNumber
+		MixedNumber number;
+		QValidator::State state;
+		state = MixedNumber::fromString( numberString, number, false );
+
+		//Check the results
+		qDebug() << "String:" << numberString << "Locale:" << locale 
+			<< "Validator state: " << state;
+		QCOMPARE( state, validatorState );
+		QCOMPARE( number.isValid(), isValid );
+		if ( isValid ) {
+			QCOMPARE( number.whole(), whole );
+			QCOMPARE( number.numerator(), numerator );
+			QCOMPARE( number.denominator(), denominator );
+			QCOMPARE( number.toDouble(), value );
+			QCOMPARE( MixedNumber::isFraction(numberString), isFraction );
+		}
+
 	}
 }
 
