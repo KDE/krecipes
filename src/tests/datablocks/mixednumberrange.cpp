@@ -40,6 +40,19 @@ void TestMixedNumberRange::testFromString_data()
 	QTest::addColumn<int>("denominator2");
 	QTest::addColumn<double>("value2");
 	QTest::addColumn<bool>("isValid2");
+	QTest::newRow("null string")
+	/* Number string		validator state		valid range?*/
+	<< QString()			<< ITM			<< false
+	/* whole	numerator	denominator	value 		valid? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+	QTest::newRow("empty string")
+	/* Number string		validator state		valid range?*/
+	<< ""				<< ITM			<< false
+	/* whole	numerator	denominator	value 		valid? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("valid1")
 	/* Number string		validator state		valid range?*/

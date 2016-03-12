@@ -31,6 +31,18 @@ void TestMixedNumber::testFromString_data()
 	QTest::addColumn<double>("value");
 	QTest::addColumn<bool>("isFraction");
 
+	QTest::newRow("null string")
+	/* Number string		validator state		isValid?*/
+	<< QString()			<< ITM			<< false
+	/* whole	numerator	denominator	value 		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
+	QTest::newRow("empty string")
+	/* Number string		validator state		isValid?*/
+	<< ""				<< ITM			<< false
+	/* whole	numerator	denominator	value 		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
 	QTest::newRow("fraction")
 	/* Number string		validator state		isValid?*/
 	<< "2/3"			<< ACC			<< true
