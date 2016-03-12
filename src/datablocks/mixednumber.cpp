@@ -241,7 +241,6 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 
 		QValidator::State num_state;
 		num_state = MixedNumber::getNumerator( input, space_index, slash_index, numerator );
-		kDebug() << num_state;
 		if ( num_state != QValidator::Acceptable ) {
 			result.m_isValid = false;
 			return QValidator::Invalid;
@@ -249,7 +248,6 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 
 		QValidator::State den_state;
 		den_state = MixedNumber::getDenominator( input, slash_index, denominator );
-		qDebug() << den_state;
 		if ( den_state == QValidator::Acceptable ) {
 			if ( denominator == 0 ) {
 				result.m_isValid = false;
