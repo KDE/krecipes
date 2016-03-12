@@ -15,6 +15,7 @@
 
 #include <QtTest/QTest>
 #include <QDebug>
+#include <QtGlobal>
 
 
 Q_DECLARE_METATYPE(QValidator::State);
@@ -22,10 +23,12 @@ Q_DECLARE_METATYPE(QValidator::State);
 #define ITM QValidator::Intermediate
 #define ACC QValidator::Acceptable
 
+#define ANY_LOCALE "C,es"
 
 void TestMixedNumberRange::testFromString_data()
 {
 	QTest::addColumn<QString>("rangeString");
+	QTest::addColumn<QString>("locales");
 	QTest::addColumn<QValidator::State>("validatorState");
 	QTest::addColumn<bool>("isValid");
 
@@ -40,115 +43,116 @@ void TestMixedNumberRange::testFromString_data()
 	QTest::addColumn<int>("denominator2");
 	QTest::addColumn<double>("value2");
 	QTest::addColumn<bool>("isValid2");
+
 	QTest::newRow("null string")
-	/* Number string		validator state		valid range?*/
-	<< QString()			<< ITM			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< QString()		<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value 		valid? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("empty string")
-	/* Number string		validator state		valid range?*/
-	<< ""				<< ITM			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< ""			<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value 		valid? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("valid1")
-	/* Number string		validator state		valid range?*/
-	<< "1/2 - 1"			<< ACC			<< true
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2 - 1"		<< ANY_LOCALE	<< ACC			<< true
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	QTest::newRow("valid2")
-	/* Number string		validator state		valid range?*/
-	<< "1/2-1"			<< ACC			<< true
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2-1"		<< ANY_LOCALE	<< ACC			<< true
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	//Probably it doesn't make much sense for Krecipes, but you can have this one
 	QTest::newRow("valid3")
-	/* Number string		validator state		valid range?*/
-	<< "1/2 - 0.75"			<< ACC			<< true
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2 - 0.75"		<< ANY_LOCALE	<< ACC			<< true
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 0		<< 3		<< 4		<< 0.75		<< true;
 
 	QTest::newRow("valid4")
-	/* Number string		validator state		valid range?*/
-	<< "1/2"			<< ACC			<< true
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2"		<< ANY_LOCALE	<< ACC			<< true
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
 	QTest::newRow("invalid1")
-	/* Number string		validator state		valid range?*/
-	<< "1/ - 3"			<< INV			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/ - 3"		<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	QTest::newRow("invalid2")
-	/* Number string		validator state		valid range?*/
-	<< "1/-"			<< INV			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/-"		<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	QTest::newRow("invalid3")
-	/* Number string		validator state		valid range?*/
-	<< "-"			<< INV			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "-"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	QTest::newRow("invalid4")
-	/* Number string		validator state		valid range?*/
-	<< "1/2 -- 1"			<< INV			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2 -- 1"		<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	QTest::newRow("invalid6")
-	/* Number string		validator state		valid range?*/
-	<< "-"			<< INV			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "-"			<< ANY_LOCALE	<< INV			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	QTest::newRow("intermediate1")
-	/* Number string		validator state		valid range?*/
-	<< "1/2 -"			<< ITM			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2 -"		<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	QTest::newRow("intermediate2")
-	/* Number string		validator state		valid range?*/
-	<< "1/2 - 3/"			<< ITM			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2 - 3/"		<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< true;
 
 	QTest::newRow("intermediate3")
-	/* Number string		validator state		valid range?*/
-	<< "1/2 - 1/3"			<< ITM			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2 - 1/3"		<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 0		<< 1		<< 3		<< 1.0/3.0	<< true;
 
 	QTest::newRow("intermediate4")
-	/* Number string		validator state		valid range?*/
-	<< "1-"				<< ITM			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "1-"			<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 0		<< 1		<< 2		<< 0.5		<< true
 	<< 0		<< 1		<< 3		<< 1.0/3.0	<< true;
 
 	QTest::newRow("intermediate5")
-	/* Number string		validator state		valid range?*/
-	<< "1. - "			<< ITM			<< false
+	/* Number string	locales		validator state		valid range?*/
+	<< "1. - "		<< ANY_LOCALE	<< ITM			<< false
 	/* whole	numerator	denominator	value		valid?*/
 	<< 1		<< 0		<< 1		<< 1.0		<< true
 	<< 1		<< 0		<< 1		<< 1.0		<< false;
@@ -160,6 +164,7 @@ void TestMixedNumberRange::testFromString()
 {
 	//Fetch data
 	QFETCH( QString, rangeString );
+	QFETCH( QString, locales );
 	QFETCH( QValidator::State, validatorState );
 	QFETCH( bool, isValid );
 
@@ -175,39 +180,47 @@ void TestMixedNumberRange::testFromString()
 	QFETCH( double, value2 );
 	QFETCH( bool, isValid2 );
 
+	QStringList localeList = locales.split(",");
+	foreach( QString locale, localeList ) {
 
-	//Convert to MixedNumberRange
-	MixedNumberRange numberRange;
-	QValidator::State state;
-	state = MixedNumberRange::fromString( rangeString, numberRange, false );
+		//Set locale
+		QLocale::setDefault(QLocale(locale));
 
-	//Check the validator state
-	qDebug() << "Validator state: " << state;
-	QCOMPARE( state, validatorState );
+		//Convert to MixedNumberRange
+		MixedNumberRange numberRange;
+		QValidator::State state;
+		state = MixedNumberRange::fromString( rangeString, numberRange, false );
 
-	//Check if the range is valid
-	QCOMPARE( numberRange.isValid(), isValid );
+		//Check the validator state
+		qDebug() << "String:" << rangeString << "Locale:" << locale
+			<< "Validator state: " << state;
+		QCOMPARE( state, validatorState );
 
-	//If the tested data is valid, check each number of the range
-	if ( isValid ) {
-		//Number 1
-		if ( isValid1 ) {
-			QCOMPARE( numberRange.first.whole(), whole1 );
-			QCOMPARE( numberRange.first.numerator(), numerator1 );
-			QCOMPARE( numberRange.first.denominator(), denominator1 );
-			QCOMPARE( numberRange.first.toDouble(), value1 );
-			QCOMPARE( numberRange.first.isValid(), isValid1 );
-		}
-		//Number 2
-		if ( isValid2 ) {
-			QCOMPARE( numberRange.second.whole(), whole2 );
-			QCOMPARE( numberRange.second.numerator(), numerator2 );
-			QCOMPARE( numberRange.second.denominator(), denominator2 );
-			QCOMPARE( numberRange.second.toDouble(), value2 );
-			QCOMPARE( numberRange.second.isValid(), isValid2 );
-		}
+		//Check if the range is valid
+		QCOMPARE( numberRange.isValid(), isValid );
 
-	}
+		//If the tested data is valid, check each number of the range
+		if ( isValid ) {
+			//Number 1
+			if ( isValid1 ) {
+				QCOMPARE( numberRange.first.whole(), whole1 );
+				QCOMPARE( numberRange.first.numerator(), numerator1 );
+				QCOMPARE( numberRange.first.denominator(), denominator1 );
+				QCOMPARE( numberRange.first.toDouble(), value1 );
+				QCOMPARE( numberRange.first.isValid(), isValid1 );
+			}
+			//Number 2
+			if ( isValid2 ) {
+				QCOMPARE( numberRange.second.whole(), whole2 );
+				QCOMPARE( numberRange.second.numerator(), numerator2 );
+				QCOMPARE( numberRange.second.denominator(), denominator2 );
+				QCOMPARE( numberRange.second.toDouble(), value2 );
+				QCOMPARE( numberRange.second.isValid(), isValid2 );
+			}
+
+		} //end if
+
+	} //end foreach
 }
 
 
