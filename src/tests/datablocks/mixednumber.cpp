@@ -67,6 +67,12 @@ void TestMixedNumber::testFromString_data()
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 2		<< 3		<< 4		<< 2.75		<< true;
 
+	QTest::newRow("decimal, scientific notation") /* this should be forbidden */
+	/* Number string		validator state		isValid?*/
+	<< "1e"				<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
 	QTest::newRow("invalid1")
 	/* Number string		validator state		isValid?*/
 	<< "abc"			<< INV			<< false
