@@ -10,6 +10,10 @@ Changes from 2.1.0 to 2.2.0:
   * Fix the rating saving when all the ratings are deleted.
   * Fixed the date picker popup to suggest only dates in the past.
     BUG: 355395
+  * Change the number input handling; not it uses QValidator's to check the
+    input string (so you shouldn't be able to type most invalid inputs, such as
+    "abc"). Also the functions to convert from string to a number have unit
+    tests.
 
 Changes from 2.0.0 to 2.1.0:
   * Removed some Qt3 support usage.
