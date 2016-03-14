@@ -993,7 +993,7 @@ QString LiteRecipeDB::escapeAndEncode( const QString &s ) const
 
 QString LiteRecipeDB::unescapeAndDecode( const QByteArray &s ) const
 {
-	return QString::fromLatin1( s );
+	return QString::fromAscii( s );
 }
 
 /*

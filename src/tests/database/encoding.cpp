@@ -189,9 +189,7 @@ void TestDatabaseEncoding::testRetrievePropertyUTF8()
 	
 	IngredientProperty p = m_sqliteDatabase->propertyName( i );
 	QVERIFY2( p.units == QString("mL"), "Units have changed." );
-	//FIXME: this would not work due to the bad encoding handling in Krecipes,
-	//it's going to take time to fix it, so comment it out temporalily.
-	//QVERIFY2( p.name == moose2, "Property name has been mangled." );
+	QVERIFY2( p.name == moose2, "Property name has been mangled." );
 
 	if ( i > 0 ) {
 		m_sqliteDatabase->removeProperty( i );

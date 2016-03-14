@@ -48,7 +48,7 @@ QSqlRecipeDB::QSqlRecipeDB( const QString &host, const QString &user, const QStr
 	dbOK = false; //it isn't ok until we've connect()'ed
 	++m_refCount;
 
-	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("Latin1"));  //this is the default, but let's explicitly set this to be sure
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 }
 
 QSqlRecipeDB::~QSqlRecipeDB()
@@ -1999,10 +1999,14 @@ QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 	return QString::fromLatin1( s_escaped.toUtf8() );
 }
 
-//The string coming out of the database is utf8 text, interpreted as though latin1.  Calling fromUtf8() on this gives us back the original utf8.
+//The string coming out of the database is utf8 text, interpreted as though latin1.
+//Calling fromUtf8() on this gives us back the original utf8.
 QString QSqlRecipeDB::unescapeAndDecode( const QByteArray &s ) const
 {
-	return QString::fromUtf8( s ).replace( "\";@", ";" ); // Use unicode encoding
+	QString result = QString::fromAscii( s );
+	result = QString::fromUtf8( result.toLatin1() );
+	result.replace( "\";@", ";" );
+	return result;
 }
 
 static bool query_has_result( const QString & q, QSqlDatabase &db )
