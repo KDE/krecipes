@@ -11,6 +11,7 @@
 
 #include "qsqlrecipedb.h"
 #include <QSqlQuery>
+#include <QSqlField>
 #include <QSqlError>
 #include <QByteArray>
 #include <QImageWriter>
@@ -1990,13 +1991,19 @@ void QSqlRecipeDB::loadPropertyElementList( ElementList *elList, QSqlQuery *quer
 //The string going into the database is utf8 text interpreted as latin1
 QString QSqlRecipeDB::escapeAndEncode( const QString &s ) const
 {
-	QString s_escaped = s;
+	QString result = s;
 
-	s_escaped.replace ( '\\', "\\\\" );
-	s_escaped.replace ( '\'', "\\'" );
-	s_escaped.replace ( ';', "\";@" ); // Small trick for only for parsing later on
+	result.replace ( ';', "\";@" ); // Small trick for only for parsing later on
 
-	return QString::fromLatin1( s_escaped.toUtf8() );
+	result = QString::fromLatin1( result.toUtf8() );
+
+        QSqlField field( "dummyfield", QVariant::String );
+        field.setValue( QVariant(result) );
+        result = this->currentDriver()->formatValue( field );
+        result.remove(0,1);
+        result.chop(1);
+
+	return result;
 }
 
 //The string coming out of the database is utf8 text, interpreted as though latin1.
