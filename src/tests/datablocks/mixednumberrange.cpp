@@ -158,6 +158,39 @@ void TestMixedNumberRange::testFromString_data()
 	<< 1		<< 0		<< 1		<< 1.0		<< false;
 
 
+	/*****************************************************************************/
+	/* Locale specific tests: check expected different behaviors.                */
+	/*****************************************************************************/
+
+	//Probably it doesn't make much sense for Krecipes, but you can have this one
+	QTest::newRow("valid3_es")
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2 - 0,75"		<< "es"		<< ACC			<< true
+	/* whole	numerator	denominator	value		valid?*/
+	<< 0		<< 1		<< 2		<< 0.5		<< true
+	<< 0		<< 3		<< 4		<< 0.75		<< true;
+
+	QTest::newRow("valid3_es_inv")
+	/* Number string	locales		validator state		valid range?*/
+	<< "1/2 - 0,75"		<< "C"		<< INV			<< false
+	/* whole	numerator	denominator	value		valid?*/
+	<< 0		<< 1		<< 2		<< 0.5		<< true
+	<< 0		<< 3		<< 4		<< 0.75		<< true;
+
+	QTest::newRow("intermediate5_es")
+	/* Number string	locales		validator state		valid range?*/
+	<< "1, - "		<< "es"		<< ITM			<< false
+	/* whole	numerator	denominator	value		valid?*/
+	<< 1		<< 0		<< 1		<< 1.0		<< true
+	<< 1		<< 0		<< 1		<< 1.0		<< false;
+
+	QTest::newRow("intermediate5_es_inv")
+	/* Number string	locales		validator state		valid range?*/
+	<< "1, - "		<< "C"		<< INV			<< false
+	/* whole	numerator	denominator	value		valid?*/
+	<< 1		<< 0		<< 1		<< 1.0		<< true
+	<< 1		<< 0		<< 1		<< 1.0		<< false;
+
 }
 
 void TestMixedNumberRange::testFromString()
