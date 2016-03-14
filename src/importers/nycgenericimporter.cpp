@@ -156,7 +156,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	{
 		MixedNumber test_amount;
 		QValidator::State state;
-		state = MixedNumber::fromString( ingredient_line[ 0 ], test_amount, false );
+		state = MixedNumber::fromString( ingredient_line[ 0 ], test_amount );
 		if ( state != QValidator::Acceptable )
 		{
 			amount = amount + test_amount;
@@ -168,7 +168,7 @@ void NYCGenericImporter::loadIngredientLine( const QString &line )
 	{
 		MixedNumber test_amount;
 		QValidator::State state;
-		state = MixedNumber::fromString( ingredient_line[ 0 ], test_amount, false );
+		state = MixedNumber::fromString( ingredient_line[ 0 ], test_amount );
 		if ( state == QValidator::Acceptable )
 		{
 			amount = amount + test_amount;

@@ -29,9 +29,14 @@ public:
 
 	~MixedNumberRange();
 
-
+	/** Parses the given QString as a mixed number range.
+	  *
+	  * This function may have different behaviors with different locales,
+	  * but it's guaranteed it will allways parse a string formatted
+	  * according to the "C" locale.
+	  */
 	static QValidator::State fromString( const QString &input,
-		MixedNumberRange &result, bool locale_aware );
+		MixedNumberRange &result );
 
 
 	QString toString( MixedNumber::Format format, bool locale_aware ) const;

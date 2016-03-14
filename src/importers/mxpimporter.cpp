@@ -184,7 +184,7 @@ void MXPImporter::loadIngredients( QTextStream &stream, Recipe &recipe )
 			{
 				MixedNumber amount;
 				QValidator::State state;
-				state = MixedNumber::fromString( amount_str, amount, false );
+				state = MixedNumber::fromString( amount_str, amount );
 				if ( state != QValidator::Acceptable )
 				{
 					addWarningMsg( i18n( "While loading recipe \"%1\" Invalid amount \"%2\" in the line \"%3\"" , recipe.title, amount_str , current.trimmed() ) );

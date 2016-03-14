@@ -93,7 +93,7 @@ void Ingredient::setAmount( const QString &range, bool *ok )
 	if ( MixedNumber::isFraction( amount_min ) ) {
 		MixedNumber mixed_min;
 		QValidator::State state;
-		state = MixedNumber::fromString( amount_min, mixed_min, true );
+		state = MixedNumber::fromString( amount_min, mixed_min );
 		if ( state != QValidator::Acceptable ) {
 			if (ok) *ok = false;
 			return;
@@ -108,7 +108,7 @@ void Ingredient::setAmount( const QString &range, bool *ok )
 		if ( MixedNumber::isFraction( amount_max ) ) {
 			MixedNumber mixed_max;
 			QValidator::State state;
-			state = MixedNumber::fromString( amount_max, mixed_max, true );
+			state = MixedNumber::fromString( amount_max, mixed_max );
 			if ( state != QValidator::Acceptable ) {
 				if (ok) *ok = false;
 				return;

@@ -146,7 +146,7 @@ QWidget* ConversionTableItem::createEditor() const
 	FractionInput *editor = new FractionInput( table()->viewport(), MixedNumber::DecimalFormat );
 
 	MixedNumber current;
-	MixedNumber::fromString( text(), current, true );
+	MixedNumber::fromString( text(), current );
 	if ( current.toDouble() > 1e-8 )
 		editor->setValue( current, 0 );
 

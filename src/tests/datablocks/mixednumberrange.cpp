@@ -222,7 +222,7 @@ void TestMixedNumberRange::testFromString()
 		//Convert to MixedNumberRange
 		MixedNumberRange numberRange;
 		QValidator::State state;
-		state = MixedNumberRange::fromString( rangeString, numberRange, false );
+		state = MixedNumberRange::fromString( rangeString, numberRange );
 
 		//Check the validator state
 		qDebug() << "String:" << rangeString << "Locale:" << locale

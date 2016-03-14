@@ -352,7 +352,7 @@ void RecipeMLImporter::readRecipemlQty( const QDomElement &qty, Ingredient &ing 
 			readRecipemlRange( qtyChild, ing.amount, ing.amount_offset );
 		else if ( tagName.isEmpty() ) {
 			MixedNumber number;
-			MixedNumber::fromString( qty.text(), number, false );
+			MixedNumber::fromString( qty.text(), number );
 			ing.amount = number.toDouble();
 		} else
 			kDebug() << "Unknown tag within <qty>: " << tagName ;
@@ -368,10 +368,10 @@ void RecipeMLImporter::readRecipemlRange( const QDomElement& range, double &amou
 		QDomElement rangeChild = rangeChilds.item( j ).toElement();
 		QString subTagName = rangeChild.tagName();
 		if ( subTagName == "q1" ) {
-			MixedNumber::fromString( rangeChild.text(), number, false );
+			MixedNumber::fromString( rangeChild.text(), number );
 			q1 = number.toDouble();
 		} else if ( subTagName == "q2" ) {
-			MixedNumber::fromString( rangeChild.text(), number, false );
+			MixedNumber::fromString( rangeChild.text(), number );
 			q2 = number.toDouble();
 		} else
 			kDebug() << "Unknown tag within <range>: " << subTagName ;

@@ -18,5 +18,5 @@ QValidator::State MixedNumberValidator::validate ( QString & input, int & pos ) 
 	Q_UNUSED(pos)
 
 	MixedNumber number;
-	return MixedNumber::fromString( input, number, true );
+	return MixedNumber::fromString( input, number );
 }

@@ -295,11 +295,11 @@ void RezkonvImporter::readRange( const QString &range_str, double &amount, doubl
 	QString to   = range_str.section( '-', 1, 1 );
 
 	MixedNumber number;
-	MixedNumber::fromString( from, number, false);
+	MixedNumber::fromString( from, number );
 	amount = number.toDouble();
 
 	if ( !to.trimmed().isEmpty() ) {
-		MixedNumber::fromString( to, number, false );
+		MixedNumber::fromString( to, number );
 		amount_offset = number.toDouble() - amount;
 	}
 }

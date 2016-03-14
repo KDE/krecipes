@@ -76,7 +76,7 @@ void ResizeRecipeDialog::accept()
 		if ( ui->m_newYieldInput->isInputValid() ) {
 			double new_yield = ui->m_newYieldInput->value().toDouble();
 			MixedNumber number;
-			MixedNumber::fromString( ui->m_currentYieldInput->text(), number, true );
+			MixedNumber::fromString( ui->m_currentYieldInput->text(), number );
 			double current_yield = number.toDouble();
 
 			resizeRecipe( new_yield / current_yield );
@@ -101,7 +101,7 @@ void ResizeRecipeDialog::accept()
 void ResizeRecipeDialog::resizeRecipe( double factor )
 {
 	MixedNumber number;
-	MixedNumber::fromString( ui->m_currentYieldInput->text(), number, true );
+	MixedNumber::fromString( ui->m_currentYieldInput->text(), number );
 	m_recipe->yield.setAmount( number.toDouble() * factor );
 
 	for ( IngredientList::iterator ing_it = m_recipe->ingList.begin(); ing_it != m_recipe->ingList.end(); ++ing_it ) {

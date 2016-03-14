@@ -189,7 +189,7 @@ bool MMFImporter::loadIngredientLine( const QString &string, IngredientList &lis
 	if ( !string.mid( 0, 7 ).trimmed().isEmpty() ) {
 		MixedNumber amount;
 		QValidator::State state;
-		state = MixedNumber::fromString( string.mid( 0, 7 ).trimmed(), amount, false );
+		state = MixedNumber::fromString( string.mid( 0, 7 ).trimmed(), amount );
 		if ( state != QValidator::Acceptable )
 			return false;
 		else

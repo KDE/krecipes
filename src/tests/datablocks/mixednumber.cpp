@@ -232,7 +232,7 @@ void TestMixedNumber::testFromString()
 		//Convert to MixedNumber
 		MixedNumber number;
 		QValidator::State state;
-		state = MixedNumber::fromString( numberString, number, false );
+		state = MixedNumber::fromString( numberString, number );
 
 		//Check the results
 		qDebug() << "String:" << numberString << "Locale:" << locale 

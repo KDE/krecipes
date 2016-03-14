@@ -183,7 +183,7 @@ QValidator::State MixedNumber::getDenominator( const QString &input, int slash_i
 	return int_validator.validate(buffer, pos);
 }
 
-QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &result, bool locale_aware )
+QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &result )
 {
 	QString input = str.trimmed();
 	if ( input.isEmpty() ) {

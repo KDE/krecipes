@@ -47,7 +47,7 @@ void FractionInput::setValueRange( const MixedNumberRange & value )
 MixedNumberRange FractionInput::valueRange() const
 {
 	MixedNumberRange result;
-	MixedNumberRange::fromString( text(), result, true );
+	MixedNumberRange::fromString( text(), result );
 	return result;
 }
 

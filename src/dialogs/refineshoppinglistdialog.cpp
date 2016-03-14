@@ -189,7 +189,7 @@ void RefineShoppingListDialog::itemRenamed( Q3ListViewItem* item, const QString 
 
 		QValidator::State state;
 		MixedNumber amount;
-		state = MixedNumber::fromString( new_text, amount, true );
+		state = MixedNumber::fromString( new_text, amount );
 		if ( state == QValidator::Acceptable ) {
 			( *found_it ).amount = amount.toDouble();
 		}

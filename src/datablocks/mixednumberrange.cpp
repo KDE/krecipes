@@ -41,7 +41,7 @@ MixedNumberRange::~MixedNumberRange()
 }
 
 QValidator::State MixedNumberRange::fromString( const QString & input,
-	MixedNumberRange & result, bool locale_aware )
+	MixedNumberRange & result )
 {
 	//Split the input string
 	QStringList tokens = input.split('-');
@@ -54,9 +54,9 @@ QValidator::State MixedNumberRange::fromString( const QString & input,
 		number2 = tokens[1].trimmed();
 		//Convert each token to MixedNumber
 		QValidator::State state1 = MixedNumber::fromString(
-			number1, result.first, locale_aware );
+			number1, result.first );
 		QValidator::State state2 = MixedNumber::fromString(
-			number2, result.second, locale_aware );
+			number2, result.second );
 		//Check the results
 		if ( state1 != QValidator::Acceptable ) {
 			return QValidator::Invalid;
@@ -86,7 +86,7 @@ QValidator::State MixedNumberRange::fromString( const QString & input,
 		number1 = tokens[0].trimmed();
 		//Convert the token to MixedNumber
 		QValidator::State state1 = MixedNumber::fromString(
-			number1, result.first, locale_aware );
+			number1, result.first );
 		result.second = MixedNumber(0,0,0); //invalid mixednumber
 		//Return the validator state
 		return state1;

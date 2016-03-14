@@ -175,7 +175,7 @@ void EditRatingDialog::itemRenamed(Q3ListViewItem* it, const QString &, int c)
 	if ( c == 1 ) {
 		QValidator::State state;
 		MixedNumber stars_mn;
-		state = MixedNumber::fromString( it->text(c), stars_mn, true );
+		state = MixedNumber::fromString( it->text(c), stars_mn );
 		if ( (state == QValidator::Acceptable) && !it->text(c).isEmpty() ) {
 			double stars = qMax(0.0,qMin(stars_mn.toDouble(),5.0)); //force to between 0 and 5
 			QPixmap starsPic = Rating::starsPixmap( stars );

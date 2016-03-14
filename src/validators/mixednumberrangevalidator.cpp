@@ -18,5 +18,5 @@ QValidator::State MixedNumberRangeValidator::validate ( QString & input, int & p
 	Q_UNUSED(pos)
 
 	MixedNumberRange numberRange;
-	return MixedNumberRange::fromString( input, numberRange, true );
+	return MixedNumberRange::fromString( input, numberRange );
 }

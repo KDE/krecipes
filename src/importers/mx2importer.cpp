@@ -119,12 +119,12 @@ void MX2Importer::readRecipe( const QDomNodeList& l, Recipe *recipe )
 			if ( !qtyStrList.isEmpty() ) {
 				QValidator::State state;
 				MixedNumber number;
-				state = MixedNumber::fromString( qtyStrList.first(), number, false );
+				state = MixedNumber::fromString( qtyStrList.first(), number );
 				if ( state != QValidator::Acceptable )
 					quantity1 = 0;
 				else
 					quantity1 = number.toDouble();
-				state = MixedNumber::fromString( qtyStrList.last(), number, false );
+				state = MixedNumber::fromString( qtyStrList.last(), number );
 				if ( state != QValidator::Acceptable )
 					quantity2 = 0;
 				else

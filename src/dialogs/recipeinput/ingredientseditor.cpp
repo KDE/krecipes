@@ -471,7 +471,7 @@ void IngredientsEditor::updateIngredientList()
 		index = m_sourceModel->index( i, 1 );
 		QString amountString = m_sourceModel->data( index, Qt::EditRole ).toString();
 		MixedNumberRange range;
-		MixedNumberRange::fromString( amountString, range, true );
+		MixedNumberRange::fromString( amountString, range );
 		ingredient.setAmountRange( range );
 		//Ingredient units
 		index = m_sourceModel->index( i, 2 );

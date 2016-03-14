@@ -78,8 +78,12 @@ public:
 
 	/** Parses the given QString as a mixed number.  The input can be
 	  * expressed as a mixed number in the form "a b/c", or as a decimal.
+	  *
+	  * This function may have different behaviors with different locales,
+	  * but it's guaranteed it will allways parse a string formatted
+	  * according to the "C" locale.
 	  */
-	static QValidator::State fromString( const QString &input, MixedNumber &result, bool locale_aware );
+	static QValidator::State fromString( const QString &input, MixedNumber &result );
 
 	static bool isFraction( const QString &input );
 
