@@ -23,13 +23,41 @@ private slots:
 	void initTestCase();
 	void cleanupTestCase();
 	void testSourceEncoding();
-	void testInsertPropertyLatin1();
-	void testRetrievePropertyLatin1();
-	void testInsertPropertyUTF8();
-	void testRetrievePropertyUTF8();
+
+	void testInsertPropertyLatin1_SQLite();
+	void testRetrievePropertyLatin1_SQLite();
+	void testInsertPropertyUTF8_SQLite();
+	void testRetrievePropertyUTF8_SQLite();
+
+#ifdef KRE_TESTS_MYSQL
+	void testInsertPropertyLatin1_MySQL();
+	void testRetrievePropertyLatin1_MySQL();
+	void testInsertPropertyUTF8_MySQL();
+	void testRetrievePropertyUTF8_MySQL();
+#endif
+
+#ifdef KRE_TESTS_POSTGRESQL
+	void testInsertPropertyLatin1_PostgreSQL();
+	void testRetrievePropertyLatin1_PostgreSQL();
+	void testInsertPropertyUTF8_PostgreSQL();
+	void testRetrievePropertyUTF8_PostgreSQL();
+#endif
+
 private:
 	RecipeDB * createDatabase( const QString & configFilename );
+	inline void testInsertPropertyLatin1();
+	inline void testRetrievePropertyLatin1();
+	inline void testInsertPropertyUTF8();
+	inline void testRetrievePropertyUTF8();
+
 	RecipeDB * m_sqliteDatabase;
+#ifdef KRE_TESTS_MYSQL
+	RecipeDB * m_mysqlDatabase;
+#endif
+#ifdef KRE_TESTS_POSTGRESQL
+	RecipeDB * m_postgresqlDatabase;
+#endif
+
 };
 
 #endif // TEST_DATABASE_ENCODING_H

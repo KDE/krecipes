@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright © 2015 Adriaan de Groot <groot@kde.org>                     *
+ *   Copyright © 2016 José Manuel Santamaría Lema <panfaust@gmail.com>     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,23 +13,76 @@
 
 #include "backends/recipedb.h"
 
+#include <KApplication>
+#include <KGlobal>
+#include <KStandardDirs>
+#include <KConfigGroup>
+#include <KSharedConfigPtr>
+
 #include <QtTest/QTest>
 
 #include <QDebug>
 
 
+RecipeDB * TestDatabaseEncoding::createDatabase(const QString & configFilename )
+{
+	RecipeDB * database;
+
+	QString configFilePath = ":/" + configFilename;
+	qDebug() << "opening database configured in" << configFilePath;
+
+	QStringList strList;
+	strList << configFilePath;
+	KGlobal::config()->addConfigSources( strList );
+
+	KConfigGroup dbtypeGroup = KGlobal::config()->group( "DBType" );
+	QString dbType = dbtypeGroup.readEntry( "Type", "" );
+
+	KConfigGroup serverGroup = KGlobal::config()->group( "Server" );
+	QString host = serverGroup.readEntry( "Host", "localhost" );
+	QString user = serverGroup.readEntry( "Username", QString() );
+	QString pass = serverGroup.readEntry( "Password", QString() );
+	QString dbname = serverGroup.readEntry( "DBName", "Krecipes" );
+	int port = serverGroup.readEntry( "Port", 0 );
+	QString dbfile = serverGroup.readEntry( "DBFile",
+		KStandardDirs::locateLocal ( "appdata", "krecipes.krecdb" ) );
+
+	database = RecipeDB::createDatabase( dbType, host, user, pass, dbname, port, dbfile );
+
+	database->connect();
+
+	return database;
+}
+
 void TestDatabaseEncoding::initTestCase()
 {
-	QLatin1String dummy("dummy");
-	m_sqliteDatabase = RecipeDB::createDatabase(QLatin1String("SQLite"), dummy, dummy, dummy, dummy, 0, QLatin1String(":memory:"));
-	QVERIFY(m_sqliteDatabase);
-	m_sqliteDatabase->connect();
-
+	m_sqliteDatabase = createDatabase( "sqliterc" );
+	qDebug() << m_sqliteDatabase->dbErr;
         QVERIFY( m_sqliteDatabase->ok() );
 	m_sqliteDatabase->transaction();
 	m_sqliteDatabase->wipeDatabase();
 	m_sqliteDatabase->commit();
-	m_sqliteDatabase->checkIntegrity();
+	//m_sqliteDatabase->checkIntegrity();
+
+#ifdef KRE_TESTS_MYSQL
+	m_mysqlDatabase = createDatabase( "mysqlrc" );
+	qDebug() << m_mysqlDatabase->dbErr;
+        QVERIFY( m_mysqlDatabase->ok() );
+	m_mysqlDatabase->transaction();
+	m_mysqlDatabase->wipeDatabase();
+	m_mysqlDatabase->commit();
+	//m_mysqlDatabase->checkIntegrity();
+#endif
+
+#ifdef KRE_TESTS_POSTGRESQL
+	m_postgresqlDatabase = createDatabase( "postgresqlrc" );
+	qDebug() << m_postgresqlDatabase->dbErr;
+        QVERIFY( m_postgresqlDatabase->ok() );
+	m_postgresqlDatabase->transaction();
+	m_postgresqlDatabase->wipeDatabase();
+	m_postgresqlDatabase->commit();
+	//m_postgresqlDatabase->checkIntegrity();
+#endif
 }
 
 
@@ -37,6 +91,16 @@ void TestDatabaseEncoding::cleanupTestCase()
 	if ( m_sqliteDatabase ) {
 		delete m_sqliteDatabase;
 	}
+#ifdef KRE_TESTS_MYSQL
+	if ( m_mysqlDatabase ) {
+		delete m_mysqlDatabase;
+	}
+#endif
+#ifdef KRE_TESTS_POSTGRESQL
+	if ( m_postgresqlDatabase ) {
+		delete m_postgresqlDatabase;
+	}
+#endif
 }
 
 void TestDatabaseEncoding::testSourceEncoding()
@@ -134,6 +198,70 @@ void TestDatabaseEncoding::testRetrievePropertyUTF8()
 	}
 
 }
+
+void TestDatabaseEncoding::testInsertPropertyLatin1_SQLite()
+{
+	testInsertPropertyLatin1();
+}
+
+void TestDatabaseEncoding::testRetrievePropertyLatin1_SQLite()
+{
+	testRetrievePropertyLatin1();
+}
+
+void TestDatabaseEncoding::testInsertPropertyUTF8_SQLite()
+{
+	testInsertPropertyUTF8();
+}
+
+void TestDatabaseEncoding::testRetrievePropertyUTF8_SQLite()
+{
+	testRetrievePropertyUTF8();
+}
+
+#ifdef KRE_TESTS_MYSQL
+void TestDatabaseEncoding::testInsertPropertyLatin1_MySQL()
+{
+	testInsertPropertyLatin1();
+}
+
+void TestDatabaseEncoding::testRetrievePropertyLatin1_MySQL()
+{
+	testRetrievePropertyLatin1();
+}
+
+void TestDatabaseEncoding::testInsertPropertyUTF8_MySQL()
+{
+	testInsertPropertyUTF8();
+}
+
+void TestDatabaseEncoding::testRetrievePropertyUTF8_MySQL()
+{
+	testRetrievePropertyUTF8();
+}
+#endif
+
+#ifdef KRE_TESTS_POSTGRESQL
+void TestDatabaseEncoding::testInsertPropertyLatin1_PostgreSQL()
+{
+	testInsertPropertyLatin1();
+}
+
+void TestDatabaseEncoding::testRetrievePropertyLatin1_PostgreSQL()
+{
+	testRetrievePropertyLatin1();
+}
+
+void TestDatabaseEncoding::testInsertPropertyUTF8_PostgreSQL()
+{
+	testInsertPropertyUTF8();
+}
+
+void TestDatabaseEncoding::testRetrievePropertyUTF8_PostgreSQL()
+{
+	testRetrievePropertyUTF8();
+}
+#endif
 
 
 QTEST_MAIN(TestDatabaseEncoding)
