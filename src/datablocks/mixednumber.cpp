@@ -231,11 +231,6 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 		return state;
 
 	} else if ( (space_index == -1) && (slash_index != -1) ) {  //input just contains a fraction
-		if ( input.endsWith( "/" ) )
-		{
-			result.m_isValid = false;
-			return QValidator::Intermediate;
-		}
 
 		whole = 0;
 
@@ -260,6 +255,7 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 			result.m_isValid = false;
 			return den_state;
 		}
+
 	} else if ( (space_index != -1) && (slash_index == -1) ) {  //input contains an incomplete mixed number
 		whole = input.mid( 0, space_index ).toInt( &num_ok );
 		if ( !num_ok ) {

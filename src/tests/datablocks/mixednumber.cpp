@@ -155,6 +155,12 @@ void TestMixedNumber::testFromString_data()
 	/* whole	numerator	denominator	value		is fraction? */
 	<< 0		<< 0		<< 0		<< 0.0		<< false;
 
+	QTest::newRow("invalid14")
+	/* Number string		locales		validator state		isValid?*/
+	<< ".678./"			<< ANY_LOCALE	<< INV			<< false
+	/* whole	numerator	denominator	value		is fraction? */
+	<< 0		<< 0		<< 0		<< 0.0		<< false;
+
 	QTest::newRow("intermediate1")
 	/* Number string		locales		validator state		isValid?*/
 	<< "1/"				<< ANY_LOCALE	<< ITM			<< false
