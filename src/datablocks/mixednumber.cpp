@@ -322,6 +322,10 @@ bool MixedNumber::isFraction( const QString &input )
 
 QString MixedNumber::toString( Format format, bool locale_aware ) const
 {
+	if ( !m_isValid ) {
+		return "";
+	}
+
 	if ( format == AutoFormat ) {
 		format = configuredFormat();
 	}
