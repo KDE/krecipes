@@ -256,6 +256,122 @@ void TestMixedNumber::testFromString()
 	}
 }
 
+void TestMixedNumber::testToString_data()
+{
+	QTest::addColumn<int>("whole");
+	QTest::addColumn<int>("numerator");
+	QTest::addColumn<int>("denominator");
+	QTest::addColumn<QString>("fractionString");
+	QTest::addColumn<QString>("decimalString");
+	QTest::addColumn<bool>("locale_aware");
+	QTest::addColumn<QString>("locales");
+
+	QTest::newRow("invalid MixedNumber")
+	/* whole	numerator	denominator	fraction	decimal */
+	<< 0		<< 0		<< 0		<< ""		<< ""
+	/* locale aware?	locale */
+	<< false		<< ANY_LOCALE;
+
+	QTest::newRow("valid1")
+	/* whole	numerator	denominator	fraction	decimal */
+	<< 0		<< 1		<< 2		<< "1/2"	<< "0.5"
+	/* locale aware?	locale */
+	<< false		<< ANY_LOCALE;
+
+	QTest::newRow("valid1_es")
+	/* whole	numerator	denominator	fraction	decimal */
+	<< 0		<< 1		<< 2		<< "1/2"	<< "0,5"
+	/* locale aware?	locale */
+	<< true		<< "es";
+
+	QTest::newRow("valid2")
+	/* whole	numerator	denominator	fraction	decimal */
+	<< 1		<< 1		<< 2		<< "1 1/2"	<< "1.5"
+	/* locale aware?	locale */
+	<< false		<< ANY_LOCALE;
+
+	QTest::newRow("valid2_es")
+	/* whole	numerator	denominator	fraction	decimal */
+	<< 1		<< 1		<< 2		<< "1 1/2"	<< "1,5"
+	/* locale aware?	locale */
+	<< true		<< "es";
+
+	QTest::newRow("valid3")
+	/* whole	numerator	denominator	fraction	decimal */
+	<< 1000		<< 0		<< 1		<< "1000"	<< "1000"
+	/* locale aware?	locale */
+	<< false		<< ANY_LOCALE;
+
+	QTest::newRow("valid3_es")
+	/* whole	numerator	denominator	fraction	decimal */
+	<< 1000		<< 0		<< 1		<< "1000"	<< "1000"
+	/* locale aware?	locale */
+	<< true		<< "es";
+
+}
+
+void TestMixedNumber::testToString()
+{
+	QFETCH( int, whole );
+	QFETCH( int, numerator );
+	QFETCH( int, denominator );
+	QFETCH( QString, fractionString );
+	QFETCH( QString, decimalString );
+	QFETCH( bool, locale_aware );
+	QFETCH( QString, locales );
+
+	MixedNumber number( whole, numerator, denominator );
+
+	QStringList localeList = locales.split(",");
+	foreach ( QString locale, localeList ) {
+
+		//Set locale
+		QLocale::setDefault(QLocale(locale));
+
+		//Check the mixed number string
+		QCOMPARE( number.toString( MixedNumber::MixedNumberFormat, locale_aware ),
+			fractionString );
+
+		//Check the decimal string
+		QCOMPARE( number.toString( MixedNumber::DecimalFormat, locale_aware ),
+			decimalString );
+
+	}
+}
+
+void TestMixedNumber::testToFromString_data()
+{
+	testToString_data();
+}
+
+void TestMixedNumber::testToFromString()
+{
+	QFETCH( int, whole );
+	QFETCH( int, numerator );
+	QFETCH( int, denominator );
+	QFETCH( QString, fractionString );
+	QFETCH( QString, decimalString );
+	QFETCH( bool, locale_aware );
+	QFETCH( QString, locales );
+
+	MixedNumber origNumber( whole, numerator, denominator );
+
+	MixedNumber parsedMixedNumber;
+
+	//Test that the numbers parsed are the same than the original
+	MixedNumber::fromString(
+		origNumber.toString( MixedNumber::MixedNumberFormat, locale_aware ),
+		parsedMixedNumber );
+
+	QCOMPARE( parsedMixedNumber.toDouble(), origNumber.toDouble() );
+
+	MixedNumber::fromString(
+		origNumber.toString( MixedNumber::MixedNumberFormat, locale_aware ),
+		parsedMixedNumber );
+
+	QCOMPARE( parsedMixedNumber.toDouble(), origNumber.toDouble() );
+}
+
 
 QTEST_MAIN(TestMixedNumber)
 

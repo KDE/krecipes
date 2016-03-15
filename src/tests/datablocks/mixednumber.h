@@ -20,6 +20,12 @@ class TestMixedNumber : public QObject
 private slots:
 	void testFromString_data();
 	void testFromString();
+
+	void testToString_data();
+	void testToString();
+
+	void testToFromString_data();
+	void testToFromString();
 };
 
 
