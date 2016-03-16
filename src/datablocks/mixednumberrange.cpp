@@ -98,6 +98,10 @@ QValidator::State MixedNumberRange::fromString( const QString & input,
 QString MixedNumberRange::toString( MixedNumber::Format format,
 	bool locale_aware ) const
 {
+	if ( !this->isValid() ) {
+		return "";
+	}
+
 	QString result = this->first.toString( format, locale_aware );
 	if ( this->second.isValid() ) {
 		result += " - " + this->second.toString( format, locale_aware );
