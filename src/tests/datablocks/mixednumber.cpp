@@ -356,20 +356,29 @@ void TestMixedNumber::testToFromString()
 
 	MixedNumber origNumber( whole, numerator, denominator );
 
-	MixedNumber parsedMixedNumber;
+	MixedNumber parsedMixedNumber1;
+	MixedNumber parsedMixedNumber2;
 
-	//Test that the numbers parsed are the same than the original
-	MixedNumber::fromString(
-		origNumber.toString( MixedNumber::MixedNumberFormat, locale_aware ),
-		parsedMixedNumber );
+	QStringList localeList = locales.split(",");
+	foreach ( QString locale, localeList ) {
 
-	QCOMPARE( parsedMixedNumber.toDouble(), origNumber.toDouble() );
+		//Set locale
+		QLocale::setDefault(QLocale(locale));
 
-	MixedNumber::fromString(
-		origNumber.toString( MixedNumber::MixedNumberFormat, locale_aware ),
-		parsedMixedNumber );
+		//Test that the numbers parsed are the same than the original
+		MixedNumber::fromString(
+			origNumber.toString( MixedNumber::MixedNumberFormat, locale_aware ),
+			parsedMixedNumber1 );
 
-	QCOMPARE( parsedMixedNumber.toDouble(), origNumber.toDouble() );
+		QCOMPARE( parsedMixedNumber1.toDouble(), origNumber.toDouble() );
+
+		MixedNumber::fromString(
+			origNumber.toString( MixedNumber::DecimalFormat, locale_aware ),
+			parsedMixedNumber2 );
+
+		QCOMPARE( parsedMixedNumber2.toDouble(), origNumber.toDouble() );
+
+	}
 }
 
 
