@@ -150,7 +150,7 @@ void TestDatabaseEncoding::testRetrievePropertyLatin1()
 
 void TestDatabaseEncoding::testInsertPropertyUTF8()
 {
-	QString moose1 = QString::fromUtf8("µøøse");  // That's a string that fix in latin1
+	QString moose1 = QString::fromUtf8("µøøse");  // That's a string that fit in latin1
 	QString moose2 = QString::fromUtf8("ሐረር ቢራ");  // Harar Beer, from Ethiopia, does not fit in latin1
 	QString moose3 = QString::fromUtf8("μøøse");  // That's a mu-oose, not a micro-oose
 	QVERIFY( m_sqliteDatabase->ok() );
