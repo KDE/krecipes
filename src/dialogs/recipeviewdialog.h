@@ -56,11 +56,8 @@ public:
 	void showButtons();
 	void hideButtons();
 
-public slots:
-	void close( void );
-
 signals:
-	void closeRecipeView( void );
+	void closeRecipeView();
 	void editRecipe();
 
 private:

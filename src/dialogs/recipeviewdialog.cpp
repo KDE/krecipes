@@ -81,7 +81,7 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 
 	//Connect the signals.
 	connect ( editButton, SIGNAL( clicked() ), this, SIGNAL( editRecipe() ) );
-	connect ( closeButton, SIGNAL( clicked() ), this, SLOT( close() ) );
+	connect ( closeButton, SIGNAL( clicked() ), this, SIGNAL( closeRecipeView() ) );
 	
 	//----------Load  the recipe --------
 	if ( recipeID != -1 )
@@ -147,13 +147,6 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids )
 	delete progress_dialog;
 	return true;
 }
-
-
-void RecipeViewDialog::close( void )
-{
-	emit closeRecipeView();
-}
-
 
 void RecipeViewDialog::reload()
 {
