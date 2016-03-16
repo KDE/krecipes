@@ -61,6 +61,7 @@ public slots:
 
 signals:
 	void closeRecipeView( void );
+	void editRecipe();
 
 private:
 
@@ -68,6 +69,7 @@ private:
 	KVBox *khtmlpartBox;
 	KHTMLPart *recipeView;
 	QFrame *functionsBox;
+	QToolButton *editButton;
 	QToolButton *closeButton;
 	RecipeDB *database;
 	bool recipe_loaded;

@@ -68,10 +68,19 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 	closeButton->setToolTip( i18nc( "@info:tooltip", "Close" ) );
 	closeButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
 
+	editButton = new QToolButton;
+	editButton->setIcon( KIcon( "document-edit" ) );
+
+	editButton->setText( i18nc( "@action:button", "Edit Recipe" ) );
+	editButton->setToolTip( i18nc( "@info:tooltip", "Edit Recipe" ) );
+	editButton->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+
 	functionsLayout->layout()->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
+	functionsLayout->addWidget( editButton );
 	functionsLayout->addWidget( closeButton );
 
 	//Connect the signals.
+	connect ( editButton, SIGNAL( clicked() ), this, SIGNAL( editRecipe() ) );
 	connect ( closeButton, SIGNAL( clicked() ), this, SLOT( close() ) );
 	
 	//----------Load  the recipe --------

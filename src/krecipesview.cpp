@@ -304,6 +304,9 @@ KrecipesView::KrecipesView( QWidget *parent )
 	// Show a recipe when requested (just switch panels)
 	connect( inputPanel, SIGNAL( showRecipe( int ) ), this, SLOT( showRecipe( int ) ) );
 
+	//Edit the recipe when requested
+	connect( viewPanel, SIGNAL( editRecipe() ), this, SLOT( editRecipe() ) );
+
 	// Close the recipe view when requested (just switch panels)
 	connect( viewPanel, SIGNAL( closeRecipeView() ), this, SLOT( closeRecipe() ) );
 
