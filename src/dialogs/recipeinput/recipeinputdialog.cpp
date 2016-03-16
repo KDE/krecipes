@@ -286,9 +286,9 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	functionsLayout->layout()->addItem( new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed ) );
 	functionsLayout->addWidget( saveButton );
+	functionsLayout->addWidget( resizeButton );
 	functionsLayout->addWidget( showButton );
 	functionsLayout->addWidget( closeButton );
-	functionsLayout->addWidget( resizeButton );
 
 	// Dialog design
 	tabWidget->resize( size().expandedTo( minimumSizeHint() ) );
