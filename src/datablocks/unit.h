@@ -12,7 +12,7 @@
 #define UNIT_H
 
 #include <QString>
-#include <QList>
+#include <QLinkedList>
 
 class Unit
 {
@@ -58,6 +58,6 @@ public:
     QString determineName(double amount, bool useAbbrev) const;
 };
 
-typedef QList< Unit > UnitList;
+typedef QLinkedList<Unit> UnitList;
 
 #endif //UNIT_H
