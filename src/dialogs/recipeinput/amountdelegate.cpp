@@ -9,7 +9,9 @@
 
 #include "amountdelegate.h"
 
+#include "dialogs/recipeinput/ingredientseditor.h"
 #include "widgets/fractioninput.h"
+#include "datablocks/mixednumberrange.h"
 
 #include <KLineEdit>
 
@@ -37,8 +39,14 @@ void AmountDelegate::setEditorData(QWidget *editor, const QModelIndex &index) co
 void AmountDelegate::setModelData(QWidget *editor, 
 	QAbstractItemModel *model, const QModelIndex &index) const
 {
+	//Set the amount string in the model
 	FractionInput * fractionInput = static_cast<FractionInput*>( editor );
 	model->setData( index, fractionInput->text(), Qt::EditRole );
+
+	//Set if the amount is plural in the model
+	QModelIndex unitIndex = model->index( index.row(), 2 );
+	bool isPlural = fractionInput->valueRange().isPlural();
+	model->setData( unitIndex, QVariant(isPlural), IngredientsEditor::IsPluralRole );
 }
 
 void AmountDelegate::updateEditorGeometry(QWidget *editor, 
