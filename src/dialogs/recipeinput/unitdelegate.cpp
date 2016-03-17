@@ -11,7 +11,6 @@
 
 #include "dialogs/recipeinput/ingredientseditor.h"
 #include "backends/recipedb.h"
-#include "datablocks/unit.h"
 
 #include <KComboBox>
 
@@ -24,10 +23,9 @@ UnitDelegate::UnitDelegate(QObject *parent): QStyledItemDelegate(parent)
 
 void UnitDelegate::loadAllUnitsList( RecipeDB * database )
 {
-/*	//FIXME: This doesn't respect the limits configured in the program
-	database->loadIngredients( &m_ingredientList );
+	database->loadUnits( &m_unitList );
 	//FIXME: it would be nice if we could get this hashmap directly from RecipeDB
-	ElementList::const_iterator it = m_ingredientList.constBegin();
+	/*ElementList::const_iterator it = m_ingredientList.constBegin();
 	while ( it != m_ingredientList.constEnd() ) {
 		m_ingredientNameToIdMap[it->name] = it->id;
 		++it;
@@ -60,27 +58,22 @@ QWidget * UnitDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem
 	editor->setCompletionMode( KGlobalSettings::CompletionPopup );
 
 	//Fill the items and the completion objects
-/*	int i = 0;
-	ElementList::const_iterator it;
-	ElementList::const_iterator list_end;
-	if ( index.data(IngredientsEditor::IsHeaderRole).toBool() ) {
-		it = m_headerList.constBegin();
-		list_end = m_headerList.constEnd();
-		QFont font = editor->font();
-		font.setBold( true );
-		font.setUnderline( true );
-		editor->setFont( font );
+	UnitList::const_iterator unit_it = m_unitList.constBegin();
+	if ( !index.data(IngredientsEditor::IsPluralRole).toBool() ) {
+		int i = 0;
+		while ( unit_it != m_unitList.constEnd() ) {
+			editor->insertItem( i, unit_it->name() );
+			editor->completionObject()->addItem( unit_it->name() );
+			++i; ++unit_it;
+		}
 	} else {
-		it = m_ingredientList.constBegin();
-		list_end = m_ingredientList.constEnd();
+		int i = 0;
+		while ( unit_it != m_unitList.constEnd() ) {
+			editor->insertItem( i, unit_it->plural() );
+			editor->completionObject()->addItem( unit_it->plural() );
+			++i; ++unit_it;
+		}
 	}
-	while ( it != list_end ) {
-		editor->insertItem( i, it->name );
-		editor->completionObject()->addItem( it->name );
-		++i;
-		++it;
-	}
-*/
 	return editor;
 }
 

@@ -11,7 +11,7 @@
 #define UNITDELEGATE_H
 
 #include "backends/recipedb.h"
-#include "datablocks/elementlist.h"
+#include "datablocks/unit.h"
 
 #include <QStyledItemDelegate>
 #include <QHash>
@@ -39,8 +39,8 @@ private slots:
 	void headerRemovedSlot( int id );*/
 
 private:
-	/*ElementList m_ingredientList;
-	QHash<QString,RecipeDB::IdType> m_ingredientNameToIdMap;
+	UnitList m_unitList;
+	/*QHash<QString,RecipeDB::IdType> m_ingredientNameToIdMap;
 
 	ElementList m_headerList;
 	QHash<QString,RecipeDB::IdType> m_headerNameToIdMap;*/
