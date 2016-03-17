@@ -76,6 +76,9 @@ public:
 	/** Ensure that the fraction is simplified to its lowest terms. */
 	void simplify();
 
+	/* Check if the number is plural */
+	bool isPlural() const;
+
 	/** Parses the given QString as a mixed number.  The input can be
 	  * expressed as a mixed number in the form "a b/c", or as a decimal.
 	  *

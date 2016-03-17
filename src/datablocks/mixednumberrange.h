@@ -49,6 +49,9 @@ public:
 
 
 	bool isValid() const;
+
+	bool isPlural() const;
+
 };
 
 #endif

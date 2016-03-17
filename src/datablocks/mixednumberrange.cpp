@@ -130,3 +130,14 @@ bool MixedNumberRange::isValid() const
 		&& ( !this->second.isValid() || (this->second > this->first) );
 	return result;
 }
+
+
+bool MixedNumberRange::isPlural() const
+{
+	if ( this->second.isValid() ) {
+		return true;
+	} else {
+		return this->first.isPlural();
+	}
+}
+

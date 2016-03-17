@@ -407,6 +407,15 @@ void MixedNumber::simplify()
 	m_denominator /= divisor;
 }
 
+bool MixedNumber::isPlural() const
+{
+	if ( this->toDouble() != 1.0 ) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 double MixedNumber::toDouble() const
 {
 	if ( m_isValid ) {
