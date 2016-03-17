@@ -12,6 +12,7 @@
 
 #include "dialogs/recipeinput/ingredientnamedelegate.h"
 #include "dialogs/recipeinput/amountdelegate.h"
+#include "dialogs/recipeinput/unitdelegate.h"
 #include "datablocks/ingredientlist.h"
 #include "datablocks/mixednumberrange.h"
 #include "backends/recipedb.h"
@@ -92,6 +93,14 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 	AmountDelegate * amountDelegate = new AmountDelegate;
 	ui->m_treeView->setItemDelegateForColumn(1, amountDelegate);
 
+	//Set unit delegate
+	UnitDelegate * unitDelegate = new UnitDelegate;
+	if ( m_database ) {
+		unitDelegate->loadAllUnitsList( m_database );
+	}
+	ui->m_treeView->setItemDelegateForColumn(2, unitDelegate);
+
+	//Populate the ingredient list
 	IngredientList::const_iterator it;
 	int current_row = 0;
 	QModelIndex index;
