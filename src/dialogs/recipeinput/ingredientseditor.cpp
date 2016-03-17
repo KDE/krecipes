@@ -151,11 +151,13 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
+	bool isAmountPlural = ingredient.amountRange().isPlural();
 	//The "Units" item.
 	index = m_sourceModel->index( row, 2 );
 	m_sourceModel->setData( index, QVariant(ingredient.amountUnitString()), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
+	m_sourceModel->setData( index, QVariant(isAmountPlural), IsPluralRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 	//The "PreparationMethod" item.
 	index = m_sourceModel->index( row, 3 );
