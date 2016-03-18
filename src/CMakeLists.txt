@@ -161,6 +161,7 @@ set(krecipesdialogs_SRCS
    dialogs/recipeinput/ingredientnamedelegate.cpp
    dialogs/recipeinput/amountdelegate.cpp
    dialogs/recipeinput/unitdelegate.cpp
+   dialogs/recipeinput/prepmethoddelegate.cpp
    dialogs/recipeinput/ratingdisplaywidget.cpp
    dialogs/recipeinput/ratinglisteditor.cpp
 

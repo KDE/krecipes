@@ -13,6 +13,7 @@
 #include "dialogs/recipeinput/ingredientnamedelegate.h"
 #include "dialogs/recipeinput/amountdelegate.h"
 #include "dialogs/recipeinput/unitdelegate.h"
+#include "dialogs/recipeinput/prepmethoddelegate.h"
 #include "datablocks/ingredientlist.h"
 #include "datablocks/mixednumberrange.h"
 #include "backends/recipedb.h"
@@ -99,6 +100,10 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 		unitDelegate->loadAllUnitsList( m_database );
 	}
 	ui->m_treeView->setItemDelegateForColumn(2, unitDelegate);
+
+	//Set preparation method delegate
+	PrepMethodDelegate * prepMethodDelegate = new PrepMethodDelegate;
+	ui->m_treeView->setItemDelegateForColumn(3, prepMethodDelegate);
 
 	//Populate the ingredient list
 	IngredientList::const_iterator it;
