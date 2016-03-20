@@ -1,13 +1,14 @@
 /***************************************************************************
-*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
-*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
-*   Copyright © 2003-2006 Jason Kivlighn <jkivlighn@gmail.com>            *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                         *
+*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>               *
+*   Copyright © 2003-2006 Jason Kivlighn <jkivlighn@gmail.com>             *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "qsqlrecipedb.h"
 #include <QSqlQuery>
@@ -770,6 +771,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 	int order_index = 0;
 	QHash<QString,IdType> newIngredients;
 	QHash<QString,IdType> newHeaders;
+	QHash<QString,IdType> newPrepMethods;
 	for ( IngredientList::iterator ing_it = recipe->ingList.begin(); ing_it != recipe->ingList.end(); ++ing_it ) {
 		if ( ing_it->ingredientID == RecipeDB::InvalidId ) {
 			if ( newIngredients.contains(ing_it->name) ) {
@@ -807,13 +809,27 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 		RecipeDB::IdType ing_list_id = lastInsertId( recipeToSave );
 		int prep_order_index = 0;
-		for ( ElementList::const_iterator prep_it = (*ing_it).prepMethodList.constBegin(); prep_it != (*ing_it).prepMethodList.constEnd(); ++prep_it ) {
+		ElementList::iterator prep_it = ing_it->prepMethodList.begin();
+		while( prep_it != ing_it->prepMethodList.end() ) {
+			//Create the preparation method if that's needed
+			if ( prep_it->id == RecipeDB::InvalidId ) {
+				if ( newPrepMethods.contains(prep_it->name) ) {
+					prep_it->id = newPrepMethods[prep_it->name];
+				} else {
+					disableTransactions();
+					prep_it->id = createNewPrepMethod( prep_it->name );
+					newPrepMethods[prep_it->name] = prep_it->id;
+					enableTransactions();
+				}
+			}
+			//Insert the preparation method in the database table
 			prep_order_index++;
 			command = QString( "INSERT INTO prep_method_list VALUES (%1,%2,%3);" )
 				.arg( ing_list_id )
 				.arg( ( *prep_it ).id )
 				.arg( prep_order_index );
 			recipeToSave.exec( command );
+			++prep_it;
 		}
 
 		for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.constBegin(); sub_it != (*ing_it).substitutes.constEnd(); ++sub_it ) {
