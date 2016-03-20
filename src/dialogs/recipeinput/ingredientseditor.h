@@ -80,8 +80,6 @@ private:
 	RecipeDB * m_database;
 
 	QStandardItemModel * m_sourceModel;
-
-	QHash<QString,RecipeDB::IdType> m_prepMethodNameToId;
 };
 
 #endif

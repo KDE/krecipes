@@ -10,7 +10,11 @@
 #ifndef PREPMETHODDELEGATE_H
 #define PREPMETHODDELEGATE_H
 
+#include "backends/recipedb.h"
+#include "datablocks/elementlist.h"
+
 #include <QStyledItemDelegate>
+#include <QHash>
 
 class PrepMethodDelegate : public QStyledItemDelegate
 {
@@ -18,10 +22,19 @@ class PrepMethodDelegate : public QStyledItemDelegate
 
 public:
 	PrepMethodDelegate(QObject *parent = 0);
+
+	void loadAllPrepMethodsList( RecipeDB * database );
+
 	QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 	void setEditorData(QWidget *editor, const QModelIndex &index) const;
 	void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 	void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+	ElementList m_prepMethodsList;
+
+	QHash<QString,RecipeDB::IdType> m_nameToIdMap;
+	QHash<RecipeDB::IdType,ElementList::iterator> m_idToIteratorMap;
 
 };
 

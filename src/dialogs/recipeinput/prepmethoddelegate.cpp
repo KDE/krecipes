@@ -20,6 +20,19 @@ PrepMethodDelegate::PrepMethodDelegate(QObject *parent): QStyledItemDelegate(par
 {
 }
 
+void PrepMethodDelegate::loadAllPrepMethodsList( RecipeDB * database )
+{
+	database->loadPrepMethods( &m_prepMethodsList );
+	//FIXME: it would be nice if we could get this hash map from RecipeDB directly
+	ElementList::iterator it = m_prepMethodsList.begin();
+	while ( it != m_prepMethodsList.end() ) {
+		m_nameToIdMap[it->name] = it->id;
+		m_idToIteratorMap[it->id] = it;
+		++it;
+	}
+
+	//TODO: connect database signals
+}
 
 QWidget * PrepMethodDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem & option ,
 	const QModelIndex & index ) const
@@ -39,11 +52,26 @@ void PrepMethodDelegate::setEditorData(QWidget *editor, const QModelIndex &index
 void PrepMethodDelegate::setModelData(QWidget *editor, 
 	QAbstractItemModel *model, const QModelIndex &index) const
 {
-	//Set the preparation methods string in the model
 	KLineEdit * lineEdit = static_cast<KLineEdit*>( editor );
-	model->setData( index, lineEdit->text(), Qt::EditRole );
 	//Set the preparation methods id's in the model
-	//TODO
+	QList<QVariant> ids;
+	QStringList stringList = lineEdit->text().split(",",QString::SkipEmptyParts);
+	QStringList prepMethodNamesList;
+	foreach( QString name, stringList ) {
+		name = name.trimmed();
+		if ( !name.isEmpty() ) {
+			if ( m_nameToIdMap.contains(name) ) {
+				ids << m_nameToIdMap[name];
+			} else {
+				ids << RecipeDB::InvalidId;
+			}
+			prepMethodNamesList << name;
+		}
+	}
+	model->setData( index, QVariant(ids), IngredientsEditor::IdRole );
+	//Set the preparation methods string in the model
+	QString prepMethodsString = prepMethodNamesList.join(", ");
+	model->setData( index, QVariant(prepMethodsString), Qt::EditRole );
 }
 
 void PrepMethodDelegate::updateEditorGeometry(QWidget *editor, 

@@ -14,11 +14,13 @@
 #include "dialogs/recipeinput/amountdelegate.h"
 #include "dialogs/recipeinput/unitdelegate.h"
 #include "dialogs/recipeinput/prepmethoddelegate.h"
+#include "dialogs/recipeinput/ingredientparserdialog.h"
 #include "datablocks/ingredientlist.h"
 #include "datablocks/mixednumberrange.h"
 #include "backends/recipedb.h"
 
 #include <QStandardItemModel>
+#include <QPointer>
 
 //FIXME: Remove this when this class is finished
 #include "kdebug.h"
@@ -103,6 +105,9 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 
 	//Set preparation method delegate
 	PrepMethodDelegate * prepMethodDelegate = new PrepMethodDelegate;
+	if ( m_database ) {
+		prepMethodDelegate->loadAllPrepMethodsList( m_database );
+	}
 	ui->m_treeView->setItemDelegateForColumn(3, prepMethodDelegate);
 
 	//Populate the ingredient list
@@ -166,14 +171,19 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 	//The "PreparationMethod" item.
 	index = m_sourceModel->index( row, 3 );
-	ElementList::const_iterator prep_it = ingredient.prepMethodList.constBegin();
-	while (prep_it != ingredient.prepMethodList.constEnd()) {
-		m_prepMethodNameToId[prep_it->name] = prep_it->id;
-		++prep_it;
-	}
-	QString prepMethodListString = ingredient.prepMethodList.join(", ");
-	if ( !ingredient.prepMethodList.isEmpty() )
-		m_sourceModel->setData( index, QVariant(prepMethodListString), Qt::EditRole );
+		//Set the prep methods id list
+		QList<QVariant> prepMethodsIds;
+		ElementList::const_iterator prep_it = ingredient.prepMethodList.constBegin();
+		while ( prep_it != ingredient.prepMethodList.constEnd() ) {
+			prepMethodsIds << prep_it->id;
+			++prep_it;
+		}
+		m_sourceModel->setData( index, prepMethodsIds, IdRole );
+		//Set the prep methods string
+		QString prepMethodListString = ingredient.prepMethodList.join(", ");
+		if ( !ingredient.prepMethodList.isEmpty() ) {
+			m_sourceModel->setData( index, QVariant(prepMethodListString), Qt::EditRole );
+		}
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
@@ -494,14 +504,17 @@ void IngredientsEditor::updateIngredientList()
 		ingredient.units.setId( m_sourceModel->data( index, UnitsIdRole ).toInt() );
 		//Ingredient preparation methods
 		index = m_sourceModel->index( i, 3 );
+		QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
 		QString prepMethodsString = m_sourceModel->data( index, Qt::EditRole ).toString();
-		QStringList prepStringList = prepMethodsString.split(",", QString::SkipEmptyParts);
+		QStringList prepStringList = prepMethodsString.split(", ", QString::SkipEmptyParts);
+		QList<QVariant>::const_iterator prep_ids_it = prepMethodsIds.constBegin();
 		QStringList::const_iterator prep_str_it = prepStringList.constBegin();
 		Element element;
 		while ( prep_str_it != prepStringList.constEnd() ) {
-			element.id = m_prepMethodNameToId[prep_str_it->trimmed()];
-			element.name = prep_str_it->trimmed();
+			element.id = prep_ids_it->toInt();
+			element.name = *prep_str_it;
 			ingredient.prepMethodList << element;
+			++prep_ids_it;
 			++prep_str_it;
 		}
 		//Dump the contents of the row childrens as ingredient substitutes
