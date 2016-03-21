@@ -40,6 +40,14 @@ QWidget * PrepMethodDelegate::createEditor(QWidget *parent, const QStyleOptionVi
 	Q_UNUSED(option)
 	Q_UNUSED(index)
 	KLineEdit* editor = new KLineEdit( parent );
+
+	//Fill the completion items
+	ElementList::const_iterator it = m_prepMethodsList.constBegin();
+	while ( it != m_prepMethodsList.constEnd() ) {
+		editor->completionObject()->addItem( it->name );
+		++it;
+	}
+
 	return editor;
 }
 
