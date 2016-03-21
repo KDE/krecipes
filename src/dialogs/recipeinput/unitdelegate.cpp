@@ -25,16 +25,18 @@ void UnitDelegate::loadAllUnitsList( RecipeDB * database )
 {
 	database->loadUnits( &m_unitList );
 	//FIXME: it would be nice if we could get this hashmap directly from RecipeDB
-	/*ElementList::const_iterator it = m_ingredientList.constBegin();
-	while ( it != m_ingredientList.constEnd() ) {
-		m_ingredientNameToIdMap[it->name] = it->id;
+	UnitList::const_iterator it = m_unitList.constBegin();
+	while ( it != m_unitList.constEnd() ) {
+		m_singularNameToIdMap[it->name()] = it->id();
+		m_pluralNameToIdMap[it->plural()] = it->id();
 		++it;
 	}
-	connect( database, SIGNAL(ingredientCreated(const Element&)),
+	//TODO: connect database signals
+	/*connect( database, SIGNAL(ingredientCreated(const Element&)),
 		this, SLOT(ingredientCreatedSlot(const Element&)) );
 	connect( database, SIGNAL(ingredientRemoved(int)),
-		this, SLOT(ingredientRemovedSlot(int)) );
-*/
+		this, SLOT(ingredientRemovedSlot(int)) );*/
+
 }
 
 /*void UnitDelegate::ingredientCreatedSlot( const Element & element )
@@ -79,32 +81,32 @@ QWidget * UnitDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem
 
 void UnitDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-/*	QString text = index.data( Qt::EditRole ).toString();
+	QString text = index.data( Qt::EditRole ).toString();
 	KComboBox *comboBox = static_cast<KComboBox*>( editor );
-	comboBox->setEditText( text );*/
+	comboBox->setEditText( text );
 }
 
 void UnitDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-/*	KComboBox *comboBox = static_cast<KComboBox*>( editor );
+	KComboBox *comboBox = static_cast<KComboBox*>( editor );
 	QString text = comboBox->currentText();
 	model->setData( index, text, Qt::EditRole );
 
-	if ( index.data(IngredientsEditor::IsHeaderRole).toBool() ) {
-		//The edited item is a header
-		if ( m_headerNameToIdMap.contains(text) ) {
-			model->setData( index, m_headerNameToIdMap[text], IngredientsEditor::IdRole );
+	if ( !index.data(IngredientsEditor::IsPluralRole).toBool() ) {
+		//The edited item is singular
+		if ( m_singularNameToIdMap.contains(text) ) {
+			model->setData( index, m_singularNameToIdMap[text], IngredientsEditor::IdRole );
 		} else {
 			model->setData( index, RecipeDB::InvalidId, IngredientsEditor::IdRole );
 		}
 	} else {
-		//The edited item is an ingredient
-		if ( m_ingredientNameToIdMap.contains(text) ) {
-			model->setData( index, m_ingredientNameToIdMap[text], IngredientsEditor::IdRole );
+		//The edited item is plural
+		if ( m_pluralNameToIdMap.contains(text) ) {
+			model->setData( index, m_pluralNameToIdMap[text], IngredientsEditor::IdRole );
 		} else {
 			model->setData( index, RecipeDB::InvalidId, IngredientsEditor::IdRole );
 		}
-	}*/
+	}
 }
 
 void UnitDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex & index ) const

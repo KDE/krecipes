@@ -40,10 +40,8 @@ private slots:
 
 private:
 	UnitList m_unitList;
-	/*QHash<QString,RecipeDB::IdType> m_ingredientNameToIdMap;
-
-	ElementList m_headerList;
-	QHash<QString,RecipeDB::IdType> m_headerNameToIdMap;*/
+	QHash<QString,RecipeDB::IdType> m_singularNameToIdMap;
+	QHash<QString,RecipeDB::IdType> m_pluralNameToIdMap;
 };
 
 #endif
