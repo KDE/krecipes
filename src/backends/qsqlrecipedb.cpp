@@ -832,8 +832,21 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 			++prep_it;
 		}
 
-		for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.constBegin(); sub_it != (*ing_it).substitutes.constEnd(); ++sub_it ) {
+		Ingredient::SubstitutesList::iterator sub_it = ing_it->substitutes.begin();
+		while ( sub_it != ing_it->substitutes.end() ) {
 			order_index++;
+			//Create the ingredient if it doesn't exist already
+			if ( sub_it->ingredientID == RecipeDB::InvalidId ) {
+				if ( newIngredients.contains(sub_it->name) ) {
+					sub_it->ingredientID = newIngredients[sub_it->name];
+				} else {
+					disableTransactions();
+					sub_it->ingredientID = createNewIngredient( sub_it->name );
+					newIngredients[sub_it->name] = sub_it->ingredientID;
+					enableTransactions();
+				}
+			}
+
 			QString ing_list_id_str = getNextInsertIDStr("ingredient_list","id");
 			command = QString( "INSERT INTO ingredient_list VALUES (%1,%2,%3,%4,%5,%6,%7,%8,%9);" )
 				.arg( ing_list_id_str )
@@ -849,14 +862,29 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 
 			RecipeDB::IdType ing_list_id = lastInsertId( recipeToSave );
 			int prep_order_index = 0;
-			for ( ElementList::const_iterator prep_it = (*sub_it).prepMethodList.constBegin(); prep_it != (*sub_it).prepMethodList.constEnd(); ++prep_it ) {
+			ElementList::iterator prep_it = sub_it->prepMethodList.begin();
+			while ( prep_it != sub_it->prepMethodList.end() ) {
+				//Create the preparation method if that's needed
+				if ( prep_it->id == RecipeDB::InvalidId ) {
+					if ( newPrepMethods.contains(prep_it->name) ) {
+						prep_it->id = newPrepMethods[prep_it->name];
+					} else {
+						disableTransactions();
+						prep_it->id = createNewPrepMethod( prep_it->name );
+						newPrepMethods[prep_it->name] = prep_it->id;
+						enableTransactions();
+					}
+				}
+				//Insert the preparation method in the database table
 				prep_order_index++;
 				command = QString( "INSERT INTO prep_method_list VALUES (%1,%2,%3);" )
 					.arg( ing_list_id )
 					.arg( ( *prep_it ).id )
 					.arg( prep_order_index );
 				recipeToSave.exec( command );
+				++prep_it;
 			}
+			++sub_it;
 		}
 	}
 
