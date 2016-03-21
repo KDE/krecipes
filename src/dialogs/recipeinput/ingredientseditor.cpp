@@ -143,14 +143,12 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	index = m_sourceModel->index( row, 4 );
 	m_sourceModel->setData( index, QVariant(ingredient.ingredientID), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( false );
 	//The "Ingredient" item.
 	index = m_sourceModel->index( row, 0 );
 	m_sourceModel->setData( index, QVariant(ingredient.ingredientID), IdRole );
 	m_sourceModel->setData( index, QVariant(ingredient.name), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	QStandardItem * ingItem = m_sourceModel->itemFromIndex( index );
 	QPersistentModelIndex ingIndex = index;
 	ingItem->setEditable( true );
@@ -159,14 +157,13 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	m_sourceModel->setData( index,
 		QVariant( ingredient.amountRange().toString(true) ), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 	bool isAmountPlural = ingredient.amountRange().isPlural();
 	//The "Units" item.
 	index = m_sourceModel->index( row, 2 );
 	m_sourceModel->setData( index, QVariant(ingredient.amountUnitString()), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
+	m_sourceModel->setData( index, QVariant(ingredient.units.id()), IdRole );
 	m_sourceModel->setData( index, QVariant(isAmountPlural), IsPluralRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 	//The "PreparationMethod" item.
@@ -185,7 +182,6 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 			m_sourceModel->setData( index, QVariant(prepMethodListString), Qt::EditRole );
 		}
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
-	m_sourceModel->setData( index, QVariant(ingredient.units.id()), UnitsIdRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 
 	//Add the susbtitutes, if any
@@ -501,7 +497,7 @@ void IngredientsEditor::updateIngredientList()
 		ingredient.setAmountRange( range );
 		//Ingredient units
 		index = m_sourceModel->index( i, 2 );
-		ingredient.units.setId( m_sourceModel->data( index, UnitsIdRole ).toInt() );
+		ingredient.units.setId( m_sourceModel->data( index, IdRole ).toInt() );
 		//Ingredient preparation methods
 		index = m_sourceModel->index( i, 3 );
 		QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
