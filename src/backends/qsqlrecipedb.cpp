@@ -802,7 +802,7 @@ void QSqlRecipeDB::saveRecipe( Recipe *recipe )
 		          .arg( ( *ing_it ).ingredientID )
 		          .arg( ( *ing_it ).amount )
 		          .arg( ( *ing_it ).amount_offset )
-		          .arg( (ing_it->units.id()==RecipeDB::InvalidId)? QString("NULL"): QString(ing_it->units.id()) )
+		          .arg( (ing_it->units.id()==RecipeDB::InvalidId)? QString("NULL"): QString::number(ing_it->units.id()) )
 		          .arg( order_index )
 		          .arg( ( *ing_it ).groupID );
 		recipeToSave.exec( command );
