@@ -162,6 +162,7 @@ set(krecipesdialogs_SRCS
    dialogs/recipeinput/amountdelegate.cpp
    dialogs/recipeinput/unitdelegate.cpp
    dialogs/recipeinput/prepmethoddelegate.cpp
+   dialogs/recipeinput/nutrientinfostatuswidget.cpp
    dialogs/recipeinput/ratingdisplaywidget.cpp
    dialogs/recipeinput/ratinglisteditor.cpp
 
@@ -200,6 +201,7 @@ kde4_add_ui_files(krecipesdialogs_SRCS
    dialogs/recipeinput/resizerecipedialog.ui
    dialogs/recipeinput/ratingdisplaywidget.ui
    dialogs/recipeinput/ingredientseditor.ui
+   dialogs/recipeinput/nutrientinfostatuswidget.ui
    )
 
 qt4_add_resources(krecipesdialogs_SRCS
