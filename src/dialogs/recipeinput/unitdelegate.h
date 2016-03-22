@@ -39,6 +39,8 @@ private slots:
 	void headerRemovedSlot( int id );*/
 
 private:
+	RecipeDB * m_database;
+
 	UnitList m_unitList;
 	QHash<QString,RecipeDB::IdType> m_singularNameToIdMap;
 	QHash<QString,RecipeDB::IdType> m_pluralNameToIdMap;
