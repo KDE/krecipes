@@ -20,6 +20,7 @@
 
 class RecipeDB;
 class IngredientList;
+class NutrientInfoDetailsDialog;
 
 class QStandardItemModel;
 class QModelIndex;
@@ -64,6 +65,8 @@ private slots:
 
 	void removeIngredientSlot();
 
+	void nutrientInfoDetailsSlot();
+
 private:
 	void setRowData( int row, const Ingredient & ingredient );
 	void setRowData( int row, const Element & header );
@@ -79,6 +82,8 @@ private:
 	RecipeDB * m_database;
 
 	QStandardItemModel * m_sourceModel;
+
+	NutrientInfoDetailsDialog * m_nutrientInfoDetailsDialog;
 };
 
 #endif

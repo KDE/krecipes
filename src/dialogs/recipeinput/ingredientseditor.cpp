@@ -15,6 +15,7 @@
 #include "dialogs/recipeinput/unitdelegate.h"
 #include "dialogs/recipeinput/prepmethoddelegate.h"
 #include "dialogs/recipeinput/ingredientparserdialog.h"
+#include "dialogs/recipeinput/nutrientinfodetailsdialog.h"
 #include "datablocks/ingredientlist.h"
 #include "datablocks/mixednumberrange.h"
 #include "backends/recipedb.h"
@@ -36,6 +37,7 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 	m_sourceModel = new QStandardItemModel;
 	ui->m_treeView->setModel( m_sourceModel );
 
+	m_nutrientInfoDetailsDialog = new NutrientInfoDetailsDialog(this);
 
 	//The horizontal column labels.
 	QStringList horizontalLabels;
@@ -70,6 +72,9 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 		this, SIGNAL(changed()) );
 	connect( ui->m_treeView, SIGNAL(doubleClicked(const QModelIndex&)),
 		this, SIGNAL(changed()) );
+
+	connect( ui->m_nutrientInfoStatusWidget, SIGNAL(detailsButtonClicked()),
+		this, SLOT(nutrientInfoDetailsSlot()) );
 }
 
 void IngredientsEditor::setDatabase( RecipeDB * database )
@@ -449,6 +454,12 @@ void IngredientsEditor::removeIngredientSlot()
 		m_sourceModel->removeRow( index.row(), index.parent() );
 		emit changed();
 	}
+}
+
+void IngredientsEditor::nutrientInfoDetailsSlot()
+{
+	//TODO: collect information to show
+	m_nutrientInfoDetailsDialog->show();
 }
 
 void IngredientsEditor::updateIngredientList()

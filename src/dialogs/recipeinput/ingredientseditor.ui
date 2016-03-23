@@ -145,7 +145,7 @@
    <item row="1" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="NutrientInfoStatusWidget" name="widget" native="true"/>
+      <widget class="NutrientInfoStatusWidget" name="m_nutrientInfoStatusWidget" native="true"/>
      </item>
      <item>
       <spacer name="horizontalSpacer">

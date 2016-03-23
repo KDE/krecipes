@@ -17,4 +17,7 @@ NutrientInfoStatusWidget::NutrientInfoStatusWidget( QWidget * parent )
 {
 	ui = new Ui::NutrientInfoStatusWidget;
 	ui->setupUi( this );
+
+	connect( ui->m_detailsButton, SIGNAL(clicked()),
+		this, SIGNAL(detailsButtonClicked()) );
 }

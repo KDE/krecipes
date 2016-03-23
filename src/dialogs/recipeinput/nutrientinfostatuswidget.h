@@ -23,6 +23,9 @@ class NutrientInfoStatusWidget : public QWidget
 public:
 	NutrientInfoStatusWidget( QWidget * parent = 0 );
 
+signals:
+	void detailsButtonClicked();
+
 private:
 	Ui::NutrientInfoStatusWidget * ui;
 
