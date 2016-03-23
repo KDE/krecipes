@@ -462,6 +462,43 @@ void IngredientsEditor::nutrientInfoDetailsSlot()
 	m_nutrientInfoDetailsDialog->show();
 }
 
+Ingredient IngredientsEditor::readIngredientFromRow( int row )
+{
+	Ingredient ingredient;
+
+	//Ingredient Id
+	QModelIndex index = m_sourceModel->index( row, 0 );
+	ingredient.ingredientID = m_sourceModel->data( index, IdRole ).toInt();
+	//Ingredient name
+	ingredient.name = m_sourceModel->data( index, Qt::EditRole ).toString();
+	//Ingredient amount
+	index = m_sourceModel->index( row, 1 );
+	QString amountString = m_sourceModel->data( index, Qt::EditRole ).toString();
+	MixedNumberRange range;
+	MixedNumberRange::fromString( amountString, range );
+	ingredient.setAmountRange( range );
+	//Ingredient units
+	index = m_sourceModel->index( row, 2 );
+	ingredient.units.setId( m_sourceModel->data( index, IdRole ).toInt() );
+	//Ingredient preparation methods
+	index = m_sourceModel->index( row, 3 );
+	QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
+	QString prepMethodsString = m_sourceModel->data( index, Qt::EditRole ).toString();
+	QStringList prepStringList = prepMethodsString.split(", ", QString::SkipEmptyParts);
+	QList<QVariant>::const_iterator prep_ids_it = prepMethodsIds.constBegin();
+	QStringList::const_iterator prep_str_it = prepStringList.constBegin();
+	Element element;
+	while ( prep_str_it != prepStringList.constEnd() ) {
+		element.id = prep_ids_it->toInt();
+		element.name = *prep_str_it;
+		ingredient.prepMethodList << element;
+		++prep_ids_it;
+		++prep_str_it;
+	}
+
+	return ingredient;
+}
+
 void IngredientsEditor::updateIngredientList()
 {
 	//Clear the IngredientList.
@@ -490,40 +527,12 @@ void IngredientsEditor::updateIngredientList()
 			lastHeaderKnown.name = index.data( Qt::EditRole ).toString();
 			continue;
 		}
-		//Dump the contents of the current row to a ingredient Object
-		Ingredient ingredient;
-		//Ingredient Id
-		ingredient.ingredientID = m_sourceModel->data( index, IdRole ).toInt();
-		//Ingredient name
-		ingredient.name = m_sourceModel->data( index, Qt::EditRole ).toString();
+		//Dump the contents of the current row to an ingredient Object
+		Ingredient ingredient = readIngredientFromRow( i );
 		//Ingredient group id
 		ingredient.groupID = lastHeaderKnown.id;
 		//Ingredient group name
 		ingredient.group = lastHeaderKnown.name;
-		//Ingredient amount
-		index = m_sourceModel->index( i, 1 );
-		QString amountString = m_sourceModel->data( index, Qt::EditRole ).toString();
-		MixedNumberRange range;
-		MixedNumberRange::fromString( amountString, range );
-		ingredient.setAmountRange( range );
-		//Ingredient units
-		index = m_sourceModel->index( i, 2 );
-		ingredient.units.setId( m_sourceModel->data( index, IdRole ).toInt() );
-		//Ingredient preparation methods
-		index = m_sourceModel->index( i, 3 );
-		QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
-		QString prepMethodsString = m_sourceModel->data( index, Qt::EditRole ).toString();
-		QStringList prepStringList = prepMethodsString.split(", ", QString::SkipEmptyParts);
-		QList<QVariant>::const_iterator prep_ids_it = prepMethodsIds.constBegin();
-		QStringList::const_iterator prep_str_it = prepStringList.constBegin();
-		Element element;
-		while ( prep_str_it != prepStringList.constEnd() ) {
-			element.id = prep_ids_it->toInt();
-			element.name = *prep_str_it;
-			ingredient.prepMethodList << element;
-			++prep_ids_it;
-			++prep_str_it;
-		}
 		//Dump the contents of the row childrens as ingredient substitutes
 		index = m_sourceModel->index( i, 0 );
 		if ( m_sourceModel->hasChildren( index ) ) {

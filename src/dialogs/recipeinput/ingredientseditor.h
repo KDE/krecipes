@@ -76,6 +76,8 @@ private:
 	void resizeColumnsToContents();
 	void moveRow( int offset );
 
+	Ingredient readIngredientFromRow( int row );
+
 	Ui::IngredientsEditor * ui;
 
 	IngredientList * m_ingredientList;
