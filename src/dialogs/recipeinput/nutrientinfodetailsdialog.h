@@ -15,6 +15,8 @@
 #include "nutrientinfostatuswidget.h"
 #include "datablocks/ingredient.h"
 
+#include <QUrl>
+
 class RecipeDB;
 
 namespace Ui {
@@ -33,6 +35,8 @@ public:
 	void addText( const QString & text );
 	void displayText();
 
+	void setDatabase( RecipeDB * database );
+
 	static NutrientInfo::Status checkIngredientStatus(
 		const Ingredient & ingredient,
 		RecipeDB * database,
@@ -44,10 +48,14 @@ signals:
 private slots:
 	void helpButtonClickedSlot();
 
+	void linkClickedSlot( const QUrl & link );
+
 private:
 	Ui::NutrientInfoDetailsDialog * ui;
 
 	QString m_text;
+
+	RecipeDB * m_database;
 };
 
 #endif

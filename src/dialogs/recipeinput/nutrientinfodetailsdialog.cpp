@@ -11,16 +11,24 @@
 
 #include "ui_nutrientinfodetailsdialog.h"
 
+#include "dialogs/editpropertiesdialog.h"
+#include "dialogs/createunitconversiondialog.h"
 #include "backends/recipedb.h"
 
 #include <KToolInvocation>
+#include <QPointer>
+
 
 NutrientInfoDetailsDialog::NutrientInfoDetailsDialog( QWidget *parent )
-		: QDialog( parent )
+		: QDialog( parent ),
+		m_database( 0 )
 {
 	ui = new Ui::NutrientInfoDetailsDialog;
 	QWidget * mainWidget = new QWidget( this );
 	ui->setupUi( mainWidget );
+
+	connect( ui->m_textBrowser, SIGNAL(anchorClicked(const QUrl &)),
+		this, SLOT(linkClickedSlot(const QUrl &)) );
 
 	connect( ui->m_updateButton, SIGNAL(clicked()),
 		this, SIGNAL(updateRequested()) );
@@ -30,6 +38,11 @@ NutrientInfoDetailsDialog::NutrientInfoDetailsDialog( QWidget *parent )
 
 	connect( ui->m_helpButton, SIGNAL(clicked()),
 		this, SLOT(helpButtonClickedSlot()) );
+}
+
+void NutrientInfoDetailsDialog::setDatabase( RecipeDB * database )
+{
+	m_database = database;
 }
 
 void NutrientInfoDetailsDialog::clear()
@@ -168,3 +181,42 @@ void NutrientInfoDetailsDialog::helpButtonClickedSlot()
 {
 	KToolInvocation::invokeHelp("property-status");
 }
+
+void NutrientInfoDetailsDialog::linkClickedSlot( const QUrl & link )
+{
+	if ( !m_database ) {
+		return;
+	}
+
+	QString linkString = link.toString();
+	if (linkString.startsWith("ingredient#")) {
+		RecipeDB::IdType ingID = linkString.mid(linkString.indexOf("#")+1).toInt();
+		QString ingName = m_database->ingredientName(ingID);
+		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( ingID, ingName, m_database, this );
+		d->exec();
+		delete d;
+	} else if (linkString.startsWith("unit#")) { //FIXME: Not used?
+		QString unitIDs = linkString.mid(linkString.indexOf("#")+1);
+		QStringList idList = unitIDs.split(',', QString::SkipEmptyParts );
+		RecipeDB::IdType unitFrom = idList[0].toInt();
+		ElementList toUnits;
+		RecipeDB::IdType lastUnit = RecipeDB::InvalidId;
+		for (int i = 1; i < idList.count(); ++i ) {
+			int id = idList[i].toInt();
+			if ( id != lastUnit ) {
+				toUnits << Element(m_database->unitName(id).name(),id);
+				lastUnit = id;
+			}
+		}
+		QPointer<CreateUnitConversionDialog> dlg =
+			new CreateUnitConversionDialog( Element(m_database->unitName(unitFrom).name()), toUnits, this );
+		if ( dlg->exec() == QDialog::Accepted ) {
+			UnitRatio ratio(dlg->toUnitID(), unitFrom, dlg->ratio());
+			if (ratio.ratio() >= 0 ) {
+				m_database->saveUnitRatio(&ratio);
+			}
+		}
+		delete dlg;
+	}
+}
+

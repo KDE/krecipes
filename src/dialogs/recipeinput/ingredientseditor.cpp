@@ -85,6 +85,7 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 void IngredientsEditor::setDatabase( RecipeDB * database )
 {
 	m_database = database;
+	m_nutrientInfoDetailsDialog->setDatabase( m_database );
 }
 
 void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
