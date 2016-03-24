@@ -144,6 +144,9 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 	}
 	ui->m_treeView->expandAll();
 	resizeColumnsToContents();
+
+	//Update the nutrient information status
+	updateNutrientInfoDetailsSlot();
 }
 
 void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
@@ -486,6 +489,13 @@ void IngredientsEditor::updateNutrientInfoDetailsSlot()
 		}
 		//Add the error message for displaying in the details dialog
 		m_nutrientInfoDetailsDialog->addText( nutrientInfoErrorMessage );
+	}
+	if ( m_nutrientIncompleteCount > 0 ) {
+		ui->m_nutrientInfoStatusWidget->setStatus( NutrientInfo::Incomplete );
+	} else if ( m_nutrientIntermediateCount > 0 ) {
+		ui->m_nutrientInfoStatusWidget->setStatus( NutrientInfo::Intermediate );
+	} else {
+		ui->m_nutrientInfoStatusWidget->setStatus( NutrientInfo::Complete );
 	}
 	m_nutrientInfoDetailsDialog->displayText();
 

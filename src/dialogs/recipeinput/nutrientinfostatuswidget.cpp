@@ -21,3 +21,26 @@ NutrientInfoStatusWidget::NutrientInfoStatusWidget( QWidget * parent )
 	connect( ui->m_detailsButton, SIGNAL(clicked()),
 		this, SIGNAL(detailsButtonClicked()) );
 }
+
+void NutrientInfoStatusWidget::setStatus( NutrientInfo::Status status )
+{
+	if ( status == NutrientInfo::Complete ) {
+		ui->m_statusLed->setColor( Qt::green );
+		ui->m_statusLabel->setText( i18nc(
+			"@info Property information for a recipe is complete",
+			"Complete") );
+		ui->m_detailsButton->setVisible(false);
+	} else if ( status == NutrientInfo::Intermediate ) {
+		ui->m_statusLed->setColor( Qt::yellow );
+		ui->m_statusLabel->setText( i18nc(
+			"@info Property information for a recipe is complete, but...",
+			"Complete, but approximations made") );
+		ui->m_detailsButton->setVisible(true);
+	} else {
+		ui->m_statusLed->setColor( Qt::red );
+		ui->m_statusLabel->setText( i18nc(
+			"@info Property information for a recipe is incomplete",
+			"Incomplete") );
+		ui->m_detailsButton->setVisible(true);
+	}
+}

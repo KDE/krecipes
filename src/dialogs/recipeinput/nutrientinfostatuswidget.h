@@ -31,6 +31,8 @@ class NutrientInfoStatusWidget : public QWidget
 public:
 	NutrientInfoStatusWidget( QWidget * parent = 0 );
 
+	void setStatus( NutrientInfo::Status status );
+
 signals:
 	void detailsButtonClicked();
 
