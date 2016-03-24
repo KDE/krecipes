@@ -21,6 +21,9 @@ NutrientInfoDetailsDialog::NutrientInfoDetailsDialog( QWidget *parent )
 	QWidget * mainWidget = new QWidget( this );
 	ui->setupUi( mainWidget );
 
+	connect( ui->m_updateButton, SIGNAL(clicked()),
+		this, SIGNAL(updateRequested()) );
+
 	connect( ui->m_closeButton, SIGNAL(clicked()),
 		this, SLOT(hide()) );
 }

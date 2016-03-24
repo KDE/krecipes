@@ -38,6 +38,9 @@ public:
 		RecipeDB * database,
 		QString * message );
 
+signals:
+	void updateRequested();
+
 private:
 	Ui::NutrientInfoDetailsDialog * ui;
 

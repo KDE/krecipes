@@ -65,6 +65,8 @@ private slots:
 
 	void removeIngredientSlot();
 
+	void updateNutrientInfoDetailsSlot();
+
 	void nutrientInfoDetailsSlot();
 
 private:

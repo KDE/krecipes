@@ -75,6 +75,9 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 	connect( ui->m_treeView, SIGNAL(doubleClicked(const QModelIndex&)),
 		this, SIGNAL(changed()) );
 
+	connect( m_nutrientInfoDetailsDialog, SIGNAL(updateRequested()),
+		this, SLOT(updateNutrientInfoDetailsSlot()) );
+
 	connect( ui->m_nutrientInfoStatusWidget, SIGNAL(detailsButtonClicked()),
 		this, SLOT(nutrientInfoDetailsSlot()) );
 }
@@ -458,7 +461,7 @@ void IngredientsEditor::removeIngredientSlot()
 	}
 }
 
-void IngredientsEditor::nutrientInfoDetailsSlot()
+void IngredientsEditor::updateNutrientInfoDetailsSlot()
 {
 	Ingredient ingredient;
 	QModelIndex index;
@@ -485,6 +488,12 @@ void IngredientsEditor::nutrientInfoDetailsSlot()
 		m_nutrientInfoDetailsDialog->addText( nutrientInfoErrorMessage );
 	}
 	m_nutrientInfoDetailsDialog->displayText();
+
+}
+
+void IngredientsEditor::nutrientInfoDetailsSlot()
+{
+	updateNutrientInfoDetailsSlot();
 	m_nutrientInfoDetailsDialog->show();
 }
 
