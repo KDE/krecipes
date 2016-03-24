@@ -29,7 +29,9 @@
 IngredientsEditor::IngredientsEditor( QWidget * parent)
 		: QWidget( parent ),
 		m_ingredientList( 0 ),
-		m_database( 0 )
+		m_database( 0 ),
+		m_nutrientIncompleteCount( 0 ),
+		m_nutrientIntermediateCount( 0 )
 {
 	ui = new Ui::IngredientsEditor;
 	ui->setupUi( this );
@@ -458,7 +460,31 @@ void IngredientsEditor::removeIngredientSlot()
 
 void IngredientsEditor::nutrientInfoDetailsSlot()
 {
-	//TODO: collect information to show
+	Ingredient ingredient;
+	QModelIndex index;
+	NutrientInfo::Status nutrientInfoStatus;
+	QString nutrientInfoErrorMessage;
+	m_nutrientIncompleteCount = 0;
+	m_nutrientIntermediateCount = 0;
+	m_nutrientInfoDetailsDialog->clear();
+	int rowCount = m_sourceModel->rowCount();
+	for ( int i = 0; i < rowCount; ++i ) {
+		//Read the ingredients we have so far in the editor
+		ingredient = readIngredientFromRow(i);
+		//Check the nutrient info status and error message
+		nutrientInfoStatus = NutrientInfoDetailsDialog::checkIngredientStatus(
+			ingredient, m_database, &nutrientInfoErrorMessage );
+		//Increase bad status counters
+		if ( nutrientInfoStatus == NutrientInfo::Incomplete ) {
+			++m_nutrientIncompleteCount;
+		}
+		if ( nutrientInfoStatus == NutrientInfo::Intermediate ) {
+			++m_nutrientIntermediateCount;
+		}
+		//Add the error message for displaying in the details dialog
+		m_nutrientInfoDetailsDialog->addText( nutrientInfoErrorMessage );
+	}
+	m_nutrientInfoDetailsDialog->displayText();
 	m_nutrientInfoDetailsDialog->show();
 }
 

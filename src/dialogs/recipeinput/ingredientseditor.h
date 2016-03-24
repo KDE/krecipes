@@ -86,6 +86,9 @@ private:
 	QStandardItemModel * m_sourceModel;
 
 	NutrientInfoDetailsDialog * m_nutrientInfoDetailsDialog;
+
+	int m_nutrientIncompleteCount;
+	int m_nutrientIntermediateCount;
 };
 
 #endif

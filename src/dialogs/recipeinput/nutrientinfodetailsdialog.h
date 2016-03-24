@@ -12,6 +12,11 @@
 
 #include <QDialog>
 
+#include "nutrientinfostatuswidget.h"
+#include "datablocks/ingredient.h"
+
+class RecipeDB;
+
 namespace Ui {
 	class NutrientInfoDetailsDialog;
 }
@@ -23,8 +28,20 @@ class NutrientInfoDetailsDialog : public QDialog
 public:
 	NutrientInfoDetailsDialog( QWidget *parent );
 
+	void clear();
+
+	void addText( const QString & text );
+	void displayText();
+
+	static NutrientInfo::Status checkIngredientStatus(
+		const Ingredient & ingredient,
+		RecipeDB * database,
+		QString * message );
+
 private:
 	Ui::NutrientInfoDetailsDialog * ui;
+
+	QString m_text;
 };
 
 #endif

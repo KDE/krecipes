@@ -16,6 +16,14 @@ namespace Ui {
 	class NutrientInfoStatusWidget;
 }
 
+namespace NutrientInfo {
+	enum Status {
+		Complete=0,
+		Intermediate=1,
+		Incomplete=2
+	};
+}
+
 class NutrientInfoStatusWidget : public QWidget
 {
 	Q_OBJECT
