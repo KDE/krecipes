@@ -41,6 +41,9 @@ public:
 signals:
 	void updateRequested();
 
+private slots:
+	void helpButtonClickedSlot();
+
 private:
 	Ui::NutrientInfoDetailsDialog * ui;
 

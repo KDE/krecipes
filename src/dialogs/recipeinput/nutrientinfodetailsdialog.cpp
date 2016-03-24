@@ -13,6 +13,7 @@
 
 #include "backends/recipedb.h"
 
+#include <KToolInvocation>
 
 NutrientInfoDetailsDialog::NutrientInfoDetailsDialog( QWidget *parent )
 		: QDialog( parent )
@@ -26,6 +27,9 @@ NutrientInfoDetailsDialog::NutrientInfoDetailsDialog( QWidget *parent )
 
 	connect( ui->m_closeButton, SIGNAL(clicked()),
 		this, SLOT(hide()) );
+
+	connect( ui->m_helpButton, SIGNAL(clicked()),
+		this, SLOT(helpButtonClickedSlot()) );
 }
 
 void NutrientInfoDetailsDialog::clear()
@@ -158,4 +162,9 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 //	}
 
 	return NutrientInfo::Complete;
+}
+
+void NutrientInfoDetailsDialog::helpButtonClickedSlot()
+{
+	KToolInvocation::invokeHelp("property-status");
 }
