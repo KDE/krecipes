@@ -71,6 +71,9 @@ void NutrientInfoDetailsDialog::displayText()
 NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 	const Ingredient & ingredient, RecipeDB * database, QString * message )
 {
+	//Clear error message
+	*message = "";
+
 	IngredientPropertyList ingPropertyList;
 	database->loadProperties( &ingPropertyList, ingredient.ingredientID );
 
