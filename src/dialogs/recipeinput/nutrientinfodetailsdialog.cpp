@@ -26,6 +26,9 @@ NutrientInfoDetailsDialog::NutrientInfoDetailsDialog( QWidget *parent )
 	ui = new Ui::NutrientInfoDetailsDialog;
 	QWidget * mainWidget = new QWidget( this );
 	ui->setupUi( mainWidget );
+	QGridLayout * mainLayout = new QGridLayout;
+	setLayout( mainLayout );
+	mainLayout->addWidget( mainWidget );
 
 	connect( ui->m_textBrowser, SIGNAL(anchorClicked(const QUrl &)),
 		this, SLOT(linkClickedSlot(const QUrl &)) );
