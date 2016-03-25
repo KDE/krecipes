@@ -15,8 +15,10 @@
 #include "dialogs/createunitconversiondialog.h"
 #include "backends/recipedb.h"
 
+#include <kdebug.h>
 #include <KToolInvocation>
 #include <QPointer>
+#include <QSet>
 
 
 NutrientInfoDetailsDialog::NutrientInfoDetailsDialog( QWidget *parent )
@@ -50,7 +52,10 @@ void NutrientInfoDetailsDialog::setDatabase( RecipeDB * database )
 
 void NutrientInfoDetailsDialog::clear()
 {
-	m_text = "";
+	m_text = "<html><style type=\"text/css\">"
+		"p { margin-top: 0; margin-bottom: 0 }"
+		".ingredient_li { margin-top: 4; margin-bottom: 4 }"
+		"</style>";
 	m_text.append( i18nc("@info",
 		"The nutrient information for this recipe is incomplete "
 		"because the following information is missing:") );
@@ -60,15 +65,16 @@ void NutrientInfoDetailsDialog::clear()
 
 void NutrientInfoDetailsDialog::addText( const QString & text )
 {
-	m_text.append("<li>");
+	m_text.append("<li class=\"ingredient_li\">");
 	m_text.append(text);
 	m_text.append("</li>");
 }
 
 void NutrientInfoDetailsDialog::displayText()
 {
-	m_text.append("</ul>");
-	ui->m_textBrowser->setText( m_text );
+	m_text.append("</ul></html>");
+	kDebug() << m_text;
+	ui->m_textBrowser->setHtml( m_text );
 }
 
 NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
@@ -89,26 +95,39 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 		return NutrientInfo::Incomplete;
 	}
 
-//	QMap<int,bool> ratioCache; //unit->conversion possible
-//	IngredientPropertyList::const_iterator prop_it;
-//	for ( prop_it = ingPropertyList.constBegin(); prop_it != ingPropertyList.constEnd(); ++prop_it ) {
-//		Ingredient result;
-//
-//		QMap<int,bool>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id());
-//		if ( cache_it == ratioCache.constEnd() ) {
-//			RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
-//			ratioCache.insert((*prop_it).perUnit.id(),status==RecipeDB::Success||status==RecipeDB::MismatchedPrepMethod);
-//
-//			switch ( status ) {
-//			case RecipeDB::Success: break;
-//			case RecipeDB::MissingUnitConversion: {
-//				if ( ing.units.type() != Unit::Other && ing.units.type() == (*prop_it).perUnit.type() ) {
+	//Find out the units used in "per amount" and store them in 'targetUnits'.
+	//We will have to check that we can perform conversions from the ingredient unit
+	//to these units, otherwise we won't be able to get the amounts of each nutritive
+	//property for the ingredient.
+	QSet<RecipeDB::IdType> perUnits_Ids;
+	QList<Unit> targetUnits;
+	IngredientPropertyList::const_iterator prop_it = ingPropertyList.constBegin();
+	while (prop_it != ingPropertyList.constEnd() ) {
+		if ( !perUnits_Ids.contains( prop_it->perUnit.id() ) ) {
+			targetUnits << prop_it->perUnit;
+			perUnits_Ids << prop_it->perUnit.id();
+		}
+		++prop_it;
+	}
+
+	//Check each unit we have to convert
+	int incompleteCount = 0;
+	int intermediateCount = 0;
+	Ingredient dummyIngredient; //This is to store the result of the conversions
+	RecipeDB::ConversionStatus status;
+	QList<Unit>::const_iterator targetUnits_it = targetUnits.constBegin();
+	while ( targetUnits_it != targetUnits.constEnd() ) {
+		status = database->convertIngredientUnits( ingredient, *targetUnits_it, dummyIngredient );
+		switch ( status ) {
+		case RecipeDB::Success: break;
+		case RecipeDB::MissingUnitConversion:
+			if ( (ingredient.units.type() != Unit::Other) && (ingredient.units.type() == targetUnits_it->type()) ) {
 //					propertyStatusMapRed.insert(ing.ingredientID,
 //						i18nc( "@info", "<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
 //						,(ing.units.name().isEmpty()?i18n("-No unit-"):ing.units.name())
 //						,((*prop_it).perUnit.name())
 //						,ing.name));
-//				} else {
+			} else {
 //					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
 //					Q3ValueList< QPair<int,int> > usedIds;
 //					QStringList missingConversions;
@@ -140,23 +159,22 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 //						("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>"),
 //						QString::number(ing.ingredientID))
 //					);
-//				}
-//				break;
-//			}
-//			case RecipeDB::MissingIngredientWeight:
+			}
+			break;
+		case RecipeDB::MissingIngredientWeight:
 //				propertyStatusMapRed.insert(ing.ingredientID, QString(
 //					i18nc("@info", "<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide "
 //					"ingredient weight.</a>",
 //					ing.name, QString::number(ing.ingredientID))));
-//				break;
-//			case RecipeDB::MismatchedPrepMethod:
-//				if ( ing.prepMethodList.count() == 0 )
+			break;
+		case RecipeDB::MismatchedPrepMethod:
+			if ( ingredient.prepMethodList.isEmpty() ) {
 //					propertyStatusMapRed.insert(ing.ingredientID,QString(
 //						i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when no "
 //						"preparation method is specified. <a href=\"ingredient#%2\">Provide "
 //						"ingredient weight.</a>",
 //						ing.name, QString::number(ing.ingredientID))));
-//				else
+			} else {
 //					propertyStatusMapRed.insert(ing.ingredientID,QString(
 //						i18nc("@info", "<b>%1:</b> There is no ""ingredient weight entry for when prepared "
 //						"in any of the following manners: %2<a href=\"ingredient#%3\">Provide "
@@ -164,24 +182,57 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 //						ing.name,
 //						"<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>",
 //						QString::number(ing.ingredientID))));
-//				break;
-//			case RecipeDB::MismatchedPrepMethodUsingApprox:
-//				propertyStatusMapYellow.insert(ing.ingredientID,QString(
-//					i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when prepared in any of "
-//					"the following manners (defaulting to a weight entry without a preparation "
-//					"method specified): "
-//					"%2<a href=\"ingredient#%3\">Provide ingredient weight.</a>",
-//					ing.name,
-//					"<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>",
-//					QString::number(ing.ingredientID))));
-//				break;
-//			default: kDebug()<<"Code error: Unhandled conversion status code "<<status; break;
-//			}
-//		}
-//	}
+			}
+			break;
+		case RecipeDB::MismatchedPrepMethodUsingApprox:
+			++intermediateCount;
+			message->append(
+				i18nc("@info", "<p><b>%1:</b> There is no ingredient weight entry for when prepared in any of "
+					"the following manners (defaulting to a weight entry without a preparation "
+					"method specified):</p>"
+					"%2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")
+					.arg( ingredient.name )
+					.arg( "<ul><li>"+ingredient.prepMethodList.join("</li><li>")+"</li></ul>" )
+					.arg( QString::number(ingredient.ingredientID) )
+			);
+			break;
+		default: kDebug()<<"Code error: Unhandled conversion status code "<<status; break;
+		}
+		++targetUnits_it;
+	}
 
-	return NutrientInfo::Complete;
+	//Return the status depending on what we found out above.
+	if ( incompleteCount > 0 ) {
+		return NutrientInfo::Incomplete;
+	} else if ( intermediateCount > 0 ) {
+		return NutrientInfo::Intermediate;
+	} else {
+		return NutrientInfo::Complete;
+	}
 }
+
+QString NutrientInfoDetailsDialog::conversionPath( const QString &ingUnit,
+	const QString &toUnit, const QString &fromUnit,
+	const QString &propUnit ) const
+{
+	QString path = '\''+ingUnit+'\'';
+
+	QString lastUnit = ingUnit;
+	if ( lastUnit != toUnit ) {
+		path.append(" =&gt; '"+toUnit+'\'');
+		lastUnit = toUnit;
+	}
+	if ( lastUnit != fromUnit ) {
+		path.append(" =&gt; '"+fromUnit+'\'');
+		lastUnit = fromUnit;
+	}
+	if ( lastUnit != propUnit ) {
+		path.append(" =&gt; '"+propUnit+'\'');
+		lastUnit = propUnit;
+	}
+	return path;
+}
+
 
 void NutrientInfoDetailsDialog::helpButtonClickedSlot()
 {
