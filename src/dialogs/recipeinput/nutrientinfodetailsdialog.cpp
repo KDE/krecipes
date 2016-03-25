@@ -52,42 +52,75 @@ void NutrientInfoDetailsDialog::setDatabase( RecipeDB * database )
 
 void NutrientInfoDetailsDialog::clear()
 {
-	m_text = "<html><style type=\"text/css\">"
-		"p { margin-top: 0; margin-bottom: 0 }"
-		".ingredient_li { margin-top: 4; margin-bottom: 4 }"
-		"</style>";
-	m_text.append( i18nc("@info",
-		"The nutrient information for this recipe is incomplete "
-		"because the following information is missing:") );
-	m_text.append("<ul>");
+	m_incompleteText = "";
+	m_intermediateText = "";
 	ui->m_textBrowser->setPlainText("");
 }
 
-void NutrientInfoDetailsDialog::addText( const QString & text )
+void NutrientInfoDetailsDialog::addIncompleteText( const QString & text )
 {
-	m_text.append("<li class=\"ingredient_li\">");
-	m_text.append(text);
-	m_text.append("</li>");
+	m_incompleteText.append("<li class=\"ingredient_li\">");
+	m_incompleteText.append(text);
+	m_incompleteText.append("</li>");
+}
+
+void NutrientInfoDetailsDialog::addIntermediateText( const QString & text )
+{
+	m_intermediateText.append("<li class=\"ingredient_li\">");
+	m_intermediateText.append(text);
+	m_intermediateText.append("</li>");
 }
 
 void NutrientInfoDetailsDialog::displayText()
 {
-	m_text.append("</ul></html>");
-	kDebug() << m_text;
-	ui->m_textBrowser->setHtml( m_text );
+	QString finalText;
+
+	//header
+	finalText = "<html><style type=\"text/css\">"
+		"p { margin-top: 0; margin-bottom: 0 }"
+		".ingredient_li { margin-top: 4; margin-bottom: 4 }"
+		"</style>";
+
+	//incomplete text
+	if ( !m_incompleteText.isEmpty() ) {
+		finalText.append( i18nc("@info",
+			"The nutrient information for this recipe is incomplete "
+			"because the following information is missing:") );
+		finalText.append("<ul>");
+		finalText.append( m_incompleteText );
+		finalText.append("</ul>");
+	}
+
+	//intermediate text
+	if ( !m_intermediateText.isEmpty() ) {
+		finalText.append( i18nc("@info",
+			"The following approximations will be made when determining "
+			"nutrient information:") );
+		finalText.append("<ul>");
+		finalText.append( m_intermediateText );
+		finalText.append("</ul>");
+	}
+
+	//text ending
+	finalText.append("</html>");
+
+	//display the text in the viewer
+	ui->m_textBrowser->setHtml( finalText );
 }
 
 NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
-	const Ingredient & ingredient, RecipeDB * database, QString * message )
+	const Ingredient & ingredient, RecipeDB * database,
+	QString * incompleteMessage, QString * intermediateMessage )
 {
-	//Clear error message
-	*message = "";
+	//Clear error messages
+	*incompleteMessage = "";
+	*intermediateMessage = "";
 
 	IngredientPropertyList ingPropertyList;
 	database->loadProperties( &ingPropertyList, ingredient.ingredientID );
 
 	if ( ingPropertyList.isEmpty() ) {
-		*message = QString(
+		*incompleteMessage = QString(
 			i18nc("@info", "<b>%1:</b> No nutrient information available. "
 			"<a href=\"ingredient#%2\">Provide nutrient information.</a>",
 			Qt::escape( ingredient.name ),
@@ -111,8 +144,6 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 	}
 
 	//Check each unit we have to convert
-	int incompleteCount = 0;
-	int intermediateCount = 0;
 	Ingredient dummyIngredient; //This is to store the result of the conversions
 	RecipeDB::ConversionStatus status;
 	QList<Unit>::const_iterator targetUnits_it = targetUnits.constBegin();
@@ -185,8 +216,7 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 			}
 			break;
 		case RecipeDB::MismatchedPrepMethodUsingApprox:
-			++intermediateCount;
-			message->append(
+			intermediateMessage->append(
 				i18nc("@info", "<p><b>%1:</b> There is no ingredient weight entry for when prepared in any of "
 					"the following manners (defaulting to a weight entry without a preparation "
 					"method specified):</p>"
@@ -202,9 +232,9 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 	}
 
 	//Return the status depending on what we found out above.
-	if ( incompleteCount > 0 ) {
+	if ( !incompleteMessage->isEmpty() ) {
 		return NutrientInfo::Incomplete;
-	} else if ( intermediateCount > 0 ) {
+	} else if ( !intermediateMessage->isEmpty() ) {
 		return NutrientInfo::Intermediate;
 	} else {
 		return NutrientInfo::Complete;

@@ -32,7 +32,8 @@ public:
 
 	void clear();
 
-	void addText( const QString & text );
+	void addIncompleteText( const QString & text );
+	void addIntermediateText( const QString & text );
 	void displayText();
 
 	void setDatabase( RecipeDB * database );
@@ -40,7 +41,8 @@ public:
 	static NutrientInfo::Status checkIngredientStatus(
 		const Ingredient & ingredient,
 		RecipeDB * database,
-		QString * message );
+		QString * incompleteMessage,
+		QString * intermediateMessage );
 
 signals:
 	void updateRequested();
@@ -57,7 +59,8 @@ private:
 
 	Ui::NutrientInfoDetailsDialog * ui;
 
-	QString m_text;
+	QString m_intermediateText;
+	QString m_incompleteText;
 
 	RecipeDB * m_database;
 };

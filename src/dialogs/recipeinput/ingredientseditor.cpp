@@ -470,7 +470,8 @@ void IngredientsEditor::updateNutrientInfoDetailsSlot()
 	Ingredient ingredient;
 	QModelIndex index;
 	NutrientInfo::Status nutrientInfoStatus;
-	QString nutrientInfoErrorMessage;
+	QString incompleteErrMsg;
+	QString intermediateErrMsg;
 	m_nutrientIncompleteCount = 0;
 	m_nutrientIntermediateCount = 0;
 	m_nutrientInfoDetailsDialog->clear();
@@ -480,16 +481,19 @@ void IngredientsEditor::updateNutrientInfoDetailsSlot()
 		ingredient = readIngredientFromRow(i);
 		//Check the nutrient info status and error message
 		nutrientInfoStatus = NutrientInfoDetailsDialog::checkIngredientStatus(
-			ingredient, m_database, &nutrientInfoErrorMessage );
+			ingredient, m_database,
+			&incompleteErrMsg, &intermediateErrMsg );
 		//Increase bad status counters
 		if ( nutrientInfoStatus == NutrientInfo::Incomplete ) {
 			++m_nutrientIncompleteCount;
+			//Add the error message for displaying in the details dialog
+			m_nutrientInfoDetailsDialog->addIncompleteText( incompleteErrMsg );
 		}
 		if ( nutrientInfoStatus == NutrientInfo::Intermediate ) {
 			++m_nutrientIntermediateCount;
+			//Add the error message for displaying in the details dialog
+			m_nutrientInfoDetailsDialog->addIntermediateText( intermediateErrMsg );
 		}
-		//Add the error message for displaying in the details dialog
-		m_nutrientInfoDetailsDialog->addText( nutrientInfoErrorMessage );
 	}
 	if ( m_nutrientIncompleteCount > 0 ) {
 		ui->m_nutrientInfoStatusWidget->setStatus( NutrientInfo::Incomplete );
