@@ -14,6 +14,7 @@
 #include "dialogs/editpropertiesdialog.h"
 #include "dialogs/createunitconversiondialog.h"
 #include "backends/recipedb.h"
+#include "datablocks/weight.h"
 
 #include <kdebug.h>
 #include <KToolInvocation>
@@ -152,67 +153,79 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 		switch ( status ) {
 		case RecipeDB::Success: break;
 		case RecipeDB::MissingUnitConversion:
-			if ( (ingredient.units.type() != Unit::Other) && (ingredient.units.type() == targetUnits_it->type()) ) {
-//					propertyStatusMapRed.insert(ing.ingredientID,
-//						i18nc( "@info", "<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
-//						,(ing.units.name().isEmpty()?i18n("-No unit-"):ing.units.name())
-//						,((*prop_it).perUnit.name())
-//						,ing.name));
+			if ( ingredient.units.id() == RecipeDB::InvalidId ) {
+				//FIXME: Right now we can't add an ingredient weight with no unit.
+				incompleteMessage->append(
+					i18nc( "@info", "<b>%1:</b> There is no ingredient weight entry for no unit. "
+					"<a href=\"ingredient#%2\">Provide this ingredient weight.</a>")
+					.arg( Qt::escape(ingredient.name) )
+					.arg( ingredient.ingredientID )
+				);
+			} else if ( (ingredient.units.type() != Unit::Other)
+			&& (ingredient.units.type() == targetUnits_it->type()) ) {
+				incompleteMessage->append(
+					i18nc( "@info", "<b>%1:</b> Missing unit conversion from '%2' to '%3'. "
+					"<a href=\"unit#%4,%5\">Provide this conversion.</a>" )
+					.arg( Qt::escape(ingredient.name) )
+					.arg( Qt::escape(ingredient.units.name()) )
+					.arg( Qt::escape(targetUnits_it->name()) )
+					.arg( ingredient.units.id() )
+					.arg( targetUnits_it->id() ) );
 			} else {
-//					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
-//					Q3ValueList< QPair<int,int> > usedIds;
-//					QStringList missingConversions;
-//					for ( WeightList::const_iterator weight_it = weights.constBegin(); weight_it != weights.constEnd(); ++weight_it ) {
-//						//skip entries that only differ in how it's prepared
-//						QPair<int,int> usedPair((*weight_it).perAmountUnitId(),(*weight_it).weightUnitId());
-//						if ( usedIds.find(usedPair) != usedIds.end() )
-//							continue;
-//
-//						QString toUnit = database->unitName((*weight_it).perAmountUnitId()).name();
-//						if ( toUnit.isEmpty() ) toUnit = i18nc( "@info", "-No unit-");
-//
-//						QString fromUnit = database->unitName((*weight_it).weightUnitId()).name();
-//						if ( fromUnit.isEmpty() ) fromUnit = i18nc( "@info", "-No unit-");
-//
-//						QString ingUnit = ing.units.name();
-//						if ( ingUnit.isEmpty() ) ingUnit = i18nc( "@info", "-No unit-");
-//
-//						QString propUnit = (*prop_it).perUnit.name();
-//						if ( propUnit.isEmpty() ) propUnit = i18nc( "@info", "-No unit-");
-//
-//						missingConversions << conversionPath( ingUnit, toUnit, fromUnit, propUnit);
-//					}
-//					propertyStatusMapRed.insert(ing.ingredientID,
-//						i18nc("@info", "<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate "
-//						"ingredient weight entry</a>, or provide conversion information to "
-//						"perform one of the following conversions: %2",
-//					  	ing.name,
-//						("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>"),
-//						QString::number(ing.ingredientID))
-//					);
+				WeightList weights = database->ingredientWeightUnits( ingredient.ingredientID );
+				QSet< QPair<RecipeDB::IdType,RecipeDB::IdType> > usedUnitIds;
+				QPair<RecipeDB::IdType,RecipeDB::IdType> usedPair;
+				QStringList missingConversions;
+				WeightList::const_iterator weight_it = weights.constBegin();
+				while ( weight_it != weights.constEnd() ) {
+					//skip entries that only differ in how it's prepared
+					usedPair.first = weight_it->perAmountUnitId();
+					usedPair.second = weight_it->weightUnitId();
+					if ( usedUnitIds.contains(usedPair) ) {
+						continue;
+					}
+					usedUnitIds << usedPair;
+
+					Unit fromUnit = ingredient.units;
+					Unit toUnit = database->unitName(weight_it->perAmountUnitId());
+
+					missingConversions << conversionPath( fromUnit, toUnit );
+					++weight_it;
+				}
+				incompleteMessage->append(
+					i18nc("@info", "<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate "
+					"ingredient weight entry</a>, or provide conversion information to "
+					"perform one of the following conversions: %2")
+					.arg ( Qt::escape(ingredient.name) )
+					.arg( "<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>" )
+					.arg( QString::number(ingredient.ingredientID) )
+				);
 			}
 			break;
 		case RecipeDB::MissingIngredientWeight:
-//				propertyStatusMapRed.insert(ing.ingredientID, QString(
-//					i18nc("@info", "<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide "
-//					"ingredient weight.</a>",
-//					ing.name, QString::number(ing.ingredientID))));
+			incompleteMessage->append(
+				i18nc("@info", "<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide "
+				"ingredient weight.</a>")
+				.arg( Qt::escape(ingredient.name) )
+				.arg( QString::number(ingredient.ingredientID) )
+			);
 			break;
 		case RecipeDB::MismatchedPrepMethod:
 			if ( ingredient.prepMethodList.isEmpty() ) {
-//					propertyStatusMapRed.insert(ing.ingredientID,QString(
-//						i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when no "
-//						"preparation method is specified. <a href=\"ingredient#%2\">Provide "
-//						"ingredient weight.</a>",
-//						ing.name, QString::number(ing.ingredientID))));
+				incompleteMessage->append(
+					i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when no "
+					"preparation method is specified. <a href=\"ingredient#%2\">Provide "
+					"ingredient weight.</a>")
+					.arg( Qt::escape(ingredient.name) )
+					.arg( QString::number(ingredient.ingredientID) ) );
 			} else {
-//					propertyStatusMapRed.insert(ing.ingredientID,QString(
-//						i18nc("@info", "<b>%1:</b> There is no ""ingredient weight entry for when prepared "
-//						"in any of the following manners: %2<a href=\"ingredient#%3\">Provide "
-//						"ingredient weight.</a>",
-//						ing.name,
-//						"<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>",
-//						QString::number(ing.ingredientID))));
+				incompleteMessage->append(
+					i18nc("@info", "<p><b>%1:</b> There is no ingredient weight entry for when prepared "
+					"in any of the following manners:</p> %2 "
+					"<a href=\"ingredient#%3\">Provide ingredient weight.</a>")
+					.arg( Qt::escape(ingredient.name) )
+					.arg( "<ul><li>"+ingredient.prepMethodList.joinHtmlEscaped("</li><li>")+"</li></ul>" )
+					.arg( QString::number(ingredient.ingredientID) ) );
 			}
 			break;
 		case RecipeDB::MismatchedPrepMethodUsingApprox:
@@ -241,25 +254,17 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 	}
 }
 
-QString NutrientInfoDetailsDialog::conversionPath( const QString &ingUnit,
-	const QString &toUnit, const QString &fromUnit,
-	const QString &propUnit ) const
+QString NutrientInfoDetailsDialog::conversionPath( const Unit &fromUnit,
+	const Unit &toUnit )
 {
-	QString path = '\''+ingUnit+'\'';
-
-	QString lastUnit = ingUnit;
-	if ( lastUnit != toUnit ) {
-		path.append(" =&gt; '"+toUnit+'\'');
-		lastUnit = toUnit;
-	}
-	if ( lastUnit != fromUnit ) {
-		path.append(" =&gt; '"+fromUnit+'\'');
-		lastUnit = fromUnit;
-	}
-	if ( lastUnit != propUnit ) {
-		path.append(" =&gt; '"+propUnit+'\'');
-		lastUnit = propUnit;
-	}
+	QString path =
+		//FIXME: to make this link work we would need to convert fromUnit to the type
+		//of toUnit first, I think this should be done in CreateUnitConversionDialog
+		/*"<a href=\"unit#"
+			+ QString::number(fromUnit.id()) + ',' + QString::number(toUnit.id())
+		+ "\">"
+		+*/ Qt::escape(fromUnit.name()) + " =&gt; " + Qt::escape(toUnit.name())
+		+ "</a>";
 	return path;
 }
 
@@ -282,7 +287,7 @@ void NutrientInfoDetailsDialog::linkClickedSlot( const QUrl & link )
 		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( ingID, ingName, m_database, this );
 		d->exec();
 		delete d;
-	} else if (linkString.startsWith("unit#")) { //FIXME: Not used?
+	} else if (linkString.startsWith("unit#")) {
 		QString unitIDs = linkString.mid(linkString.indexOf("#")+1);
 		QStringList idList = unitIDs.split(',', QString::SkipEmptyParts );
 		RecipeDB::IdType unitFrom = idList[0].toInt();
@@ -298,12 +303,15 @@ void NutrientInfoDetailsDialog::linkClickedSlot( const QUrl & link )
 		QPointer<CreateUnitConversionDialog> dlg =
 			new CreateUnitConversionDialog( Element(m_database->unitName(unitFrom).name()), toUnits, this );
 		if ( dlg->exec() == QDialog::Accepted ) {
-			UnitRatio ratio(dlg->toUnitID(), unitFrom, dlg->ratio());
+			UnitRatio ratio(unitFrom, dlg->toUnitID(), dlg->ratio());
 			if (ratio.ratio() >= 0 ) {
 				m_database->saveUnitRatio(&ratio);
+				UnitRatio reverseRatio = ratio.reverse();
+				m_database->saveUnitRatio(&reverseRatio);
 			}
 		}
 		delete dlg;
 	}
+	emit updateRequested();
 }
 

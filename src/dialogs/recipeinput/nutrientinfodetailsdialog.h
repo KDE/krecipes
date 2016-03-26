@@ -53,9 +53,7 @@ private slots:
 	void linkClickedSlot( const QUrl & link );
 
 private:
-	QString conversionPath( const QString &ingUnit,
-		const QString &toUnit, const QString &fromUnit,
-		const QString &propUnit ) const;
+	static QString conversionPath( const Unit &fromUnit, const Unit &toUnit );
 
 	Ui::NutrientInfoDetailsDialog * ui;
 
