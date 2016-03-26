@@ -1,14 +1,17 @@
 /***************************************************************************
-*   Copyright © 2003-2004 Unai Garro <ugarro@gmail.com>                   *
-*   Copyright © 2003-2004 Jason Kivlighn <jkivlighn@gmail.com>            *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2003-2004 Unai Garro <ugarro@gmail.com>                    *
+*   Copyright © 2003-2004 Jason Kivlighn <jkivlighn@gmail.com>             *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 #include "datablocks/elementlist.h"
+
 #include <QStringList>
+#include <QTextDocument>
 
 
 ElementList::ElementList() : QList <Element>()
@@ -82,6 +85,22 @@ QString ElementList::join( const QString &sep ) const
 		if ( it != begin() )
 			ret += sep;
 		ret += (*it).name;
+	}
+
+	return ret;
+}
+
+QString ElementList::joinHtmlEscaped( const QString &sep ) const
+{
+	QString ret;
+
+	ElementList::const_iterator it_end = constEnd();
+	ElementList::const_iterator it;
+
+	for ( it = constBegin(); it != it_end; ++it ) {
+		if ( it != constBegin() )
+			ret += sep;
+		ret += Qt::escape(it->name);
 	}
 
 	return ret;

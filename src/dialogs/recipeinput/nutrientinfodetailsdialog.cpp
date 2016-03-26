@@ -221,8 +221,8 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 					"the following manners (defaulting to a weight entry without a preparation "
 					"method specified):</p>"
 					"%2<a href=\"ingredient#%3\">Provide ingredient weight.</a>")
-					.arg( ingredient.name )
-					.arg( "<ul><li>"+ingredient.prepMethodList.join("</li><li>")+"</li></ul>" )
+					.arg( Qt::escape(ingredient.name) )
+					.arg( "<ul><li>"+ingredient.prepMethodList.joinHtmlEscaped("</li><li>")+"</li></ul>" )
 					.arg( QString::number(ingredient.ingredientID) )
 			);
 			break;
