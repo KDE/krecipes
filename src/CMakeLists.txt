@@ -195,7 +195,12 @@ set(krecipesdialogs_SRCS
    dialogs/conversiondialog.cpp
    dialogs/createingredientweightdialog.cpp
    dialogs/editpropertiesdialog.cpp
-   dialogs/createunitconversiondialog.cpp)
+   dialogs/createunitconversiondialog.cpp
+
+   #Preferences
+   dialogs/preferences/krecipespreferences.cpp
+
+   )
 
 kde4_add_ui_files(krecipesdialogs_SRCS
    dialogs/recipeinput/recipegeneralinfoeditor.ui
@@ -406,7 +411,6 @@ set(krecipes_SRCS
    main.cpp
    krecipes.cpp
    krecipesview.cpp
-   pref.cpp
    #propertycalculator.cpp
    setupassistant.cpp
    shoppingcalculator.cpp

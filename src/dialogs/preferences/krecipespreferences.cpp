@@ -9,7 +9,7 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#include "pref.h"
+#include "krecipespreferences.h"
 
 #include <QLabel>
 
@@ -634,4 +634,3 @@ void SpellCheckingPrefs::saveOptions()
 	m_confPage->save();
 }
 
-#include "pref.moc"

@@ -25,7 +25,7 @@
 
 #include <kglobalsettings.h>
 
-#include "pref.h"
+#include "dialogs/preferences/krecipespreferences.h"
 
 ConvertSQLite3::ConvertSQLite3( const QString &db_file ):
 	QObject(), error(false),

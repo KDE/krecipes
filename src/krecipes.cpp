@@ -9,9 +9,9 @@
 ***************************************************************************/
 
 #include "krecipes.h"
-#include "pref.h"
 #include "krecipesview.h"
 
+#include "dialogs/preferences/krecipespreferences.h"
 #include "dialogs/recipeviewdialog.h"
 #include "dialogs/recipeinput/recipeinputdialog.h"
 #include "dialogs/selectrecipedialog.h"
