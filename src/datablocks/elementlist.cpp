@@ -27,10 +27,10 @@ Element ElementList::getElement( int index ) const
 
 Element ElementList::findByName( const QString &name ) const
 {
-	ElementList::const_iterator it_end = end();
-	for ( ElementList::const_iterator it = begin(); it != it_end; ++it ) {
-		if ( ( *it ).name == name )
-			return * it;
+	ElementList::const_iterator it_end = constEnd();
+	for ( ElementList::const_iterator it = constBegin(); it != it_end; ++it ) {
+		if ( it->name == name )
+			return *it;
 	}
 
 	Element el;
