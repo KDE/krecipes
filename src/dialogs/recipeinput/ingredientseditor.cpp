@@ -529,7 +529,8 @@ Ingredient IngredientsEditor::readIngredientFromRow( int row )
 	ingredient.setAmountRange( range );
 	//Ingredient units
 	index = m_sourceModel->index( row, 2 );
-	ingredient.units.setId( m_sourceModel->data( index, IdRole ).toInt() );
+	RecipeDB::IdType unitsId = m_sourceModel->data( index, IdRole ).toInt();
+	ingredient.units = m_database->unitName( unitsId );
 	//Ingredient preparation methods
 	index = m_sourceModel->index( row, 3 );
 	QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
