@@ -96,6 +96,11 @@ void UnitDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, cons
 	QString text = comboBox->currentText();
 	model->setData( index, text, Qt::EditRole );
 
+	if ( text.trimmed().isEmpty() ) {
+		model->setData( index, RecipeDB::InvalidId, IngredientsEditor::IdRole );
+		model->setData( index, QString(""), Qt::EditRole );
+		return;
+	}
 
 	bool singular = !index.data(IngredientsEditor::IsPluralRole).toBool();
 	if ( singular && m_singularNameToIdMap.contains(text) ) {
