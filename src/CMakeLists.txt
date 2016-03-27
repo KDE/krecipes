@@ -199,7 +199,14 @@ set(krecipesdialogs_SRCS
 
    #Preferences
    dialogs/preferences/krecipespreferences.cpp
-
+   dialogs/preferences/sqliteserverprefs.cpp
+   dialogs/preferences/mysqlserverprefs.cpp
+   dialogs/preferences/postgresqlserverprefs.cpp
+   dialogs/preferences/serverprefs.cpp
+   dialogs/preferences/numberprefs.cpp
+   dialogs/preferences/importprefs.cpp
+   dialogs/preferences/performanceprefs.cpp
+   dialogs/preferences/spellcheckingprefs.cpp
    )
 
 kde4_add_ui_files(krecipesdialogs_SRCS

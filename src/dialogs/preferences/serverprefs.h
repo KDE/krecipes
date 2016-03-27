@@ -10,40 +10,24 @@
 *   (at your option) any later version.                                    *
 ****************************************************************************/
 
-#ifndef KRECIPESPREFERENCES_H
-#define KRECIPESPREFERENCES_H
+#ifndef SERVERPREFS_H
+#define SERVERPREFS_H
 
-#include <KPageDialog>
+#include <QWidget>
 
-#include <QMap>
+class QCheckBox;
 
-class ServerPrefs;
-class NumbersPrefs;
-class ImportPrefs;
-class PerformancePrefs;
-class SpellCheckingPrefs;
-
-
-class KrecipesPreferences : public KPageDialog
+class ServerPrefs : public QWidget
 {
 	Q_OBJECT
 public:
-	KrecipesPreferences( QWidget *parent );
+	ServerPrefs( QWidget *parent = 0 );
 
-protected slots:
-	void slotHelp();
-
+	// Public Methods
+	void saveOptions( void );
 private:
-	ServerPrefs *m_pageServer;
-	NumbersPrefs *m_pageNumbers;
-	ImportPrefs *m_pageImport;
-	PerformancePrefs *m_pagePerformance;
-	SpellCheckingPrefs *m_pageSpellChecking;
-
-	QMap<QString,QString> m_helpMap;
-
-private slots:
-	void saveSettings( void );
+	QWidget *serverWidget;
+	QCheckBox *wizard_button;
 };
 
 #endif

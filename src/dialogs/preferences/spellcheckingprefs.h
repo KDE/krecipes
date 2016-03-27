@@ -10,40 +10,25 @@
 *   (at your option) any later version.                                    *
 ****************************************************************************/
 
-#ifndef KRECIPESPREFERENCES_H
-#define KRECIPESPREFERENCES_H
+#ifndef SPELLCHECKINGPREFS_H 
+#define SPELLCHECKINGPREFS_H
 
-#include <KPageDialog>
+#include <QWidget>
 
-#include <QMap>
-
-class ServerPrefs;
-class NumbersPrefs;
-class ImportPrefs;
-class PerformancePrefs;
-class SpellCheckingPrefs;
+namespace Sonnet {
+	class ConfigWidget;
+}
 
 
-class KrecipesPreferences : public KPageDialog
+class SpellCheckingPrefs : public QWidget
 {
 	Q_OBJECT
 public:
-	KrecipesPreferences( QWidget *parent );
+	SpellCheckingPrefs( QWidget *parent = 0 );
 
-protected slots:
-	void slotHelp();
-
-private:
-	ServerPrefs *m_pageServer;
-	NumbersPrefs *m_pageNumbers;
-	ImportPrefs *m_pageImport;
-	PerformancePrefs *m_pagePerformance;
-	SpellCheckingPrefs *m_pageSpellChecking;
-
-	QMap<QString,QString> m_helpMap;
-
-private slots:
-	void saveSettings( void );
+	void saveOptions();
+protected:
+	Sonnet::ConfigWidget *m_confPage;
 };
 
 #endif

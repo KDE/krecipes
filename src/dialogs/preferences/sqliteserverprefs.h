@@ -10,40 +10,28 @@
 *   (at your option) any later version.                                    *
 ****************************************************************************/
 
-#ifndef KRECIPESPREFERENCES_H
-#define KRECIPESPREFERENCES_H
+#ifndef SQLITESERVERPREFS_H
+#define SQLITESERVERPREFS_H
 
-#include <KPageDialog>
+#include <QWidget>
 
-#include <QMap>
+class KUrlRequester;
 
-class ServerPrefs;
-class NumbersPrefs;
-class ImportPrefs;
-class PerformancePrefs;
-class SpellCheckingPrefs;
-
-
-class KrecipesPreferences : public KPageDialog
+class SQLiteServerPrefs : public QWidget
 {
 	Q_OBJECT
-public:
-	KrecipesPreferences( QWidget *parent );
 
-protected slots:
-	void slotHelp();
+public:
+	SQLiteServerPrefs( QWidget *parent );
+
+	void saveOptions( void );
 
 private:
-	ServerPrefs *m_pageServer;
-	NumbersPrefs *m_pageNumbers;
-	ImportPrefs *m_pageImport;
-	PerformancePrefs *m_pagePerformance;
-	SpellCheckingPrefs *m_pageSpellChecking;
-
-	QMap<QString,QString> m_helpMap;
-
-private slots:
-	void saveSettings( void );
+	// Internal Widgets
+	KUrlRequester *dumpPathRequester;
+	KUrlRequester *oldPathRequester;
+	KUrlRequester *newPathRequester;
+	KUrlRequester *fileRequester;
 };
 
 #endif

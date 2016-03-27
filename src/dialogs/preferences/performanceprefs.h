@@ -10,40 +10,29 @@
 *   (at your option) any later version.                                    *
 ****************************************************************************/
 
-#ifndef KRECIPESPREFERENCES_H
-#define KRECIPESPREFERENCES_H
+#ifndef PERFORMANCEPREFS_H
+#define PERFORMANCEPREFS_H
 
-#include <KPageDialog>
+#include <QWidget>
 
-#include <QMap>
+class QVBoxLayout;
+class QCheckBox;
+class KIntNumInput;
 
-class ServerPrefs;
-class NumbersPrefs;
-class ImportPrefs;
-class PerformancePrefs;
-class SpellCheckingPrefs;
-
-
-class KrecipesPreferences : public KPageDialog
+class PerformancePrefs : public QWidget
 {
 	Q_OBJECT
+
 public:
-	KrecipesPreferences( QWidget *parent );
+	PerformancePrefs( QWidget *parent = 0 );
 
-protected slots:
-	void slotHelp();
+	void saveOptions();
 
-private:
-	ServerPrefs *m_pageServer;
-	NumbersPrefs *m_pageNumbers;
-	ImportPrefs *m_pageImport;
-	PerformancePrefs *m_pagePerformance;
-	SpellCheckingPrefs *m_pageSpellChecking;
-
-	QMap<QString,QString> m_helpMap;
-
-private slots:
-	void saveSettings( void );
+protected:
+	QVBoxLayout* Form1Layout;
+	QCheckBox* searchAsYouTypeBox;
+	KIntNumInput* catLimitInput;
+	KIntNumInput* limitInput;
 };
 
 #endif

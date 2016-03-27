@@ -10,40 +10,31 @@
 *   (at your option) any later version.                                    *
 ****************************************************************************/
 
-#ifndef KRECIPESPREFERENCES_H
-#define KRECIPESPREFERENCES_H
+#ifndef POSTGRESQLSERVERPREFS_H
+#define POSTGRESQLSERVERPREFS_H
 
-#include <KPageDialog>
+#include <QWidget>
 
-#include <QMap>
+class KIntNumInput;
+class KLineEdit;
+class KUrlRequester;
 
-class ServerPrefs;
-class NumbersPrefs;
-class ImportPrefs;
-class PerformancePrefs;
-class SpellCheckingPrefs;
-
-
-class KrecipesPreferences : public KPageDialog
+class PostgreSQLServerPrefs : public QWidget
 {
-	Q_OBJECT
 public:
-	KrecipesPreferences( QWidget *parent );
+	PostgreSQLServerPrefs( QWidget *parent );
 
-protected slots:
-	void slotHelp();
-
+	void saveOptions( void );
 private:
-	ServerPrefs *m_pageServer;
-	NumbersPrefs *m_pageNumbers;
-	ImportPrefs *m_pageImport;
-	PerformancePrefs *m_pagePerformance;
-	SpellCheckingPrefs *m_pageSpellChecking;
+	// Internal Widgets
+	KUrlRequester *dumpPathRequester;
+	KUrlRequester *psqlPathRequester;
 
-	QMap<QString,QString> m_helpMap;
-
-private slots:
-	void saveSettings( void );
+	KLineEdit *serverEdit;
+	KLineEdit *usernameEdit;
+	KLineEdit *passwordEdit;
+	KLineEdit *dbNameEdit;
+	KIntNumInput *portEdit;
 };
 
 #endif

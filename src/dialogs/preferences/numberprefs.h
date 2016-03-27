@@ -10,40 +10,38 @@
 *   (at your option) any later version.                                    *
 ****************************************************************************/
 
-#ifndef KRECIPESPREFERENCES_H
-#define KRECIPESPREFERENCES_H
+#ifndef NUMBERPREFS_H
+#define NUMBERPREFS_H
 
-#include <KPageDialog>
+#include <QWidget>
 
-#include <QMap>
+class QGroupBox;
+class QRadioButton;
+class QVBoxLayout;
+class QCheckBox;
 
-class ServerPrefs;
-class NumbersPrefs;
-class ImportPrefs;
-class PerformancePrefs;
-class SpellCheckingPrefs;
-
-
-class KrecipesPreferences : public KPageDialog
+class NumbersPrefs : public QWidget
 {
 	Q_OBJECT
+
 public:
-	KrecipesPreferences( QWidget *parent );
+	NumbersPrefs( QWidget *parent = 0 );
+
+	void saveOptions();
+
+protected:
+	QGroupBox* numberButtonGroup;
+	QRadioButton* fractionRadioButton;
+	QRadioButton* decimalRadioButton;
+
+	QVBoxLayout* Form1Layout;
+	QVBoxLayout* numberButtonGroupLayout;
+
+	QCheckBox *abbrevButton;
 
 protected slots:
-	void slotHelp();
+	virtual void languageChange();
 
-private:
-	ServerPrefs *m_pageServer;
-	NumbersPrefs *m_pageNumbers;
-	ImportPrefs *m_pageImport;
-	PerformancePrefs *m_pagePerformance;
-	SpellCheckingPrefs *m_pageSpellChecking;
-
-	QMap<QString,QString> m_helpMap;
-
-private slots:
-	void saveSettings( void );
 };
 
 #endif
