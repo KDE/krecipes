@@ -128,6 +128,11 @@ bool RecipeViewDialog::showRecipes( const QList<int> &ids )
 		progress_dialog->setObjectName( "open_progress_dialog" );
 		progress_dialog->setModal( true );
 		progress_dialog->resize( 240, 80 );
+		//Hide the edit button when more than one recipe is displayed
+		editButton->setVisible( false );
+	} else {
+		//If it's just one recipe, show the edit button
+		editButton->setVisible( true );
 	}
 
 	XSLTExporter html_generator( tmp_filename, "html" );
