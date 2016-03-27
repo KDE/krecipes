@@ -3,9 +3,6 @@
 
 * Autocompletion does not work for recipe instructions.
 
-* In conversion tables, it seems there was a tooltip displaying something, not
-  anymore.
-
 * The mx2 exporter doesn't pass the tests because of amount ranges. According
   to Warren Severin (the guy who wrote the exporter) Mastercook doesn't manage
   ranges, see the comments in src/exporters/mx2exporter.cpp
