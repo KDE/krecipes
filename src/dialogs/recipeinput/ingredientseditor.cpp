@@ -467,6 +467,10 @@ void IngredientsEditor::removeIngredientSlot()
 
 void IngredientsEditor::updateNutrientInfoDetailsSlot()
 {
+	if ( !m_database ) {
+		return;
+	}
+
 	Ingredient ingredient;
 	QModelIndex index;
 	NutrientInfo::Status nutrientInfoStatus;
@@ -530,7 +534,12 @@ Ingredient IngredientsEditor::readIngredientFromRow( int row )
 	//Ingredient units
 	index = m_sourceModel->index( row, 2 );
 	RecipeDB::IdType unitsId = m_sourceModel->data( index, IdRole ).toInt();
-	ingredient.units = m_database->unitName( unitsId );
+	ingredient.units.setId( unitsId );
+	if ( m_database ) {
+		//This is needed to get the unit type which must be known
+		//to check the nutrient info status
+		ingredient.units = m_database->unitName( unitsId );
+	}
 	//Ingredient preparation methods
 	index = m_sourceModel->index( row, 3 );
 	QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
