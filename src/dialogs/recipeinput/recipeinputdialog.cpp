@@ -775,6 +775,7 @@ void RecipeInputDialog::recipeChanged( void )
 
 void RecipeInputDialog::recipeChanged( const QString & t )
 {
+	ingredientsEditor->setRecipeTitle( t );
 	emit createButton( this, t );
 	recipeChanged();
 }

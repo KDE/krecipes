@@ -46,6 +46,8 @@ public:
 
 	void setDatabase( RecipeDB * database );
 
+	void setRecipeTitle( const QString & title );
+
 	void loadIngredientList( IngredientList * ingredientList );
 
 	void updateIngredientList();
@@ -84,6 +86,7 @@ private:
 
 	IngredientList * m_ingredientList;
 	RecipeDB * m_database;
+	QString m_recipeTitle;
 
 	QStandardItemModel * m_sourceModel;
 

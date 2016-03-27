@@ -88,6 +88,11 @@ void IngredientsEditor::setDatabase( RecipeDB * database )
 	m_nutrientInfoDetailsDialog->setDatabase( m_database );
 }
 
+void IngredientsEditor::setRecipeTitle( const QString & title )
+{
+	m_recipeTitle = title;
+}
+
 void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 {
 	m_ingredientList = ingredientList;
@@ -506,6 +511,9 @@ void IngredientsEditor::updateNutrientInfoDetailsSlot()
 	} else {
 		ui->m_nutrientInfoStatusWidget->setStatus( NutrientInfo::Complete );
 	}
+	m_nutrientInfoDetailsDialog->setWindowTitle(
+		i18nc( "@title", "Nutritive information status" ) +
+		(m_recipeTitle.isEmpty()?QString():" - "+m_recipeTitle) );
 	m_nutrientInfoDetailsDialog->displayText();
 
 }
