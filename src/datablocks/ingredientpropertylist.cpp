@@ -18,9 +18,11 @@ IngredientPropertyList::~IngredientPropertyList()
 
 IngredientPropertyList::iterator IngredientPropertyList::find( int id )
 {
-	IngredientProperty ip;
-	ip.id = id;
-	return QList<IngredientProperty>::find( ip );
+	IngredientPropertyList::iterator it = begin();
+	while (it != end() && it->id != id) {
+		++it;
+	}
+	return it;
 }
 
 int IngredientPropertyList::findByName( const QString &name )
