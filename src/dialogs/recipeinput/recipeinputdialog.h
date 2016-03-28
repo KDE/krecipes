@@ -141,7 +141,6 @@ private slots:
 	void enableChangedSignal( bool en = true );
 	void enableSaveButton( bool enabled );
 	void closeOptions( void );
-	void prepTitleChanged( const QString &title );
 	void recipeRemoved( int id );
 	void slotIngredientParser();
 	void addIngredient( const Ingredient &ing, bool noHeader = false );

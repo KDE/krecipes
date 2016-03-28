@@ -348,17 +348,6 @@ void RecipeInputDialog::recipeRemoved( int id )
 	}
 }
 
-void RecipeInputDialog::prepTitleChanged( const QString &title )
-{
-	//we don't want the menu to grow due to a long title
-	//### KStringHandler::rsqueeze does this but I can't remember when it was added (compatibility issue...)
-	QString short_title = title.left( 20 );
-	if ( title.length() > 20 )
-		short_title.append( "..." );
-
-	emit titleChanged( short_title );
-}
-
 int RecipeInputDialog::loadedRecipeID() const
 {
 	return loadedRecipe->recipeID;
