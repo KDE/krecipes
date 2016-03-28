@@ -324,6 +324,10 @@ void IngredientsEditor::resizeColumnsToContents()
 	//this way it won't look ugly when edited
 	int columnWidth = ui->m_treeView->columnWidth( ingredientColumn() );
 	ui->m_treeView->setColumnWidth( ingredientColumn(), columnWidth + 15 );
+	//Put some extra space for the unit column,
+	//this way it won't look ugly when edited
+	columnWidth = ui->m_treeView->columnWidth( unitColumn() );
+	ui->m_treeView->setColumnWidth( unitColumn(), columnWidth + 15 );
 }
 
 void IngredientsEditor::addIngredientSlot()
