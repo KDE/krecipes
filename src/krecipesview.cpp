@@ -2,7 +2,7 @@
 *   Copyright © 2003-2004 Unai Garro <ugarro@gmail.com>                      *
 *   Copyright © 2003-2004 Cyril Bosselut <bosselut@b1project.com>            *
 *   Copyright © 2003-2004 Jason Kivlighn <jkivlighn@gmail.com>               *
-*   Copyright © 2009-2015 José Manuel Santamaría Lema <panfaust@gmail.com>   *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com>   *
 *                                                                            *
 *   This program is free software; you can redistribute it and/or modify     *
 *   it under the terms of the GNU General Public License as published by     *
@@ -11,6 +11,8 @@
 ******************************************************************************/
 
 #include "krecipesview.h"
+
+#include "kresplashscreen.h"
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -64,6 +66,12 @@ KrecipesView::KrecipesView( QWidget *parent )
 	wizard();
 	kDebug() << "Wizard finished correctly" ;
 
+	//Create splash screen
+	KreSplashScreen splashScreen;
+
+	//Show the splash screen
+	splashScreen.show();
+	splashScreen.raise();
 	kapp->processEvents();
 
 	// Initialize Database
@@ -321,6 +329,9 @@ KrecipesView::KrecipesView( QWidget *parent )
 	connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
 	
 	connect( ingredientMatcherPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+
+	//Finish the splash screen
+	splashScreen.finish( this );
 
 #ifndef NDEBUG
 	kDebug()<<"Total time elapsed: "<<dbg_total_timer.elapsed()/1000<<" sec";

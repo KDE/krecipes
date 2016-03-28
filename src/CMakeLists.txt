@@ -416,6 +416,7 @@ endif(BUILD_NUKEDB)
 
 set(krecipes_SRCS
    main.cpp
+   kresplashscreen.cpp
    krecipes.cpp
    krecipesview.cpp
    #propertycalculator.cpp
