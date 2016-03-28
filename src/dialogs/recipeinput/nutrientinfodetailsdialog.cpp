@@ -117,15 +117,26 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 	*incompleteMessage = "";
 	*intermediateMessage = "";
 
-	IngredientPropertyList ingPropertyList;
-	database->loadProperties( &ingPropertyList, ingredient.ingredientID );
-
-	if ( ingPropertyList.isEmpty() ) {
+	//The ingredient is going to be created later, so  we don't
+	//have nutrient information yet.
+	if ( ingredient.ingredientID == RecipeDB::InvalidId ) {
+		QString hrefString = "ingredient$" + ingredient.name;
 		*incompleteMessage = QString(
 			i18nc("@info", "<b>%1:</b> No nutrient information available. "
-			"<a href=\"ingredient#%2\">Provide nutrient information.</a>",
-			Qt::escape( ingredient.name ),
-			QString::number(ingredient.ingredientID)));
+			"<a href=\"%2\">Provide nutrient information.</a>",
+			Qt::escape( ingredient.name ), hrefString ) );
+		return NutrientInfo::Incomplete;
+	}
+
+	//The ingredient is already in the database but it doesn't have nutrient information.
+	IngredientPropertyList ingPropertyList;
+	database->loadProperties( &ingPropertyList, ingredient.ingredientID );
+	if ( ingPropertyList.isEmpty() ) {
+		QString hrefString = "ingredient#" + QString::number(ingredient.ingredientID);
+		*incompleteMessage = QString(
+			i18nc("@info", "<b>%1:</b> No nutrient information available. "
+			"<a href=\"%2\">Provide nutrient information.</a>",
+			Qt::escape(ingredient.name), hrefString ) );
 		return NutrientInfo::Incomplete;
 	}
 
@@ -281,7 +292,12 @@ void NutrientInfoDetailsDialog::linkClickedSlot( const QUrl & link )
 	}
 
 	QString linkString = link.toString();
-	if (linkString.startsWith("ingredient#")) {
+	if (linkString.startsWith("ingredient$")) {
+		QString newIngredientName = linkString.mid(linkString.indexOf("$")+1);
+		RecipeDB::IdType newIngredientId = m_database->createNewIngredient( newIngredientName );
+		emit updateRequested();
+		linkClickedSlot( "ingredient#" + QString::number( newIngredientId ) );
+	} else if (linkString.startsWith("ingredient#")) {
 		RecipeDB::IdType ingID = linkString.mid(linkString.indexOf("#")+1).toInt();
 		QString ingName = m_database->ingredientName(ingID);
 		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( ingID, ingName, m_database, this );
