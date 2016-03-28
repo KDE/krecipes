@@ -82,6 +82,36 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 		this, SLOT(nutrientInfoDetailsSlot()) );
 }
 
+int IngredientsEditor::ingredientColumn()
+{
+	return 0;
+}
+
+int IngredientsEditor::amountColumn()
+{
+	return 1;
+}
+
+int IngredientsEditor::unitColumn()
+{
+	return 2;
+}
+
+int IngredientsEditor::prepmethodsColumn()
+{
+	return 3;
+}
+
+int IngredientsEditor::ingredientIdColumn()
+{
+	return 4;
+}
+
+int IngredientsEditor::headerColumn()
+{
+	return 0;
+}
+
 void IngredientsEditor::setDatabase( RecipeDB * database )
 {
 	m_database = database;
@@ -106,25 +136,25 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 		ingredientNameDelegate->loadAllIngredientsList( m_database );
 		ingredientNameDelegate->loadAllHeadersList( m_database );
 	}
-	ui->m_treeView->setItemDelegateForColumn(0, ingredientNameDelegate);
+	ui->m_treeView->setItemDelegateForColumn(ingredientColumn(), ingredientNameDelegate);
 
 	//Set amount delegate
 	AmountDelegate * amountDelegate = new AmountDelegate;
-	ui->m_treeView->setItemDelegateForColumn(1, amountDelegate);
+	ui->m_treeView->setItemDelegateForColumn(amountColumn(), amountDelegate);
 
 	//Set unit delegate
 	UnitDelegate * unitDelegate = new UnitDelegate;
 	if ( m_database ) {
 		unitDelegate->loadAllUnitsList( m_database );
 	}
-	ui->m_treeView->setItemDelegateForColumn(2, unitDelegate);
+	ui->m_treeView->setItemDelegateForColumn(unitColumn(), unitDelegate);
 
 	//Set preparation method delegate
 	PrepMethodDelegate * prepMethodDelegate = new PrepMethodDelegate;
 	if ( m_database ) {
 		prepMethodDelegate->loadAllPrepMethodsList( m_database );
 	}
-	ui->m_treeView->setItemDelegateForColumn(3, prepMethodDelegate);
+	ui->m_treeView->setItemDelegateForColumn(prepmethodsColumn(), prepMethodDelegate);
 
 	//Populate the ingredient list
 	IngredientList::const_iterator it;
@@ -159,12 +189,12 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 {
 	QModelIndex index;
 	//The "Id" item.
-	index = m_sourceModel->index( row, 4 );
+	index = m_sourceModel->index( row, ingredientIdColumn() );
 	m_sourceModel->setData( index, QVariant(ingredient.ingredientID), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( false );
 	//The "Ingredient" item.
-	index = m_sourceModel->index( row, 0 );
+	index = m_sourceModel->index( row, ingredientColumn() );
 	m_sourceModel->setData( index, QVariant(ingredient.ingredientID), IdRole );
 	m_sourceModel->setData( index, QVariant(ingredient.name), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
@@ -172,21 +202,21 @@ void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
 	QPersistentModelIndex ingIndex = index;
 	ingItem->setEditable( true );
 	//The "Amount" item.
-	index = m_sourceModel->index( row, 1 );
+	index = m_sourceModel->index( row, amountColumn() );
 	m_sourceModel->setData( index,
 		QVariant( ingredient.amountRange().toString(true) ), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 	bool isAmountPlural = ingredient.amountRange().isPlural();
 	//The "Units" item.
-	index = m_sourceModel->index( row, 2 );
+	index = m_sourceModel->index( row, unitColumn() );
 	m_sourceModel->setData( index, QVariant(ingredient.amountUnitString()), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(false), IsHeaderRole );
 	m_sourceModel->setData( index, QVariant(ingredient.units.id()), IdRole );
 	m_sourceModel->setData( index, QVariant(isAmountPlural), IsPluralRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( true );
 	//The "PreparationMethod" item.
-	index = m_sourceModel->index( row, 3 );
+	index = m_sourceModel->index( row, prepmethodsColumn() );
 		//Set the prep methods id list
 		QList<QVariant> prepMethodsIds;
 		ElementList::const_iterator prep_it = ingredient.prepMethodList.constBegin();
@@ -230,13 +260,13 @@ void IngredientsEditor::setRowData( int row, const Element & header )
 {
 	QModelIndex index;
 	//The "Id" item.
-	index = m_sourceModel->index( row, 4 );
+	index = m_sourceModel->index( row, ingredientIdColumn() );
 	m_sourceModel->setData( index, QVariant(header.id), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(header.id), IdRole );
 	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
 	m_sourceModel->itemFromIndex( index )->setEditable( false );
 	//The "Header" item.
-	index = m_sourceModel->index( row, 0 );
+	index = m_sourceModel->index( row, headerColumn() );
 	m_sourceModel->setData( index, QVariant(header.name), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(header.id), IdRole );
 	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
@@ -268,18 +298,18 @@ void IngredientsEditor::setRowDataAlternative( int row, const IngredientData & i
 	subItem->setData( QVariant(ingredient.ingredientID), IdRole );
 	//Ingredient amount
 	//(substitutes can't have an amount so adding a dummy item)
-	QStandardItem * subItemAmount = parentItem->child( row, 1 );
+	QStandardItem * subItemAmount = parentItem->child( row, amountColumn() );
 	subItemAmount->setEditable( false );
 	//Ingredient units
 	//(substitutes can't have an amount so adding a dummy item)
-	QStandardItem * subItemUnits = parentItem->child( row, 2 );
+	QStandardItem * subItemUnits = parentItem->child( row, unitColumn() );
 	subItemUnits->setEditable( false );
 	//Preparation method
 	//(substitutes can't have a preparation method so adding a dummy item)
-	QStandardItem * subItemPrep = parentItem->child( row, 3 );
+	QStandardItem * subItemPrep = parentItem->child( row, prepmethodsColumn() );
 	subItemPrep->setEditable( false );
 	//Substitute ingredient ID
-	QStandardItem * subItemId = parentItem->child( row, 4 );
+	QStandardItem * subItemId = parentItem->child( row, ingredientIdColumn() );
 	subItemId->setEditable( false );
 	subItemId->setData( QVariant(ingredient.ingredientID), Qt::DisplayRole );
 }
@@ -292,8 +322,8 @@ void IngredientsEditor::resizeColumnsToContents()
 	}
 	//Put some extra space for the ingredient name column,
 	//this way it won't look ugly when edited
-	int columnWidth = ui->m_treeView->columnWidth( 0 );
-	ui->m_treeView->setColumnWidth( 0, columnWidth + 15 );
+	int columnWidth = ui->m_treeView->columnWidth( ingredientColumn() );
+	ui->m_treeView->setColumnWidth( ingredientColumn(), columnWidth + 15 );
 }
 
 void IngredientsEditor::addIngredientSlot()
@@ -306,7 +336,7 @@ void IngredientsEditor::addIngredientSlot()
 	Ingredient ingredient;
 	ingredient.ingredientID = RecipeDB::InvalidId;
 	ingredient.units.setId( RecipeDB::InvalidId );
-	QModelIndex ingNameIndex = m_sourceModel->index( rowCount, 0 );
+	QModelIndex ingNameIndex = m_sourceModel->index( rowCount, ingredientColumn() );
 
 	//Add the data to the model
 	setRowData( rowCount, ingredient );
@@ -373,7 +403,7 @@ void IngredientsEditor::addHeaderSlot()
 	//Put data in the row
 	setRowData( rowCount, header );
 	//Edit the header name
-	QModelIndex headerNameIndex = m_sourceModel->index( rowCount, 0 );
+	QModelIndex headerNameIndex = m_sourceModel->index( rowCount, headerColumn() );
 	ui->m_treeView->setCurrentIndex( headerNameIndex );
 	ui->m_treeView->scrollTo( headerNameIndex );
 	ui->m_treeView->edit( headerNameIndex );
@@ -529,18 +559,18 @@ Ingredient IngredientsEditor::readIngredientFromRow( int row )
 	Ingredient ingredient;
 
 	//Ingredient Id
-	QModelIndex index = m_sourceModel->index( row, 0 );
+	QModelIndex index = m_sourceModel->index( row, ingredientColumn() );
 	ingredient.ingredientID = m_sourceModel->data( index, IdRole ).toInt();
 	//Ingredient name
 	ingredient.name = m_sourceModel->data( index, Qt::EditRole ).toString();
 	//Ingredient amount
-	index = m_sourceModel->index( row, 1 );
+	index = m_sourceModel->index( row, amountColumn() );
 	QString amountString = m_sourceModel->data( index, Qt::EditRole ).toString();
 	MixedNumberRange range;
 	MixedNumberRange::fromString( amountString, range );
 	ingredient.setAmountRange( range );
 	//Ingredient units
-	index = m_sourceModel->index( row, 2 );
+	index = m_sourceModel->index( row, unitColumn() );
 	RecipeDB::IdType unitsId = m_sourceModel->data( index, IdRole ).toInt();
 	ingredient.units.setId( unitsId );
 	if ( m_database ) {
@@ -549,7 +579,7 @@ Ingredient IngredientsEditor::readIngredientFromRow( int row )
 		ingredient.units = m_database->unitName( unitsId );
 	}
 	//Ingredient preparation methods
-	index = m_sourceModel->index( row, 3 );
+	index = m_sourceModel->index( row, prepmethodsColumn() );
 	QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
 	QString prepMethodsString = m_sourceModel->data( index, Qt::EditRole ).toString();
 	QStringList prepStringList = prepMethodsString.split(", ", QString::SkipEmptyParts);
@@ -587,7 +617,7 @@ void IngredientsEditor::updateIngredientList()
 	Element lastHeaderKnown;
 	lastHeaderKnown.id = RecipeDB::InvalidId;
 	for ( int i = 0; i < rowCount; ++i ) {
-		index = m_sourceModel->index( i, 0 );
+		index = m_sourceModel->index( i, headerColumn() );
 		//Skip the row if it's a header;
 		bool is_header = m_sourceModel->data( index, IsHeaderRole ).toBool();
 		if ( is_header ) {
@@ -602,7 +632,7 @@ void IngredientsEditor::updateIngredientList()
 		//Ingredient group name
 		ingredient.group = lastHeaderKnown.name;
 		//Dump the contents of the row childrens as ingredient substitutes
-		index = m_sourceModel->index( i, 0 );
+		index = m_sourceModel->index( i, ingredientColumn() );
 		if ( m_sourceModel->hasChildren( index ) ) {
 			QStandardItem * item = m_sourceModel->itemFromIndex( index );
 			int childCount = item->rowCount();

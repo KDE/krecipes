@@ -44,7 +44,7 @@ void AmountDelegate::setModelData(QWidget *editor,
 	model->setData( index, fractionInput->text(), Qt::EditRole );
 
 	//Set if the amount is plural in the model
-	QModelIndex unitIndex = model->index( index.row(), 2 );
+	QModelIndex unitIndex = model->index( index.row(), IngredientsEditor::unitColumn() );
 	bool isPlural = fractionInput->valueRange().isPlural();
 	model->setData( unitIndex, QVariant(isPlural), IngredientsEditor::IsPluralRole );
 }

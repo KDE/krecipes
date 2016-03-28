@@ -44,6 +44,13 @@ public:
 		IsPluralRole = Qt::UserRole+2
 	};
 
+	inline int ingredientColumn();
+	inline int amountColumn();
+	static int unitColumn(); //static because of UnitDelegate
+	inline int prepmethodsColumn();
+	inline int ingredientIdColumn();
+	inline int headerColumn();
+
 	void setDatabase( RecipeDB * database );
 
 	void setRecipeTitle( const QString & title );
