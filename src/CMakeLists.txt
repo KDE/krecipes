@@ -142,6 +142,14 @@ set(krecipesdialogs_SRCS
 
    #Setup assistant
    dialogs/setupassistant/setupassistant.cpp
+   dialogs/setupassistant/welcomepage.cpp
+   dialogs/setupassistant/dbtypesetuppage.cpp
+   dialogs/setupassistant/sqlitesetuppage.cpp
+   dialogs/setupassistant/permissionssetuppage.cpp
+   dialogs/setupassistant/psqlpermissionssetuppage.cpp
+   dialogs/setupassistant/serversetuppage.cpp
+   dialogs/setupassistant/datainitializepage.cpp
+   dialogs/setupassistant/savepage.cpp
 
    dialogs/advancedsearchdialog.cpp
    dialogs/recipeimportdialog.cpp
