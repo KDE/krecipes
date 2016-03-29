@@ -105,6 +105,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="m_moveUpButton">
+       <property name="toolTip">
+        <string>Move ingredient up</string>
+       </property>
        <property name="icon">
         <iconset theme="arrow-up">
          <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
@@ -113,6 +116,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="m_moveDownButton">
+       <property name="toolTip">
+        <string>Move ingredient down</string>
+       </property>
        <property name="icon">
         <iconset theme="arrow-down">
          <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
@@ -134,6 +140,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="m_deleteButton">
+       <property name="toolTip">
+        <string>Remove ingredient</string>
+       </property>
        <property name="icon">
         <iconset theme="list-remove">
          <normaloff>../../../../../../</normaloff>../../../../../../</iconset>
