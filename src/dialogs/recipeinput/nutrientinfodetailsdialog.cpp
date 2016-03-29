@@ -187,8 +187,8 @@ NutrientInfo::Status NutrientInfoDetailsDialog::checkIngredientStatus(
 				QSet< QPair<RecipeDB::IdType,RecipeDB::IdType> > usedUnitIds;
 				QPair<RecipeDB::IdType,RecipeDB::IdType> usedPair;
 				QStringList missingConversions;
-				WeightList::const_iterator weight_it = weights.constBegin();
-				while ( weight_it != weights.constEnd() ) {
+				WeightList::const_iterator weight_it;
+				for ( weight_it = weights.constEnd(); weight_it != weights.constEnd(); ++weight_it ) {
 					//skip entries that only differ in how it's prepared
 					usedPair.first = weight_it->perAmountUnitId();
 					usedPair.second = weight_it->weightUnitId();
