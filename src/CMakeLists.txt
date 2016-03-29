@@ -139,6 +139,10 @@ kde4_add_ui_files(krecipeswidgets_SRCS
 ############## dialogs ###############
 
 set(krecipesdialogs_SRCS
+
+   #Setup assistant
+   dialogs/setupassistant/setupassistant.cpp
+
    dialogs/advancedsearchdialog.cpp
    dialogs/recipeimportdialog.cpp
 
@@ -420,7 +424,6 @@ set(krecipes_SRCS
    krecipes.cpp
    krecipesview.cpp
    #propertycalculator.cpp
-   setupassistant.cpp
    shoppingcalculator.cpp
    convert_sqlite3.cpp
    #klomanager.cpp

@@ -28,9 +28,9 @@
 #include "actionshandlers/krerecipeactionshandler.h"
 #include "actionshandlers/kreunitactionshandler.h"
 #include "actionshandlers/krecategoryactionshandler.h"
-#include "setupassistant.h"
 #include "convert_sqlite3.h"
 
+#include "dialogs/setupassistant/setupassistant.h"
 #include "dialogs/recipeinput/recipeinputdialog.h"
 #include "dialogs/recipeviewdialog.h"
 #include "dialogs/selectrecipedialog.h"
