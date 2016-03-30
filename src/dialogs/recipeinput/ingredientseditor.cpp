@@ -120,8 +120,24 @@ int IngredientsEditor::headerColumn()
 
 void IngredientsEditor::setDatabase( RecipeDB * database )
 {
+	//Disconnect all signals from the old database
+	if ( m_database ) {
+		disconnect( m_database, 0, this, 0 );
+	}
+
+	//Update the database objects
 	m_database = database;
 	m_nutrientInfoDetailsDialog->setDatabase( m_database );
+
+	//Connect signals from new database
+	connect( m_database, SIGNAL(ingredientCreated(const Element &)),
+		this, SLOT(ingredientCreatedDBSlot(const Element &)) );
+
+	connect( m_database, SIGNAL(ingredientModified(const Ingredient &)),
+		this, SLOT(ingredientModifiedDBSlot(const Ingredient &)) );
+
+	connect( m_database, SIGNAL(ingredientRemoved(int)),
+		this, SLOT(ingredientRemovedDBSlot(int)) );
 }
 
 void IngredientsEditor::setRecipeTitle( const QString & title )
@@ -568,6 +584,108 @@ void IngredientsEditor::itemChangedSlot( QStandardItem * item )
 {
 	Q_UNUSED(item)
 	ui->m_nutrientInfoStatusWidget->setStatus( NutrientInfo::Unknown );
+}
+
+void IngredientsEditor::ingredientCreatedDBSlot( const Element & newIngredient )
+{
+	QModelIndex index;
+	QStandardItem * item;
+	QStandardItem * child;
+	int rowCount = m_sourceModel->rowCount();
+	int childRowCount;
+	RecipeDB::IdType modelIngredientId;
+	QString modelIngredientName;
+	//Check in the model if there is an ingredient with the same name and the Id set
+	//as RecipeDB::InvalidId (that means the ingredient is going to be created when
+	//saving the recipe). If there is any, update its Id to the Id of the ingredient
+	//which was just created in the database so we won't have nonsense duplicates.
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, ingredientColumn() );
+		item = m_sourceModel->itemFromIndex( index );
+		modelIngredientId = m_sourceModel->data( index, IdRole ).toInt();
+		modelIngredientName = m_sourceModel->data( index, Qt::DisplayRole ).toString();
+		if ( (modelIngredientId == RecipeDB::InvalidId)
+		&& (newIngredient.name == modelIngredientName) ) {
+			m_sourceModel->setData( index, newIngredient.id, IdRole );
+			index = m_sourceModel->index( i, ingredientIdColumn() );
+			m_sourceModel->setData( index, newIngredient.id, Qt::DisplayRole );
+		}
+		childRowCount = item->rowCount();
+		for ( int j = 0; j < childRowCount; ++j ) {
+			child = item->child( j, ingredientColumn() );
+			modelIngredientId = child->data( IdRole ).toInt();
+			modelIngredientName = child->data( Qt::DisplayRole ).toString();
+			if ( (modelIngredientId == RecipeDB::InvalidId)
+			&& (newIngredient.name == modelIngredientName) ) {
+				child->setData( newIngredient.id, IdRole );
+				child = item->child( j, ingredientIdColumn() );
+				child->setData( newIngredient.id, Qt::DisplayRole );
+			}
+		}
+
+	}
+
+}
+
+void IngredientsEditor::ingredientModifiedDBSlot( const Ingredient & newIngredient )
+{
+	QModelIndex index;
+	QStandardItem * item;
+	QStandardItem * child;
+	int rowCount = m_sourceModel->rowCount();
+	int childRowCount;
+	RecipeDB::IdType modelIngredientId;
+	//Find the modified ingredient in the model and update its name
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, ingredientColumn() );
+		item = m_sourceModel->itemFromIndex( index );
+		modelIngredientId = m_sourceModel->data( index, IdRole ).toInt();
+		if ( newIngredient.ingredientID == modelIngredientId ) {
+			m_sourceModel->setData( index, newIngredient.name, Qt::DisplayRole );
+		}
+		childRowCount = item->rowCount();
+		for ( int j = 0; j < childRowCount; ++j ) {
+			child = item->child( j, ingredientColumn() );
+			modelIngredientId = child->data( IdRole ).toInt();
+			if ( newIngredient.ingredientID == modelIngredientId ) {
+				child->setData( newIngredient.name, Qt::DisplayRole );
+			}
+		}
+
+	}
+}
+
+void IngredientsEditor::ingredientRemovedDBSlot( RecipeDB::IdType ingredientRemovedId )
+{
+	QModelIndex index;
+	QStandardItem * item;
+	QStandardItem * child;
+	RecipeDB::IdType modelIngredientId;
+	int rowCount = m_sourceModel->rowCount();
+	int childRowCount;
+	//If the ingredient was removed in the database set the ID to RecipeDB::InvalidId
+	//in the model, this means the ingredient will be created again when saving the
+	//recipe.
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, ingredientColumn() );
+		item = m_sourceModel->itemFromIndex( index );
+		modelIngredientId = m_sourceModel->data( index, IdRole ).toInt();
+		if ( ingredientRemovedId == modelIngredientId ) {
+			m_sourceModel->setData( index, RecipeDB::InvalidId, IdRole );
+			index = m_sourceModel->index( i, ingredientIdColumn() );
+			m_sourceModel->setData( index, RecipeDB::InvalidId, Qt::DisplayRole );
+		}
+		childRowCount = item->rowCount();
+		for ( int j = 0; j < childRowCount; ++j ) {
+			child = item->child( j, ingredientColumn() );
+			modelIngredientId = child->data( IdRole ).toInt();
+			if ( ingredientRemovedId == modelIngredientId ) {
+				child->setData( RecipeDB::InvalidId, IdRole );
+				child = item->child( j, ingredientIdColumn() );
+				child->setData( RecipeDB::InvalidId, Qt::DisplayRole );
+			}
+		}
+	}
 }
 
 Ingredient IngredientsEditor::readIngredientFromRow( int row )

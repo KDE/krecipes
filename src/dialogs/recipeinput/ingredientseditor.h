@@ -81,6 +81,10 @@ private slots:
 
 	void itemChangedSlot( QStandardItem * item );
 
+	void ingredientCreatedDBSlot( const Element & newIngredient );
+	void ingredientModifiedDBSlot( const Ingredient & newIngredient );
+	void ingredientRemovedDBSlot( int ingredientRemovedId );
+
 private:
 	void setRowData( int row, const Ingredient & ingredient );
 	void setRowData( int row, const Element & header );
