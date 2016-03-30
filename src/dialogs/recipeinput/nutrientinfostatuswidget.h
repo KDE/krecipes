@@ -20,7 +20,8 @@ namespace NutrientInfo {
 	enum Status {
 		Complete=0,
 		Intermediate=1,
-		Incomplete=2
+		Incomplete=2,
+		Unknown=3
 	};
 }
 
@@ -35,6 +36,7 @@ public:
 
 signals:
 	void detailsButtonClicked();
+	void updateButtonClicked();
 
 private:
 	Ui::NutrientInfoStatusWidget * ui;

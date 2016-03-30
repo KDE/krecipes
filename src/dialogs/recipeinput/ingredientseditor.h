@@ -24,6 +24,7 @@ class NutrientInfoDetailsDialog;
 
 class QStandardItemModel;
 class QModelIndex;
+class QStandardItem;
 
 
 namespace Ui{
@@ -77,6 +78,8 @@ private slots:
 	void updateNutrientInfoDetailsSlot();
 
 	void nutrientInfoDetailsSlot();
+
+	void itemChangedSlot( QStandardItem * item );
 
 private:
 	void setRowData( int row, const Ingredient & ingredient );

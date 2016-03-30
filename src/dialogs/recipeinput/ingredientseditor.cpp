@@ -75,7 +75,13 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 	connect( ui->m_treeView, SIGNAL(doubleClicked(const QModelIndex&)),
 		this, SIGNAL(changed()) );
 
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SLOT(itemChangedSlot(QStandardItem*)) );
+
 	connect( m_nutrientInfoDetailsDialog, SIGNAL(updateRequested()),
+		this, SLOT(updateNutrientInfoDetailsSlot()) );
+
+	connect( ui->m_nutrientInfoStatusWidget, SIGNAL(updateButtonClicked()),
 		this, SLOT(updateNutrientInfoDetailsSlot()) );
 
 	connect( ui->m_nutrientInfoStatusWidget, SIGNAL(detailsButtonClicked()),
@@ -556,6 +562,12 @@ void IngredientsEditor::nutrientInfoDetailsSlot()
 {
 	updateNutrientInfoDetailsSlot();
 	m_nutrientInfoDetailsDialog->show();
+}
+
+void IngredientsEditor::itemChangedSlot( QStandardItem * item )
+{
+	Q_UNUSED(item)
+	ui->m_nutrientInfoStatusWidget->setStatus( NutrientInfo::Unknown );
 }
 
 Ingredient IngredientsEditor::readIngredientFromRow( int row )
