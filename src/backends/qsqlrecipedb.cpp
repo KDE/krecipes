@@ -1173,8 +1173,10 @@ void QSqlRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
 	command = QString( "UPDATE ingredients SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( ingredientID );
 	QSqlQuery ingredientToCreate( command, *database);
 
-	emit ingredientRemoved( ingredientID );
-	emit ingredientCreated( Element( newLabel, ingredientID ) );
+	Ingredient newIngredient;
+	newIngredient.ingredientID = ingredientID;
+	newIngredient.name = newLabel;
+	emit ingredientModified( newIngredient );
 }
 
 void QSqlRecipeDB::addUnitToIngredient( int ingredientID, int unitID )

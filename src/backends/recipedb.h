@@ -118,6 +118,7 @@ signals:
 	void ingGroupRemoved( int id );
 
 	void ingredientCreated( const Element & );
+	void ingredientModified( const Ingredient & newIngredient );
 	void ingredientRemoved( int id );
 
 	void prepMethodCreated( const Element & );
