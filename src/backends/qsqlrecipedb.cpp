@@ -582,8 +582,7 @@ void QSqlRecipeDB::modPrepMethod( int prepMethodID, const QString &newLabel )
 	command = QString( "UPDATE prep_methods SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( prepMethodID );
 	QSqlQuery prepMethodToCreate( command, *database);
 
-	emit prepMethodRemoved( prepMethodID );
-	emit prepMethodCreated( Element( newLabel, prepMethodID ) );
+	emit prepMethodModified( Element( newLabel, prepMethodID ) );
 }
 
 void QSqlRecipeDB::modProperty( int propertyID, const QString &newLabel, const QString &unit )

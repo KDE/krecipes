@@ -122,6 +122,7 @@ signals:
 	void ingredientRemoved( int id );
 
 	void prepMethodCreated( const Element & );
+	void prepMethodModified( const Element & );
 	void prepMethodRemoved( int id );
 
 	void propertyCreated( const IngredientProperty & );
