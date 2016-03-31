@@ -1714,8 +1714,7 @@ void QSqlRecipeDB::modUnit( const Unit &unit )
 	  .arg(unit.type());
 	unitQuery.exec( command );
 
-	emit unitRemoved( unit.id() );
-	emit unitCreated( newUnit );
+	emit unitModified(unit);
 }
 
 void QSqlRecipeDB::findUseOfIngGroupInRecipes( ElementList *results, int groupID )

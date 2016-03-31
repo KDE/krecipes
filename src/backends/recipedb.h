@@ -128,6 +128,7 @@ signals:
 	void propertyRemoved( int id );
 
 	void unitCreated( const Unit & );
+	void unitModified( const Unit & );
 	void unitRemoved( int id );
 
 	void ratingCriteriaCreated( const Element & );
