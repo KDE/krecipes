@@ -74,6 +74,8 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	connect( ui->m_previousButton, SIGNAL(clicked()), this, SLOT(activatePreviousPage()) );
 	connect( ui->m_nextButton, SIGNAL(clicked()), this, SLOT(activateNextPage()) );
 
+	//Connect signals/slots
+	connect( this, SIGNAL(loadFinishedPrivate()), this, SLOT(loadFinishedPrivateSlot()) );
 }
 
 KreGenericListWidget::~KreGenericListWidget()
@@ -152,8 +154,6 @@ void KreGenericListWidget::reload( ReloadFlags flags )
 	//as soon as the load is finished.
 	disconnect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
 		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
-
-	connect( this, SIGNAL(loadFinishedPrivate()), this, SLOT(loadFinishedPrivateSlot()) );
 
 	//Reload the current page.
 	load( m_currentLimit, m_currentOffset );
