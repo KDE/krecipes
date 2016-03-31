@@ -138,6 +138,15 @@ void IngredientsEditor::setDatabase( RecipeDB * database )
 
 	connect( m_database, SIGNAL(ingredientRemoved(int)),
 		this, SLOT(ingredientRemovedDBSlot(int)) );
+
+	connect( m_database, SIGNAL(unitCreated(const Unit &)),
+		this, SLOT(unitCreatedDBSlot(const Unit &)) );
+
+	connect( m_database, SIGNAL(unitModified(const Unit &)),
+		this, SLOT(unitModifiedDBSlot(const Unit &)) );
+
+	connect( m_database, SIGNAL(unitRemoved(int)),
+		this, SLOT(unitRemovedDBSlot(int)) );
 }
 
 void IngredientsEditor::setRecipeTitle( const QString & title )
@@ -717,6 +726,70 @@ void IngredientsEditor::ingredientRemovedDBSlot( RecipeDB::IdType ingredientRemo
 	//Re-connect the changed signal
 	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
 		this, SIGNAL(changed()) );
+}
+
+void IngredientsEditor::unitCreatedDBSlot( const Unit & newUnit )
+{
+	Q_UNUSED(newUnit)
+	//We don't need to add code here for now because right now new units
+	//are created in the database when the user types a new unit
+}
+
+void IngredientsEditor::unitModifiedDBSlot( const Unit & newUnit )
+{
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+	QModelIndex index;
+	int rowCount = m_sourceModel->rowCount();
+	RecipeDB::IdType modelUnitId;
+	QString newUnitName;
+	Ingredient modelIngredient;
+
+	//Find the modified ingredient in the model and update its name
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, unitColumn() );
+		modelUnitId = m_sourceModel->data( index, IdRole ).toInt();
+		if ( newUnit.id() == modelUnitId ) {
+			modelIngredient = readIngredientFromRow( i );
+			newUnitName = modelIngredient.amountUnitString();
+			m_sourceModel->setData( index, newUnitName, Qt::DisplayRole );
+		}
+
+	}
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+}
+
+void IngredientsEditor::unitRemovedDBSlot( int unitRemovedId )
+{
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+	QModelIndex index;
+	RecipeDB::IdType modelUnitId;
+	int rowCount = m_sourceModel->rowCount();
+	//If the ingredient was removed in the database set the ID to RecipeDB::InvalidId
+	//in the model, this means the ingredient will be created again when saving the
+	//recipe.
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, unitColumn() );
+		modelUnitId = m_sourceModel->data( index, IdRole ).toInt();
+		if ( unitRemovedId == modelUnitId ) {
+			m_sourceModel->setData( index, RecipeDB::InvalidId, IdRole );
+			m_sourceModel->setData( index, QString(""), Qt::DisplayRole );
+		}
+	}
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
 }
 
 Ingredient IngredientsEditor::readIngredientFromRow( int row )

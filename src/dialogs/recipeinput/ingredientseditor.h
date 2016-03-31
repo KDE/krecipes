@@ -85,6 +85,10 @@ private slots:
 	void ingredientModifiedDBSlot( const Ingredient & newIngredient );
 	void ingredientRemovedDBSlot( int ingredientRemovedId );
 
+	void unitCreatedDBSlot( const Unit & newUnit );
+	void unitModifiedDBSlot( const Unit & newUnit );
+	void unitRemovedDBSlot( int unitRemovedId );
+
 private:
 	void setRowData( int row, const Ingredient & ingredient );
 	void setRowData( int row, const Element & header );
