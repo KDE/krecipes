@@ -147,6 +147,10 @@ void IngredientsEditor::setRecipeTitle( const QString & title )
 
 void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 {
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
 	m_ingredientList = ingredientList;
 
 	m_sourceModel->setRowCount( 0 );
@@ -205,6 +209,10 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 
 	//Update the nutrient information status
 	updateNutrientInfoDetailsSlot();
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
 }
 
 void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
@@ -588,6 +596,10 @@ void IngredientsEditor::itemChangedSlot( QStandardItem * item )
 
 void IngredientsEditor::ingredientCreatedDBSlot( const Element & newIngredient )
 {
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
 	QModelIndex index;
 	QStandardItem * item;
 	QStandardItem * child;
@@ -625,10 +637,17 @@ void IngredientsEditor::ingredientCreatedDBSlot( const Element & newIngredient )
 
 	}
 
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
 }
 
 void IngredientsEditor::ingredientModifiedDBSlot( const Ingredient & newIngredient )
 {
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
 	QModelIndex index;
 	QStandardItem * item;
 	QStandardItem * child;
@@ -653,10 +672,18 @@ void IngredientsEditor::ingredientModifiedDBSlot( const Ingredient & newIngredie
 		}
 
 	}
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
 }
 
 void IngredientsEditor::ingredientRemovedDBSlot( RecipeDB::IdType ingredientRemovedId )
 {
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
 	QModelIndex index;
 	QStandardItem * item;
 	QStandardItem * child;
@@ -686,6 +713,10 @@ void IngredientsEditor::ingredientRemovedDBSlot( RecipeDB::IdType ingredientRemo
 			}
 		}
 	}
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
 }
 
 Ingredient IngredientsEditor::readIngredientFromRow( int row )
