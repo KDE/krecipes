@@ -130,23 +130,31 @@ void IngredientsEditor::setDatabase( RecipeDB * database )
 	m_nutrientInfoDetailsDialog->setDatabase( m_database );
 
 	//Connect signals from new database
+
+	//Ingredients
 	connect( m_database, SIGNAL(ingredientCreated(const Element &)),
 		this, SLOT(ingredientCreatedDBSlot(const Element &)) );
-
 	connect( m_database, SIGNAL(ingredientModified(const Ingredient &)),
 		this, SLOT(ingredientModifiedDBSlot(const Ingredient &)) );
-
 	connect( m_database, SIGNAL(ingredientRemoved(int)),
 		this, SLOT(ingredientRemovedDBSlot(int)) );
 
+	//Units
 	connect( m_database, SIGNAL(unitCreated(const Unit &)),
 		this, SLOT(unitCreatedDBSlot(const Unit &)) );
-
 	connect( m_database, SIGNAL(unitModified(const Unit &)),
 		this, SLOT(unitModifiedDBSlot(const Unit &)) );
-
 	connect( m_database, SIGNAL(unitRemoved(int)),
 		this, SLOT(unitRemovedDBSlot(int)) );
+
+	kDebug() << "connecting methods";
+	//Preparation methods
+	connect( m_database, SIGNAL(prepMethodCreated(const Element &)),
+		this, SLOT(prepMethodCreatedDBSlot(const Element &)) );
+	connect( m_database, SIGNAL(prepMethodModified(const Element &)),
+		this, SLOT(prepMethodModifiedDBSlot(const Element &)) );
+	connect( m_database, SIGNAL(prepMethodRemoved(int)),
+		this, SLOT(prepMethodRemovedDBSlot(int)) );
 }
 
 void IngredientsEditor::setRecipeTitle( const QString & title )
@@ -790,6 +798,134 @@ void IngredientsEditor::unitRemovedDBSlot( int unitRemovedId )
 	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
 		this, SIGNAL(changed()) );
 
+}
+
+void IngredientsEditor::prepMethodCreatedDBSlot( const Element & newPrepMethod )
+{
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+	QModelIndex index;
+	int rowCount = m_sourceModel->rowCount();
+	QString modelIngredientName;
+	bool prepMethodFound;
+	//Check in the model if there is a preparation method with the same name and the Id
+	//set as RecipeDB::InvalidId (that means the preparation method is going to be created
+	//when saving the recipe). If there is any, update its Id to the Id of the preparation
+	//method which was just created in the database so we won't have nonsense duplicates.
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, prepmethodsColumn() );
+
+		QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
+		QString prepMethodsString = m_sourceModel->data( index, Qt::EditRole ).toString();
+		QStringList prepStringList = prepMethodsString.split(", ", QString::SkipEmptyParts);
+		QList<QVariant>::iterator prep_ids_it = prepMethodsIds.begin();
+		QStringList::const_iterator prep_str_it = prepStringList.constBegin();
+		Element element;
+		prepMethodFound = false;
+		while ( prep_str_it != prepStringList.constEnd() ) {
+			if ( (prep_ids_it->toInt() == RecipeDB::InvalidId)
+			&& (*prep_str_it == newPrepMethod.name) ) {
+				*prep_ids_it = newPrepMethod.id;
+				prepMethodFound = true;
+			}
+			++prep_ids_it;
+			++prep_str_it;
+		}
+
+		if ( prepMethodFound ) {
+			m_sourceModel->setData( index, prepMethodsIds, IdRole );
+		}
+	}
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+}
+
+void IngredientsEditor::prepMethodModifiedDBSlot( const Element & newPrepMethod )
+{
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+	QModelIndex index;
+	int rowCount = m_sourceModel->rowCount();
+	QString modelIngredientName;
+	bool prepMethodFound;
+	//Find the modified prep method in the model and update its name
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, prepmethodsColumn() );
+
+		QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
+		QString prepMethodsString = m_sourceModel->data( index, Qt::EditRole ).toString();
+		QStringList prepStringList = prepMethodsString.split(", ", QString::SkipEmptyParts);
+		QList<QVariant>::const_iterator prep_ids_it = prepMethodsIds.constBegin();
+		QStringList::iterator prep_str_it = prepStringList.begin();
+		Element element;
+		prepMethodFound = false;
+		while ( prep_str_it != prepStringList.end() ) {
+			if ( prep_ids_it->toInt() == newPrepMethod.id ) {
+				*prep_str_it = newPrepMethod.name;
+				prepMethodFound = true;
+			}
+			++prep_ids_it;
+			++prep_str_it;
+		}
+
+		if ( prepMethodFound ) {
+			prepMethodsString = prepStringList.join(", ");
+			m_sourceModel->setData( index, prepMethodsString, Qt::DisplayRole );
+		}
+	}
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+}
+
+void IngredientsEditor::prepMethodRemovedDBSlot( int prepMethodRemovedId )
+{
+
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+	QModelIndex index;
+	int rowCount = m_sourceModel->rowCount();
+	QString modelIngredientName;
+	bool prepMethodFound;
+	//Find the preparation method in the model and, if found, set its Id as RecipeDB::InvalidId
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, prepmethodsColumn() );
+
+		QList<QVariant> prepMethodsIds = m_sourceModel->data( index, IdRole ).toList();
+		QString prepMethodsString = m_sourceModel->data( index, Qt::EditRole ).toString();
+		QStringList prepStringList = prepMethodsString.split(", ", QString::SkipEmptyParts);
+		QList<QVariant>::iterator prep_ids_it = prepMethodsIds.begin();
+		QStringList::const_iterator prep_str_it = prepStringList.constBegin();
+		Element element;
+		prepMethodFound = false;
+		while ( prep_str_it != prepStringList.constEnd() ) {
+			if ( prep_ids_it->toInt() == prepMethodRemovedId ) {
+				*prep_ids_it = RecipeDB::InvalidId;
+				kDebug() << "found";
+				prepMethodFound = true;
+			}
+			++prep_ids_it;
+			++prep_str_it;
+		}
+
+		if ( prepMethodFound ) {
+			m_sourceModel->setData( index, prepMethodsIds, IdRole );
+		}
+	}
+
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
 }
 
 Ingredient IngredientsEditor::readIngredientFromRow( int row )

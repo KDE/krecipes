@@ -89,6 +89,10 @@ private slots:
 	void unitModifiedDBSlot( const Unit & newUnit );
 	void unitRemovedDBSlot( int unitRemovedId );
 
+	void prepMethodCreatedDBSlot( const Element & newPrepMethod );
+	void prepMethodModifiedDBSlot( const Element & newPrepMethod );
+	void prepMethodRemovedDBSlot( int prepMethodRemovedId );
+
 private:
 	void setRowData( int row, const Ingredient & ingredient );
 	void setRowData( int row, const Element & header );
