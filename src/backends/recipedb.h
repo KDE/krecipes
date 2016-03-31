@@ -115,6 +115,7 @@ signals:
 	void categoriesMerged( int id1, int id2 );
 
 	void ingGroupCreated( const Element & );
+	void ingGroupModified( const Element & );
 	void ingGroupRemoved( int id );
 
 	void ingredientCreated( const Element & );

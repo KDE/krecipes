@@ -1161,8 +1161,7 @@ void QSqlRecipeDB::modIngredientGroup( int groupID, const QString &newLabel )
 	command = QString( "UPDATE ingredient_groups SET name='%1' WHERE id=%2;" ).arg( escapeAndEncode( newLabel ) ).arg( groupID );
 	QSqlQuery ingredientToCreate( command, *database);
 
-	emit ingGroupRemoved( groupID );
-	emit ingGroupCreated( Element( newLabel, groupID ) );
+	emit ingGroupModified( Element( newLabel, groupID ) );
 }
 
 void QSqlRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
