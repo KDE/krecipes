@@ -630,6 +630,7 @@ void IngredientsEditor::ingredientCreatedDBSlot( const Element & newIngredient )
 		this, SIGNAL(changed()) );
 
 	QModelIndex index;
+	bool isHeader;
 	QStandardItem * item;
 	QStandardItem * child;
 	int rowCount = m_sourceModel->rowCount();
@@ -642,6 +643,10 @@ void IngredientsEditor::ingredientCreatedDBSlot( const Element & newIngredient )
 	//which was just created in the database so we won't have nonsense duplicates.
 	for ( int i = 0; i < rowCount; ++i ) {
 		index = m_sourceModel->index( i, ingredientColumn() );
+		isHeader = m_sourceModel->data( index, IsHeaderRole ).toBool();
+		if ( isHeader ) {
+			continue;
+		}
 		item = m_sourceModel->itemFromIndex( index );
 		modelIngredientId = m_sourceModel->data( index, IdRole ).toInt();
 		modelIngredientName = m_sourceModel->data( index, Qt::DisplayRole ).toString();
@@ -678,6 +683,7 @@ void IngredientsEditor::ingredientModifiedDBSlot( const Ingredient & newIngredie
 		this, SIGNAL(changed()) );
 
 	QModelIndex index;
+	bool isHeader;
 	QStandardItem * item;
 	QStandardItem * child;
 	int rowCount = m_sourceModel->rowCount();
@@ -686,6 +692,10 @@ void IngredientsEditor::ingredientModifiedDBSlot( const Ingredient & newIngredie
 	//Find the modified ingredient in the model and update its name
 	for ( int i = 0; i < rowCount; ++i ) {
 		index = m_sourceModel->index( i, ingredientColumn() );
+		isHeader = m_sourceModel->data( index, IsHeaderRole ).toBool();
+		if ( isHeader ) {
+			continue;
+		}
 		item = m_sourceModel->itemFromIndex( index );
 		modelIngredientId = m_sourceModel->data( index, IdRole ).toInt();
 		if ( newIngredient.ingredientID == modelIngredientId ) {
@@ -714,6 +724,7 @@ void IngredientsEditor::ingredientRemovedDBSlot( RecipeDB::IdType ingredientRemo
 		this, SIGNAL(changed()) );
 
 	QModelIndex index;
+	bool isHeader;
 	QStandardItem * item;
 	QStandardItem * child;
 	RecipeDB::IdType modelIngredientId;
@@ -724,6 +735,10 @@ void IngredientsEditor::ingredientRemovedDBSlot( RecipeDB::IdType ingredientRemo
 	//recipe.
 	for ( int i = 0; i < rowCount; ++i ) {
 		index = m_sourceModel->index( i, ingredientColumn() );
+		isHeader = m_sourceModel->data( index, IsHeaderRole ).toBool();
+		if ( isHeader ) {
+			continue;
+		}
 		item = m_sourceModel->itemFromIndex( index );
 		modelIngredientId = m_sourceModel->data( index, IdRole ).toInt();
 		if ( ingredientRemovedId == modelIngredientId ) {
