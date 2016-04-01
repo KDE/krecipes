@@ -97,7 +97,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	//------- Ingredients Tab -----------------
 
-	ingredientsTab = new QFrame( this );
+	ingredientsTab = new QFrame;
 	ingredientsTab->setFrameStyle( QFrame::NoFrame );
 	ingredientsTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
 	QGridLayout* ingredientsLayout = new QGridLayout( ingredientsTab );
@@ -245,11 +245,11 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 
 	tabWidget->insertTab( -1, m_recipeGeneralInfoEditor, i18nc( "@title:tab", "Recipe" ) );
-	tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
+	//TODO: Remove this after removing the old editor code
+	//tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
 	ingredientsEditor = new IngredientsEditor;
 	ingredientsEditor->setDatabase( database );
-	//TODO: uncomment this to try the new ingredients editor
-	//tabWidget->insertTab( -1, ingredientsEditor, i18nc( "@title:tab", "Ingredients" ) );
+	tabWidget->insertTab( -1, ingredientsEditor, i18nc( "@title:tab", "Ingredients" ) );
 	tabWidget->insertTab( -1, instructionsTab, i18nc( "@title:tab", "Instructions" ) );
 	tabWidget->insertTab( -1, ratingListEditor, i18nc( "@title:tab", "Ratings" ) );
 
