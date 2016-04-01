@@ -97,8 +97,6 @@ private:
 	QFrame *ingredientsTab;
 	IngredientsEditor * ingredientsEditor;
 
-	KPushButton* ingParserButton;
-
 	RatingListEditor * ratingListEditor;
 
 	//Function buttons
@@ -124,9 +122,6 @@ private slots:
 	void enableSaveButton( bool enabled );
 	void closeOptions( void );
 	void recipeRemoved( int id );
-	void slotIngredientParser();
-	void addIngredient( const Ingredient &ing, bool noHeader = false );
-	void addIngredientHeader( const Element &header );
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()

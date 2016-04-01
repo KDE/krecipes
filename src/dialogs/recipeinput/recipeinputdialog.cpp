@@ -117,15 +117,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	QSpacerItem* spacerToOtherButtons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	ingredientsLayout->addItem( spacerToOtherButtons, 4, 5 );
 
-	ingParserButton = new KPushButton( ingredientsTab );
-	ingParserButton->setFixedSize( QSize( 31, 31 ) );
-	ingParserButton->setIcon( KIcon( "edit-paste" ) );
-	ingParserButton->setIconSize( QSize( 16, 16 ) );
-	ingParserButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	ingredientsLayout->addWidget( ingParserButton, 8, 5 );
-
-		ingParserButton->setToolTip( i18nc(  "@info:tooltip", "Paste Ingredients" ) );
-
 	// Ingredient List
 	ingredientList = new K3ListView( ingredientsTab );
 	ingredientList->addColumn( i18nc( "@title:column", "Ingredient" ) );
@@ -230,7 +221,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	connect( ingredientsEditor, SIGNAL(changed()), this, SLOT(recipeChanged()) );
 
-	connect( ingParserButton, SIGNAL( clicked() ), this, SLOT( slotIngredientParser() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
 	connect( ingredientList, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( syncListView( Q3ListViewItem*, const QString &, int ) ) );
@@ -636,98 +626,6 @@ int RecipeInputDialog::ingItemIndex( Q3ListView *listview, const Q3ListViewItem 
 
 		return j;
 	}
-}
-
-void RecipeInputDialog::slotIngredientParser()
-{
-	UnitList units;
-	database->loadUnits(&units);
-	QPointer<IngredientParserDialog> dlg = new IngredientParserDialog(units,this);
-	if ( dlg->exec() == QDialog::Accepted ) {
-		IngredientList ings = dlg->ingredients();
-		QStringList usedGroups;
-		bool haveHeader = ingredientList->lastItem() && ingredientList->lastItem()->rtti() == INGGRPLISTVIEWITEM_RTTI;
-		for ( IngredientList::iterator it = ings.begin(); it != ings.end(); ++it ) {
-			if ( !(*it).group.isEmpty() && usedGroups.indexOf((*it).group) == -1 ) {
-				int id = IngredientInputWidget::createNewGroupIfNecessary((*it).group,database);
-				addIngredientHeader( Element((*it).group, id) );
-				haveHeader = true;
-				usedGroups << (*it).group;
-			}
-			(*it).ingredientID = IngredientInputWidget::createNewIngredientIfNecessary((*it).name,database);
-			(*it).units.setId(IngredientInputWidget::createNewUnitIfNecessary((*it).units.name(),false,(*it).ingredientID,(*it).units,database));
-
-			QList<int> prepIDs = IngredientInputWidget::createNewPrepIfNecessary((*it).prepMethodList,database);
-			QList<int>::const_iterator prep_id_it = prepIDs.constBegin();
-			for ( ElementList::iterator prep_it = (*it).prepMethodList.begin(); prep_it != (*it).prepMethodList.end(); ++prep_it, ++prep_id_it ) {
-				(*prep_it).id = *prep_id_it;
-			}
-
-			addIngredient( *it, !haveHeader );
-
-			if ( usedGroups.count() > 0 && (*it).group.isEmpty() ) {
-				Q3ListViewItem *last_item = ingredientList->lastItem();
-				if ( last_item->parent() ) {
-					last_item->parent()->takeItem( last_item );
-					ingredientList->insertItem( last_item );
-					last_item->moveItem( ingredientList->lastItem()->parent() );
-				}
-			}
-		}
-	}
-	delete dlg;
-}
-
-void RecipeInputDialog::addIngredient( const Ingredient &ing, bool noHeader )
-{
-	Ingredient ingCopy = ing;
-
-	//Append to the ListView
-	Q3ListViewItem* lastElement = ingredientList->lastItem();
-	while ( lastElement && lastElement->rtti() == INGSUBLISTVIEWITEM_RTTI )
-		lastElement = lastElement->itemAbove();
-
-	if ( noHeader && lastElement )
-		lastElement = (lastElement->parent())?lastElement->parent():lastElement;
-
-	if ( !noHeader && lastElement &&
-		( lastElement->rtti() == INGGRPLISTVIEWITEM_RTTI || ( lastElement->parent() && lastElement->parent() ->rtti() == INGGRPLISTVIEWITEM_RTTI ) ) )
-	{
-		IngGrpListViewItem * header = ( lastElement->parent() ) ? ( IngGrpListViewItem* ) lastElement->parent() : ( IngGrpListViewItem* ) lastElement;
-
-		ingCopy.groupID = header->id();
-
-		lastElement = new IngListViewItem( header, lastElement, ingCopy );
-		for ( Ingredient::SubstitutesList::const_iterator it = ingCopy.substitutes.constBegin(); it != ingCopy.substitutes.constEnd(); ++it ) {
-			new IngSubListViewItem( lastElement, *it );
-		}
-		lastElement->setOpen(true);
-	}
-	else {
-		lastElement = new IngListViewItem( ingredientList, lastElement, ingCopy );
-		for ( Ingredient::SubstitutesList::const_iterator it = ing.substitutes.constBegin(); it != ing.substitutes.constEnd(); ++it ) {
-			new IngSubListViewItem( lastElement, *it );
-		}
-		lastElement->setOpen(true);
-	}
-
-	//append to recipe
-	loadedRecipe->ingList.append( ingCopy );
-
-	//update the completion in the instructions edit
-	instructionsEdit->addCompletionItem( ingCopy.name );
-
-	emit changed();
-}
-
-void RecipeInputDialog::addIngredientHeader( const Element &header )
-{
-	Q3ListViewItem *last_item = ingredientList->lastItem();
-	if ( last_item && last_item->parent() )
-		last_item = last_item->parent();
-
-	IngGrpListViewItem *ing_header = new IngGrpListViewItem( ingredientList, last_item, header.name, header.id );
-	ing_header->setOpen( true );
 }
 
 void RecipeInputDialog::reloadCheckSpelling()
