@@ -103,8 +103,6 @@ private:
 	KTextBrowser *statusTextView;
 	KDialog *propertyStatusDialog;
 
-	KPushButton* removeButton;
-	KPushButton* addButton;
 	KPushButton* ingParserButton;
 
 	RatingListEditor * ratingListEditor;
@@ -128,7 +126,6 @@ private:
 	// Signals & Slots
 
 private slots:
-	void removeIngredient( void );
 	void syncListView( Q3ListViewItem* it, const QString &new_text, int col );
 	void recipeChanged( void );
 	void recipeChanged( const QString &t );

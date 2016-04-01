@@ -112,25 +112,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	QSpacerItem* spacerToButtons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	ingredientsLayout->addItem( spacerToButtons, 3, 4 );
 
-	// Add, Up,down,... buttons
-
-	addButton = new KPushButton( ingredientsTab );
-	addButton->setFixedSize( QSize( 31, 31 ) );
-	addButton->setIcon(KIcon( "add_ingredient" ) );
-	addButton->setIconSize( QSize( 16, 16 ) );
-	addButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	ingredientsLayout->addWidget( addButton, 3, 5 );
 
 	// Spacer to the rest of buttons
 	QSpacerItem* spacerToOtherButtons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	ingredientsLayout->addItem( spacerToOtherButtons, 4, 5 );
-
-	removeButton = new KPushButton( ingredientsTab );
-	removeButton->setFixedSize( QSize( 31, 31 ) );
-	removeButton->setIcon( KIcon( "list-remove" ) );
-	removeButton->setIconSize( QSize( 16, 16 )  );
-	removeButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	ingredientsLayout->addWidget( removeButton, 7, 5 );
 
 	ingParserButton = new KPushButton( ingredientsTab );
 	ingParserButton->setFixedSize( QSize( 31, 31 ) );
@@ -139,8 +124,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingParserButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 	ingredientsLayout->addWidget( ingParserButton, 8, 5 );
 
-		addButton->setToolTip( i18nc( "@info:tooltip", "Add ingredient" ) );
-		removeButton->setToolTip( i18nc(  "@info:tooltip", "Remove ingredient" ) );
 		ingParserButton->setToolTip( i18nc(  "@info:tooltip", "Paste Ingredients" ) );
 
 	// Ingredient List
@@ -286,7 +269,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	connect( ingredientsEditor, SIGNAL(changed()), this, SLOT(recipeChanged()) );
 
-	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
 	connect( ingParserButton, SIGNAL( clicked() ), this, SLOT( slotIngredientParser() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
@@ -404,72 +386,6 @@ void RecipeInputDialog::reload( void )
 
 	// Show ratings
 	ratingListEditor->refresh();
-}
-
-void RecipeInputDialog::removeIngredient( void )
-{
-	Q3ListViewItem * it = ingredientList->selectedItem();
-	if ( it && (it->rtti() == INGLISTVIEWITEM_RTTI || it->rtti() == INGSUBLISTVIEWITEM_RTTI) ) {
-		Q3ListViewItem *iselect = it->itemBelow();
-		while ( iselect && iselect->rtti() == INGSUBLISTVIEWITEM_RTTI )
-			iselect = iselect->itemBelow();
-
-		if ( !iselect ) {
-			iselect = it->itemAbove();
-			while ( iselect && iselect->rtti() == INGSUBLISTVIEWITEM_RTTI )
-				iselect = iselect->itemAbove();
-		}
-
-		IngListViewItem *ing_item = (IngListViewItem*)it; //we can cast IngSubListViewItem to this too, it's a subclass
-
-		IngredientData &ing = loadedRecipe->ingList.findSubstitute( ing_item->ingredient() );
-
-		//Remove it from the instruction's completion
-		instructionsEdit->removeCompletionItem( ing.name );
-
-		loadedRecipe->ingList.removeSubstitute( ing );
-
-		int ingID = ing_item->ingredient().ingredientID;
-		QMap<int,QString>::iterator map_it;
-		if ( (map_it = propertyStatusMapRed.find(ingID)) != propertyStatusMapRed.end() )
-			propertyStatusMapRed.erase( map_it );
-		else if ( (map_it = propertyStatusMapYellow.find(ingID)) != propertyStatusMapYellow.end() )
-			propertyStatusMapYellow.erase( map_it );
-		showStatusIndicator();
-
-		//Now remove the ingredient
-		it->setSelected( false );
-		delete it;
-		if ( iselect )
-			ingredientList->setSelected( iselect, true ); // be careful iselect->setSelected doesn't work this way.
-
-		emit changed();
-	}
-	else if ( it && it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
-		IngGrpListViewItem * header = ( IngGrpListViewItem* ) it;
-
-		for ( IngListViewItem * sub_item = (IngListViewItem*)header->firstChild(); sub_item; sub_item = (IngListViewItem*)sub_item->nextSibling() ) {
-			IngredientData &ing = loadedRecipe->ingList.findSubstitute( sub_item->ingredient() );
-
-			//Remove it from the instruction's completion
-			instructionsEdit->removeCompletionItem( ing.name );
-
-			loadedRecipe->ingList.removeSubstitute( ing );
-
-			int ingID = sub_item->ingredient().ingredientID;
-			QMap<int,QString>::iterator map_it;
-			if ( (map_it = propertyStatusMapRed.find(ingID)) != propertyStatusMapRed.end() )
-				propertyStatusMapRed.erase( map_it );
-			else if ( (map_it = propertyStatusMapYellow.find(ingID)) != propertyStatusMapYellow.end() )
-				propertyStatusMapYellow.erase( map_it );
-			showStatusIndicator();
-		}
-
-		delete header;
-
-		emit changed();
-	}
-
 }
 
 void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_text, int col )
