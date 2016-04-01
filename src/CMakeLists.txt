@@ -110,7 +110,6 @@ set(krecipeswidgets_SRCS
    widgets/kdatepickerpopup.cpp
    widgets/kreheaderlistwidget.cpp
    widgets/criteriacombobox.cpp
-   widgets/ingredientinputwidget.cpp
    widgets/unitcombobox.cpp
    widgets/unittypedelegate.cpp
    widgets/amountunitinput.cpp

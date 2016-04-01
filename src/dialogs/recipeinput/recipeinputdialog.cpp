@@ -66,7 +66,6 @@
 #include "widgets/fractioninput.h"
 #include "widgets/kretextedit.h"
 #include "widgets/inglistviewitem.h"
-#include "widgets/ingredientinputwidget.h"
 
 #include "profiling.h"
 

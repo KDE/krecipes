@@ -53,7 +53,6 @@ class FractionInput;
 class Ingredient;
 class Rating;
 class RecipeGeneralInfoEditor;
-class IngredientInputWidget;
 class RatingDisplayWidget;
 class RatingListEditor;
 
