@@ -65,6 +65,8 @@ signals:
 	void changed();
 
 private slots:
+	void populateModel( IngredientList * ingredientList );
+
 	void addIngredientSlot();
 	void addAltIngredientSlot();
 	void addHeaderSlot();

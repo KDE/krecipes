@@ -212,6 +212,18 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 	ui->m_treeView->setItemDelegateForColumn(prepmethodsColumn(), prepMethodDelegate);
 
 	//Populate the ingredient list
+	populateModel( ingredientList );
+
+	//Update the nutrient information status
+	updateNutrientInfoDetailsSlot();
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+}
+
+void IngredientsEditor::populateModel( IngredientList * ingredientList )
+{
 	IngredientList::const_iterator it;
 	int current_row = 0;
 	QModelIndex index;
@@ -235,13 +247,6 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 	}
 	ui->m_treeView->expandAll();
 	resizeColumnsToContents();
-
-	//Update the nutrient information status
-	updateNutrientInfoDetailsSlot();
-
-	//Re-connect the changed signal
-	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
-		this, SIGNAL(changed()) );
 }
 
 void IngredientsEditor::setRowData( int row, const Ingredient & ingredient )
