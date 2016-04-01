@@ -34,14 +34,15 @@ public:
 
 private slots:
 	void ingredientCreatedSlot( const Element & element );
+	void ingredientModifiedSlot( const Ingredient & ingredient );
 	void ingredientRemovedSlot( int id );
 
 	void headerCreatedSlot( const Element & element );
 	void headerRemovedSlot( int id );
 
 private:
-	ElementList m_ingredientList;
-	QHash<QString,RecipeDB::IdType> m_ingredientNameToIdMap;
+	QHash<RecipeDB::IdType,Element> m_idToIngredientMap;
+	QMultiHash<QString,RecipeDB::IdType> m_ingredientNameToIdMap;
 
 	ElementList m_headerList;
 	QHash<QString,RecipeDB::IdType> m_headerNameToIdMap;
