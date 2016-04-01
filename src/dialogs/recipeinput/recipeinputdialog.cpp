@@ -143,45 +143,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientList->setDefaultRenameAction( Q3ListView::Reject );
 	ingredientsLayout->addWidget( ingredientList, 3, 1, 7, 4, 0 );
 
-	QHBoxLayout *propertyStatusLayout = new QHBoxLayout( ingredientsTab );
-	propertyStatusLayout->setMargin( 0 );
-	propertyStatusLayout->setSpacing( 5 );
-
-	QLabel *propertyLabel = new QLabel( i18nc( "@label", "Property Status:"), ingredientsTab );
-	propertyStatusLabel = new QLabel( ingredientsTab );
-	propertyStatusLed = new KLed( ingredientsTab );
-	propertyStatusLed->setFixedSize( QSize(16,16) );
-	propertyStatusButton = new KPushButton( i18nc( "@action:button", "Details..."), ingredientsTab );
-	//QPushButton *propertyUpdateButton = new QPushButton( i18n("Update"), ingredientsTab );
-	propertyStatusLayout->addWidget( propertyLabel );
-	propertyStatusLayout->addWidget( propertyStatusLabel );
-	propertyStatusLayout->addWidget( propertyStatusLed );
-	propertyStatusLayout->addWidget( propertyStatusButton );
-	//propertyStatusLayout->addWidget( propertyUpdateButton );
-	QSpacerItem* propertySpacerRight = new QSpacerItem( 10, 10, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum );
-	propertyStatusLayout->addItem( propertySpacerRight );
-
-	KGuiItem updateGuiItem;
-	updateGuiItem.setText( i18nc("@action:inmenu Updates the loaded information", "Update") );
-	updateGuiItem.setIcon( KIcon( "view-refresh" ) );
-
-	propertyStatusDialog = new KDialog( this );
-	propertyStatusDialog->setObjectName( "propertyStatusDialog" );
-	propertyStatusDialog->setModal( false );
-	propertyStatusDialog->showButtonSeparator( false );
-	propertyStatusDialog->setCaption( i18nc( "@title:window ", "Property details") );
-	propertyStatusDialog->setButtons( KDialog::Close | KDialog::User1 | KDialog::Help );
-	propertyStatusDialog->setDefaultButton( KDialog::Close );
-	propertyStatusDialog->setButtonGuiItem( KDialog::User1, updateGuiItem );
-	propertyStatusDialog->setHelp("property-status");
-
-	statusTextView = new KTextBrowser(0);
-	statusTextView->setOpenLinks( false );
-	propertyStatusDialog->setMainWidget( statusTextView );
-	propertyStatusDialog->resize( 400, 300 );
-
-	ingredientsLayout->addLayout( propertyStatusLayout, 10, 1, 1, 4, 0 );
-
 	// ------- Recipe Instructions Tab -----------
 
 	instructionsTab = new QFrame( this );
@@ -274,11 +235,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
 	connect( ingredientList, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( syncListView( Q3ListViewItem*, const QString &, int ) ) );
 
-	connect( propertyStatusLed, SIGNAL(clicked()), SLOT(updatePropertyStatus()) );
-	connect( propertyStatusDialog, SIGNAL(user1Clicked()), SLOT(updatePropertyStatus()) );
-	connect( propertyStatusButton, SIGNAL(clicked()), propertyStatusDialog, SLOT(show()) );
-	connect( statusTextView, SIGNAL(anchorClicked(const QUrl&)), this, SLOT( statusLinkClicked(const QUrl &) ) );
-
 	// Function buttons
 	connect ( saveButton, SIGNAL( clicked() ), this, SLOT( save() ) );
 	connect ( closeButton, SIGNAL( clicked() ), this, SLOT( closeOptions() ) );
@@ -327,9 +283,6 @@ void RecipeInputDialog::loadRecipe( int recipeID )
 	database->loadRecipe( loadedRecipe, RecipeDB::All ^ RecipeDB::Meta ^ RecipeDB::Properties, recipeID );
 
 	reload();
-
-	propertyStatusDialog->hide();
-	updatePropertyStatus();
 
 	//Enable changed() signals
 	enableChangedSignal();
@@ -450,7 +403,6 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 
 					ing_item->setUnit( new_ing.units );
 
-					updatePropertyStatus();
 					emit changed();
 				}
 				else {
@@ -488,7 +440,6 @@ void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_tex
 					(*it).id = *id_it;
 				}
 
-				updatePropertyStatus();
 				emit changed();
 			}
 			break;
@@ -561,11 +512,6 @@ void RecipeInputDialog::newRecipe( void )
 
 	//Set back to the first page
 	tabWidget->setCurrentIndex( 0 );
-
-	//clear status info
-	propertyStatusMapRed.clear();
-	propertyStatusMapYellow.clear();
-	showStatusIndicator();
 
 	// Enable Save Button
 	emit enableSaveOption( true );
@@ -771,8 +717,6 @@ void RecipeInputDialog::addIngredient( const Ingredient &ing, bool noHeader )
 	//update the completion in the instructions edit
 	instructionsEdit->addCompletionItem( ingCopy.name );
 
-	updatePropertyStatus( ingCopy, true );
-
 	emit changed();
 }
 
@@ -784,241 +728,6 @@ void RecipeInputDialog::addIngredientHeader( const Element &header )
 
 	IngGrpListViewItem *ing_header = new IngGrpListViewItem( ingredientList, last_item, header.name, header.id );
 	ing_header->setOpen( true );
-}
-
-void RecipeInputDialog::updatePropertyStatus()
-{
-	propertyStatusMapRed.clear();
-	propertyStatusMapYellow.clear();
-
-	for ( IngredientList::const_iterator ing_it = loadedRecipe->ingList.begin(); ing_it != loadedRecipe->ingList.end(); ++ing_it ) {
-		updatePropertyStatus( *ing_it, false );
-	}
-
-	showStatusIndicator();
-}
-
-void RecipeInputDialog::updatePropertyStatus( const Ingredient &ing, bool updateIndicator )
-{
-	IngredientPropertyList ingPropertyList;
-	database->loadProperties( &ingPropertyList, ing.ingredientID );
-
-	if ( ingPropertyList.count() == 0 ) {
-		propertyStatusMapRed.insert(ing.ingredientID, QString(
-			i18nc("@info", "<b>%1:</b> No nutrient information available. "
-			"<a href=\"ingredient#%2\">Provide nutrient information.</a>",
-			ing.name,
-			QString::number(ing.ingredientID))));
-	}
-
-	QMap<int,bool> ratioCache; //unit->conversion possible
-	IngredientPropertyList::const_iterator prop_it;
-	for ( prop_it = ingPropertyList.constBegin(); prop_it != ingPropertyList.constEnd(); ++prop_it ) {
-		Ingredient result;
-
-		QMap<int,bool>::const_iterator cache_it = ratioCache.constFind((*prop_it).perUnit.id());
-		if ( cache_it == ratioCache.constEnd() ) {
-			RecipeDB::ConversionStatus status = database->convertIngredientUnits( ing, (*prop_it).perUnit, result );
-			ratioCache.insert((*prop_it).perUnit.id(),status==RecipeDB::Success||status==RecipeDB::MismatchedPrepMethod);
-
-			switch ( status ) {
-			case RecipeDB::Success: break;
-			case RecipeDB::MissingUnitConversion: {
-				if ( ing.units.type() != Unit::Other && ing.units.type() == (*prop_it).perUnit.type() ) {
-					propertyStatusMapRed.insert(ing.ingredientID,
-						i18nc( "@info", "<b>%3:</b> Unit conversion missing for conversion from '%1' to '%2'"
-						,(ing.units.name().isEmpty()?i18n("-No unit-"):ing.units.name())
-						,((*prop_it).perUnit.name())
-						,ing.name));
-				} else {
-					WeightList weights = database->ingredientWeightUnits( ing.ingredientID );
-					Q3ValueList< QPair<int,int> > usedIds;
-					QStringList missingConversions;
-					for ( WeightList::const_iterator weight_it = weights.constBegin(); weight_it != weights.constEnd(); ++weight_it ) {
-						//skip entries that only differ in how it's prepared
-						QPair<int,int> usedPair((*weight_it).perAmountUnitId(),(*weight_it).weightUnitId());
-						if ( usedIds.find(usedPair) != usedIds.end() )
-							continue;
-
-						QString toUnit = database->unitName((*weight_it).perAmountUnitId()).name();
-						if ( toUnit.isEmpty() ) toUnit = i18nc( "@info", "-No unit-");
-
-						QString fromUnit = database->unitName((*weight_it).weightUnitId()).name();
-						if ( fromUnit.isEmpty() ) fromUnit = i18nc( "@info", "-No unit-");
-
-						QString ingUnit = ing.units.name();
-						if ( ingUnit.isEmpty() ) ingUnit = i18nc( "@info", "-No unit-");
-
-						QString propUnit = (*prop_it).perUnit.name();
-						if ( propUnit.isEmpty() ) propUnit = i18nc( "@info", "-No unit-");
-
-						missingConversions << conversionPath( ingUnit, toUnit, fromUnit, propUnit);
-					}
-					propertyStatusMapRed.insert(ing.ingredientID,
-						i18nc("@info", "<b>%1:</b> Either <a href=\"ingredient#%3\">enter an appropriate "
-						"ingredient weight entry</a>, or provide conversion information to "
-						"perform one of the following conversions: %2",
-					  	ing.name,
-						("<ul><li>"+missingConversions.join("</li><li>")+"</li></ul>"),
-						QString::number(ing.ingredientID))
-					);
-				}
-				break;
-			}
-			case RecipeDB::MissingIngredientWeight:
-				propertyStatusMapRed.insert(ing.ingredientID, QString(
-					i18nc("@info", "<b>%1:</b> No ingredient weight entries. <a href=\"ingredient#%2\">Provide "
-					"ingredient weight.</a>",
-					ing.name, QString::number(ing.ingredientID))));
-				break;
-			case RecipeDB::MismatchedPrepMethod:
-				if ( ing.prepMethodList.count() == 0 )
-					propertyStatusMapRed.insert(ing.ingredientID,QString(
-						i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when no "
-						"preparation method is specified. <a href=\"ingredient#%2\">Provide "
-						"ingredient weight.</a>",
-						ing.name, QString::number(ing.ingredientID))));
-				else
-					propertyStatusMapRed.insert(ing.ingredientID,QString(
-						i18nc("@info", "<b>%1:</b> There is no ""ingredient weight entry for when prepared "
-						"in any of the following manners: %2<a href=\"ingredient#%3\">Provide "
-						"ingredient weight.</a>",
-						ing.name,
-						"<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>",
-						QString::number(ing.ingredientID))));
-				break;
-			case RecipeDB::MismatchedPrepMethodUsingApprox:
-				propertyStatusMapYellow.insert(ing.ingredientID,QString(
-					i18nc("@info", "<b>%1:</b> There is no ingredient weight entry for when prepared in any of "
-					"the following manners (defaulting to a weight entry without a preparation "
-					"method specified): "
-					"%2<a href=\"ingredient#%3\">Provide ingredient weight.</a>",
-					ing.name,
-					"<ul><li>"+ing.prepMethodList.join("</li><li>")+"</li></ul>",
-					QString::number(ing.ingredientID))));
-				break;
-			default: kDebug()<<"Code error: Unhandled conversion status code "<<status; break;
-			}
-		}
-	}
-
-	if ( updateIndicator )
-		showStatusIndicator();
-}
-
-void RecipeInputDialog::showStatusIndicator()
-{
-	if ( propertyStatusMapRed.count() == 0 ) {
-		if ( propertyStatusMapYellow.count() == 0 ) {
-			propertyStatusLed->setColor( Qt::green );
-			propertyStatusLabel->setText( i18nc(
-				"@info Property information for a recipe is complete",
-				"Complete") );
-			propertyStatusButton->setEnabled(false);
-		}
-		else {
-			propertyStatusLed->setColor( Qt::yellow );
-			propertyStatusLabel->setText( i18nc(
-				"@info Property information for a recipe is complete, but...",
-				"Complete, but approximations made") );
-			propertyStatusButton->setEnabled(true);
-		}
-	}
-	else {
-		propertyStatusLed->setColor( Qt::red );
-		propertyStatusLabel->setText( i18nc(
-			"@info Property information for a recipe is incomplete",
-			"Incomplete") );
-		propertyStatusButton->setEnabled(true);
-	}
-
-	if ( propertyStatusMapRed.count() == 0 && propertyStatusMapYellow.count() == 0 )
-		propertyStatusDialog->hide();
-	else
-		statusTextView->setText(statusMessage());
-}
-
-QString RecipeInputDialog::statusMessage() const
-{
-	QString statusMessage;
-
-	if ( propertyStatusMapRed.count() > 0 ) {
-		statusMessage.append( i18nc("@info", "The nutrient information for this recipe is incomplete because the following information is missing:") );
-		statusMessage.append("<ul>");
-		for ( QMap<int,QString>::const_iterator it = propertyStatusMapRed.begin(); it != propertyStatusMapRed.end(); ++it ) {
-			statusMessage.append("<li>");
-			statusMessage.append(it.value());
-			statusMessage.append("</li>");
-		}
-		statusMessage.append("</ul>");
-	}
-
-	if ( propertyStatusMapYellow.count() > 0 ) {
-		statusMessage.append( i18nc("@info", "The following approximations will be made when determining nutrient information:") );
-		statusMessage.append("<ul>");
-		for ( QMap<int,QString>::const_iterator it = propertyStatusMapYellow.begin(); it != propertyStatusMapYellow.end(); ++it ) {
-			statusMessage.append("<li>");
-			statusMessage.append(it.value());
-			statusMessage.append("</li>");
-		}
-		statusMessage.append("</ul>");
-	}
-
-	return statusMessage;
-}
-
-QString RecipeInputDialog::conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const
-{
-	QString path = '\''+ingUnit+'\'';
-
-	QString lastUnit = ingUnit;
-	if ( lastUnit != toUnit ) {
-		path.append(" =&gt; '"+toUnit+'\'');
-		lastUnit = toUnit;
-	}
-	if ( lastUnit != fromUnit ) {
-		path.append(" =&gt; '"+fromUnit+'\'');
-		lastUnit = fromUnit;
-	}
-	if ( lastUnit != propUnit ) {
-		path.append(" =&gt; '"+propUnit+'\'');
-		lastUnit = propUnit;
-	}
-	return path;
-}
-
-void RecipeInputDialog::statusLinkClicked( const QUrl &link )
-{
-	QString linkString = link.toString();
-	if (linkString.startsWith("ingredient#")) {
-		int ingID = linkString.mid(linkString.indexOf("#")+1).toInt();
-		QString ingName = database->ingredientName(ingID);
-		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( ingID, ingName, database, this );
-		d->exec();
-		delete d;
-	} else if (linkString.startsWith("unit#")) { //FIXME: Not used?
-		QString unitIDs = linkString.mid(linkString.indexOf("#")+1);
-		QStringList idList = unitIDs.split(',', QString::SkipEmptyParts );
-		int unitFrom = idList[0].toInt();
-		ElementList toUnits;
-		int lastUnit = -1;
-		for (int i = 1; i < idList.count(); ++i ) {
-			int id = idList[i].toInt();
-			if ( id != lastUnit ) {
-				toUnits << Element(database->unitName(id).name(),id);
-				lastUnit = id;
-			}
-		}
-		QPointer<CreateUnitConversionDialog> dlg = new CreateUnitConversionDialog( Element(database->unitName(unitFrom).name()), toUnits, this );
-		if ( dlg->exec() == QDialog::Accepted ) {
-			UnitRatio ratio(dlg->toUnitID(), unitFrom, dlg->ratio());
-			if (ratio.ratio() >= 0 ) {
-				database->saveUnitRatio(&ratio);
-			}
-		}
-		delete dlg;
-	}
-	updatePropertyStatus();
 }
 
 void RecipeInputDialog::reloadCheckSpelling()

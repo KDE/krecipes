@@ -96,12 +96,6 @@ private:
 	K3ListView* ingredientList;
 	QFrame *ingredientsTab;
 	IngredientsEditor * ingredientsEditor;
-	KLed *propertyStatusLed;
-	QLabel *propertyStatusLabel;
-	KPushButton *propertyStatusButton;
-	//QTextEdit *statusTextView;
-	KTextBrowser *statusTextView;
-	KDialog *propertyStatusDialog;
 
 	KPushButton* ingParserButton;
 
@@ -113,9 +107,6 @@ private:
 	QToolButton* closeButton;
 	QToolButton* showButton;
 	QToolButton* resizeButton;
-
-	QMap<int,QString> propertyStatusMapRed;
-	QMap<int,QString> propertyStatusMapYellow;
 
 	// Internal functions
 	void saveRecipe( void );
@@ -136,10 +127,6 @@ private slots:
 	void slotIngredientParser();
 	void addIngredient( const Ingredient &ing, bool noHeader = false );
 	void addIngredientHeader( const Element &header );
-	void updatePropertyStatus();
-	void updatePropertyStatus( const Ingredient &ing, bool updateIndicator );
-	void showStatusIndicator();
-	void statusLinkClicked( const QUrl &url );
 
 public slots:
 	bool save ( void ); // Activated when krecipes.cpp sends signal save()
