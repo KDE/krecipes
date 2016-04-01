@@ -13,48 +13,19 @@
 #ifndef RECIPEINPUTDIALOG_H
 #define RECIPEINPUTDIALOG_H
 
-#include <kdialog.h>
-#include <ktextedit.h>
-#include <klineedit.h>
-#include <kcombobox.h>
-#include <knuminput.h>
-#include <kpushbutton.h>
+#include <KVBox>
 
-#include <QLabel>
-#include <qmap.h>
-#include <QToolButton>
-
-#include <QDateTimeEdit>
-#include <QDropEvent>
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
-#include <kvbox.h>
-
-#include "datablocks/elementlist.h"
-#include "datablocks/rating.h"
-
+class RecipeGeneralInfoEditor;
 class IngredientsEditor;
+class KreTextEdit;
+class RatingListEditor;
+class RecipeDB;
+class Recipe;
 
 class KTabWidget;
-class QDateTimeEdit;
-class QTextEdit;
-class KTextBrowser;
-class KLed;
 
-class KreTextEdit;
-class KDialog;
-class KPushButton;
-
-class ImageDropLabel;
-class Recipe;
-class RecipeDB;
-class FractionInput;
-class Ingredient;
-class Rating;
-class RecipeGeneralInfoEditor;
-class RatingDisplayWidget;
-class RatingListEditor;
+class QFrame;
+class QToolButton;
 
 /**
 @author Unai Garro

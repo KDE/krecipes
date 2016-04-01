@@ -47,6 +47,7 @@
 #include <QFrame>
 #include <QDragEnterEvent>
 
+#include <KTextEdit>
 #include <kprogressdialog.h>
 #include <kmessagebox.h>
 #include <kglobal.h>

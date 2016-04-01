@@ -12,60 +12,20 @@
 
 #include "recipeinputdialog.h"
 
-#include "widgets/imagedroplabel.h"
-#include "dialogs/recipeinput/ratinglisteditor.h"
-#include "dialogs/recipeinput/recipegeneralinfoeditor.h"
+#include "recipegeneralinfoeditor.h"
 #include "ingredientseditor.h"
-
-#include <QString>
-
-
-#include <QImage>
-#include <qdatetimeedit.h>
-#include <QPainter>
-#include <QPointer>
-#include <KTabWidget>
-#include <KTextBrowser>
-#include <QLabel>
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QGridLayout>
-#include <QDragEnterEvent>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QFrame>
-#include <QDropEvent>
-#include <QGroupBox>
-
-#include <kapplication.h>
-#include <kcompletionbox.h>
-#include <kurl.h>
-#include <kfiledialog.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-#include <kled.h>
-#include <kdialog.h>
-#include <kio/netaccess.h>
-#include <kvbox.h>
-
-#include "selectauthorsdialog.h"
+#include "ratinglisteditor.h"
 #include "resizerecipedialog.h"
-#include "ingredientparserdialog.h"
-#include "editratingdialog.h"
-#include "dialogs/createunitdialog.h"
-#include "datablocks/recipe.h"
-#include "datablocks/rating.h"
-#include "datablocks/categorytree.h"
-#include "datablocks/unit.h"
-#include "datablocks/weight.h"
-#include "backends/recipedb.h"
 #include "selectcategoriesdialog.h"
-#include "dialogs/createunitconversiondialog.h"
-#include "dialogs/editpropertiesdialog.h"
-#include "widgets/fractioninput.h"
+
 #include "widgets/kretextedit.h"
-#include "widgets/inglistviewitem.h"
+
+#include <KLocale>
+#include <KMessageBox>
+#include <KTabWidget>
+
+#include <QToolButton>
+#include <QHBoxLayout>
 
 #include "profiling.h"
 
