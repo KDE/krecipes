@@ -1,0 +1,17 @@
+------------------------------
+Release procedure for Krecipes
+------------------------------
+
+1. Update the version in krecipes_version.h
+2. Prepare the tarball with releaseme.rb
+   https://quickgit.kde.org/?p=releaseme.git
+   * Use the kdelibs4 branch
+   * Adjust the settings in the 'krecipesrc' file and do
+     user@host:~/kde-devel/releaseme$ ./krecipes.rb
+3. Upload the tarball to KDE's ftp
+4. Upload the tarball to sourceforge
+5. Open a bug for the KDE sysadmins to add the new version to bugs.kde.org
+6. Announce the release in kde-apps.org
+7. Mail about the release to:
+   - krecipes-devel@kde.org
+   - release-team@kde.org
