@@ -147,7 +147,6 @@ void IngredientsEditor::setDatabase( RecipeDB * database )
 	connect( m_database, SIGNAL(unitRemoved(int)),
 		this, SLOT(unitRemovedDBSlot(int)) );
 
-	kDebug() << "connecting methods";
 	//Preparation methods
 	connect( m_database, SIGNAL(prepMethodCreated(const Element &)),
 		this, SLOT(prepMethodCreatedDBSlot(const Element &)) );
@@ -155,6 +154,14 @@ void IngredientsEditor::setDatabase( RecipeDB * database )
 		this, SLOT(prepMethodModifiedDBSlot(const Element &)) );
 	connect( m_database, SIGNAL(prepMethodRemoved(int)),
 		this, SLOT(prepMethodRemovedDBSlot(int)) );
+
+	//Headers
+	connect( m_database, SIGNAL(ingGroupCreated(const Element &)),
+		this, SLOT(headerCreatedDBSlot(const Element &)) );
+	connect( m_database, SIGNAL(ingGroupModified(const Element &)),
+		this, SLOT(headerModifiedDBSlot(const Element &)) );
+	connect( m_database, SIGNAL(ingGroupRemoved(int)),
+		this, SLOT(headerRemovedDBSlot(int)) );
 }
 
 void IngredientsEditor::setRecipeTitle( const QString & title )
@@ -922,6 +929,113 @@ void IngredientsEditor::prepMethodRemovedDBSlot( int prepMethodRemovedId )
 		}
 	}
 
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+}
+
+void IngredientsEditor::headerCreatedDBSlot( const Element & newHeader )
+{
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+	QModelIndex index;
+	int rowCount = m_sourceModel->rowCount();
+	RecipeDB::IdType modelHeaderId;
+	QString modelHeaderName;
+	bool isHeader;
+	//Check in the model if there is a header with the same name and the Id set
+	//as RecipeDB::InvalidId (that means the header is going to be created when
+	//saving the recipe). If there is any, update its Id to the Id of the header
+	//which was just created in the database so we won't have nonsense duplicates.
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, headerColumn() );
+		isHeader = m_sourceModel->data( index, IsHeaderRole ).toBool();
+		if ( !isHeader ) {
+			continue;
+		}
+		modelHeaderId = m_sourceModel->data( index, IdRole ).toInt();
+		modelHeaderName = m_sourceModel->data( index, Qt::DisplayRole ).toString();
+		if ( (modelHeaderId == RecipeDB::InvalidId)
+		&& (newHeader.name == modelHeaderName) ) {
+			m_sourceModel->setData( index, newHeader.id, IdRole );
+			index = m_sourceModel->index( i, ingredientIdColumn() ); //FIXME: create headerIdColumn
+			m_sourceModel->setData( index, newHeader.id, Qt::DisplayRole );
+		}
+
+	}
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+}
+
+void IngredientsEditor::headerModifiedDBSlot( const Element & newHeader )
+{
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+	QModelIndex index;
+	int rowCount = m_sourceModel->rowCount();
+	RecipeDB::IdType modelHeaderId;
+	QString modelHeaderName;
+	bool isHeader;
+	//Check in the model if there is a header with the same name and the Id set
+	//as RecipeDB::InvalidId (that means the header is going to be created when
+	//saving the recipe). If there is any, update its Id to the Id of the header
+	//which was just created in the database so we won't have nonsense duplicates.
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, headerColumn() );
+		isHeader = m_sourceModel->data( index, IsHeaderRole ).toBool();
+		if ( !isHeader ) {
+			continue;
+		}
+		modelHeaderId = m_sourceModel->data( index, IdRole ).toInt();
+		modelHeaderName = m_sourceModel->data( index, Qt::DisplayRole ).toString();
+		if ( modelHeaderId == newHeader.id ) {
+			m_sourceModel->setData( index, newHeader.name, Qt::DisplayRole );
+		}
+
+	}
+
+	//Re-connect the changed signal
+	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+}
+
+void IngredientsEditor::headerRemovedDBSlot( int headerRemovedId )
+{
+	//Disconnect the changed signal temporarily
+	disconnect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
+		this, SIGNAL(changed()) );
+
+	QModelIndex index;
+	int rowCount = m_sourceModel->rowCount();
+	RecipeDB::IdType modelHeaderId;
+	QString modelHeaderName;
+	bool isHeader;
+	//Check in the model if there is a header with the same name and the Id set
+	//as RecipeDB::InvalidId (that means the header is going to be created when
+	//saving the recipe). If there is any, update its Id to the Id of the header
+	//which was just created in the database so we won't have nonsense duplicates.
+	for ( int i = 0; i < rowCount; ++i ) {
+		index = m_sourceModel->index( i, headerColumn() );
+		isHeader = m_sourceModel->data( index, IsHeaderRole ).toBool();
+		if ( !isHeader ) {
+			continue;
+		}
+		modelHeaderId = m_sourceModel->data( index, IdRole ).toInt();
+		modelHeaderName = m_sourceModel->data( index, Qt::DisplayRole ).toString();
+		if ( modelHeaderId == headerRemovedId ) {
+			m_sourceModel->setData( index, RecipeDB::InvalidId, IdRole );
+			index = m_sourceModel->index( i, ingredientIdColumn() ); //FIXME: create headerIdColumn
+			m_sourceModel->setData( index, RecipeDB::InvalidId, Qt::DisplayRole );
+		}
+	}
 
 	//Re-connect the changed signal
 	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
