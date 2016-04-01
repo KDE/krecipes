@@ -17,6 +17,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <QMultiHash>
 
 class QEventLoop;
 class QTimer;
@@ -223,7 +224,7 @@ public:
 	virtual int loadIngredientGroups( ElementList *list ) = 0;
 	virtual int loadIngredients( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadIngredientMaps( QHash<RecipeDB::IdType,Element> * idToIngredientMap,
-		QHash<QString,RecipeDB::IdType> * nameToIdMap ) = 0;
+		QMultiHash<QString,RecipeDB::IdType> * nameToIdMap ) = 0;
 	virtual void loadPossibleUnits( int ingredientID, UnitList *list ) = 0;
 	virtual int loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	// Loads the list of possible properties by default, all the ingredient properties
