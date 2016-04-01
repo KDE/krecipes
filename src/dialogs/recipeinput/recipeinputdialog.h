@@ -104,9 +104,6 @@ private:
 	KTextBrowser *statusTextView;
 	KDialog *propertyStatusDialog;
 
-	// Buttons to move ingredients up & down...
-	KPushButton* upButton;
-	KPushButton* downButton;
 	KPushButton* removeButton;
 	KPushButton* addButton;
 	KPushButton* ingParserButton;
@@ -132,8 +129,6 @@ private:
 	// Signals & Slots
 
 private slots:
-	void moveIngredientUp( void );
-	void moveIngredientDown( void );
 	void removeIngredient( void );
 	void syncListView( Q3ListViewItem* it, const QString &new_text, int col );
 	void recipeChanged( void );

@@ -129,20 +129,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	QSpacerItem* spacerToOtherButtons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	ingredientsLayout->addItem( spacerToOtherButtons, 4, 5 );
 
-	upButton = new KPushButton( ingredientsTab );
-	upButton->setFixedSize( QSize( 31, 31 ) );
-	upButton->setIcon( KIcon( "go-up" ) );
-	upButton->setIconSize( QSize( 16, 16 ) );
-	upButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	ingredientsLayout->addWidget( upButton, 5, 5 );
-
-	downButton = new KPushButton( ingredientsTab );
-	downButton->setFixedSize( QSize( 31, 31 ) );
-	downButton->setIcon( KIcon( "go-down" ) );
-	downButton->setIconSize(  QSize( 16, 16 ) );
-	downButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) );
-	ingredientsLayout->addWidget( downButton, 6, 5 );
-
 	removeButton = new KPushButton( ingredientsTab );
 	removeButton->setFixedSize( QSize( 31, 31 ) );
 	removeButton->setIcon( KIcon( "list-remove" ) );
@@ -158,8 +144,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	ingredientsLayout->addWidget( ingParserButton, 8, 5 );
 
 		addButton->setToolTip( i18nc( "@info:tooltip", "Add ingredient" ) );
-		upButton->setToolTip( i18nc(  "@info:tooltip", "Move ingredient up" ) );
-		downButton->setToolTip( i18nc(  "@info:tooltip", "Move ingredient down" ) );
 		removeButton->setToolTip( i18nc(  "@info:tooltip", "Remove ingredient" ) );
 		ingParserButton->setToolTip( i18nc(  "@info:tooltip", "Paste Ingredients" ) );
 
@@ -246,7 +230,7 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	tabWidget->insertTab( -1, m_recipeGeneralInfoEditor, i18nc( "@title:tab", "Recipe" ) );
 	//TODO: Remove this after removing the old editor code
-	//tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
+	tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
 	ingredientsEditor = new IngredientsEditor;
 	ingredientsEditor->setDatabase( database );
 	tabWidget->insertTab( -1, ingredientsEditor, i18nc( "@title:tab", "Ingredients" ) );
@@ -306,8 +290,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	connect( ingredientsEditor, SIGNAL(changed()), this, SLOT(recipeChanged()) );
 
-	connect( upButton, SIGNAL( clicked() ), this, SLOT( moveIngredientUp() ) );
-	connect( downButton, SIGNAL( clicked() ), this, SLOT( moveIngredientDown() ) );
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
 	connect( addButton, SIGNAL( clicked() ), ingInput, SLOT( addIngredient() ) );
 	connect( ingParserButton, SIGNAL( clicked() ), this, SLOT( slotIngredientParser() ) );
@@ -430,151 +412,6 @@ void RecipeInputDialog::reload( void )
 
 	// Show ratings
 	ratingListEditor->refresh();
-}
-
-void RecipeInputDialog::moveIngredientUp( void )
-{
-	Q3ListViewItem * it = ingredientList->selectedItem();
-	if ( !it || it->rtti() == INGSUBLISTVIEWITEM_RTTI )
-		return ;
-
-	Q3ListViewItem *iabove = it->itemAbove();
-	while ( iabove && iabove->rtti() == INGSUBLISTVIEWITEM_RTTI )
-		iabove = iabove->itemAbove();
-
-	if ( iabove ) {
-		if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
-			if ( iabove->parent() )
-				iabove = iabove->parent();
-
-			int it_index = ingItemIndex( ingredientList, it );
-			int iabove_index = ingItemIndex( ingredientList, iabove );
-
-			iabove->moveItem( it ); //Move the Item
-
-			loadedRecipe->ingList.move( iabove_index, ( iabove->rtti() == INGGRPLISTVIEWITEM_RTTI ) ? iabove->childCount() : 1, it_index + it->childCount() - 1 );
-		}
-		else {
-			const int it_index = ingItemIndex( ingredientList, it );
-			int iabove_index = ingItemIndex( ingredientList, iabove );
-			//IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
-
-			if ( iabove->parent() != it->parent() ) {
-				if ( iabove->rtti() == INGGRPLISTVIEWITEM_RTTI && it->parent() ) { //move the item out of the group
-					it->parent() ->takeItem( it );
-					ingredientList->insertItem( it );
-					it->moveItem( ( iabove->itemAbove() ->parent() ) ? iabove->itemAbove() ->parent() : iabove->itemAbove() ); //Move the Item
-				}
-				else { //move the item into the group
-					ingredientList->takeItem( it );
-					iabove->parent() ->insertItem( it );
-					it->moveItem( iabove ); //Move the Item
-				}
-
-				ingredientList->setCurrentItem( it ); //Keep selected
-			}
-			else {
-				iabove->moveItem( it ); //Move the Item
-				loadedRecipe->ingList.move( it_index, iabove_index );
-			}
-
-			IngListViewItem *ing_item = (IngListViewItem*)it;
-			int newGroupID;
-			if ( it->parent() ) {
-				newGroupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
-			} else {
-				newGroupID = -1;
-			}
-			loadedRecipe->ingList[it_index].groupID = newGroupID;
-			ing_item->setGroup( newGroupID );
-		}
-
-		emit changed();
-	}
-}
-
-void RecipeInputDialog::moveIngredientDown( void )
-{
-	Q3ListViewItem * it = ingredientList->selectedItem();
-	if ( !it || it->rtti() == INGSUBLISTVIEWITEM_RTTI )
-		return ;
-
-	Q3ListViewItem *ibelow = it->itemBelow();
-	while ( ibelow && ibelow->rtti() == INGSUBLISTVIEWITEM_RTTI )
-		ibelow = ibelow->itemBelow();
-
-	if ( ibelow ) {
-		if ( it->rtti() == INGGRPLISTVIEWITEM_RTTI ) {
-			Q3ListViewItem * next_sibling = it->nextSibling();
-
-			if ( next_sibling ) {
-				int it_index = ingItemIndex( ingredientList, it );
-				int ibelow_index = ingItemIndex( ingredientList, next_sibling );
-
-				it->moveItem( next_sibling ); //Move the Item
-
-				int skip = 0;
-				if ( next_sibling->childCount() > 0 )
-					skip = next_sibling->childCount() - 1;
-
-				loadedRecipe->ingList.move( it_index, it->childCount(), ibelow_index + skip );
-			}
-		}
-		else {
-			int it_index = ingItemIndex( ingredientList, it );
-			int ibelow_index = ingItemIndex( ingredientList, ibelow );
-			//IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
-
-			if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI || ( ibelow->parent() != it->parent() ) ) {
-				if ( ibelow->rtti() == INGGRPLISTVIEWITEM_RTTI && !it->parent() ) { //move the item into the group
-					if ( !it->parent() )
-						ingredientList->takeItem( it );
-					else
-						it->parent() ->takeItem( it );
-
-					ibelow->insertItem( it );
-				}
-				else { //move the item out of the group
-					Q3ListViewItem *parent = it->parent(); //store this because we can't get it after we do it->takeItem()
-					parent->takeItem( it );
-					ingredientList->insertItem( it );
-					it->moveItem( parent ); //Move the Item
-				}
-
-				ingredientList->setCurrentItem( it ); //Keep selected
-			}
-			else {
-				it->moveItem( ibelow ); //Move the Item
-				loadedRecipe->ingList.move( it_index, ibelow_index );
-			}
-
-			IngListViewItem *ing_item = (IngListViewItem*)it;
-			int newGroupID;
-			if ( it->parent() ) {
-				newGroupID = ( ( IngGrpListViewItem* ) it->parent() ) ->id();
-			} else {
-				newGroupID = -1;
-			}
-			loadedRecipe->ingList[it_index].groupID = newGroupID;
-			ing_item->setGroup( newGroupID );
-		}
-
-		emit changed();
-	}
-	else if ( it->parent() ) {
-		it->parent() ->takeItem( it );
-		ingredientList->insertItem( it );
-		it->moveItem( ( ingredientList->lastItem() ->parent() ) ? ingredientList->lastItem() ->parent() : ingredientList->lastItem() ); //Move the Item
-		ingredientList->setCurrentItem( it ); //Keep selected
-
-		int it_index = ingItemIndex( ingredientList, it );
-		//IngredientList::iterator ing = loadedRecipe->ingList.at( it_index );
-		IngListViewItem *ing_item = (IngListViewItem*)it;
-		loadedRecipe->ingList[it_index].groupID = -1;
-		ing_item->setGroup( -1 );
-
-		emit changed();
-	}
 }
 
 void RecipeInputDialog::removeIngredient( void )
