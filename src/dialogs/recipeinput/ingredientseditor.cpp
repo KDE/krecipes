@@ -118,6 +118,11 @@ int IngredientsEditor::headerColumn()
 	return 0;
 }
 
+int IngredientsEditor::headerIdColumn()
+{
+	return 4;
+}
+
 void IngredientsEditor::setDatabase( RecipeDB * database )
 {
 	//Disconnect all signals from the old database
@@ -314,7 +319,7 @@ void IngredientsEditor::setRowData( int row, const Element & header )
 {
 	QModelIndex index;
 	//The "Id" item.
-	index = m_sourceModel->index( row, ingredientIdColumn() );
+	index = m_sourceModel->index( row, headerIdColumn() );
 	m_sourceModel->setData( index, QVariant(header.id), Qt::EditRole );
 	m_sourceModel->setData( index, QVariant(header.id), IdRole );
 	m_sourceModel->setData( index, QVariant(true), IsHeaderRole );
@@ -961,7 +966,7 @@ void IngredientsEditor::headerCreatedDBSlot( const Element & newHeader )
 		if ( (modelHeaderId == RecipeDB::InvalidId)
 		&& (newHeader.name == modelHeaderName) ) {
 			m_sourceModel->setData( index, newHeader.id, IdRole );
-			index = m_sourceModel->index( i, ingredientIdColumn() ); //FIXME: create headerIdColumn
+			index = m_sourceModel->index( i, headerIdColumn() );
 			m_sourceModel->setData( index, newHeader.id, Qt::DisplayRole );
 		}
 
@@ -1032,7 +1037,7 @@ void IngredientsEditor::headerRemovedDBSlot( int headerRemovedId )
 		modelHeaderName = m_sourceModel->data( index, Qt::DisplayRole ).toString();
 		if ( modelHeaderId == headerRemovedId ) {
 			m_sourceModel->setData( index, RecipeDB::InvalidId, IdRole );
-			index = m_sourceModel->index( i, ingredientIdColumn() ); //FIXME: create headerIdColumn
+			index = m_sourceModel->index( i, headerIdColumn() );
 			m_sourceModel->setData( index, RecipeDB::InvalidId, Qt::DisplayRole );
 		}
 	}

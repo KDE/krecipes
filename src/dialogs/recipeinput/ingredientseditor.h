@@ -51,6 +51,7 @@ public:
 	inline int prepmethodsColumn();
 	inline int ingredientIdColumn();
 	inline int headerColumn();
+	inline int headerIdColumn();
 
 	void setDatabase( RecipeDB * database );
 
