@@ -106,10 +106,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	QSpacerItem* spacerBoxLeft = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
 	ingredientsLayout->addItem( spacerBoxLeft, 1, 0 );
 
-	//Input Widgets
-	ingInput = new IngredientInputWidget( database, ingredientsTab );
-	ingredientsLayout->addWidget( ingInput, 1, 1, 1, 5, 0 );
-
 	// Spacers to list and buttons
 	QSpacerItem* spacerToList = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
 	ingredientsLayout->addItem( spacerToList, 2, 1 );
@@ -291,14 +287,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	connect( ingredientsEditor, SIGNAL(changed()), this, SLOT(recipeChanged()) );
 
 	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
-	connect( addButton, SIGNAL( clicked() ), ingInput, SLOT( addIngredient() ) );
 	connect( ingParserButton, SIGNAL( clicked() ), this, SLOT( slotIngredientParser() ) );
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
 	connect( ingredientList, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( syncListView( Q3ListViewItem*, const QString &, int ) ) );
-
-	connect ( ingInput, SIGNAL( ingredientEntered(const Ingredient&) ), this, SLOT( addIngredient(const Ingredient&) ) );
-	connect ( ingInput, SIGNAL( headerEntered(const Element&) ), this, SLOT( addIngredientHeader(const Element&) ) );
 
 	connect( propertyStatusLed, SIGNAL(clicked()), SLOT(updatePropertyStatus()) );
 	connect( propertyStatusDialog, SIGNAL(user1Clicked()), SLOT(updatePropertyStatus()) );
@@ -643,7 +635,6 @@ void RecipeInputDialog::newRecipe( void )
 	m_recipeGeneralInfoEditor->loadRecipe( loadedRecipe );
 
 	ingredientList->clear();
-	ingInput->clear();
 
 	ingredientsEditor->loadIngredientList( &loadedRecipe->ingList );
 

@@ -96,7 +96,6 @@ private:
 	K3ListView* ingredientList;
 	QFrame *ingredientsTab;
 	IngredientsEditor * ingredientsEditor;
-	IngredientInputWidget *ingInput;
 	KLed *propertyStatusLed;
 	QLabel *propertyStatusLabel;
 	KPushButton *propertyStatusButton;
