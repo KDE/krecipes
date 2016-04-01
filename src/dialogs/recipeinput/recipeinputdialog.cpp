@@ -26,12 +26,10 @@
 #include <QPointer>
 #include <KTabWidget>
 #include <KTextBrowser>
-//Added by qt3to4:
 #include <QLabel>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QGridLayout>
-#include <Q3ValueList>
 #include <QDragEnterEvent>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -97,42 +95,10 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	//------- Ingredients Tab -----------------
 
-	ingredientsTab = new QFrame;
-	ingredientsTab->setFrameStyle( QFrame::NoFrame );
-	ingredientsTab->setSizePolicy( QSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding ) );
-	QGridLayout* ingredientsLayout = new QGridLayout( ingredientsTab );
+	ingredientsEditor = new IngredientsEditor;
+	ingredientsEditor->setDatabase( database );
 
-	// Border
-	QSpacerItem* spacerBoxLeft = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	ingredientsLayout->addItem( spacerBoxLeft, 1, 0 );
-
-	// Spacers to list and buttons
-	QSpacerItem* spacerToList = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	ingredientsLayout->addItem( spacerToList, 2, 1 );
-	QSpacerItem* spacerToButtons = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::Minimum );
-	ingredientsLayout->addItem( spacerToButtons, 3, 4 );
-
-
-	// Spacer to the rest of buttons
-	QSpacerItem* spacerToOtherButtons = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::Fixed );
-	ingredientsLayout->addItem( spacerToOtherButtons, 4, 5 );
-
-	// Ingredient List
-	ingredientList = new K3ListView( ingredientsTab );
-	ingredientList->addColumn( i18nc( "@title:column", "Ingredient" ) );
-	ingredientList->addColumn( i18nc( "@title:column", "Amount" ) );
-	ingredientList->setColumnAlignment( 1, Qt::AlignHCenter );
-	ingredientList->addColumn( i18nc( "@title:column", "Units" ) );
-	ingredientList->addColumn( i18nc( "@title:column", "Preparation Method" ) );
-	ingredientList->setSorting( -1 ); // Do not sort
-	ingredientList->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::MinimumExpanding ) );
-	ingredientList->setItemsRenameable( true );
-	ingredientList->setRenameable( 0, false ); //name
-	ingredientList->setRenameable( 1, true ); //amount
-	ingredientList->setRenameable( 2, true ); //units
-	ingredientList->setRenameable( 3, true ); //prep method
-	ingredientList->setDefaultRenameAction( Q3ListView::Reject );
-	ingredientsLayout->addWidget( ingredientList, 3, 1, 7, 4, 0 );
+	//------- END OF Ingredients Tab ----------
 
 	// ------- Recipe Instructions Tab -----------
 
@@ -160,10 +126,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 
 	tabWidget->insertTab( -1, m_recipeGeneralInfoEditor, i18nc( "@title:tab", "Recipe" ) );
-	//TODO: Remove this after removing the old editor code
-	tabWidget->insertTab( -1, ingredientsTab, i18nc( "@title:tab", "Ingredients" ) );
-	ingredientsEditor = new IngredientsEditor;
-	ingredientsEditor->setDatabase( database );
 	tabWidget->insertTab( -1, ingredientsEditor, i18nc( "@title:tab", "Ingredients" ) );
 	tabWidget->insertTab( -1, instructionsTab, i18nc( "@title:tab", "Instructions" ) );
 	tabWidget->insertTab( -1, ratingListEditor, i18nc( "@title:tab", "Ratings" ) );
@@ -223,7 +185,6 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 
 	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
 	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
-	connect( ingredientList, SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( syncListView( Q3ListViewItem*, const QString &, int ) ) );
 
 	// Function buttons
 	connect ( saveButton, SIGNAL( clicked() ), this, SLOT( save() ) );
@@ -290,151 +251,13 @@ void RecipeInputDialog::reload( void )
 	//show ingredient list
 	ingredientsEditor->loadIngredientList( &loadedRecipe->ingList );
 
-	//show ingredient list
-	IngredientList list_copy = loadedRecipe->ingList;
-	for ( IngredientList group_list = list_copy.firstGroup(); group_list.count() != 0; group_list = list_copy.nextGroup() ) {
-		Q3ListViewItem * lastElement = ingredientList->lastItem();
-		Q3ListViewItem *ing_header = 0;
-
-		QString group = group_list.first().group;
-		if ( !group.isEmpty() ) {
-			if ( lastElement && lastElement->parent() )
-				lastElement = lastElement->parent();
-
-			ing_header = new IngGrpListViewItem( ingredientList, lastElement, group_list[ 0 ].group, group_list[ 0 ].groupID );
-			ing_header->setOpen( true );
-			lastElement = ing_header;
-		}
-
-		for ( IngredientList::const_iterator ing_it = group_list.begin(); ing_it != group_list.end(); ++ing_it ) {
-			//Insert ingredient after last one
-			if ( ing_header ) {
-				lastElement = new IngListViewItem ( ing_header, lastElement, *ing_it );
-			}
-			else {
-				if ( lastElement && lastElement->parent() )
-					lastElement = lastElement->parent();
-				lastElement = new IngListViewItem ( ingredientList, lastElement, *ing_it );
-			}
-
-			for ( Ingredient::SubstitutesList::const_iterator sub_it = (*ing_it).substitutes.begin(); sub_it != (*ing_it).substitutes.end(); ++sub_it ) {
-				new IngSubListViewItem ( lastElement, *sub_it );
-				lastElement->setOpen(true);
-			}
-
-			//update completion
-			instructionsEdit->addCompletionItem( ( *ing_it ).name );
-		}
-	}
+	//Update instructions edit completion
+	//TODO
+	//IngredientList::const_iterator = loadedRecipe->ingList;
+	//instructionsEdit->addCompletionItem( ( *ng_it->name );
 
 	// Show ratings
 	ratingListEditor->refresh();
-}
-
-void RecipeInputDialog::syncListView( Q3ListViewItem* it, const QString &new_text, int col )
-{
-	if ( it->rtti() != INGLISTVIEWITEM_RTTI && it->rtti() != INGSUBLISTVIEWITEM_RTTI )
-		return ;
-
-	IngListViewItem *ing_item = ( IngListViewItem* ) it;
-
-	IngredientData &new_ing = loadedRecipe->ingList.findSubstitute( ing_item->ingredient() );
-
-	switch ( col ) {
-	case 1:  //amount
-		{
-			bool ok;
-
-			Ingredient new_ing_amount;
-			new_ing_amount.setAmount(new_text,&ok);
-
-			if ( ok )
-			{
-				if ( new_ing.amount != new_ing_amount.amount ||
-					 new_ing.amount_offset != new_ing_amount.amount_offset ) {
-					new_ing.amount = new_ing_amount.amount;
-					new_ing.amount_offset = new_ing_amount.amount_offset;
-					if ( !new_text.isEmpty() )
-						ing_item->setAmount( new_ing_amount.amount, new_ing_amount.amount_offset );
-
-					new_ing.amount = new_ing_amount.amount;
-					new_ing.amount_offset = new_ing_amount.amount_offset;
-					emit changed();
-				}
-			}
-			else
-			{
-				if ( !new_text.isEmpty() )
-					ing_item->setAmount( new_ing.amount, new_ing.amount_offset );
-			}
-
-			break;
-		}
-	case 2:  //unit
-		{
-			Unit old_unit = new_ing.units;
-
-			if ( new_text.length() > int(database->maxUnitNameLength()) )
-			{
-				KMessageBox::error( this, i18ncp( "@info", "Unit name cannot be longer than 1 character.", "Unit name cannot be longer than %1 characters.", database->maxUnitNameLength() ) );
-				ing_item->setUnit( old_unit );
-				break;
-			}
-
-			QString approp_unit = new_ing.units.determineName(new_ing.amount, /*useAbbrev=*/false);
-			if ( approp_unit != new_text.trimmed() )
-			{
-				Unit new_unit;
-				int new_id = IngredientInputWidget::createNewUnitIfNecessary( new_text.trimmed(), new_ing.amount > 1, ing_item->ingredient().ingredientID, new_unit, database );
-
-				if ( new_id != -1 ) {
-					new_ing.units = new_unit;
-					new_ing.units.setId(new_id);
-
-					ing_item->setUnit( new_ing.units );
-
-					emit changed();
-				}
-				else {
-					ing_item->setUnit( old_unit );
-				}
-			}
-			break;
-		}
-	case 3:  //prep method
-		{
-			QString old_text = new_ing.prepMethodList.join(",");
-
-			QStringList prepMethodList;
-			if (new_text.isEmpty())
-				prepMethodList = QStringList();
-			else
-				prepMethodList = new_text.split( ',', QString::SkipEmptyParts);
-
-			for ( QStringList::const_iterator it = prepMethodList.constBegin(); it != prepMethodList.constEnd(); ++it ) {
-				if ( (*it).trimmed().length() > int(database->maxPrepMethodNameLength()) )
-				{
-					KMessageBox::error( this, i18ncp( "@info", "Preparation method cannot be longer than 1 character.", "Preparation method cannot be longer than %1 characters." , database->maxPrepMethodNameLength() ) );
-					ing_item->setPrepMethod( old_text );
-					break;
-				}
-			}
-
-			if ( old_text != new_text.trimmed() )
-			{
-				new_ing.prepMethodList = ElementList::split(",",new_text.trimmed());
-				QList<int> new_ids = IngredientInputWidget::createNewPrepIfNecessary( new_ing.prepMethodList, database );
-
-				QList<int>::const_iterator id_it = new_ids.constBegin();
-				for ( ElementList::iterator it = new_ing.prepMethodList.begin(); it != new_ing.prepMethodList.end(); ++it, ++id_it ) {
-					(*it).id = *id_it;
-				}
-
-				emit changed();
-			}
-			break;
-		}
-	}
 }
 
 void RecipeInputDialog::recipeChanged( void )
@@ -490,8 +313,6 @@ void RecipeInputDialog::newRecipe( void )
 	loadedRecipe->empty();
 
 	m_recipeGeneralInfoEditor->loadRecipe( loadedRecipe );
-
-	ingredientList->clear();
 
 	ingredientsEditor->loadIngredientList( &loadedRecipe->ingList );
 
@@ -602,30 +423,6 @@ void RecipeInputDialog::resizeRecipe( void )
 		reload();
 	
 	delete dlg;
-}
-
-int RecipeInputDialog::ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const
-{
-	if ( !item )
-		return -1;
-
-	if ( item == listview->firstChild() )
-		return 0;
-	else {
-		Q3ListViewItemIterator it( listview->firstChild() );
-		int j = 0;
-		for ( ; it.current() && it.current() != item; ++it ) {
-			if ( it.current() ->rtti() == INGLISTVIEWITEM_RTTI ) {
-				if ( !it.current()->parent() || it.current()->parent()->rtti() == INGGRPLISTVIEWITEM_RTTI )
-					j++;
-			}
-		}
-
-		if ( !it.current() )
-			return -1;
-
-		return j;
-	}
 }
 
 void RecipeInputDialog::reloadCheckSpelling()

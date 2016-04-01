@@ -17,7 +17,6 @@
 #include <ktextedit.h>
 #include <klineedit.h>
 #include <kcombobox.h>
-#include <k3listview.h>
 #include <knuminput.h>
 #include <kpushbutton.h>
 
@@ -89,13 +88,10 @@ private:
 
 	RecipeGeneralInfoEditor * m_recipeGeneralInfoEditor;
 
+	IngredientsEditor * ingredientsEditor;
+
 	QFrame* instructionsTab;
 	KreTextEdit* instructionsEdit;
-
-	//Ingredient inputs
-	K3ListView* ingredientList;
-	QFrame *ingredientsTab;
-	IngredientsEditor * ingredientsEditor;
 
 	RatingListEditor * ratingListEditor;
 
@@ -108,14 +104,10 @@ private:
 
 	// Internal functions
 	void saveRecipe( void );
-	int ingItemIndex( Q3ListView *listview, const Q3ListViewItem *item ) const;
-	QString statusMessage() const;
-	QString conversionPath( const QString &ingUnit, const QString &toUnit, const QString &fromUnit, const QString &propUnit ) const;
 
 	// Signals & Slots
 
 private slots:
-	void syncListView( Q3ListViewItem* it, const QString &new_text, int col );
 	void recipeChanged( void );
 	void recipeChanged( const QString &t );
 	void enableChangedSignal( bool en = true );
