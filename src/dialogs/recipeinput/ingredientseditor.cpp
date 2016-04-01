@@ -474,9 +474,15 @@ void IngredientsEditor::addHeaderSlot()
 
 void IngredientsEditor::ingParserSlot()
 {
-	kDebug() << "here";
-	//TODO
-	//Don't forget emit changed();
+	UnitList units;
+	m_database->loadUnits(&units);
+	QPointer<IngredientParserDialog> dlg = new IngredientParserDialog(units,this);
+	if ( dlg->exec() == QDialog::Accepted ) {
+		IngredientList ings = dlg->ingredients();
+		//TODO: Insert ingredients in the model
+	}
+	delete dlg;
+
 }
 
 void IngredientsEditor::moveRow( int offset )
