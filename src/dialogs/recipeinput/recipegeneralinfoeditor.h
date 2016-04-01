@@ -39,6 +39,9 @@ signals:
 	void changed();
 	void titleChanged(const QString & title);
 
+public slots:
+	void editCategoriesSlot();
+
 private slots:
 	void titleChangedSlot(const QString & title);
 
@@ -47,8 +50,6 @@ private slots:
 	void clearPhotoSlot();
 
 	void editAuthorsSlot();
-
-	void editCategoriesSlot();
 
 private:
 	RecipeDB::IdType createNewYieldIfNecessary( const QString &yield );

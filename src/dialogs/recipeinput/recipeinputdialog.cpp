@@ -16,7 +16,6 @@
 #include "ingredientseditor.h"
 #include "ratinglisteditor.h"
 #include "resizerecipedialog.h"
-#include "selectcategoriesdialog.h"
 
 #include "widgets/kretextedit.h"
 
@@ -361,15 +360,7 @@ void RecipeInputDialog::showRecipe( void )
 
 void RecipeInputDialog::addCategory( void )
 {
-       QPointer<SelectCategoriesDialog> editCategoriesDialog = new SelectCategoriesDialog( this, loadedRecipe->categoryList, database );
-
-       if ( editCategoriesDialog->exec() == QDialog::Accepted ) { // user presses Ok
-		loadedRecipe->categoryList.clear();
-		editCategoriesDialog->getSelectedCategories( &( loadedRecipe->categoryList ) ); // get the category list chosen
-		emit( recipeChanged() ); //Indicate that the recipe changed
-       }
-
-       delete editCategoriesDialog;
+	m_recipeGeneralInfoEditor->editCategoriesSlot();
 }
 
 
