@@ -149,6 +149,8 @@ public:
 	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
 	int loadIngredientGroups( ElementList *list );
 	int loadIngredients( ElementList *list, int limit = -1, int offset = 0 );
+	void loadIngredientMaps( QHash<RecipeDB::IdType,Element> * idToIngredientMap,
+		QHash<QString,RecipeDB::IdType> * nameToIdMap );
 	void loadPossibleUnits( int ingredientID, UnitList *list );
 	int loadPrepMethods( ElementList *list, int limit = -1, int offset = 0 );
 	// Loads the list of possible properties by default, all the ingredient

@@ -521,6 +521,27 @@ int QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 	return numberOfIngredients;
 }
 
+void QSqlRecipeDB::loadIngredientMaps( QHash<RecipeDB::IdType,Element> * idToIngredientMap,
+	QHash<QString,RecipeDB::IdType> * nameToIdMap )
+{
+	idToIngredientMap->clear();
+	nameToIdMap->clear();
+
+	QSqlQuery query;
+	query.prepare( "SELECT id,name FROM ingredients" );
+	query.exec();
+
+	CHECK_QUERY(query,return;)
+
+	while( query.next() ) {
+		Element ing;
+		ing.id = m_query->value( 0 ).toInt();
+		ing.name = unescapeAndDecode( m_query->value( 1 ).toByteArray() );
+		idToIngredientMap->insert( ing.id, ing );
+		nameToIdMap->insert( ing.name, ing.id );
+	}
+}
+
 int QSqlRecipeDB::loadPrepMethods( ElementList *list, int limit, int offset )
 {
 	list->clear();
