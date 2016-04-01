@@ -27,6 +27,19 @@
 #include "datablocks/ingredientpropertylist.h"
 #include "datablocks/unitratiolist.h"
 
+//macro with the debug output for SQL queries
+#define KRECIPES_SQL_DEBUG_OUTPUT kDebug()
+//macro to test that 'query' was executed succesfully, in
+//case something goes wrong, it executes 'abortCode'
+#define CHECK_QUERY(query,abortCode) \
+if ( query.isActive() ) { \
+	KRECIPES_SQL_DEBUG_OUTPUT << "SQL query:" << query.lastQuery(); \
+} else { \
+	KRECIPES_SQL_DEBUG_OUTPUT << "SQL query FAILED:" << query.lastQuery(); \
+	abortCode \
+}
+
+
 /**
 @author Unai Garro, Jason Kivlighn
 */
@@ -240,8 +253,5 @@ private:
 
 	bool m_transactionsEnabled;
 };
-
-
-
 
 #endif

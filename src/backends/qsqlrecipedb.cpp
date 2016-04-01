@@ -2425,6 +2425,8 @@ RecipeDB::IdType QSqlRecipeDB::createNewAuthor( const QString &authorName )
 	command = QString( "INSERT INTO authors VALUES(%2,'%1');" ).arg( escapeAndEncode( real_name ) ).arg( getNextInsertIDStr( "authors", "id" ) );
 	QSqlQuery authorToCreate( command, *database);
 
+	CHECK_QUERY(authorToCreate,return RecipeDB::InvalidId;)
+
 	RecipeDB::IdType last_insert_id = lastInsertId( authorToCreate );
 	emit authorCreated( Element( real_name, last_insert_id ) );
 	return last_insert_id;
