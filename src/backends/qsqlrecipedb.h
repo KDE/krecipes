@@ -148,6 +148,8 @@ public:
 	void loadCategories( CategoryTree *list, int limit = -1, int offset = 0, int parent_id = -1, bool recurse = true );
 	void loadCategories( ElementList *list, int limit = -1, int offset = 0 );
 	int loadIngredientGroups( ElementList *list );
+	void loadIngredientGroupMaps( QHash<RecipeDB::IdType,Element> * idToIngGroupMap,
+		QMultiHash<QString,RecipeDB::IdType> * nameToIdMap );
 	int loadIngredients( ElementList *list, int limit = -1, int offset = 0 );
 	void loadIngredientMaps( QHash<RecipeDB::IdType,Element> * idToIngredientMap,
 		QMultiHash<QString,RecipeDB::IdType> * nameToIdMap );

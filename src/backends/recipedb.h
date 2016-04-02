@@ -222,6 +222,8 @@ public:
 	void loadCachedCategories( CategoryTree **list, int limit, int offset, int parent_id, bool recurse );
 	virtual void loadCategories( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual int loadIngredientGroups( ElementList *list ) = 0;
+	virtual void loadIngredientGroupMaps( QHash<RecipeDB::IdType,Element> * idToIngGroupMap,
+		QMultiHash<QString,RecipeDB::IdType> * nameToIdMap ) = 0;
 	virtual int loadIngredients( ElementList *list, int limit = -1, int offset = 0 ) = 0;
 	virtual void loadIngredientMaps( QHash<RecipeDB::IdType,Element> * idToIngredientMap,
 		QMultiHash<QString,RecipeDB::IdType> * nameToIdMap ) = 0;

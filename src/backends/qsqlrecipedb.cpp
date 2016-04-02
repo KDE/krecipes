@@ -500,6 +500,27 @@ int QSqlRecipeDB::loadIngredientGroups( ElementList *list )
 	return numberOfIngGroups;
 }
 
+void QSqlRecipeDB::loadIngredientGroupMaps( QHash<RecipeDB::IdType,Element> * idToIngGroupMap,
+	QMultiHash<QString,RecipeDB::IdType> * nameToIdMap )
+{
+	idToIngGroupMap->clear();
+	nameToIdMap->clear();
+
+	QSqlQuery query( "SELECT id,name FROM ingredient_groups", *database);
+	query.exec();
+
+	CHECK_QUERY(query,return;)
+
+	while( query.next() ) {
+		Element ingGroup;
+		ingGroup.id = query.value( 0 ).toInt();
+		ingGroup.name = unescapeAndDecode( query.value( 1 ).toByteArray() );
+		idToIngGroupMap->insert( ingGroup.id, ingGroup );
+		nameToIdMap->insert( ingGroup.name, ingGroup.id );
+	}
+}
+
+
 int QSqlRecipeDB::loadIngredients( ElementList *list, int limit, int offset )
 {
 	int numberOfIngredients = 0;
