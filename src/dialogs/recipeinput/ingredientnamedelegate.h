@@ -38,14 +38,15 @@ private slots:
 	void ingredientRemovedSlot( int id );
 
 	void headerCreatedSlot( const Element & element );
+	void headerModifiedSlot( const Element & element );
 	void headerRemovedSlot( int id );
 
 private:
 	QHash<RecipeDB::IdType,Element> m_idToIngredientMap;
 	QMultiHash<QString,RecipeDB::IdType> m_ingredientNameToIdMap;
 
-	ElementList m_headerList;
-	QHash<QString,RecipeDB::IdType> m_headerNameToIdMap;
+	QHash<RecipeDB::IdType,Element> m_idToHeaderMap;
+	QMultiHash<QString,RecipeDB::IdType> m_headerNameToIdMap;
 };
 
 #endif

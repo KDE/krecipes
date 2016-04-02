@@ -39,15 +39,12 @@ void IngredientNameDelegate::loadAllIngredientsList( RecipeDB * database )
 void IngredientNameDelegate::loadAllHeadersList( RecipeDB * database )
 {
 	//FIXME: This doesn't respect the limits configured in the program
-	database->loadIngredientGroups( &m_headerList );
-	//FIXME: it would be nice if we could get this hashmap directly from RecipeDB
-	ElementList::const_iterator it = m_headerList.constBegin();
-	while ( it != m_headerList.constEnd() ) {
-		m_headerNameToIdMap[it->name] = it->id;
-		++it;
-	}
+	database->loadIngredientGroupMaps( &m_idToHeaderMap, &m_headerNameToIdMap );
+
 	connect( database, SIGNAL(ingGroupCreated(const Element&)),
 		this, SLOT(headerCreatedSlot(const Element&)) );
+	connect( database, SIGNAL(ingGroupModified(const Element&)),
+		this, SLOT(headerModifiedSlot(const Element &)) );
 	connect( database, SIGNAL(ingGroupRemoved(int)),
 		this, SLOT(headerRemovedSlot(int)) );
 }
@@ -74,13 +71,21 @@ void IngredientNameDelegate::ingredientRemovedSlot( int id )
 
 void IngredientNameDelegate::headerCreatedSlot( const Element & element )
 {
-	m_headerNameToIdMap[element.name] = element.id;
-	m_headerList << element;
+	m_idToHeaderMap[element.id] = element;
+	m_headerNameToIdMap.insert( element.name, element.id );
+}
+
+void IngredientNameDelegate::headerModifiedSlot( const Element & element )
+{
+	headerRemovedSlot( element.id );
+	headerCreatedSlot( element );
 }
 
 void IngredientNameDelegate::headerRemovedSlot( int id )
 {
-	m_headerNameToIdMap.remove( m_headerNameToIdMap.keys(id).first() );
+	QString headerName = m_idToHeaderMap[id].name;
+	m_idToHeaderMap.remove( id );
+	m_headerNameToIdMap.remove( headerName, id );
 }
 
 
@@ -104,29 +109,20 @@ QWidget * IngredientNameDelegate::createEditor(QWidget *parent, const QStyleOpti
 
 	//Fill the items and the completion objects
 	int i = 0;
+	QHash<RecipeDB::IdType,Element>::const_iterator it;
+	QHash<RecipeDB::IdType,Element>::const_iterator it_end;
 	if ( index.data(IngredientsEditor::IsHeaderRole).toBool() ) {
-		ElementList::const_iterator it;
-		ElementList::const_iterator list_end;
-		it = m_headerList.constBegin();
-		list_end = m_headerList.constEnd();
-		QFont font = editor->font();
-		font.setBold( true );
-		font.setUnderline( true );
-		editor->setFont( font );
-		while ( it != list_end ) {
-			editor->insertItem( i, it->name );
-			editor->completionObject()->addItem( it->name );
-			++i;
-			++it;
-		}
+		it = m_idToHeaderMap.constBegin();
+		it_end = m_idToHeaderMap.constEnd();
 	} else {
-		QHash<RecipeDB::IdType,Element>::const_iterator it = m_idToIngredientMap.constBegin();
-		while (it != m_idToIngredientMap.constEnd()) {
-			editor->insertItem( i, it.value().name );
-			editor->completionObject()->addItem( it.value().name );
-			++i;
-			++it;
-		}
+		it = m_idToIngredientMap.constBegin();
+		it_end = m_idToIngredientMap.constEnd();
+	}
+	while( it != it_end ) {
+		editor->insertItem( i, it.value().name );
+		editor->completionObject()->addItem( it.value().name );
+		++i;
+		++it;
 	}
 	proxyModel->sort(0);
 
@@ -149,7 +145,7 @@ void IngredientNameDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
 	if ( index.data(IngredientsEditor::IsHeaderRole).toBool() ) {
 		//The edited item is a header
 		if ( m_headerNameToIdMap.contains(text) ) {
-			model->setData( index, m_headerNameToIdMap[text], IngredientsEditor::IdRole );
+			model->setData( index, m_headerNameToIdMap.values(text).first(), IngredientsEditor::IdRole );
 		} else {
 			model->setData( index, RecipeDB::InvalidId, IngredientsEditor::IdRole );
 		}
