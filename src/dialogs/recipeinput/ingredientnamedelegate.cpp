@@ -11,6 +11,8 @@
 
 #include "dialogs/recipeinput/ingredientseditor.h"
 #include "backends/recipedb.h"
+#include "models/kreallingredientsmodels.h"
+#include "models/kresinglecolumnproxymodel.h"
 #include "datablocks/unit.h"
 
 #include <KComboBox>
@@ -19,7 +21,9 @@
 //#include <kdebug.h>
 
 
-IngredientNameDelegate::IngredientNameDelegate(QObject *parent): QStyledItemDelegate(parent)
+IngredientNameDelegate::IngredientNameDelegate( RecipeDB * database, QObject *parent ):
+	QStyledItemDelegate(parent),
+	m_database(database)
 {
 }
 
@@ -100,12 +104,8 @@ QWidget * IngredientNameDelegate::createEditor(QWidget *parent, const QStyleOpti
 
 	//Order
 	editor->completionObject()->setOrder( KCompletion::Sorted );
-	QSortFilterProxyModel * proxyModel = new QSortFilterProxyModel( editor );
-	proxyModel->setSourceModel(editor->model());
-	// editor's current model must be reparented,
-	// otherwise QComboBox::setModel() will delete it
-	editor->model()->setParent(proxyModel);
-	editor->setModel( proxyModel );
+
+	editor->setModel( m_database->allIngredientsModels()->ingredientNameModel() );
 
 	//Fill the items and the completion objects
 	int i = 0;
@@ -119,12 +119,10 @@ QWidget * IngredientNameDelegate::createEditor(QWidget *parent, const QStyleOpti
 		it_end = m_idToIngredientMap.constEnd();
 	}
 	while( it != it_end ) {
-		editor->insertItem( i, it.value().name );
 		editor->completionObject()->addItem( it.value().name );
 		++i;
 		++it;
 	}
-	proxyModel->sort(0);
 
 	return editor;
 }

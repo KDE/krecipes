@@ -186,7 +186,7 @@ void IngredientsEditor::loadIngredientList( IngredientList * ingredientList )
 	m_sourceModel->setRowCount( ingredientList->count() );
 
 	//Set ingredient name delegate
-	IngredientNameDelegate * ingredientNameDelegate = new IngredientNameDelegate;
+	IngredientNameDelegate * ingredientNameDelegate = new IngredientNameDelegate( m_database );
 	if ( m_database ) {
 		ingredientNameDelegate->loadAllIngredientsList( m_database );
 		ingredientNameDelegate->loadAllHeadersList( m_database );

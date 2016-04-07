@@ -24,7 +24,8 @@ class IngredientNameDelegate : public QStyledItemDelegate
 	Q_OBJECT
 
 public:
-	IngredientNameDelegate(QObject *parent = 0);
+	IngredientNameDelegate( RecipeDB * database,
+		QObject *parent = 0 );
 	void loadAllIngredientsList( RecipeDB * database );
 	void loadAllHeadersList( RecipeDB * database );
 	QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -42,6 +43,8 @@ private slots:
 	void headerRemovedSlot( int id );
 
 private:
+	RecipeDB * m_database;
+
 	QHash<RecipeDB::IdType,Element> m_idToIngredientMap;
 	QMultiHash<QString,RecipeDB::IdType> m_ingredientNameToIdMap;
 
