@@ -17,9 +17,12 @@
 #include <QByteArray>
 #include <QImageWriter>
 #include <QPixmap>
+#include <QStandardItemModel>
 #include "datablocks/categorytree.h"
 #include "datablocks/rating.h"
 #include "datablocks/weight.h"
+#include "models/kreallingredientsmodels.h"
+#include "models/kresinglecolumnproxymodel.h"
 
 #include "propertycalculator.h"
 
@@ -175,6 +178,47 @@ RecipeDB::Error QSqlRecipeDB::connect( bool create_db, bool create_tables )
 	m_query->setForwardOnly(true);
 	dbOK = true;
 	return NoError;
+}
+
+void QSqlRecipeDB::loadAllIngredientsModels()
+{
+	if ( !m_allIngredientsModels ) {
+		m_allIngredientsModels = new KreAllIngredientsModels( this );
+	}
+
+	QStandardItemModel * sourceModel = m_allIngredientsModels->sourceModel();
+	KreSingleColumnProxyModel * ingredientNameModel =
+		m_allIngredientsModels->ingredientNameModel();
+
+	QSqlQuery query( "SELECT id,name FROM ingredients", *database);
+	query.exec();
+
+	CHECK_QUERY(query,return;)
+
+	//Pre-allocate memory for model
+	sourceModel->setRowCount( getCount("ingredients") );
+	sourceModel->setColumnCount( 2 );
+
+	int row = 0;
+	QModelIndex index;
+	while( query.next() ) {
+		index = sourceModel->index( row, 0 );
+		sourceModel->setData( index, query.value(0) );
+		index = sourceModel->index( row, 1 );
+		sourceModel->setData( index, query.value(1) );
+		++row;
+	}
+
+	ingredientNameModel->sort(0);
+	ingredientNameModel->setDynamicSortFilter( true );
+}
+
+KreAllIngredientsModels * QSqlRecipeDB::allIngredientsModels()
+{
+	if ( !m_allIngredientsModels ) {
+		loadAllIngredientsModels();
+	}
+	return m_allIngredientsModels;
 }
 
 void QSqlRecipeDB::transaction()

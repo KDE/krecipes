@@ -10,7 +10,7 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 
-#include "backends/recipedb.h"
+#include "recipedb.h"
 
 #include <kapplication.h>
 #include <kconfiggroup.h>
@@ -66,7 +66,8 @@ struct ingredient_nutrient_data
 };
 
 RecipeDB::RecipeDB() :
-	QObject(), m_categoryCache(0), haltOperation(false), process(NULL)
+	QObject(), m_categoryCache(0), haltOperation(false), process(NULL),
+	m_allIngredientsModels(0)
 {
 	new KrecipesdbAdaptor( this );
 	QDBusConnection::sessionBus().registerObject("/KrecipesDB", this);

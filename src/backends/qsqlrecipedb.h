@@ -94,6 +94,9 @@ public:
 
 	RecipeDB::Error connect( bool create_db, bool create_tables );
 
+	void loadAllIngredientsModels();
+	KreAllIngredientsModels * allIngredientsModels();
+
 	virtual void transaction();
 	virtual void commit();
 	virtual void enableTransactions();

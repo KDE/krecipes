@@ -43,6 +43,8 @@ class RecipeSearchParameters;
 class Weight;
 typedef QList<Weight> WeightList;
 
+class KreAllIngredientsModels;
+
 
 class RecipeDB: public QObject
 {
@@ -159,6 +161,9 @@ public:
 	static RecipeDB* createDatabase( const QString &dbType, const QString &file = QString() );
 	/** Convenience method.  Calls the above with arguments from KConfig. */
 	static RecipeDB* createDatabase();
+
+	virtual void loadAllIngredientsModels() = 0;
+	virtual KreAllIngredientsModels * allIngredientsModels() = 0;
 
 	//FIXME: Actually this functions shouldn't be exposed here since RecipeDB is suposed
 	//to represent a generic database which may be not be based on SQL. Not a big problem
@@ -387,6 +392,8 @@ protected:
 	QString krecipes_version() const;
 
 	CategoryTree *m_categoryCache;
+
+	KreAllIngredientsModels * m_allIngredientsModels;
 
 private:
 	QIODevice * m_dumpFile;
