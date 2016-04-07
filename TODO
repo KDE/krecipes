@@ -22,6 +22,8 @@ Planned for the 3.1 branch:
 
  [Mandatory]
  * The database version number should be a string instead of a float.
+ * There is a draft of a new API for Krecipes in 'src/api_v2_design/README'
+   maybe it would be a good idea to move forward its adoption in the program.
  * Change the program so it stops using a couple of doubles (amount+offset) to
    deal with ranges, use MixedNumberRange instead; subtasks (in order)
    - Mark the deprecated functions from FractionInput as such and remove its
@@ -47,9 +49,10 @@ Planned for the 3.1 branch:
  * Check files taken from other projects and explain in a comment where those
    files came from.
  * Update the USDA database.
- * Create a typedef for id type instead of just using 'int'.
 
  [Brainstorming]
+ * The tests for importers/exporters aren't using qtestlib, they are 'normal'
+   programs with its main function. It would be nice to port them to qtestlib.
  * When you print recipes, they are printed in no particular order, I guess they
    should be in alphabetical order.
  * D-BUS interface and service menus to import recipes and restore databases.
