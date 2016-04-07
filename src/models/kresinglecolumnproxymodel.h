@@ -7,29 +7,23 @@
 *   (at your option) any later version.                                    *
 ****************************************************************************/
 
-#ifndef KREALLINGREDIENTSMODELS_H
-#define KREALLINGREDIENTSMODELS_H
+#ifndef KRESINGLECOLUMNMODEL_H
+#define KRESINGLECOLUMNMODEL_H
 
-#include <QObject>
+#include <QSortFilterProxyModel>
 
-class RecipeDB;
-class KreSingleColumnProxyModel;
-class QStandardItemModel;
-
-class KreAllIngredientsModels: public QObject {
+class KreSingleColumnProxyModel: public QSortFilterProxyModel {
 Q_OBJECT
 
 public:
-	KreAllIngredientsModels( RecipeDB * database );
+	KreSingleColumnProxyModel( int column );
 
-	QStandardItemModel * sourceModel();
-	KreSingleColumnProxyModel * ingredientNameModel();
+protected:
+	bool filterAcceptsColumn( int source_column, 
+		const QModelIndex& source_parent ) const;
 
-private:
-	RecipeDB * m_database;
-	QStandardItemModel * m_sourceModel;
-	KreSingleColumnProxyModel * m_ingredientNameModel;
-	
+	int m_acceptedColumn;
+
 };
 
 #endif

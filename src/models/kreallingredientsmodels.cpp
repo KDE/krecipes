@@ -9,16 +9,26 @@
 
 #include "kreallingredientsmodels.h"
 
+#include "kresinglecolumnproxymodel.h"
+
 #include <QStandardItemModel>
 
 
 KreAllIngredientsModels::KreAllIngredientsModels( RecipeDB * database ):
 	m_database( database )
 {
-	m_sourceModel = new QStandardItemModel( this );
+	m_sourceModel = new QStandardItemModel;
+	m_ingredientNameModel = new KreSingleColumnProxyModel( 1 );
+	m_ingredientNameModel->setSortCaseSensitivity( Qt::CaseInsensitive );
+	m_ingredientNameModel->setSourceModel( m_sourceModel );
 }
 
 QStandardItemModel * KreAllIngredientsModels::sourceModel()
 {
 	return m_sourceModel;
+}
+
+KreSingleColumnProxyModel * KreAllIngredientsModels::ingredientNameModel()
+{
+	return m_ingredientNameModel;
 }
