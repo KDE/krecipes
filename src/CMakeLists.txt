@@ -37,6 +37,11 @@ set(krecipesdbs_SRCS
 
 qt4_add_dbus_adaptor(krecipesdbs_SRCS backends/org.kde.krecipesdb.xml recipedb.h RecipeDB)
 
+############## models ################
+
+set(krecipesmodels_SRCS
+   models/kreallingredientsmodels.cpp
+   )
 
 ############ importers ###############
 
@@ -295,6 +300,7 @@ set(validators_SRCS
 
 kde4_add_library(krecipescommon STATIC
    ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS}
+   ${krecipesmodels_SRCS}
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
    ${datablocks_SRCS} ${krecipesthreadedqueries_SRCS}
    ${validators_SRCS}
