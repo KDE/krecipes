@@ -123,7 +123,7 @@ New API design to solve the above issues
   - NOTE 1: if we have a QStandardItemModel for all ingredients with 2 columns:
     id and ingredient name we could filter out the id one for comboboxes using
     this technique:
-    https://wiki.qt.io/Filter_Columns_in_a_QFileSystemModel* 
+    https://wiki.qt.io/Filter_Columns_in_a_QFileSystemModel 
   - NOTE 2: To transfer data from the database QSqlRecipeDB will use either:
     a) dtos or QLists of dtos
     b) models such as QStandardItemModel or KCompletion objects
