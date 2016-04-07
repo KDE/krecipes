@@ -1,0 +1,198 @@
+------------------------------
+Krecipes API and design issues
+------------------------------
+
+There are various flaws in the Krecipes API, i.e. the classes inside these
+directories:
+- src/datablocks/
+- src/backends/
+- src/importers/
+- src/exporters/
+
+List of issues:
+
+#1 The handling of database Id's:
+   - The ids are int's or, in the best case of type RecipeDB::IdType, which is a
+     typedef for int. According to the SQLite documentation the numbers used for
+     primary keys are 64-bit signed integers, so, if I'm not mistaken it's not
+     guaranteed that the database id will fit in the int.
+   - Also having the database Id's as numbers makes more difficult to handle
+     foreign keys which are set to NULL. Usually this is handled as -1 or
+     RecipeDB::InvalidId (which is -1), not only in the program logic, but also
+     on the database itself; sometimes external keys are stored as -1 while 
+     actually they should be stored as NULL
+
+#2 Classes inside src/datablocks doesn't have getters or setters except for Unit
+
+#3 The class Ingredient in src/datablocks is not a class to represent a row in
+   the 'ingredients' SQL table; it's a class to represent an ingredient entry
+   for a recipe. To represent a row in the ingredients table the class Element.
+   This various issues:
+   - It's confusing
+   - It's difficult to reference ingredient subsitutes (see the Ingredient vs
+     IngredientData hack to have a list of substitutes)
+   - As mentioned the class Element is used to represent a row of the
+     ingredients table, consider this RecipeDB signal:
+     void ingredientCreated( const Element & );
+     So what happens if I want to change the program and database schema to
+     support singular/plural names? I would have to create a new class to
+     represent a row in the 'ingredients' table, let's call it 'IngredientRow'
+     and change the api of RecipeDB changing the signal mentioned above like
+     this:
+     void ingredientCreated( const IngredientRow & );
+     It would have been better to have a class to represent row from the table 
+     'ingredients' (even if it were an empty subclass of the 'Element' class).
+
+#4 Right now, Krecipes has an option to limit the number of elements to show;
+   configuring this option has this effect: program dialogs shown when
+   clicking "Data..." in the left panel display the items in a "paged" fashion;
+   a couple of buttons appear in the bottom of the QTreeView to go to the next
+   page or the previous page.
+   However this is kind of futile, because when we edit a recipe we 
+   are reading all the ingredients, units and preparation methods of the
+   database for autocompletion objects and comboboxes in the recipe editor.
+   So maybe it would be nice to have something to load all the external elements
+   needed for a recipe just once when the program starts and then use this
+   elements.
+   Viewing the things under "Data..." in a paged fashion has also other issues:
+   - When creating a new element there is no other way to update the QTreeView
+     properly than reloading the current "page": when we insert a new element,
+     for example, there is no way to know properly the insertion point because
+     the sorting algorigthm of the database and the sorting algorithm of
+     QSortFilterProxyModel could differ. This means that when we import recipes
+     from a file and we need to create new ingredients/authors/whatever we
+     reload the "Data..." -> Ingredients/Authors/whatever QTreeView.
+   - Since the QTreeview's under the "Data..." are using a model containing only
+     the elements of the current page the search text box returns the matches
+     only for the current page and not for the whole database (which would be
+     more appropiate).
+
+#5 Viewing/exporting recipes without saving them in the database:
+   See this bug report: https://bugs.kde.org/show_bug.cgi?id=292099
+   Right now, there is no way to display a recipe wihtout saving it; if you edit
+   a recipe and you click "Show Recipe" you will be asked to save the recipe in
+   the database before displaying it; if you don't save, you won't be able to
+   view the modified recipe.
+   To view a recipe it's exported to HTML by the "XSLT exporter" to a temporary
+   directory under "/tmp" and then the resulting HTML is displayed in a KHTML
+   part.
+   So maybe it would be nice to load into memory everything we would need to
+   export a recipe so the exporters would take a recipe object without
+   accessing the database at all.
+
+#6 Use of QLinkedList: sometimes QLinkedList is used to transfer data from the
+   database, this is because sometimes we need persistent iterators to populate
+   some classes from 'src/datablocks' with data, see for instance the log of
+   the commit e5ceac80bdd0c9ac4e4d5178f98345c17021b4f1
+    "RecipeList should be a subclass of QLinkedList because in
+     QSqlRecipeDB::loadRecipes method we are keeping iterators to RecipeList
+     elements in recipeIterators hasmap after doing non-const operations against
+     the RecipeList. This is wrong if RecipeList is a QList but fine if
+     RecipeList is a QLinkedList.
+     This commit fixes some random segfaults when showing recipes and when using
+     the ingredient matcher."
+
+
+----------------------------------------
+New API design to solve the above issues
+----------------------------------------
+
+* Solution for #1: use QVariant's to store id's. This way we will be able to
+  manage NULL foreign keys with QVariant::isNull() and also it will be
+  guaranteed that the integer type used by the DBMS for id's will fit in our id
+  variables.
+
+* Solution for #2: make getters and setters in the new classes instead of having
+  public data members.
+
+* Solution for #3: create two separate classes:
+  - KreIngredient to represent an ingredient object i.e. a row in the
+    'ingredients' SQL table
+  - KreRecipeIngredientEntry to represent an ingredient entry of a recipe; a
+    recipe would have from 0 to n ingredient entries.
+
+* Solution for #4 and #5: keep some global models in RecipeDB; this models
+  would be updated automatically with changes in the database connecting
+  themselves against RecipeDB. For instance we could have a class named
+  KreAllIngredientsModel providing a set of models which would be populated
+  by RecipeDB and updated connecting to recipeDB signals. Regarding the issue
+  #5 "Viewing/exporting recipes without saving them in the database" see below
+  the section "Data needed to edit/view/export a recipe without saving it" for
+  more details. Also this global models could be used as a cache for the
+  database.
+  - NOTE 1: if we have a QStandardItemModel for all ingredients with 2 columns:
+    id and ingredient name we could filter out the id one for comboboxes using
+    this technique:
+    https://wiki.qt.io/Filter_Columns_in_a_QFileSystemModel* 
+  - NOTE 2: To transfer data from the database QSqlRecipeDB will use either:
+    a) dtos or QLists of dtos
+    b) models such as QStandardItemModel or KCompletion objects
+    For instance, to read all the ingredients from the database we will use the
+    approach b) for efficiency reasons. However to load the needed data to edit
+    a recipe we will use the the approach b) and then we will use the data from
+    the recipe DTO (a KreRecipe object) to populate RecipeGeneralInfoEditor or
+    the model of IngredientsEditor.
+
+* Solution for #6: Use QList instead of QLinkedList and avoid the use of
+  non-const iterators to alter lists as much as possible. Probably, this will
+  reduce the number of mallocs when reading stuff from the database.
+
+
+------------------------
+Mockup of the new design
+------------------------
+
+* Inside this directory there is a file called 'datablocks_v2.h' with some
+  drafts of the classes meant to replace the current stuff in 'src/datablocks'.
+* There is also a file called 'api_v2_models.h' with some drafs of the model
+  classes meant to be filled by RecipeDB and used all over the program when
+  needed.
+* The classes in 'datablocks_v2.h' would be located in 'src/dtos/'. DTO means
+  "Data Transfer Object" 
+* The classes in 'api_v2_models.h' would be located mostly in 'src/models/'
+
+
+----------------------------------------------------------
+Data needed to edit/view/export a recipe without saving it
+----------------------------------------------------------
+
+A recipe would be represented by the KreRecipe class; this class should be
+populated with all the "external data" needed to edit/view/export a recipe.
+
+The table below lists the "external data" needed and where we could get it. All
+that data should be stored in the recipe DTO (the KreRecipe class).
+
++--------------------------------------------------------------------------------------+
+| DATA NEEDED                        | WE COULD GET IT FROM:                           |
++--------------------------------------------------------------------------------------+
+| Name of the ingredients used       | KreAllIngredientsModels global object           |
++--------------------------------------------------------------------------------------+
+| Name of the headers used           | KreAllHeadersModels global object               |
++--------------------------------------------------------------------------------------+
+| Name singular/plural/abbreviations | KreAllUnitsModels global object                 |
+| of the units used                  |                                                 |
++--------------------------------------------------------------------------------------+
+| Name of the preparation methods    | KreAllPrepMethodsModels global object           |
++--------------------------------------------------------------------------------------+
+| Properties of the ingredients used | The database: when viewing/editing a recipe we  |
+|                                    | should have a map indexed by                    | 
+|                                    | ingredient id like this:                        |
+|                                    | QHash<QVariant,KrePropertiesForIngredientModel> |
++--------------------------------------------------------------------------------------+
+| Weights of the ingredients used    | The database: when viewing/editing a recipe we  |
+|                                    | should have a map indexed by                    |
+|                                    | ingredient id like this:                        |
+|                                    | QHash<QVariant,KreWeightsForIngredientModel>    |
++--------------------------------------------------------------------------------------+
+| Unit conversions                   | KreUnitConversionsModel global object           |
++--------------------------------------------------------------------------------------+
+| Category names                     | KreAllRecipesTreeModel global object            |
++--------------------------------------------------------------------------------------+
+| Names of the authors               | KreAllAuthorsModels global object               |
++--------------------------------------------------------------------------------------+
+| Ratings                            | The database                                    |
++--------------------------------------------------------------------------------------+
+| Yield type                         | KreAllYieldsTypesModels global object           |
++--------------------------------------------------------------------------------------+
+
+
