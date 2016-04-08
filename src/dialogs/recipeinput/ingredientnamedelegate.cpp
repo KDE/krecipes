@@ -102,26 +102,13 @@ QWidget * IngredientNameDelegate::createEditor(QWidget *parent, const QStyleOpti
 	editor->setEditable( true );
 	editor->setCompletionMode( KGlobalSettings::CompletionPopup );
 
-	//Order
-	editor->completionObject()->setOrder( KCompletion::Sorted );
-
-	editor->setModel( m_database->allIngredientsModels()->ingredientNameModel() );
-
-	//Fill the items and the completion objects
-	int i = 0;
-	QHash<RecipeDB::IdType,Element>::const_iterator it;
-	QHash<RecipeDB::IdType,Element>::const_iterator it_end;
-	if ( index.data(IngredientsEditor::IsHeaderRole).toBool() ) {
-		it = m_idToHeaderMap.constBegin();
-		it_end = m_idToHeaderMap.constEnd();
+	//Set the models and the completion objects
+	if ( !index.data(IngredientsEditor::IsHeaderRole).toBool() ) {
+		editor->setModel( m_database->allIngredientsModels()->ingredientNameModel() );
+		editor->setCompletionObject(
+			m_database->allIngredientsModels()->ingredientNameCompletion() );
 	} else {
-		it = m_idToIngredientMap.constBegin();
-		it_end = m_idToIngredientMap.constEnd();
-	}
-	while( it != it_end ) {
-		editor->completionObject()->addItem( it.value().name );
-		++i;
-		++it;
+		//TODO: set models and completion for headers
 	}
 
 	return editor;
