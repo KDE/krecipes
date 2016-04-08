@@ -19,6 +19,12 @@ add_definitions (-DQT3_SUPPORT)
 add_definitions (-DQT3_SUPPORT_WARNINGS)
 #add_definitions (-DKRECIPES_DEPRECATED_WARNINGS)
 
+############### dtos #################
+
+set(krecipesdtos_SRCS
+   dtos/kreelement.cpp
+   )
+
 ############# backends ###############
 
 set(sqlite_SRCS backends/SQLite/literecipedb.cpp)
@@ -288,6 +294,7 @@ set(validators_SRCS
 # (i.e. I want to save CPU time when compiling with test programs)
 
 kde4_add_library(krecipescommon STATIC
+   ${krecipesdtos_SRCS}
    ${mysql_SRCS} ${postgresql_SRCS} ${sqlite_SRCS} ${krecipesdbs_SRCS}
    ${krecipesmodels_SRCS}
    ${krecipesimporters_SRCS} ${krecipesexporters_SRCS}
