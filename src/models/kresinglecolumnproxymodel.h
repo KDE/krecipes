@@ -16,7 +16,7 @@ class KreSingleColumnProxyModel: public QSortFilterProxyModel {
 Q_OBJECT
 
 public:
-	KreSingleColumnProxyModel( int column );
+	KreSingleColumnProxyModel( int column, QObject * parent = 0 );
 
 protected:
 	bool filterAcceptsColumn( int source_column, 

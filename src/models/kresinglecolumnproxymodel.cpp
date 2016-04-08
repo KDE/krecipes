@@ -9,8 +9,8 @@
 
 #include "kresinglecolumnproxymodel.h"
 
-KreSingleColumnProxyModel::KreSingleColumnProxyModel( int column ):
-	QSortFilterProxyModel( 0 ),
+KreSingleColumnProxyModel::KreSingleColumnProxyModel( int column, QObject * parent ):
+	QSortFilterProxyModel( parent ),
 	m_acceptedColumn( column )
 {
 }

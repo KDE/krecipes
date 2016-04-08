@@ -18,8 +18,8 @@
 KreAllIngredientsModels::KreAllIngredientsModels( RecipeDB * database ):
 	m_database( database )
 {
-	m_sourceModel = new QStandardItemModel;
-	m_ingredientNameModel = new KreSingleColumnProxyModel( 1 );
+	m_sourceModel = new QStandardItemModel( this );
+	m_ingredientNameModel = new KreSingleColumnProxyModel( 1, this );
 	m_ingredientNameModel->setSortCaseSensitivity( Qt::CaseInsensitive );
 	m_ingredientNameModel->setSourceModel( m_sourceModel );
 	m_ingredientNameCompletion = new KCompletion;
