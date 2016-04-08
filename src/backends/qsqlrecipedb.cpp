@@ -11,6 +11,19 @@
 ****************************************************************************/
 
 #include "qsqlrecipedb.h"
+
+#include "datablocks/categorytree.h"
+#include "datablocks/rating.h"
+#include "datablocks/weight.h"
+#include "models/kreallingredientsmodels.h"
+#include "models/kresinglecolumnproxymodel.h"
+#include "propertycalculator.h"
+
+#include <KLocale>
+#include <KMessageBox>
+#include <KCodecs>
+#include <kdebug.h>
+
 #include <QSqlQuery>
 #include <QSqlField>
 #include <QSqlError>
@@ -18,24 +31,10 @@
 #include <QImageWriter>
 #include <QPixmap>
 #include <QStandardItemModel>
-#include "datablocks/categorytree.h"
-#include "datablocks/rating.h"
-#include "datablocks/weight.h"
-#include "models/kreallingredientsmodels.h"
-#include "models/kresinglecolumnproxymodel.h"
-
-#include "propertycalculator.h"
-
 #include <QBuffer>
 #include <QTextCodec>
-
 #include <QThread>
 
-#include <kdebug.h>
-#include <kstandarddirs.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kcodecs.h>
 
 int QSqlRecipeDB::m_refCount = 0;
 

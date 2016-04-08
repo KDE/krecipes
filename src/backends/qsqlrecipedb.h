@@ -1,31 +1,32 @@
 /***************************************************************************
-*   Copyright © 2004 Unai Garro <ugarro@gmail.com>                        *
-*   Copyright © 2004 Cyril Bosselut <bosselut@b1project.com>              *
-*   Copyright © 2004, 2006 Jason Kivlighn <jkivlighn@gmail.com>           *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2004 Unai Garro <ugarro@gmail.com>                         *
+*   Copyright © 2004 Cyril Bosselut <bosselut@b1project.com>               *
+*   Copyright © 2004, 2006 Jason Kivlighn <jkivlighn@gmail.com>            *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 
 #ifndef QSQLRECIPEDB_H
 #define QSQLRECIPEDB_H
 
-#include "backends/recipedb.h"
-
-#include <qglobal.h>
-#include <qsqldatabase.h>
-#include <QString>
-#include <QPixmap>
-#include <QSqlQuery>
-#include <QSqlDriver>
+#include "recipedb.h"
 
 #include "datablocks/recipe.h"
 #include "datablocks/elementlist.h"
 #include "datablocks/ingredientpropertylist.h"
 #include "datablocks/unitratiolist.h"
+
+#include <QString>
+#include <QPixmap>
+#include <QSqlDriver>
+
+class QSqlDatabase;
+class QSqlQuery;
 
 //macro with the debug output for SQL queries
 #define KRECIPES_SQL_DEBUG_OUTPUT kDebug()
