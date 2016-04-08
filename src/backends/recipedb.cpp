@@ -1,61 +1,55 @@
 /***************************************************************************
-*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                        *
-*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>              *
-*   Copyright © 2003-2006 Jason Kivlighn <jkivlighn@gmail.com>            *
-*   Copyright © 2009 José Manuel Santamaría Lema <panfaust@gmail.com>     *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-***************************************************************************/
+*   Copyright © 2003 Unai Garro <ugarro@gmail.com>                         *
+*   Copyright © 2003 Cyril Bosselut <bosselut@b1project.com>               *
+*   Copyright © 2003-2006 Jason Kivlighn <jkivlighn@gmail.com>             *
+*   Copyright © 2009-2016 José Manuel Santamaría Lema <panfaust@gmail.com> *
+*                                                                          *
+*   This program is free software; you can redistribute it and/or modify   *
+*   it under the terms of the GNU General Public License as published by   *
+*   the Free Software Foundation; either version 2 of the License, or      *
+*   (at your option) any later version.                                    *
+****************************************************************************/
 
 #include "recipedb.h"
 
-#include <kapplication.h>
-#include <kconfiggroup.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
-#include <kprogressdialog.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kaboutdata.h>
+#include "PostgreSQL/psqlrecipedb.h"
+#include "MySQL/mysqlrecipedb.h"
+#include "SQLite/literecipedb.h"
+#include "searchparameters.h"
+#include "usda_property_data.h"
+#include "usda_ingredient_data.h"
+#include "usda_unit_data.h"
+#include "krecipesdbadaptor.h"
+#include "importers/kreimporter.h"
+#include "datablocks/categorytree.h"
+#include "datablocks/ingredientpropertylist.h"
+#include "datablocks/weight.h"
+
+#include <KApplication>
+#include <KConfigGroup>
+#include <KStandardDirs>
+#include <KProgressDialog>
+#include <KGlobal>
+#include <KLocale>
+#include <KAboutData>
 #include <KProcess>
+#include <KFilterDev>
+#include <KMessageBox>
+#include <kdebug.h>
+
 #include <QEventLoop>
 #include <QTimer>
-#include <kfilterdev.h>
-#include <kmessagebox.h>
-
 #include <QFile>
 #include <QList>
 #include <QStringList>
 #include <KStandardDirs>
-//Added by qt3to4:
 #include <Q3ValueList>
 #include <QTextStream>
 
 #include <map>
 
-#include "importers/kreimporter.h"
-
-#include "PostgreSQL/psqlrecipedb.h"
-
-#include "MySQL/mysqlrecipedb.h"
-
-#include "SQLite/literecipedb.h"
-
-#include "datablocks/categorytree.h"
-#include "datablocks/ingredientpropertylist.h"
-#include "datablocks/weight.h"
-
-#include "searchparameters.h"
-
-#include "usda_property_data.h"
-#include "usda_ingredient_data.h"
-#include "usda_unit_data.h"
-#include "krecipesdbadaptor.h"
-
 #define DB_FILENAME "krecipes.krecdb"
+
 
 struct ingredient_nutrient_data
 {
