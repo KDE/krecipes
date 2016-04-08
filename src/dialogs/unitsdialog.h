@@ -21,7 +21,6 @@
 class RecipeDB;
 class KreConversionTable;
 class KreUnitListWidget;
-class UnitActionsHandler; //TODO: Remove, obsolete.
 class KreUnitActionsHandler;
 class KAction;
 class KPushButton;

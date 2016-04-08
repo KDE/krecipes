@@ -22,7 +22,6 @@
 #include "widgets/kreconversiontable.h"
 #include "widgets/unitlistview.h" //TODO: Remove, deprecated.
 #include "widgets/kreunitlistwidget.h" //TODO: Remove, deprecated.
-#include "actionshandlers/unitactionshandler.h" //TODO: Remove, deprecated.
 #include "actionshandlers/kreunitactionshandler.h"
 
 #include <kapplication.h>

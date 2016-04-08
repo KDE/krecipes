@@ -78,12 +78,6 @@ set(krecipesactionshandlers_SRCS
 
    #FIXME: The classes below are deprecated and must be removed sooner or later.
    actionshandlers/actionshandlerbase.cpp
-   actionshandlers/categoryactionshandler.cpp
-   actionshandlers/unitactionshandler.cpp
-   actionshandlers/propertyactionshandler.cpp
-   actionshandlers/prepmethodactionshandler.cpp
-   actionshandlers/ingredientactionshandler.cpp
-   actionshandlers/headeractionshandler.cpp
    actionshandlers/recipeactionshandler.cpp
 )
 
