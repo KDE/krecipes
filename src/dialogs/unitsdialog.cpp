@@ -18,10 +18,8 @@
 #include "createelementdialog.h"
 #include "dependanciesdialog.h"
 #include "backends/recipedb.h"
-#include "widgets/conversiontable.h" //TODO: Remove, deprecated.
 #include "widgets/kreconversiontable.h"
-#include "widgets/unitlistview.h" //TODO: Remove, deprecated.
-#include "widgets/kreunitlistwidget.h" //TODO: Remove, deprecated.
+#include "widgets/kreunitlistwidget.h"
 #include "actionshandlers/kreunitactionshandler.h"
 
 #include <kapplication.h>

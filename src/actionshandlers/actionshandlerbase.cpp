@@ -18,11 +18,11 @@
 #include <KMessageBox>
 class Q3ListViewItem;
 
+#include "widgets/dblistviewbase.h"
+
 #include "datablocks/elementlist.h"
 
 #include "backends/recipedb.h"
-
-#include "widgets/authorlistview.h"
 
 #include "dialogs/createelementdialog.h"
 #include "dialogs/dependanciesdialog.h"

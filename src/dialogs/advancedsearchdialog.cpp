@@ -51,7 +51,6 @@
 #include "backends/recipedb.h"
 #include "backends/searchparameters.h"
 #include "actionshandlers/recipeactionshandler.h"
-#include "widgets/recipelistview.h"
 #include "widgets/kdateedit.h"
 #include "widgets/fractioninput.h"
 #include "widgets/criteriacombobox.h"

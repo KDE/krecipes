@@ -11,8 +11,8 @@
 
 #ifndef UNITSDIALOG_H
 #define UNITSDIALOG_H
-#include <qwidget.h>
-#include <k3listview.h>
+
+#include <QWidget>
 
 #include "datablocks/unitratiolist.h"
 #include "datablocks/unit.h"

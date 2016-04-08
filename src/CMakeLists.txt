@@ -118,16 +118,10 @@ set(krecipeswidgets_SRCS
    widgets/thumbbar.cpp
 
    #FIXME: The classes below are deprecated and must be removed sooner or later.
-   widgets/authorlistview.cpp #replaced by kreauthorlistwidget.cpp
    widgets/dblistviewbase.cpp #replaced by kregenericlistwidget.cpp
    widgets/categorylistview.cpp #replaced by krecategorieslistwidget.cpp
-   widgets/conversiontable.cpp #replaced by kreconversiontable.cpp
-   widgets/unitlistview.cpp #replaced by kreunitlistwidget.cpp
    widgets/propertylistview.cpp #replaced by krepropertylistwidget.cpp
-   widgets/prepmethodlistview.cpp #replaced by kreprepmethodlistwidget.cpp
    widgets/ingredientlistview.cpp #replaced by kreingredientlistwidget.cpp
-   widgets/headerlistview.cpp #replaced by kreheaderlistwidget.cpp
-   widgets/recipelistview.cpp
 
 )
 
