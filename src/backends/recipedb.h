@@ -13,6 +13,7 @@
 #ifndef RECIPEDB_H
 #define RECIPEDB_H
 
+#include "dtos/kreingredient.h"
 #include "datablocks/recipe.h"
 #include "datablocks/recipelist.h"
 #include "datablocks/elementlist.h"
@@ -123,9 +124,15 @@ signals:
 	void ingGroupModified( const Element & );
 	void ingGroupRemoved( int id );
 
-	void ingredientCreated( const Element & );
-	void ingredientModified( const Ingredient & newIngredient );
-	void ingredientRemoved( int id );
+	//Ingredients API v1 signals
+	/* KRECIPES_DEPRECATED */ void ingredientCreated( const Element & );
+	/* KRECIPES_DEPRECATED */ void ingredientModified( const Ingredient & newIngredient );
+	/* KRECIPES_DEPRECATED */ void ingredientRemoved( int id );
+
+	//Ingredients API v2 signals
+	void ingredientCreated( const KreIngredient & ingredient );
+	void ingredientModified( const KreIngredient & newIngredient );
+	void ingredientRemoved( const QVariant & id );
 
 	void prepMethodCreated( const Element & );
 	void prepMethodModified( const Element & );

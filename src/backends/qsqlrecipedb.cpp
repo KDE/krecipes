@@ -1212,7 +1212,10 @@ RecipeDB::IdType QSqlRecipeDB::createNewIngredient( const QString &ingredientNam
 	QSqlQuery ingredientToCreate( command, *database);
 
 	RecipeDB::IdType last_insert_id = lastInsertId( ingredientToCreate );
+
 	emit ingredientCreated( Element( real_name, last_insert_id ) );
+	emit ingredientCreated( KreIngredient( QVariant(last_insert_id), real_name ) );
+
 	return last_insert_id;
 }
 
@@ -1263,6 +1266,8 @@ void QSqlRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
 	newIngredient.ingredientID = ingredientID;
 	newIngredient.name = newLabel;
 	emit ingredientModified( newIngredient );
+
+	emit ingredientModified( KreIngredient( QVariant(ingredientID), newLabel ) );
 }
 
 void QSqlRecipeDB::addUnitToIngredient( int ingredientID, int unitID )
@@ -1448,6 +1453,7 @@ void QSqlRecipeDB::removeIngredient( int ingredientID )
 	ingredientToDelete.exec( command );
 
 	emit ingredientRemoved( ingredientID );
+	emit ingredientRemoved( QVariant(ingredientID) );
 }
 
 void QSqlRecipeDB::removeIngredientWeight( int id )
