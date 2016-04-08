@@ -22,6 +22,7 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KCodecs>
+#include <KCompletion>
 #include <kdebug.h>
 
 #include <QSqlQuery>
@@ -188,6 +189,8 @@ void QSqlRecipeDB::loadAllIngredientsModels()
 	QStandardItemModel * sourceModel = m_allIngredientsModels->sourceModel();
 	KreSingleColumnProxyModel * ingredientNameModel =
 		m_allIngredientsModels->ingredientNameModel();
+	KCompletion * ingredientNameCompletion =
+		m_allIngredientsModels->ingredientNameCompletion();
 
 	QSqlQuery query( "SELECT id,name FROM ingredients", *database);
 	query.exec();
@@ -205,6 +208,7 @@ void QSqlRecipeDB::loadAllIngredientsModels()
 		sourceModel->setData( index, query.value(0) );
 		index = sourceModel->index( row, 1 );
 		sourceModel->setData( index, query.value(1) );
+		ingredientNameCompletion->addItem( query.value(1).toString() );
 		++row;
 	}
 

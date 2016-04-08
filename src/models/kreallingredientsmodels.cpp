@@ -11,6 +11,7 @@
 
 #include "kresinglecolumnproxymodel.h"
 
+#include <KCompletion>
 #include <QStandardItemModel>
 
 
@@ -21,6 +22,12 @@ KreAllIngredientsModels::KreAllIngredientsModels( RecipeDB * database ):
 	m_ingredientNameModel = new KreSingleColumnProxyModel( 1 );
 	m_ingredientNameModel->setSortCaseSensitivity( Qt::CaseInsensitive );
 	m_ingredientNameModel->setSourceModel( m_sourceModel );
+	m_ingredientNameCompletion = new KCompletion;
+}
+
+KreAllIngredientsModels::~KreAllIngredientsModels()
+{
+	delete m_ingredientNameCompletion;
 }
 
 QStandardItemModel * KreAllIngredientsModels::sourceModel()
@@ -32,3 +39,9 @@ KreSingleColumnProxyModel * KreAllIngredientsModels::ingredientNameModel()
 {
 	return m_ingredientNameModel;
 }
+
+KCompletion * KreAllIngredientsModels::ingredientNameCompletion()
+{
+	return m_ingredientNameCompletion;
+}
+

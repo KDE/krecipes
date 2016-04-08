@@ -14,6 +14,7 @@
 
 class RecipeDB;
 class KreSingleColumnProxyModel;
+class KCompletion;
 class QStandardItemModel;
 
 class KreAllIngredientsModels: public QObject {
@@ -21,14 +22,17 @@ Q_OBJECT
 
 public:
 	KreAllIngredientsModels( RecipeDB * database );
+	~KreAllIngredientsModels();
 
 	QStandardItemModel * sourceModel();
 	KreSingleColumnProxyModel * ingredientNameModel();
+	KCompletion * ingredientNameCompletion();
 
 private:
 	RecipeDB * m_database;
 	QStandardItemModel * m_sourceModel;
 	KreSingleColumnProxyModel * m_ingredientNameModel;
+	KCompletion * m_ingredientNameCompletion;
 	
 };
 
