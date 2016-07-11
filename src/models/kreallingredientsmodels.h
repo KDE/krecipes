@@ -14,6 +14,7 @@
 
 class RecipeDB;
 class KreSingleColumnProxyModel;
+class KreIngredient;
 class KCompletion;
 class QStandardItemModel;
 
@@ -27,6 +28,11 @@ public:
 	QStandardItemModel * sourceModel();
 	KreSingleColumnProxyModel * ingredientNameModel();
 	KCompletion * ingredientNameCompletion();
+
+private slots:
+	void ingredientCreatedDBSlot( const KreIngredient & );
+	void ingredientModifiedDBSlot( const KreIngredient & );
+	void ingredientRemovedDBSlot( const QVariant & );
 
 private:
 	RecipeDB * m_database;
