@@ -24,6 +24,7 @@ add_definitions (-DQT3_SUPPORT_WARNINGS)
 set(krecipesdtos_SRCS
    dtos/kreelement.cpp
    dtos/kreingredient.cpp
+   dtos/kreingheader.cpp
    )
 
 ############# backends ###############
