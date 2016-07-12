@@ -97,6 +97,8 @@ public:
 
 	void loadAllIngredientsModels();
 	KreAllIngredientsModels * allIngredientsModels();
+	void loadAllIngHeadersModels();
+	KreAllIngHeadersModels * allIngHeadersModels();
 
 	virtual void transaction();
 	virtual void commit();

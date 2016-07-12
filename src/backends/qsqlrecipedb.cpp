@@ -16,6 +16,7 @@
 #include "datablocks/rating.h"
 #include "datablocks/weight.h"
 #include "models/kreallingredientsmodels.h"
+#include "models/kreallingheadersmodels.h"
 #include "models/kresinglecolumnproxymodel.h"
 #include "propertycalculator.h"
 
@@ -223,6 +224,51 @@ KreAllIngredientsModels * QSqlRecipeDB::allIngredientsModels()
 	}
 	return m_allIngredientsModels;
 }
+
+void QSqlRecipeDB::loadAllIngHeadersModels()
+{
+	if ( !m_allIngHeadersModels ) {
+		m_allIngHeadersModels = new KreAllIngHeadersModels( this );
+	}
+
+	QStandardItemModel * sourceModel = m_allIngHeadersModels->sourceModel();
+	KreSingleColumnProxyModel * ingHeaderNameModel =
+		m_allIngHeadersModels->ingHeaderNameModel();
+	KCompletion * ingHeaderNameCompletion =
+		m_allIngHeadersModels->ingHeaderNameCompletion();
+
+	QSqlQuery query( "SELECT id,name FROM ingredient_groups", *database);
+	query.exec();
+
+	CHECK_QUERY(query,return;)
+
+	//Pre-allocate memory for model
+	sourceModel->setRowCount( getCount("ingredient_groups") );
+	sourceModel->setColumnCount( 2 );
+
+	int row = 0;
+	QModelIndex index;
+	while( query.next() ) {
+		index = sourceModel->index( row, 0 );
+		sourceModel->setData( index, query.value(0) );
+		index = sourceModel->index( row, 1 );
+		sourceModel->setData( index, query.value(1) );
+		ingHeaderNameCompletion->addItem( query.value(1).toString() );
+		++row;
+	}
+
+	ingHeaderNameModel->sort(0);
+	ingHeaderNameModel->setDynamicSortFilter( true );
+}
+
+KreAllIngHeadersModels * QSqlRecipeDB::allIngHeadersModels()
+{
+	if ( !m_allIngHeadersModels ) {
+		loadAllIngHeadersModels();
+	}
+	return m_allIngHeadersModels;
+}
+
 
 void QSqlRecipeDB::transaction()
 {
