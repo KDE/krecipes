@@ -1245,7 +1245,10 @@ RecipeDB::IdType QSqlRecipeDB::createNewIngGroup( const QString &name )
 	QSqlQuery query( command, *database);
 
 	RecipeDB::IdType last_insert_id = lastInsertId( query );
+
 	emit ingGroupCreated( Element( real_name, last_insert_id ) );
+	emit ingHeaderCreated( KreIngHeader( QVariant(last_insert_id), real_name ) );
+
 	return last_insert_id;
 }
 
@@ -1299,6 +1302,7 @@ void QSqlRecipeDB::modIngredientGroup( int groupID, const QString &newLabel )
 	QSqlQuery ingredientToCreate( command, *database);
 
 	emit ingGroupModified( Element( newLabel, groupID ) );
+	emit ingHeaderModified( KreIngHeader( QVariant(groupID), newLabel ) );
 }
 
 void QSqlRecipeDB::modIngredient( int ingredientID, const QString &newLabel )
@@ -1430,6 +1434,7 @@ void QSqlRecipeDB::removeIngredientGroup( int groupID )
 	toDelete.exec( command );
 
 	emit ingGroupRemoved( groupID );
+	emit ingHeaderRemoved( QVariant(groupID) );
 }
 
 void QSqlRecipeDB::removeIngredient( int ingredientID )
@@ -2858,6 +2863,7 @@ void QSqlRecipeDB::mergeIngredientGroups( int id1, int id2 )
 	command = QString( "DELETE FROM ingredient_groups WHERE id=%1" ).arg( id2 );
 	update.exec( command );
 	emit ingGroupRemoved( id2 );
+	emit ingHeaderRemoved( QVariant(id2) );
 }
 
 void QSqlRecipeDB::mergeIngredients( int id1, int id2 )

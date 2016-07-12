@@ -14,6 +14,7 @@
 #define RECIPEDB_H
 
 #include "dtos/kreingredient.h"
+#include "dtos/kreingheader.h"
 #include "datablocks/recipe.h"
 #include "datablocks/recipelist.h"
 #include "datablocks/elementlist.h"
@@ -121,12 +122,18 @@ signals:
 	void categoryModified( int id, int parent_id );
 	void categoriesMerged( int id1, int id2 );
 
-	void ingGroupCreated( const Element & );
-	void ingGroupModified( const Element & );
-	void ingGroupRemoved( int id );
+	//Ingredient headers API v1 signals
+	/* kRECIPES_DEPRECATED */ void ingGroupCreated( const Element & );
+	/* kRECIPES_DEPRECATED */ void ingGroupModified( const Element & );
+	/* kRECIPES_DEPRECATED */ void ingGroupRemoved( int id );
+
+	//Ingredient headers API v2 signals
+	void ingHeaderCreated( const KreIngHeader & ingHeader );
+	void ingHeaderModified( const KreIngHeader & newIngHeader );
+	void ingHeaderRemoved( const QVariant & id );
 
 	//Ingredients API v1 signals
-	/* KRECIPES_DEPRECATED */ void ingredientCreated( const Element & );
+	/* kRECIPES_DEPRECATED */ void ingredientCreated( const Element & );
 	/* KRECIPES_DEPRECATED */ void ingredientModified( const Ingredient & newIngredient );
 	/* KRECIPES_DEPRECATED */ void ingredientRemoved( int id );
 
