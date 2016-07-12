@@ -12,6 +12,7 @@
 #include "dialogs/recipeinput/ingredientseditor.h"
 #include "backends/recipedb.h"
 #include "models/kreallingredientsmodels.h"
+#include "models/kreallingheadersmodels.h"
 #include "models/kresinglecolumnproxymodel.h"
 #include "datablocks/unit.h"
 
@@ -108,7 +109,9 @@ QWidget * IngredientNameDelegate::createEditor(QWidget *parent, const QStyleOpti
 		editor->setCompletionObject(
 			m_database->allIngredientsModels()->ingredientNameCompletion() );
 	} else {
-		//TODO: set models and completion for headers
+		editor->setModel( m_database->allIngHeadersModels()->ingHeaderNameModel() );
+		editor->setCompletionObject(
+			m_database->allIngHeadersModels()->ingHeaderNameCompletion() );
 	}
 
 	return editor;
