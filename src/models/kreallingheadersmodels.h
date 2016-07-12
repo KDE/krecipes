@@ -29,10 +29,10 @@ public:
 	KreSingleColumnProxyModel * ingHeaderNameModel();
 	KCompletion * ingHeaderNameCompletion();
 
-//private slots:
-//	void ingHeaderCreatedDBSlot( const KreIngHeader & );
-//	void ingHeaderModifiedDBSlot( const KreIngHeader & );
-//	void ingHeaderRemovedDBSlot( const QVariant & );
+private slots:
+	void ingHeaderCreatedDBSlot( const KreIngHeader & );
+	void ingHeaderModifiedDBSlot( const KreIngHeader & );
+	void ingHeaderRemovedDBSlot( const QVariant & );
 
 private:
 	RecipeDB * m_database;
