@@ -49,6 +49,7 @@ qt4_add_dbus_adaptor(krecipesdbs_SRCS backends/org.kde.krecipesdb.xml recipedb.h
 
 set(krecipesmodels_SRCS
    models/kreallingredientsmodels.cpp
+   models/kreallingheadersmodels.cpp
    models/kresinglecolumnproxymodel.cpp
    )
 
