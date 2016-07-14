@@ -60,9 +60,10 @@ struct ingredient_nutrient_data
 };
 
 RecipeDB::RecipeDB() :
-	QObject(), m_categoryCache(0), haltOperation(false), process(NULL),
+	QObject(), m_categoryCache(0),
 	m_allIngredientsModels(0),
-	m_allIngHeadersModels(0)
+	m_allIngHeadersModels(0),
+	haltOperation(false), process(NULL)
 {
 	new KrecipesdbAdaptor( this );
 	QDBusConnection::sessionBus().registerObject("/KrecipesDB", this);
