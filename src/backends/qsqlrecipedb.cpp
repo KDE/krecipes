@@ -217,14 +217,6 @@ void QSqlRecipeDB::loadAllIngredientsModels()
 	ingredientNameModel->setDynamicSortFilter( true );
 }
 
-KreAllIngredientsModels * QSqlRecipeDB::allIngredientsModels()
-{
-	if ( !m_allIngredientsModels ) {
-		loadAllIngredientsModels();
-	}
-	return m_allIngredientsModels;
-}
-
 void QSqlRecipeDB::loadAllIngHeadersModels()
 {
 	if ( !m_allIngHeadersModels ) {
@@ -260,15 +252,6 @@ void QSqlRecipeDB::loadAllIngHeadersModels()
 	ingHeaderNameModel->sort(0);
 	ingHeaderNameModel->setDynamicSortFilter( true );
 }
-
-KreAllIngHeadersModels * QSqlRecipeDB::allIngHeadersModels()
-{
-	if ( !m_allIngHeadersModels ) {
-		loadAllIngHeadersModels();
-	}
-	return m_allIngHeadersModels;
-}
-
 
 void QSqlRecipeDB::transaction()
 {

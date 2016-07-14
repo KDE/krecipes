@@ -141,6 +141,23 @@ RecipeDB* RecipeDB::createDatabase( const QString &dbType, const QString &host, 
 	return database;
 }
 
+KreAllIngredientsModels * RecipeDB::allIngredientsModels()
+{
+	if ( !m_allIngredientsModels ) {
+		loadAllIngredientsModels();
+	}
+	return m_allIngredientsModels;
+}
+
+KreAllIngHeadersModels * RecipeDB::allIngHeadersModels()
+{
+	if ( !m_allIngHeadersModels ) {
+		loadAllIngHeadersModels();
+	}
+	return m_allIngHeadersModels;
+}
+
+
 void RecipeDB::updateCategoryCache( int limit )
 {
 	m_categoryCache = new CategoryTree;

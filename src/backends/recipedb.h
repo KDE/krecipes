@@ -182,9 +182,9 @@ public:
 	//Database models, they are updated automatically on database changes
 	//via signals/slots connections between themselves and RecipeDB
 	virtual void loadAllIngredientsModels() = 0;
-	virtual KreAllIngredientsModels * allIngredientsModels() = 0;
+	KreAllIngredientsModels * allIngredientsModels();
 	virtual void loadAllIngHeadersModels() = 0;
-	virtual KreAllIngHeadersModels * allIngHeadersModels() = 0;
+	KreAllIngHeadersModels * allIngHeadersModels();
 
 	//FIXME: Actually this functions shouldn't be exposed here since RecipeDB is suposed
 	//to represent a generic database which may be not be based on SQL. Not a big problem
