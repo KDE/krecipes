@@ -61,12 +61,12 @@ void KreAllIngredientsModels::ingredientCreatedDBSlot( const KreIngredient & ing
 	//Prepare the id item
 	QStandardItem * itemId = new QStandardItem;
 	itemId->setData( ingredient.id(), Qt::EditRole );
-        itemId->setEditable( false );
+	itemId->setEditable( false );
 
-        //Prepare the name item
-        QStandardItem *itemName = new QStandardItem( ingredient.name() );
+	//Prepare the name item
+	QStandardItem *itemName = new QStandardItem( ingredient.name() );
 	itemName->setData( ingredient.name(), Qt::EditRole );
-        itemName->setEditable( true );
+	itemName->setEditable( true );
 
 	//Add the new row to the source model
 	QList<QStandardItem*> itemList;
