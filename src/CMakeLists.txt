@@ -443,6 +443,8 @@ set(krecipes_SRCS
 
 qt4_add_dbus_adaptor(krecipes_SRCS org.kde.krecipes.xml krecipesview.h KrecipesView)
 
+kde4_add_app_icon(krecipes_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/hi*-app-krecipes.png")
+
 kde4_add_executable(krecipes
    ${krecipes_SRCS}
    )
