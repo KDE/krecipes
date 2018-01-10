@@ -17,6 +17,7 @@
 		<comment xml:lang="es">Archivo de copia de respaldo de Krecipes</comment>
 		<comment xml:lang="et">Krecipese varukoopiafail</comment>
 		<comment xml:lang="fi">Krecipes-varmuuskopiotiedosto</comment>
+		<comment xml:lang="fr">Fichier de copie de secours KRecipes</comment>
 		<comment xml:lang="gl">Copia de seguranza de Krecipes</comment>
 		<comment xml:lang="it">Copia di sicurezza di Krecipes</comment>
 		<comment xml:lang="ko">Krecipes 백업 파일</comment>
@@ -47,6 +48,7 @@
 		<comment xml:lang="es">Recetas exportadas de Krecipes</comment>
 		<comment xml:lang="et">Krecipese eksporditud retseptid</comment>
 		<comment xml:lang="fi">Viedyt Krecipes-reseptit</comment>
+		<comment xml:lang="fr">Recettes KRecipes exportées</comment>
 		<comment xml:lang="gl">Receitas exportadas de Krecipes</comment>
 		<comment xml:lang="it">Ricette di Krecipes esportate</comment>
 		<comment xml:lang="ko">Krecipes 내보낸 요리법</comment>
@@ -77,6 +79,7 @@
 		<comment xml:lang="es">Recetas exportadas de Krecipes (datos comprimidos)</comment>
 		<comment xml:lang="et">Krecipese eksporditud retseptid (tihendatud andmed)</comment>
 		<comment xml:lang="fi">Viedyt Krecipes-reseptit(pakattuna)</comment>
+		<comment xml:lang="fr">Recettes KRecipes exportées (données compressées)</comment>
 		<comment xml:lang="gl">Receitas exportadas de Krecipes (datos comprimidos)</comment>
 		<comment xml:lang="it">Ricette di Krecipes esportate (dati compressi)</comment>
 		<comment xml:lang="ko">Krecipes 내보낸 요리법(압축된 데이터)</comment>
