@@ -83,7 +83,7 @@ public:
 	  * expressed as a mixed number in the form "a b/c", or as a decimal.
 	  *
 	  * This function may have different behaviors with different locales,
-	  * but it's guaranteed it will allways parse a string formatted
+	  * but it's guaranteed it will always parse a string formatted
 	  * according to the "C" locale.
 	  */
 	static QValidator::State fromString( const QString &input, MixedNumber &result );

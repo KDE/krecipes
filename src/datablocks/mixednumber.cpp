@@ -214,7 +214,7 @@ QValidator::State MixedNumber::fromString( const QString &str, MixedNumber &resu
 		QDoubleValidator double_validator(0);
 		double_validator.setBottom( 0.0 );
 		double_validator.setNotation( QDoubleValidator::StandardNotation );
-		//Should return Intermediate or Invalid, whichever it's appropiate.
+		//Should return Intermediate or Invalid, whichever it's appropriate.
 		int pos = 0; //we are going to ignore this parameter
 		QValidator::State state = double_validator.validate( input, pos );
 		result.m_isValid = (state == QValidator::Acceptable);

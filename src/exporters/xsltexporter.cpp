@@ -66,7 +66,7 @@ XSLTExporter::XSLTExporter( const QString& filename, const QString &format ) :
 	//let's do everything we can to be sure at least some layout is loaded
 	QString template_filename = config.readEntry( "Template", KStandardDirs::locate( "appdata", "layouts/Default.xsl" ) );
 	if ( template_filename.isEmpty() || !QFile::exists( template_filename )
-     || template_filename.endsWith(".template") ) //handle the transition to xslt
+     || template_filename.endsWith(QLatin1String(".template")) ) //handle the transition to xslt
 		template_filename = KStandardDirs::locate( "appdata", "layouts/Default.xsl" );
 
 	kDebug() << "Using template file: " << template_filename ;

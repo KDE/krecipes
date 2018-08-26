@@ -30,7 +30,7 @@ class QSqlQuery;
 
 //macro with the debug output for SQL queries
 #define KRECIPES_SQL_DEBUG_OUTPUT kDebug()
-//macro to test that 'query' was executed succesfully, in
+//macro to test that 'query' was executed successfully, in
 //case something goes wrong, it executes 'abortCode'
 #define CHECK_QUERY(query,abortCode) \
 if ( query.isActive() ) { \

@@ -191,7 +191,7 @@ void PageSetupDialog::loadFile()
 {
 	QString file = KFileDialog::getOpenFileName( KStandardDirs::locateLocal( "appdata", "layouts/" ), QString("*.klo *.xsl|%1").arg(i18n("Krecipes style or template file")), this, i18n( "Select Layout" ) );
 
-	if ( file.endsWith(".klo") )
+	if ( file.endsWith(QLatin1String(".klo")) )
 		loadLayout( file );
 	else {
 		active_template = file;

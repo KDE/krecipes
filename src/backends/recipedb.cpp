@@ -42,7 +42,6 @@
 #include <QFile>
 #include <QList>
 #include <QStringList>
-#include <KStandardDirs>
 #include <Q3ValueList>
 #include <QTextStream>
 
@@ -463,7 +462,7 @@ bool RecipeDB::restore( const QString &file, QString *errMsg )
 		KConfigGroup config = KGlobal::config()->group( "DBType" );
 		QString dbType = QString::fromUtf8(m_dumpFile->readLine()).trimmed();
 		dbType = dbType.right( dbType.length() - dbType.indexOf(":") - 2 );
-		if ( dbType.isEmpty() || !firstLine.startsWith("-- Generated for Krecipes") ) {
+		if ( dbType.isEmpty() || !firstLine.startsWith(QLatin1String("-- Generated for Krecipes")) ) {
 			if ( errMsg ) *errMsg = i18n("This file is not a Krecipes backup file or has become corrupt.");
 			delete m_dumpFile;
 			return false;
@@ -592,7 +591,7 @@ void RecipeDB::execSQL( QTextStream &stream )
 	QString line, command;
 	while ( (line = stream.readLine()) != QString() ) {
 		command += ' '+line;
-		if ( command.startsWith(" --") ) {
+		if ( command.startsWith(QLatin1String(" --")) ) {
 			command.clear();
 		}
 		else if ( command.endsWith(';') ) {

@@ -292,18 +292,18 @@ void NutrientInfoDetailsDialog::linkClickedSlot( const QUrl & link )
 	}
 
 	QString linkString = link.toString();
-	if (linkString.startsWith("ingredient$")) {
+	if (linkString.startsWith(QLatin1String("ingredient$"))) {
 		QString newIngredientName = linkString.mid(linkString.indexOf("$")+1);
 		RecipeDB::IdType newIngredientId = m_database->createNewIngredient( newIngredientName );
 		emit updateRequested();
 		linkClickedSlot( "ingredient#" + QString::number( newIngredientId ) );
-	} else if (linkString.startsWith("ingredient#")) {
+	} else if (linkString.startsWith(QLatin1String("ingredient#"))) {
 		RecipeDB::IdType ingID = linkString.mid(linkString.indexOf("#")+1).toInt();
 		QString ingName = m_database->ingredientName(ingID);
 		QPointer<EditPropertiesDialog> d = new EditPropertiesDialog( ingID, ingName, m_database, this );
 		d->exec();
 		delete d;
-	} else if (linkString.startsWith("unit#")) {
+	} else if (linkString.startsWith(QLatin1String("unit#"))) {
 		QString unitIDs = linkString.mid(linkString.indexOf("#")+1);
 		QStringList idList = unitIDs.split(',', QString::SkipEmptyParts );
 		RecipeDB::IdType unitFrom = idList[0].toInt();
