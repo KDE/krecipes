@@ -55,7 +55,7 @@ KreTextEdit::KreTextEdit( QWidget *parent ):
 	else
 		setCheckSpellingEnabled( false );
 
-	//connect( this, SIGNAL( clicked( int, int ) ), SLOT( haltCompletion() ) );
+	//connect( this, SIGNAL(clicked(int,int)), SLOT(haltCompletion()) );
 }
 
 void KreTextEdit::createHighlighter()

@@ -91,8 +91,8 @@ IngredientParserDialog::IngredientParserDialog( const UnitList &units, QWidget* 
 	buttonBox->addItem( horizontalSpacing );
 
 	KMenu *kpop = new KMenu( previewIngView );
-	kpop->addAction( i18nc( "@item:inmenu", "&Delete" ), this, SLOT( removeIngredient() ), Qt::Key_Delete );
-	kpop->addAction( i18nc( "@item:inmenu", "Set &Header") , this, SLOT( convertToHeader() ) );
+	kpop->addAction( i18nc( "@item:inmenu", "&Delete" ), this, SLOT(removeIngredient()), Qt::Key_Delete );
+	kpop->addAction( i18nc( "@item:inmenu", "Set &Header") , this, SLOT(convertToHeader()) );
 
 	connect( parseButton, SIGNAL(clicked()), this, SLOT(parseText()) );
 	connect( buttonGroup, SIGNAL(clicked()), this, SLOT(convertToHeader()) );

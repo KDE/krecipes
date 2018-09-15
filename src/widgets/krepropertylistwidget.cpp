@@ -37,10 +37,10 @@ KrePropertyListWidget::KrePropertyListWidget( QWidget * parent, RecipeDB * db ):
         m_sourceModel->setHorizontalHeaderLabels( horizontalLabels );
 
 	//Connect signals and slots.
-	connect( m_database, SIGNAL( propertyCreated( const IngredientProperty & ) ),
-		this, SLOT( createProperty( const IngredientProperty & ) ) );
-	connect( m_database, SIGNAL( propertyRemoved( int ) ),
-		this, SLOT( removeProperty( int ) ) );
+	connect( m_database, SIGNAL(propertyCreated(IngredientProperty)),
+		this, SLOT(createProperty(IngredientProperty)) );
+	connect( m_database, SIGNAL(propertyRemoved(int)),
+		this, SLOT(removeProperty(int)) );
 }
 
 int KrePropertyListWidget::elementCount()

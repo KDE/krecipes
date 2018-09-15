@@ -89,8 +89,8 @@ KrecipesPreferences::KrecipesPreferences( QWidget *parent )
 
 
 	// Signals & Slots
-	connect ( this, SIGNAL( okClicked() ), this, SLOT( saveSettings() ) );
-        connect ( this, SIGNAL( helpClicked() ), this, SLOT( slotHelp() ) );
+	connect ( this, SIGNAL(okClicked()), this, SLOT(saveSettings()) );
+        connect ( this, SIGNAL(helpClicked()), this, SLOT(slotHelp()) );
 }
 
 void KrecipesPreferences::saveSettings( void )

@@ -284,51 +284,51 @@ KrecipesView::KrecipesView( QWidget *parent )
 
 
 	// Connect Signals from Left Panel to slotSetPanel()
-	connect( leftPanel, SIGNAL( clicked( KrePanel ) ), this, SLOT( slotSetPanel( KrePanel ) ) );
+	connect( leftPanel, SIGNAL(clicked(KrePanel)), this, SLOT(slotSetPanel(KrePanel)) );
 
-	connect( contextButton, SIGNAL( clicked() ), SLOT( activateContextHelp() ) );
+	connect( contextButton, SIGNAL(clicked()), SLOT(activateContextHelp()) );
 
-	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( resizeRightPane( int, int ) ) );
+	connect( leftPanel, SIGNAL(resized(int,int)), this, SLOT(resizeRightPane(int,int)) );
 
 
 	// Retransmit signal to parent to Enable/Disable the Save Button
-	connect ( inputPanel, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveOptionSlot( bool ) ) );
+	connect ( inputPanel, SIGNAL(enableSaveOption(bool)), this, SLOT(enableSaveOptionSlot(bool)) );
 
 	// Create a new button when a recipe is unsaved
-	connect ( inputPanel, SIGNAL( createButton( QWidget*, const QString & ) ), this, SLOT( addRecipeButton( QWidget*, const QString & ) ) );
+	connect ( inputPanel, SIGNAL(createButton(QWidget*,QString)), this, SLOT(addRecipeButton(QWidget*,QString)) );
 
 	// Connect Signals from selectPanel (SelectRecipeDialog)
 
-	connect ( selectPanel, SIGNAL( recipeSelected( int, int ) ), this, SLOT( actionRecipe( int, int ) ) );
-	connect ( selectPanel, SIGNAL( recipesSelected( const QList<int>&, int ) ), this, SLOT( actionRecipes( const QList<int>&, int ) ) );
+	connect ( selectPanel, SIGNAL(recipeSelected(int,int)), this, SLOT(actionRecipe(int,int)) );
+	connect ( selectPanel, SIGNAL(recipesSelected(QList<int>,int)), this, SLOT(actionRecipes(QList<int>,int)) );
 
 	// Connect Signals from ingredientMatcherPanel (IngredientMatcherDialog)
 
-	connect ( ingredientMatcherPanel, SIGNAL( recipeSelected( int, int ) ), SLOT( actionRecipe( int, int ) ) );
+	connect ( ingredientMatcherPanel, SIGNAL(recipeSelected(int,int)), SLOT(actionRecipe(int,int)) );
 
 	// Close a recipe when requested (just switch panels)
-	connect( inputPanel, SIGNAL( closeRecipe() ), this, SLOT( closeRecipe() ) );
+	connect( inputPanel, SIGNAL(closeRecipe()), this, SLOT(closeRecipe()) );
 
 	// Show a recipe when requested (just switch panels)
-	connect( inputPanel, SIGNAL( showRecipe( int ) ), this, SLOT( showRecipe( int ) ) );
+	connect( inputPanel, SIGNAL(showRecipe(int)), this, SLOT(showRecipe(int)) );
 
 	//Edit the recipe when requested
-	connect( viewPanel, SIGNAL( editRecipe() ), this, SLOT( editRecipe() ) );
+	connect( viewPanel, SIGNAL(editRecipe()), this, SLOT(editRecipe()) );
 
 	// Close the recipe view when requested (just switch panels)
-	connect( viewPanel, SIGNAL( closeRecipeView() ), this, SLOT( closeRecipe() ) );
+	connect( viewPanel, SIGNAL(closeRecipeView()), this, SLOT(closeRecipe()) );
 
 	// Create a new shopping list when a new diet is generated and accepted
-	connect( dietPanel, SIGNAL( dietReady() ), this, SLOT( createShoppingListFromDiet() ) );
+	connect( dietPanel, SIGNAL(dietReady()), this, SLOT(createShoppingListFromDiet()) );
 
 	// Place the Tip Button in correct position when the left pane is resized
-	connect( leftPanel, SIGNAL( resized( int, int ) ), this, SLOT( moveTipButton( int, int ) ) );
+	connect( leftPanel, SIGNAL(resized(int,int)), this, SLOT(moveTipButton(int,int)) );
 
-	connect( rightPanel, SIGNAL( panelRaised( QWidget*, QWidget* ) ), SLOT( panelRaised( QWidget*, QWidget* ) ) );
+	connect( rightPanel, SIGNAL(panelRaised(QWidget*,QWidget*)), SLOT(panelRaised(QWidget*,QWidget*)) );
 
-	connect( selectPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+	connect( selectPanel, SIGNAL(recipeSelected(bool)), SIGNAL(recipeSelected(bool)) );
 	
-	connect( ingredientMatcherPanel, SIGNAL( recipeSelected(bool) ), SIGNAL( recipeSelected(bool) ) );
+	connect( ingredientMatcherPanel, SIGNAL(recipeSelected(bool)), SIGNAL(recipeSelected(bool)) );
 
 	//Finish the splash screen
 	splashScreen.finish( this );
@@ -1062,8 +1062,8 @@ void KrecipesView::addRecipeButton( QWidget *w, const QString &title )
 
 	leftPanel->highlightButton( recipeButton );
 
-	connect( recipeButton, SIGNAL( clicked() ), this, SLOT( switchToRecipe() ) );
-	connect( ( RecipeInputDialog * ) w, SIGNAL( titleChanged( const QString& ) ), recipeButton, SLOT( setTitle( const QString& ) ) );
+	connect( recipeButton, SIGNAL(clicked()), this, SLOT(switchToRecipe()) );
+	connect( ( RecipeInputDialog * ) w, SIGNAL(titleChanged(QString)), recipeButton, SLOT(setTitle(QString)) );
 
 }
 

@@ -135,23 +135,23 @@ RecipeInputDialog::RecipeInputDialog( QWidget* parent, RecipeDB *db ) : KVBox( p
 	enableChangedSignal(); // Enables the signal "changed()"
 
 	// Connect signals & Slots
-	connect( m_recipeGeneralInfoEditor , SIGNAL( titleChanged( const QString& ) ),
-		this, SLOT( recipeChanged( const QString& ) ) );
-	connect( m_recipeGeneralInfoEditor, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+	connect( m_recipeGeneralInfoEditor , SIGNAL(titleChanged(QString)),
+		this, SLOT(recipeChanged(QString)) );
+	connect( m_recipeGeneralInfoEditor, SIGNAL(changed()), this, SIGNAL(changed()) );
 
 	connect( ingredientsEditor, SIGNAL(changed()), this, SLOT(recipeChanged()) );
 
-	connect( this, SIGNAL( changed() ), this, SLOT( recipeChanged() ) );
-	connect( instructionsEdit, SIGNAL( textChanged() ), this, SLOT( recipeChanged() ) );
+	connect( this, SIGNAL(changed()), this, SLOT(recipeChanged()) );
+	connect( instructionsEdit, SIGNAL(textChanged()), this, SLOT(recipeChanged()) );
 
 	// Function buttons
-	connect ( saveButton, SIGNAL( clicked() ), this, SLOT( save() ) );
-	connect ( closeButton, SIGNAL( clicked() ), this, SLOT( closeOptions() ) );
-	connect ( showButton, SIGNAL( clicked() ), this, SLOT( showRecipe() ) );
-	connect ( resizeButton, SIGNAL( clicked() ), this, SLOT( resizeRecipe() ) );
-	connect ( this, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveButton( bool ) ) );
+	connect ( saveButton, SIGNAL(clicked()), this, SLOT(save()) );
+	connect ( closeButton, SIGNAL(clicked()), this, SLOT(closeOptions()) );
+	connect ( showButton, SIGNAL(clicked()), this, SLOT(showRecipe()) );
+	connect ( resizeButton, SIGNAL(clicked()), this, SLOT(resizeRecipe()) );
+	connect ( this, SIGNAL(enableSaveOption(bool)), this, SLOT(enableSaveButton(bool)) );
 
-	connect ( database, SIGNAL( recipeRemoved(int) ), this, SLOT( recipeRemoved(int) ) );
+	connect ( database, SIGNAL(recipeRemoved(int)), this, SLOT(recipeRemoved(int)) );
 
 }
 

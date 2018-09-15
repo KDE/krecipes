@@ -46,7 +46,7 @@ SelectCategoriesDialog::SelectCategoriesDialog( QWidget *parent, const ElementLi
 	newCatButton->setIcon( KIcon( "list-add" ) );
 
 	// Connect signals & Slots
-	connect ( newCatButton, SIGNAL( clicked() ), SLOT( createNewCategory() ) );
+	connect ( newCatButton, SIGNAL(clicked()), SLOT(createNewCategory()) );
 }
 
 SelectCategoriesDialog::~SelectCategoriesDialog()

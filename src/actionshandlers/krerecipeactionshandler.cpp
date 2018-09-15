@@ -55,14 +55,14 @@ KreRecipeActionsHandler::KreRecipeActionsHandler( KreRecipesListWidget * listWid
 	m_recipesMenu = m_contextMenu; //Re-use the menu from the base class
 	m_categoriesMenu = new KMenu( listWidget );
 
-	connect( listWidget, SIGNAL( selectionChanged() ),
-		this, SLOT( selectionChangedSlot() ) );
+	connect( listWidget, SIGNAL(selectionChanged()),
+		this, SLOT(selectionChangedSlot()) );
 
-	connect( listWidget, SIGNAL( doubleClicked(const QModelIndex &) ),
-		this, SLOT( open() ) );
+	connect( listWidget, SIGNAL(doubleClicked(QModelIndex)),
+		this, SLOT(open()) );
 
-	connect( this, SIGNAL( printDone() ), 
-		this, SLOT( printDoneSlot() ), Qt::QueuedConnection );
+	connect( this, SIGNAL(printDone()), 
+		this, SLOT(printDoneSlot()), Qt::QueuedConnection );
 }
 
 void KreRecipeActionsHandler::addRecipeAction( KAction * action )
@@ -358,8 +358,8 @@ void KreRecipeActionsHandler::print(bool ok)
 	QPrinter printer;
 	QPointer<QPrintPreviewDialog> previewdlg = new QPrintPreviewDialog(&printer);
 	//Show the print preview dialog.
-	connect(previewdlg, SIGNAL(paintRequested(QPrinter *)),
-		m_printPage->mainFrame(), SLOT(print(QPrinter *)));
+	connect(previewdlg, SIGNAL(paintRequested(QPrinter*)),
+		m_printPage->mainFrame(), SLOT(print(QPrinter*)));
 	previewdlg->exec();
 	delete previewdlg;
 	//Remove the temporary directory which stores the HTML and free memory.

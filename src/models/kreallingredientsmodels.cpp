@@ -28,12 +28,12 @@ KreAllIngredientsModels::KreAllIngredientsModels( RecipeDB * database ):
 	m_ingredientNameCompletion = new KCompletion;
 
 	//Connect signals and slots for model updating
-	connect( database, SIGNAL(ingredientCreated(const KreIngredient &)),
-		this, SLOT(ingredientCreatedDBSlot(const KreIngredient &)) );
-	connect( database, SIGNAL(ingredientModified(const KreIngredient &)),
-		this, SLOT(ingredientModifiedDBSlot(const KreIngredient &)) );
-	connect( database, SIGNAL(ingredientRemoved(const QVariant &)),
-		this, SLOT(ingredientRemovedDBSlot(const QVariant &)) );
+	connect( database, SIGNAL(ingredientCreated(KreIngredient)),
+		this, SLOT(ingredientCreatedDBSlot(KreIngredient)) );
+	connect( database, SIGNAL(ingredientModified(KreIngredient)),
+		this, SLOT(ingredientModifiedDBSlot(KreIngredient)) );
+	connect( database, SIGNAL(ingredientRemoved(QVariant)),
+		this, SLOT(ingredientRemovedDBSlot(QVariant)) );
 }
 
 KreAllIngredientsModels::~KreAllIngredientsModels()

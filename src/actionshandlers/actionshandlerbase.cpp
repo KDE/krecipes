@@ -34,16 +34,16 @@ ActionsHandlerBase::ActionsHandlerBase( DBListViewBase *_parentListView, RecipeD
 
 	kpop = new KMenu( parentListView );
 	connect( parentListView,
-		SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ),
-		SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) )
+		SIGNAL(contextMenu(K3ListView*,Q3ListViewItem*,QPoint)),
+		SLOT(showPopup(K3ListView*,Q3ListViewItem*,QPoint))
 	);
 	connect( parentListView,
-		SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ),
-		SLOT( renameElement( Q3ListViewItem*, const QPoint &, int ) )
+		SIGNAL(doubleClicked(Q3ListViewItem*,QPoint,int)),
+		SLOT(renameElement(Q3ListViewItem*,QPoint,int))
 	);
 	connect( parentListView,
-		SIGNAL( itemRenamed( Q3ListViewItem* ) ),
-		SLOT( saveElement( Q3ListViewItem* ) )
+		SIGNAL(itemRenamed(Q3ListViewItem*)),
+		SLOT(saveElement(Q3ListViewItem*))
 	);
 }
 

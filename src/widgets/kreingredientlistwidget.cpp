@@ -32,10 +32,10 @@ KreIngredientListWidget::KreIngredientListWidget( QWidget * parent, RecipeDB *db
 	setCurrentLimit( config.readEntry( "Limit", -1 ) );
 
 	//Connect signals and slots.
-	connect( m_database, SIGNAL( ingredientCreated( const Element & ) ), 
-		SLOT( createIngredient( const Element & ) ) );
-	connect( m_database, SIGNAL( ingredientRemoved( int ) ), 
-		SLOT( removeIngredient( int ) ) );
+	connect( m_database, SIGNAL(ingredientCreated(Element)), 
+		SLOT(createIngredient(Element)) );
+	connect( m_database, SIGNAL(ingredientRemoved(int)), 
+		SLOT(removeIngredient(int)) );
 }
 
 

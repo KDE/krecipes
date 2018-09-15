@@ -56,8 +56,8 @@ CategoriesEditorDialog::CategoriesEditorDialog( QWidget* parent, RecipeDB *db ) 
 
 	//Connect Signals & Slots
 
-	connect ( newCategoryButton, SIGNAL( clicked() ), categoryActionsHandler, SLOT( createNew() ) );
-	connect ( removeCategoryButton, SIGNAL( clicked() ), categoryActionsHandler, SLOT( remove() ) );
+	connect ( newCategoryButton, SIGNAL(clicked()), categoryActionsHandler, SLOT(createNew()) );
+	connect ( removeCategoryButton, SIGNAL(clicked()), categoryActionsHandler, SLOT(remove()) );
 }
 
 CategoriesEditorDialog::~CategoriesEditorDialog()

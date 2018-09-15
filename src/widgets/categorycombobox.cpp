@@ -26,10 +26,10 @@ CategoryComboBox::CategoryComboBox( QWidget *parent, RecipeDB *db ) : KComboBox(
 		database( db ),
 		m_offset(0)
 {
-	connect( database, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( createCategory( const Element &, int ) ) );
-	connect( database, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
-	connect( database, SIGNAL( categoryModified( const Element & ) ), SLOT( modifyCategory( const Element & ) ) );
-	connect( database, SIGNAL( categoriesMerged( int, int ) ), SLOT( mergeCategories( int, int ) ) );
+	connect( database, SIGNAL(categoryCreated(Element,int)), SLOT(createCategory(Element,int)) );
+	connect( database, SIGNAL(categoryRemoved(int)), SLOT(removeCategory(int)) );
+	connect( database, SIGNAL(categoryModified(Element)), SLOT(modifyCategory(Element)) );
+	connect( database, SIGNAL(categoriesMerged(int,int)), SLOT(mergeCategories(int,int)) );
 
 	// Insert default "All Categories" (row 0, which will be translated to -1 as category in the filtering process)
 	// the rest of the items are loaded when needed in order to significantly speed up startup

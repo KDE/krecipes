@@ -81,9 +81,9 @@ DBTypeSetupPage::DBTypeSetupPage( QWidget *parent ) : QWidget( parent )
 	QSpacerItem *spacer_bottom = new QSpacerItem( 10, 10, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding );
 	layout->addItem( spacer_bottom, 4, 3 );
 
-	connect( liteCheckBox, SIGNAL( clicked() ), this, SLOT( setSQLitePages() ) );
-	connect( mysqlCheckBox, SIGNAL( clicked() ), this, SLOT( setMySQLPages() ) );
-	connect( psqlCheckBox, SIGNAL( clicked() ), this, SLOT( setPostgreSQLPages() ) );
+	connect( liteCheckBox, SIGNAL(clicked()), this, SLOT(setSQLitePages()) );
+	connect( mysqlCheckBox, SIGNAL(clicked()), this, SLOT(setMySQLPages()) );
+	connect( psqlCheckBox, SIGNAL(clicked()), this, SLOT(setPostgreSQLPages()) );
 
 }
 

@@ -53,8 +53,8 @@ ResizeRecipeDialog::ResizeRecipeDialog( QWidget *parent, Recipe *recipe )
 	}
 
 	// signals and slots connections
-	connect( ui->m_buttonGroup, SIGNAL( changed( int ) ),
-		this, SLOT( activateCurrentOption( int ) ) );
+	connect( ui->m_buttonGroup, SIGNAL(changed(int)),
+		this, SLOT(activateCurrentOption(int)) );
 }
 
 void ResizeRecipeDialog::activateCurrentOption( int button_id )

@@ -121,9 +121,9 @@ PSqlPermissionsSetupPage::PSqlPermissionsSetupPage( QWidget *parent ) : QWidget(
 
 	// Connect Signals & slots
 
-	connect( rootCheckBox, SIGNAL( toggled( bool ) ), rootInfoGBox, SLOT( setEnabled( bool ) ) );
-	connect( rootCheckBox, SIGNAL( toggled( bool ) ), this, SLOT( rootCheckBoxChanged( bool ) ) );
-	connect( noSetupCheckBox, SIGNAL( toggled( bool ) ), this, SLOT( noSetupCheckBoxChanged( bool ) ) );
+	connect( rootCheckBox, SIGNAL(toggled(bool)), rootInfoGBox, SLOT(setEnabled(bool)) );
+	connect( rootCheckBox, SIGNAL(toggled(bool)), this, SLOT(rootCheckBoxChanged(bool)) );
+	connect( noSetupCheckBox, SIGNAL(toggled(bool)), this, SLOT(noSetupCheckBoxChanged(bool)) );
 }
 
 void PSqlPermissionsSetupPage::rootCheckBoxChanged( bool on )

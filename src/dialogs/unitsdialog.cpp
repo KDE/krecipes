@@ -73,19 +73,19 @@ UnitsDialog::UnitsDialog( QWidget *parent, RecipeDB *db ) : QWidget( parent )
 	page_layout->addWidget( tabWidget );
 
 	// Connect signals & slots
-	connect( newUnitButton, SIGNAL( clicked() ), unitActionsHandler, SLOT( createNew() ) );
-	connect( removeUnitButton, SIGNAL( clicked() ), unitActionsHandler, SLOT( remove() ) );
-	connect( massConversionTable, SIGNAL( ratioChanged( int, int, double ) ), this, SLOT( saveRatio( int, int, double ) ) );
-	connect( massConversionTable, SIGNAL( ratioRemoved( int, int ) ), this, SLOT( removeRatio( int, int ) ) );
-	connect( volumeConversionTable, SIGNAL( ratioChanged( int, int, double ) ), this, SLOT( saveRatio( int, int, double ) ) );
-	connect( volumeConversionTable, SIGNAL( ratioRemoved( int, int ) ), this, SLOT( removeRatio( int, int ) ) );
+	connect( newUnitButton, SIGNAL(clicked()), unitActionsHandler, SLOT(createNew()) );
+	connect( removeUnitButton, SIGNAL(clicked()), unitActionsHandler, SLOT(remove()) );
+	connect( massConversionTable, SIGNAL(ratioChanged(int,int,double)), this, SLOT(saveRatio(int,int,double)) );
+	connect( massConversionTable, SIGNAL(ratioRemoved(int,int)), this, SLOT(removeRatio(int,int)) );
+	connect( volumeConversionTable, SIGNAL(ratioChanged(int,int,double)), this, SLOT(saveRatio(int,int,double)) );
+	connect( volumeConversionTable, SIGNAL(ratioRemoved(int,int)), this, SLOT(removeRatio(int,int)) );
 
 	//TODO: I'm too lazy right now, so do a complete reload to keep in sync with db
-	connect( database, SIGNAL( unitCreated( const Unit& ) ), this, SLOT( loadConversionTables() ) );
-	connect( database, SIGNAL( unitRemoved( int ) ), this, SLOT( loadConversionTables() ) );
+	connect( database, SIGNAL(unitCreated(Unit)), this, SLOT(loadConversionTables()) );
+	connect( database, SIGNAL(unitRemoved(int)), this, SLOT(loadConversionTables()) );
 
 	//this is for the above TODO, but it still has some bugs to be worked out
-	//connect(database,SIGNAL(unitCreated(const Element&)),conversionTable,SLOT(unitCreated(const Element&)));
+	//connect(database,SIGNAL(unitCreated(Element)),conversionTable,SLOT(unitCreated(Element)));
 	//connect(database,SIGNAL(unitRemoved(int)),conversionTable,SLOT(unitRemoved(int)));
 
 	//Populate data into the table

@@ -19,8 +19,8 @@
 UnitComboBox::UnitComboBox( QWidget *parent, RecipeDB *db, Unit::Type type ) : KComboBox( parent ),
 		database( db ), m_type(type)
 {
-	connect( database, SIGNAL( unitCreated( const Unit & ) ), SLOT( createUnit( const Unit & ) ) );
-	connect( database, SIGNAL( unitRemoved( int ) ), SLOT( removeUnit( int ) ) );
+	connect( database, SIGNAL(unitCreated(Unit)), SLOT(createUnit(Unit)) );
+	connect( database, SIGNAL(unitRemoved(int)), SLOT(removeUnit(int)) );
 }
 
 void UnitComboBox::popup()

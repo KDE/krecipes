@@ -76,9 +76,9 @@ MealInput::MealInput( QWidget *parent, RecipeDB *db ) : QWidget( parent ),
 	dishNumberInput->setValue( dishNumber );
 
 	// Signals & Slots
-	connect( dishNumberInput, SIGNAL( valueChanged( int ) ), this, SLOT( changeDishNumber( int ) ) );
-	connect( buttonPrev, SIGNAL( clicked() ), this, SLOT( prevDish() ) );
-	connect( buttonNext, SIGNAL( clicked() ), this, SLOT( nextDish() ) );
+	connect( dishNumberInput, SIGNAL(valueChanged(int)), this, SLOT(changeDishNumber(int)) );
+	connect( buttonPrev, SIGNAL(clicked()), this, SLOT(prevDish()) );
+	connect( buttonNext, SIGNAL(clicked()), this, SLOT(nextDish()) );
 
 }
 

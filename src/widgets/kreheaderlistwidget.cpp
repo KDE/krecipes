@@ -33,10 +33,10 @@ KreHeaderListWidget::KreHeaderListWidget( QWidget * parent, RecipeDB *db ):
 	//setCurrentLimit( config.readEntry( "Limit", -1 ) );
 
 	//Connect signals and slots.
-	connect( m_database, SIGNAL( ingGroupCreated( const Element & ) ), 
-		SLOT( createHeader( const Element & ) ) );
-	connect( m_database, SIGNAL( ingGroupRemoved( int ) ), 
-		SLOT( removeHeader( int ) ) );
+	connect( m_database, SIGNAL(ingGroupCreated(Element)), 
+		SLOT(createHeader(Element)) );
+	connect( m_database, SIGNAL(ingGroupRemoved(int)), 
+		SLOT(removeHeader(int)) );
 }
 
 

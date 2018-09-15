@@ -36,8 +36,8 @@ void UnitDelegate::loadAllUnitsList( RecipeDB * database )
 		++it;
 	}
 	//TODO: connect database signals
-	/*connect( database, SIGNAL(ingredientCreated(const Element&)),
-		this, SLOT(ingredientCreatedSlot(const Element&)) );
+	/*connect( database, SIGNAL(ingredientCreated(Element)),
+		this, SLOT(ingredientCreatedSlot(Element)) );
 	connect( database, SIGNAL(ingredientRemoved(int)),
 		this, SLOT(ingredientRemovedSlot(int)) );*/
 

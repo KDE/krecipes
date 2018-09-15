@@ -43,8 +43,8 @@ ShoppingListViewDialog::ShoppingListViewDialog( QWidget *parent, const Ingredien
 
 	setInitialSize( QSize(350, 450) );
 
-	connect ( this, SIGNAL( user1Clicked() ), this, SLOT( print() ) );
-	connect ( this, SIGNAL( closeClicked() ), this, SLOT( accept() ) );
+	connect ( this, SIGNAL(user1Clicked()), this, SLOT(print()) );
+	connect ( this, SIGNAL(closeClicked()), this, SLOT(accept()) );
 
 	//---------- Sort the list --------
 	IngredientList list_copy = ingredientList;

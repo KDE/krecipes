@@ -19,10 +19,10 @@
 HeaderComboBox::HeaderComboBox( bool b, QWidget *parent, RecipeDB *db ) : KComboBox( b, parent ),
 		database( db )
 {
-	connect( database, SIGNAL( ingGroupCreated(const Element &) ),
-		this, SLOT( createHeader(const Element &) ) );
-	connect( database, SIGNAL( ingGroupRemoved(int) ),
-		this, SLOT( removeHeader(int) ) );
+	connect( database, SIGNAL(ingGroupCreated(Element)),
+		this, SLOT(createHeader(Element)) );
+	connect( database, SIGNAL(ingGroupRemoved(int)),
+		this, SLOT(removeHeader(int)) );
 }
 
 void HeaderComboBox::reload()

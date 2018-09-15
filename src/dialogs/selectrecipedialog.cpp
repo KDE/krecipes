@@ -104,25 +104,25 @@ SelectRecipeDialog::SelectRecipeDialog( QWidget *parent, RecipeDB* db )
 
 
 	// Signals & Slots
-	connect( openButton, SIGNAL( clicked() ), actionHandler, SLOT( open() ) );
-	connect( this, SIGNAL( recipeSelected( bool ) ), openButton, SLOT( setEnabled( bool ) ) );
-	connect( editButton, SIGNAL( clicked() ), actionHandler, SLOT( edit() ) );
-	connect( this, SIGNAL( recipeSelected( bool ) ), editButton, SLOT( setEnabled( bool ) ) );
-	connect( removeButton, SIGNAL( clicked() ), actionHandler, SLOT( remove() ) );
-	connect( this, SIGNAL( recipeSelected( bool ) ), removeButton, SLOT( setEnabled( bool ) ) );
+	connect( openButton, SIGNAL(clicked()), actionHandler, SLOT(open()) );
+	connect( this, SIGNAL(recipeSelected(bool)), openButton, SLOT(setEnabled(bool)) );
+	connect( editButton, SIGNAL(clicked()), actionHandler, SLOT(edit()) );
+	connect( this, SIGNAL(recipeSelected(bool)), editButton, SLOT(setEnabled(bool)) );
+	connect( removeButton, SIGNAL(clicked()), actionHandler, SLOT(remove()) );
+	connect( this, SIGNAL(recipeSelected(bool)), removeButton, SLOT(setEnabled(bool)) );
 
 
-	connect( recipeListWidget, SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
-	connect( recipeListWidget, SIGNAL( elementSelected(const QList<int> &, const QList<int> &) ), 
-		this, SLOT( selectionChanged(const QList<int> &, const QList<int> &) ) );
+	connect( recipeListWidget, SIGNAL(selectionChanged()), this, SLOT(haveSelectedItems()) );
+	connect( recipeListWidget, SIGNAL(elementSelected(QList<int>,QList<int>)), 
+		this, SLOT(selectionChanged(QList<int>,QList<int>)) );
 
-	connect( advancedSearch, SIGNAL( recipeSelected( bool ) ), SIGNAL( recipeSelected( bool ) ) );
-	connect( advancedSearch, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
-	connect( advancedSearch, SIGNAL( recipesSelected( const QList<int> &, int ) ), SIGNAL( recipesSelected( const QList<int> &, int ) ) );
+	connect( advancedSearch, SIGNAL(recipeSelected(bool)), SIGNAL(recipeSelected(bool)) );
+	connect( advancedSearch, SIGNAL(recipeSelected(int,int)), SIGNAL(recipeSelected(int,int)) );
+	connect( advancedSearch, SIGNAL(recipesSelected(QList<int>,int)), SIGNAL(recipesSelected(QList<int>,int)) );
 
-	connect( actionHandler, SIGNAL( recipeSelected( bool ) ), SIGNAL( recipeSelected( bool ) ) );
-	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
-	connect( actionHandler, SIGNAL( recipesSelected( const QList<int> &, int ) ), SIGNAL( recipesSelected( const QList<int> &, int ) ) );
+	connect( actionHandler, SIGNAL(recipeSelected(bool)), SIGNAL(recipeSelected(bool)) );
+	connect( actionHandler, SIGNAL(recipeSelected(int,int)), SIGNAL(recipeSelected(int,int)) );
+	connect( actionHandler, SIGNAL(recipesSelected(QList<int>,int)), SIGNAL(recipesSelected(QList<int>,int)) );
 }
 
 SelectRecipeDialog::~SelectRecipeDialog()

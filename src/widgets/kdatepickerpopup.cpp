@@ -70,10 +70,10 @@ KDatePickerPopup::KDatePickerPopup( Items items, const QDate &date, QWidget *par
   mDatePicker = new KDatePicker( this );
   mDatePicker->setCloseButton( false );
 
-  connect( mDatePicker, SIGNAL( dateEntered( const QDate& ) ),
-           SLOT( slotDateChanged( const QDate& ) ) );
-  connect( mDatePicker, SIGNAL( dateSelected( const QDate& ) ),
-           SLOT( slotDateChanged( const QDate& ) ) );
+  connect( mDatePicker, SIGNAL(dateEntered(QDate)),
+           SLOT(slotDateChanged(QDate)) );
+  connect( mDatePicker, SIGNAL(dateSelected(QDate)),
+           SLOT(slotDateChanged(QDate)) );
 
   mDatePicker->setDate( date );
 
@@ -96,10 +96,10 @@ void KDatePickerPopup::buildMenu()
   }
 
   if ( mItems & Words ) {
-    addAction( i18nc( "@option today", "&Today" ), this, SLOT( slotToday() ) );
-    addAction( i18nc( "@option yesterday", "&Yesterday" ), this, SLOT( slotYesterday() ) );
-    addAction( i18nc( "@option last week", "Last &Week" ), this, SLOT( slotLastWeek() ) );
-    addAction( i18nc( "@option last month", "Last M&onth" ), this, SLOT( slotLastMonth() ) );
+    addAction( i18nc( "@option today", "&Today" ), this, SLOT(slotToday()) );
+    addAction( i18nc( "@option yesterday", "&Yesterday" ), this, SLOT(slotYesterday()) );
+    addAction( i18nc( "@option last week", "Last &Week" ), this, SLOT(slotLastWeek()) );
+    addAction( i18nc( "@option last month", "Last M&onth" ), this, SLOT(slotLastMonth()) );
 
     if ( mItems & NoDate ) {
       addSeparator();
@@ -107,7 +107,7 @@ void KDatePickerPopup::buildMenu()
   }
 
   if ( mItems & NoDate ) {
-    addAction( i18nc( "@option do not specify a date", "No Date" ), this, SLOT( slotNoDate() ) );
+    addAction( i18nc( "@option do not specify a date", "No Date" ), this, SLOT(slotNoDate()) );
   }
 }
 

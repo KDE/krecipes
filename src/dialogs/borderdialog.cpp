@@ -77,11 +77,11 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 	color_hbox->setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
 	hsSelector = new KHueSaturationSelector( color_hbox );
 	hsSelector->setMinimumSize( 140, 70 );
-	connect( hsSelector, SIGNAL( valueChanged( int, int ) ), SLOT( slotHSChanged( int, int ) ) );
+	connect( hsSelector, SIGNAL(valueChanged(int,int)), SLOT(slotHSChanged(int,int)) );
 
 	valuePal = new KColorValueSelector( color_hbox );
 	valuePal->setMinimumSize( 26, 70 );
-	connect( valuePal, SIGNAL( valueChanged( int ) ), SLOT( slotVChanged( int ) ) );
+	connect( valuePal, SIGNAL(valueChanged(int)), SLOT(slotVChanged(int)) );
 
 	layout2->addWidget( color_hbox );
 	layout4->addLayout( layout2 );
@@ -111,9 +111,9 @@ BorderDialog::BorderDialog( const KreBorder &border, QWidget* parent, const char
 
 	languageChange();
 
-	connect( widthSpinBox, SIGNAL( valueChanged( int ) ), SLOT( updatePreview() ) );
-	connect( widthListBox, SIGNAL( highlighted( int ) ), SLOT( updateSpinBox( int ) ) );
-	connect( styleListBox, SIGNAL( highlighted( int ) ), SLOT( updatePreview() ) );
+	connect( widthSpinBox, SIGNAL(valueChanged(int)), SLOT(updatePreview()) );
+	connect( widthListBox, SIGNAL(highlighted(int)), SLOT(updateSpinBox(int)) );
+	connect( styleListBox, SIGNAL(highlighted(int)), SLOT(updatePreview()) );
 
 	initListBoxs();
 	loadBorder( border );

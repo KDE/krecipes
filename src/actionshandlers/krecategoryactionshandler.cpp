@@ -33,7 +33,7 @@ KreCategoryActionsHandler::KreCategoryActionsHandler( KreCategoriesListWidget * 
 	m_pasteAction( 0 ),
 	m_pasteAsSubAction( 0 )
 {
-	connect( m_contextMenu, SIGNAL( aboutToShow() ), SLOT( preparePopup() ) );
+	connect( m_contextMenu, SIGNAL(aboutToShow()), SLOT(preparePopup()) );
 }
 
 void KreCategoryActionsHandler::setCategoryPasteAction( KAction * action )

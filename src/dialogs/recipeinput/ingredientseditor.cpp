@@ -72,7 +72,7 @@ IngredientsEditor::IngredientsEditor( QWidget * parent)
 
 	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
 		this, SIGNAL(changed()) );
-	connect( ui->m_treeView, SIGNAL(doubleClicked(const QModelIndex&)),
+	connect( ui->m_treeView, SIGNAL(doubleClicked(QModelIndex)),
 		this, SIGNAL(changed()) );
 
 	connect( m_sourceModel, SIGNAL(itemChanged(QStandardItem*)),
@@ -137,34 +137,34 @@ void IngredientsEditor::setDatabase( RecipeDB * database )
 	//Connect signals from new database
 
 	//Ingredients
-	connect( m_database, SIGNAL(ingredientCreated(const Element &)),
-		this, SLOT(ingredientCreatedDBSlot(const Element &)) );
-	connect( m_database, SIGNAL(ingredientModified(const Ingredient &)),
-		this, SLOT(ingredientModifiedDBSlot(const Ingredient &)) );
+	connect( m_database, SIGNAL(ingredientCreated(Element)),
+		this, SLOT(ingredientCreatedDBSlot(Element)) );
+	connect( m_database, SIGNAL(ingredientModified(Ingredient)),
+		this, SLOT(ingredientModifiedDBSlot(Ingredient)) );
 	connect( m_database, SIGNAL(ingredientRemoved(int)),
 		this, SLOT(ingredientRemovedDBSlot(int)) );
 
 	//Units
-	connect( m_database, SIGNAL(unitCreated(const Unit &)),
-		this, SLOT(unitCreatedDBSlot(const Unit &)) );
-	connect( m_database, SIGNAL(unitModified(const Unit &)),
-		this, SLOT(unitModifiedDBSlot(const Unit &)) );
+	connect( m_database, SIGNAL(unitCreated(Unit)),
+		this, SLOT(unitCreatedDBSlot(Unit)) );
+	connect( m_database, SIGNAL(unitModified(Unit)),
+		this, SLOT(unitModifiedDBSlot(Unit)) );
 	connect( m_database, SIGNAL(unitRemoved(int)),
 		this, SLOT(unitRemovedDBSlot(int)) );
 
 	//Preparation methods
-	connect( m_database, SIGNAL(prepMethodCreated(const Element &)),
-		this, SLOT(prepMethodCreatedDBSlot(const Element &)) );
-	connect( m_database, SIGNAL(prepMethodModified(const Element &)),
-		this, SLOT(prepMethodModifiedDBSlot(const Element &)) );
+	connect( m_database, SIGNAL(prepMethodCreated(Element)),
+		this, SLOT(prepMethodCreatedDBSlot(Element)) );
+	connect( m_database, SIGNAL(prepMethodModified(Element)),
+		this, SLOT(prepMethodModifiedDBSlot(Element)) );
 	connect( m_database, SIGNAL(prepMethodRemoved(int)),
 		this, SLOT(prepMethodRemovedDBSlot(int)) );
 
 	//Headers
-	connect( m_database, SIGNAL(ingGroupCreated(const Element &)),
-		this, SLOT(headerCreatedDBSlot(const Element &)) );
-	connect( m_database, SIGNAL(ingGroupModified(const Element &)),
-		this, SLOT(headerModifiedDBSlot(const Element &)) );
+	connect( m_database, SIGNAL(ingGroupCreated(Element)),
+		this, SLOT(headerCreatedDBSlot(Element)) );
+	connect( m_database, SIGNAL(ingGroupModified(Element)),
+		this, SLOT(headerModifiedDBSlot(Element)) );
 	connect( m_database, SIGNAL(ingGroupRemoved(int)),
 		this, SLOT(headerRemovedDBSlot(int)) );
 }

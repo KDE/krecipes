@@ -56,8 +56,8 @@ AuthorsDialog::AuthorsDialog( QWidget* parent, RecipeDB *db )
 
 	//Connect Signals & Slots
 
-	connect ( newAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( createNew() ) );
-	connect ( removeAuthorButton, SIGNAL( clicked() ), authorActionsHandler, SLOT( remove() ) );
+	connect ( newAuthorButton, SIGNAL(clicked()), authorActionsHandler, SLOT(createNew()) );
+	connect ( removeAuthorButton, SIGNAL(clicked()), authorActionsHandler, SLOT(remove()) );
 }
 
 AuthorsDialog::~AuthorsDialog()

@@ -43,7 +43,7 @@ CreateElementDialog::CreateElementDialog( QWidget *parent, const QString &text )
 	 setFixedHeight( size().height() );
 
 	 elementEdit->setFocus();
-	 connect( elementEdit, SIGNAL( textChanged(const QString& ) ), this, SLOT( slotTextChanged( const QString& ) ) );
+	 connect( elementEdit, SIGNAL(textChanged(QString)), this, SLOT(slotTextChanged(QString)) );
 	 enableButtonOk( false );
 }
 

@@ -56,17 +56,17 @@ KreCategoriesListWidget::KreCategoriesListWidget( QWidget *parent, RecipeDB *db,
 	KConfigGroup configPerformance = KGlobal::config()->group( "Performance" );
 	setCurrentLimit( configPerformance.readEntry( "CategoryLimit", -1 ) );
 
-	connect( m_database, SIGNAL( categoryCreated( const Element &, int) ), 
-		this, SLOT( createCategorySlot( const Element &, int ) ) );
-	connect( m_database, SIGNAL( categoryModified( const Element & ) ),
-		SLOT( modifyCategory( const Element & ) ) );
-	connect( m_database, SIGNAL( categoryModified( int, int ) ),
-		SLOT( modifyCategory( int, int ) ) );
-	connect( m_database, SIGNAL( categoryRemoved( int ) ), 
-		SLOT( removeCategory( int ) ) );
+	connect( m_database, SIGNAL(categoryCreated(Element,int)), 
+		this, SLOT(createCategorySlot(Element,int)) );
+	connect( m_database, SIGNAL(categoryModified(Element)),
+		SLOT(modifyCategory(Element)) );
+	connect( m_database, SIGNAL(categoryModified(int,int)),
+		SLOT(modifyCategory(int,int)) );
+	connect( m_database, SIGNAL(categoryRemoved(int)), 
+		SLOT(removeCategory(int)) );
 
-	connect( this, SIGNAL( itemsChanged( const QModelIndex &, const QModelIndex & ) ),
-		SLOT( itemsChangedSlot( const QModelIndex &, const QModelIndex & ) ) );
+	connect( this, SIGNAL(itemsChanged(QModelIndex,QModelIndex)),
+		SLOT(itemsChangedSlot(QModelIndex,QModelIndex)) );
 }
 
 KreCategoriesListWidget::~KreCategoriesListWidget()

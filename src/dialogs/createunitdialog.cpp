@@ -65,7 +65,7 @@ CreateUnitDialog::CreateUnitDialog( QWidget *parent, const QString &name, const 
 	resize( 400, size().height() );
 	setFixedHeight( size().height() );
 
-	connect( nameAbbrevEdit, SIGNAL(textChanged(const QString&)), SLOT(nameAbbrevTextChanged(const QString &)) );
+	connect( nameAbbrevEdit, SIGNAL(textChanged(QString)), SLOT(nameAbbrevTextChanged(QString)) );
 
 	if ( name.isEmpty() )
 		nameEdit->setFocus();

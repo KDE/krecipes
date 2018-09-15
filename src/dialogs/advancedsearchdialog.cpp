@@ -546,52 +546,52 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 
 	actionHandler = new KreRecipeActionsHandler( resultsListWidget, database );
 
-	connect( titleEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( ingredientsAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( ingredientsAnyEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( ingredientsWithoutEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( authorsAnyEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( authorsAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( authorsWithoutEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( categoriesNotEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( categoriesAnyEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( categoriesAllEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( ingredientsWithoutEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
-	connect( instructionsEdit, SIGNAL( returnPressed() ), SLOT( search() ) );
+	connect( titleEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( ingredientsAllEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( ingredientsAnyEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( ingredientsWithoutEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( authorsAnyEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( authorsAllEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( authorsWithoutEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( categoriesNotEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( categoriesAnyEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( categoriesAllEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( ingredientsWithoutEdit, SIGNAL(returnPressed()), SLOT(search()) );
+	connect( instructionsEdit, SIGNAL(returnPressed()), SLOT(search()) );
 
-	connect( findButton, SIGNAL( clicked() ), SLOT( search() ) );
-	connect( clearButton, SIGNAL( clicked() ), SLOT( clear() ) );
+	connect( findButton, SIGNAL(clicked()), SLOT(search()) );
+	connect( clearButton, SIGNAL(clicked()), SLOT(clear()) );
 
-	connect( enableServingsCheckBox, SIGNAL( toggled( bool ) ), servingsSpinBox, SLOT( setEnabled( bool ) ) );
-	connect( enableServingsCheckBox, SIGNAL( toggled( bool ) ), servingsComboBox, SLOT( setEnabled( bool ) ) );
-	connect( enablePrepTimeCheckBox, SIGNAL( toggled( bool ) ), prepTimeEdit, SLOT( setEnabled( bool ) ) );
-	connect( enablePrepTimeCheckBox, SIGNAL( toggled( bool ) ), prepTimeComboBox, SLOT( setEnabled( bool ) ) );
+	connect( enableServingsCheckBox, SIGNAL(toggled(bool)), servingsSpinBox, SLOT(setEnabled(bool)) );
+	connect( enableServingsCheckBox, SIGNAL(toggled(bool)), servingsComboBox, SLOT(setEnabled(bool)) );
+	connect( enablePrepTimeCheckBox, SIGNAL(toggled(bool)), prepTimeEdit, SLOT(setEnabled(bool)) );
+	connect( enablePrepTimeCheckBox, SIGNAL(toggled(bool)), prepTimeComboBox, SLOT(setEnabled(bool)) );
 
-	connect( titleButton, SIGNAL( toggled( bool ) ), titleFrame, SLOT( setShown( bool ) ) );
-	connect( ingredientButton, SIGNAL( toggled( bool ) ), ingredientFrame, SLOT( setShown( bool ) ) );
-	connect( authorsButton, SIGNAL( toggled( bool ) ), authorsFrame, SLOT( setShown( bool ) ) );
-	connect( categoriesButton, SIGNAL( toggled( bool ) ), categoryFrame, SLOT( setShown( bool ) ) );
-	connect( servingsButton, SIGNAL( toggled( bool ) ), servingsFrame, SLOT( setShown( bool ) ) );
-	connect( prepTimeButton, SIGNAL( toggled( bool ) ), prepTimeFrame, SLOT( setShown( bool ) ) );
-	connect( instructionsButton, SIGNAL( toggled( bool ) ), instructionsFrame, SLOT( setShown( bool ) ) );
-	connect( metaDataButton, SIGNAL( toggled( bool ) ), metaDataFrame, SLOT( setShown( bool ) ) );
-	connect( ratingsButton, SIGNAL( toggled( bool ) ), ratingButtonGroup, SLOT( setShown( bool ) ) );
+	connect( titleButton, SIGNAL(toggled(bool)), titleFrame, SLOT(setShown(bool)) );
+	connect( ingredientButton, SIGNAL(toggled(bool)), ingredientFrame, SLOT(setShown(bool)) );
+	connect( authorsButton, SIGNAL(toggled(bool)), authorsFrame, SLOT(setShown(bool)) );
+	connect( categoriesButton, SIGNAL(toggled(bool)), categoryFrame, SLOT(setShown(bool)) );
+	connect( servingsButton, SIGNAL(toggled(bool)), servingsFrame, SLOT(setShown(bool)) );
+	connect( prepTimeButton, SIGNAL(toggled(bool)), prepTimeFrame, SLOT(setShown(bool)) );
+	connect( instructionsButton, SIGNAL(toggled(bool)), instructionsFrame, SLOT(setShown(bool)) );
+	connect( metaDataButton, SIGNAL(toggled(bool)), metaDataFrame, SLOT(setShown(bool)) );
+	connect( ratingsButton, SIGNAL(toggled(bool)), ratingButtonGroup, SLOT(setShown(bool)) );
 
-	connect( titleButton, SIGNAL( toggled( bool ) ), SLOT( titleButtonSwitched( bool ) ) );
-	connect( ingredientButton, SIGNAL( toggled( bool ) ), SLOT( ingredientButtonSwitched( bool ) ) );
-	connect( authorsButton, SIGNAL( toggled( bool ) ), SLOT( authorsButtonSwitched( bool ) ) );
-	connect( categoriesButton, SIGNAL( toggled( bool ) ), SLOT( categoriesButtonSwitched( bool ) ) );
-	connect( servingsButton, SIGNAL( toggled( bool ) ), SLOT( servingsButtonSwitched( bool ) ) );
-	connect( prepTimeButton, SIGNAL( toggled( bool ) ), SLOT( prepTimeButtonSwitched( bool ) ) );
-	connect( instructionsButton, SIGNAL( toggled( bool ) ), SLOT( instructionsButtonSwitched( bool ) ) );
-	connect( metaDataButton, SIGNAL( toggled( bool ) ), SLOT( metaDataButtonSwitched( bool ) ) );
-	connect( ratingsButton, SIGNAL( toggled( bool ) ), SLOT( ratingsButtonSwitched( bool ) ) );
+	connect( titleButton, SIGNAL(toggled(bool)), SLOT(titleButtonSwitched(bool)) );
+	connect( ingredientButton, SIGNAL(toggled(bool)), SLOT(ingredientButtonSwitched(bool)) );
+	connect( authorsButton, SIGNAL(toggled(bool)), SLOT(authorsButtonSwitched(bool)) );
+	connect( categoriesButton, SIGNAL(toggled(bool)), SLOT(categoriesButtonSwitched(bool)) );
+	connect( servingsButton, SIGNAL(toggled(bool)), SLOT(servingsButtonSwitched(bool)) );
+	connect( prepTimeButton, SIGNAL(toggled(bool)), SLOT(prepTimeButtonSwitched(bool)) );
+	connect( instructionsButton, SIGNAL(toggled(bool)), SLOT(instructionsButtonSwitched(bool)) );
+	connect( metaDataButton, SIGNAL(toggled(bool)), SLOT(metaDataButtonSwitched(bool)) );
+	connect( ratingsButton, SIGNAL(toggled(bool)), SLOT(ratingsButtonSwitched(bool)) );
 
-	connect( ratingAvgRadioButton, SIGNAL( clicked() ), this, SLOT( activateRatingOptionAvg() ) );
-	connect( criterionRadioButton, SIGNAL( clicked() ), this, SLOT( activateRatingOptionCriterion() ) );
+	connect( ratingAvgRadioButton, SIGNAL(clicked()), this, SLOT(activateRatingOptionAvg()) );
+	connect( criterionRadioButton, SIGNAL(clicked()), this, SLOT(activateRatingOptionCriterion()) );
 
-	connect( addCriteriaButton, SIGNAL( clicked() ), this, SLOT( slotAddRatingCriteria() ) );
-	connect( removeCriteriaButton, SIGNAL( clicked() ), this, SLOT( slotRemoveRatingCriteria() ) );
+	connect( addCriteriaButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
+	connect( removeCriteriaButton, SIGNAL(clicked()), this, SLOT(slotRemoveRatingCriteria()) );
 
 	titleFrame->setVisible(false);
 	ingredientFrame->setVisible(false);
@@ -603,10 +603,10 @@ AdvancedSearchDialog::AdvancedSearchDialog( QWidget *parent, RecipeDB *db ) : QW
 	metaDataFrame->setVisible(false);
 	ratingButtonGroup->setVisible(false);
 
-	//connect( resultsListView, SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
-	connect( actionHandler, SIGNAL( recipeSelected( bool ) ), SIGNAL( recipeSelected( bool ) ) );
-	connect( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
-	connect( actionHandler, SIGNAL( recipesSelected( const QList<int> &, int ) ), SIGNAL( recipesSelected( const QList<int> &, int ) ) );
+	//connect( resultsListView, SIGNAL(selectionChanged()), this, SLOT(haveSelectedItems()) );
+	connect( actionHandler, SIGNAL(recipeSelected(bool)), SIGNAL(recipeSelected(bool)) );
+	connect( actionHandler, SIGNAL(recipeSelected(int,int)), SIGNAL(recipeSelected(int,int)) );
+	connect( actionHandler, SIGNAL(recipesSelected(QList<int>,int)), SIGNAL(recipesSelected(QList<int>,int)) );
 
 	clear();
 }

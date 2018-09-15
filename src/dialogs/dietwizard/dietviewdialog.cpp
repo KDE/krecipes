@@ -38,9 +38,9 @@ DietViewDialog::DietViewDialog( QWidget *parent, const RecipeList &recipeList, i
 
 	setSizeGripEnabled( true );
 
-	connect ( this, SIGNAL( user2Clicked() ), this, SLOT( slotOk() ) );
-	connect ( this, SIGNAL( closeClicked() ), this, SLOT( close() ) );
-	connect ( this, SIGNAL( user1Clicked() ), this, SLOT( print() ) );
+	connect ( this, SIGNAL(user2Clicked()), this, SLOT(slotOk()) );
+	connect ( this, SIGNAL(closeClicked()), this, SLOT(close()) );
+	connect ( this, SIGNAL(user1Clicked()), this, SLOT(print()) );
 
 	// Show the diet
 	showDiet( recipeList, dayNumber, mealNumber, dishNumbers );

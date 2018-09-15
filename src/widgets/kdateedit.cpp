@@ -91,18 +91,18 @@ KDateEdit::KDateEdit( QWidget *parent, const char *name )
   //setSizeAdjustPolicy( AdjustToContents );
   setMinimumSize( sizeHint() );
 
-  connect( lineEdit(), SIGNAL( returnPressed() ),
-           this, SLOT( lineEnterPressed() ) );
-  connect( this, SIGNAL( textChanged( const QString& ) ),
-           SLOT( slotTextChanged( const QString& ) ) );
+  connect( lineEdit(), SIGNAL(returnPressed()),
+           this, SLOT(lineEnterPressed()) );
+  connect( this, SIGNAL(textChanged(QString)),
+           SLOT(slotTextChanged(QString)) );
 
   mPopup = new KDatePickerPopup( KDatePickerPopup::DatePicker | KDatePickerPopup::Words,
                                  QDate::currentDate(), this );
   mPopup->hide();
   mPopup->installEventFilter( this );
 
-  connect( mPopup, SIGNAL( dateChanged( const QDate& ) ),
-           SLOT( dateSelected( const QDate& ) ) );
+  connect( mPopup, SIGNAL(dateChanged(QDate)),
+           SLOT(dateSelected(QDate)) );
 
   // handle keyword entry
   setupKeywords();

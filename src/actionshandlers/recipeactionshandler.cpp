@@ -61,18 +61,18 @@ RecipeActionsHandler::RecipeActionsHandler( K3ListView *_parentListView, RecipeD
 	catPop = new KMenu( parentListView );
 
 	connect( parentListView,
-		SIGNAL( contextMenu( K3ListView *, Q3ListViewItem *, const QPoint & ) ),
-		SLOT( showPopup( K3ListView *, Q3ListViewItem *, const QPoint & ) )
+		SIGNAL(contextMenu(K3ListView*,Q3ListViewItem*,QPoint)),
+		SLOT(showPopup(K3ListView*,Q3ListViewItem*,QPoint))
 	);
 	connect( parentListView,
-		SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ),
-		SLOT( open() )
+		SIGNAL(doubleClicked(Q3ListViewItem*,QPoint,int)),
+		SLOT(open())
 	);
 	connect( parentListView,
-		SIGNAL( selectionChanged() ), SLOT( selectionChangedSlot() ) );
+		SIGNAL(selectionChanged()), SLOT(selectionChangedSlot()) );
 
-	connect( this, SIGNAL( printDone() ), 
-		this, SLOT( printDoneSlot() ), Qt::QueuedConnection );
+	connect( this, SIGNAL(printDone()), 
+		this, SLOT(printDoneSlot()), Qt::QueuedConnection );
 }
 
 void RecipeActionsHandler::addRecipeAction( KAction * action )
@@ -474,8 +474,8 @@ void RecipeActionsHandler::print(bool ok)
 	QPrinter printer;
 	QPointer<QPrintPreviewDialog> previewdlg = new QPrintPreviewDialog(&printer);
 	//Show the print preview dialog.
-	connect(previewdlg, SIGNAL(paintRequested(QPrinter *)),
-		m_printPage->mainFrame(), SLOT(print(QPrinter *)));
+	connect(previewdlg, SIGNAL(paintRequested(QPrinter*)),
+		m_printPage->mainFrame(), SLOT(print(QPrinter*)));
 	previewdlg->exec();
 	delete previewdlg;
 	//Remove the temporary directory which stores the HTML and free memory.

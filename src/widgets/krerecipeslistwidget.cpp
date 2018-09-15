@@ -33,12 +33,12 @@ KreRecipesListWidget::KreRecipesListWidget( QWidget *parent, RecipeDB *db ):
         horizontalLabels << i18nc( "@title:column", "Recipes" ) << i18nc( "@title:column", "Id" );
         m_sourceModel->setHorizontalHeaderLabels( horizontalLabels );
 
-	connect( ui->m_treeView, SIGNAL( doubleClicked(const QModelIndex &) ),
-		this, SIGNAL( doubleClicked(const QModelIndex &) ) );
+	connect( ui->m_treeView, SIGNAL(doubleClicked(QModelIndex)),
+		this, SIGNAL(doubleClicked(QModelIndex)) );
 
 	//Connect signals and slots from the database
-	connect( m_database, SIGNAL( categoryCreated(const Element &, int) ),
-		this, SLOT( createCategorySlot(const Element &, int) ) );
+	connect( m_database, SIGNAL(categoryCreated(Element,int)),
+		this, SLOT(createCategorySlot(Element,int)) );
 	//TODO: connect the following signals from database
 	// right now they are not needed but will be in the future.
 	//void categoryRemoved( int id );
@@ -46,17 +46,17 @@ KreRecipesListWidget::KreRecipesListWidget( QWidget *parent, RecipeDB *db ):
 	//void categoryModified( int id, int parent_id );
 	//void categoriesMerged( int id1, int id2 );
 	//void recipeCreated( const Element &, const ElementList &categories );
-	connect( m_database, SIGNAL( recipeRemoved(int) ),
-		this, SLOT( removeRecipeSlot(int) ) );
-	connect( m_database, SIGNAL( recipeRemoved(int, int) ),
-		this, SLOT( removeRecipeFromCategorySlot(int, int) ) );
-	connect( m_database, SIGNAL( recipeModified(const Element &, const ElementList &) ),
-		this, SLOT( modifyRecipeSlot(const Element &, const ElementList &) ) );
+	connect( m_database, SIGNAL(recipeRemoved(int)),
+		this, SLOT(removeRecipeSlot(int)) );
+	connect( m_database, SIGNAL(recipeRemoved(int,int)),
+		this, SLOT(removeRecipeFromCategorySlot(int,int)) );
+	connect( m_database, SIGNAL(recipeModified(Element,ElementList)),
+		this, SLOT(modifyRecipeSlot(Element,ElementList)) );
 
 	//Needed to update the lists of ids of the selected elements and to trigger
 	//our elementSelected signal.
-	connect( ui->m_treeView->selectionModel(), SIGNAL( selectionChanged(const QItemSelection &, const QItemSelection &) ), 
-		this, SLOT( selectionChangedSlot(const QItemSelection &, const QItemSelection &) ) );
+	connect( ui->m_treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), 
+		this, SLOT(selectionChangedSlot(QItemSelection,QItemSelection)) );
 }
 
 void KreRecipesListWidget::createCategorySlot( const Element & category, int parent_id )

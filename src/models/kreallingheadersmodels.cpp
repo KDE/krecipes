@@ -28,12 +28,12 @@ KreAllIngHeadersModels::KreAllIngHeadersModels( RecipeDB * database ):
 	m_ingHeaderNameCompletion = new KCompletion;
 
 	//Connect signals and slots for model updating
-	connect( database, SIGNAL(ingHeaderCreated(const KreIngHeader &)),
-		this, SLOT(ingHeaderCreatedDBSlot(const KreIngHeader &)) );
-	connect( database, SIGNAL(ingHeaderModified(const KreIngHeader &)),
-		this, SLOT(ingHeaderModifiedDBSlot(const KreIngHeader &)) );
-	connect( database, SIGNAL(ingHeaderRemoved(const QVariant &)),
-		this, SLOT(ingHeaderRemovedDBSlot(const QVariant &)) );
+	connect( database, SIGNAL(ingHeaderCreated(KreIngHeader)),
+		this, SLOT(ingHeaderCreatedDBSlot(KreIngHeader)) );
+	connect( database, SIGNAL(ingHeaderModified(KreIngHeader)),
+		this, SLOT(ingHeaderModifiedDBSlot(KreIngHeader)) );
+	connect( database, SIGNAL(ingHeaderRemoved(QVariant)),
+		this, SLOT(ingHeaderRemovedDBSlot(QVariant)) );
 }
 
 KreAllIngHeadersModels::~KreAllIngHeadersModels()

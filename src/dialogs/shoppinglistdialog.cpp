@@ -79,10 +79,10 @@ ShoppingListDialog::ShoppingListDialog( QWidget *parent, RecipeDB *db ) : QWidge
 	clearButton->setIcon( KIcon( "edit-clear" ) );
 
 	// Connect signals & slots
-	connect( addRecipeButton, SIGNAL( clicked() ), this, SLOT( addRecipe() ) );
-	connect( removeRecipeButton, SIGNAL( clicked() ), this, SLOT( removeRecipe() ) );
-	connect( okButton, SIGNAL( clicked() ), this, SLOT( showShoppingList() ) );
-	connect( clearButton, SIGNAL( clicked() ), this, SLOT( clear() ) );
+	connect( addRecipeButton, SIGNAL(clicked()), this, SLOT(addRecipe()) );
+	connect( removeRecipeButton, SIGNAL(clicked()), this, SLOT(removeRecipe()) );
+	connect( okButton, SIGNAL(clicked()), this, SLOT(showShoppingList()) );
+	connect( clearButton, SIGNAL(clicked()), this, SLOT(clear()) );
 }
 
 ShoppingListDialog::~ShoppingListDialog()

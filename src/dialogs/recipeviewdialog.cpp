@@ -80,8 +80,8 @@ RecipeViewDialog::RecipeViewDialog( QWidget *parent, RecipeDB *db, int recipeID 
 	functionsLayout->addWidget( closeButton );
 
 	//Connect the signals.
-	connect ( editButton, SIGNAL( clicked() ), this, SIGNAL( editRecipe() ) );
-	connect ( closeButton, SIGNAL( clicked() ), this, SIGNAL( closeRecipeView() ) );
+	connect ( editButton, SIGNAL(clicked()), this, SIGNAL(editRecipe()) );
+	connect ( closeButton, SIGNAL(clicked()), this, SIGNAL(closeRecipeView()) );
 	
 	//----------Load  the recipe --------
 	if ( recipeID != -1 )

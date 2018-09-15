@@ -40,10 +40,10 @@ KreAuthorListWidget::KreAuthorListWidget( QWidget *parent, RecipeDB *db ):
 	KConfigGroup config = KGlobal::config()->group( "Performance" );
 	setCurrentLimit( config.readEntry( "Limit", -1 ) );
 
-	connect( m_database, SIGNAL( authorCreated( const Element & ) ), 
-		SLOT( createAuthor( const Element & ) ) );
-	connect( m_database, SIGNAL( authorRemoved( int ) ), 
-		SLOT( removeAuthor( int ) ) );
+	connect( m_database, SIGNAL(authorCreated(Element)), 
+		SLOT(createAuthor(Element)) );
+	connect( m_database, SIGNAL(authorRemoved(int)), 
+		SLOT(removeAuthor(int)) );
 
 }
 
@@ -75,8 +75,8 @@ void KreAuthorListWidget::load( int limit, int offset )
 	m_thread->setLimit( limit );
 	m_thread->setOffset( offset );
 
-	connect( m_thread, SIGNAL(loadFinished(const ElementList&,int)), 
-		this, SLOT(queryFinished(const ElementList&,int)), Qt::QueuedConnection );
+	connect( m_thread, SIGNAL(loadFinished(ElementList,int)), 
+		this, SLOT(queryFinished(ElementList,int)), Qt::QueuedConnection );
 
 	kDebug() << "Starting thread.";
 	m_thread->start();

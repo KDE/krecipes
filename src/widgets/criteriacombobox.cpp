@@ -15,7 +15,7 @@
 CriteriaComboBox::CriteriaComboBox( bool b, QWidget *parent, RecipeDB *db ) : KComboBox( b, parent ),
 		database( db )
 {
-	connect( db, SIGNAL(ratingCriteriaCreated(const Element &)), this, SLOT(addCriteria(const Element &)) );
+	connect( db, SIGNAL(ratingCriteriaCreated(Element)), this, SLOT(addCriteria(Element)) );
 }
 
 void CriteriaComboBox::addCriteria( const Element &criteria )

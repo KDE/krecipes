@@ -79,8 +79,8 @@ IngredientListView::IngredientListView( QWidget *parent, RecipeDB *db ) : DBList
 {
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( Q3ListView::Reject );
-	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( checkCreateIngredient( const Element & ) ) );
-	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
+	connect( database, SIGNAL(ingredientCreated(Element)), SLOT(checkCreateIngredient(Element)) );
+	connect( database, SIGNAL(ingredientRemoved(int)), SLOT(removeIngredient(int)) );
 }
 
 void IngredientListView::load( int limit, int offset )

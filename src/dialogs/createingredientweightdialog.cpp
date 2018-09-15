@@ -81,7 +81,7 @@ CreateIngredientWeightDialog::CreateIngredientWeightDialog( QWidget* parent, Rec
 	//clearWState( WState_Polished );
 
 	weightEdit->setFocus();
-	connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+	connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
 }
 
 CreateIngredientWeightDialog::~CreateIngredientWeightDialog()

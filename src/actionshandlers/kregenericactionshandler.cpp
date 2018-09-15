@@ -34,12 +34,12 @@ KreGenericActionsHandler::KreGenericActionsHandler( KreGenericListWidget * listW
 
 	m_contextMenu = new KMenu( listWidget );
 	connect( listWidget,
-		SIGNAL( contextMenuRequested( const QModelIndex &, const QPoint & ) ),
-		SLOT( showPopup( const QModelIndex &, const QPoint & ) )
+		SIGNAL(contextMenuRequested(QModelIndex,QPoint)),
+		SLOT(showPopup(QModelIndex,QPoint))
 	);
 	connect( listWidget,
-		SIGNAL( itemsChanged( const QModelIndex &, const QModelIndex & ) ),
-		SLOT( saveElement( const QModelIndex &, const QModelIndex &) )
+		SIGNAL(itemsChanged(QModelIndex,QModelIndex)),
+		SLOT(saveElement(QModelIndex,QModelIndex))
 	);
 }
 

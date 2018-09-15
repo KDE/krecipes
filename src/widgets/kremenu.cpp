@@ -71,7 +71,7 @@ void KreMenu::childEvent ( QChildEvent *e )
 			else
 				button->show();
 
-			connect ( button, SIGNAL( clicked( KreMenuButton* ) ), this, SLOT( collectClicks( KreMenuButton* ) ) );
+			connect ( button, SIGNAL(clicked(KreMenuButton*)), this, SLOT(collectClicks(KreMenuButton*)) );
 		}
 	}
 	else if ( e->type() == QChildEvent::ChildRemoved ) {
@@ -129,8 +129,8 @@ MenuId KreMenu::createSubMenu( const QString &title, const QString &icon )
 	newSubMenuButton->setTitle( i18nc("@action:button Up to top menu",  "Up..." ) );
 	newSubMenuButton->setIconSet( KIcon( "arrow-up" ) );
 
-	connect( newMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );
-	connect( newSubMenuButton, SIGNAL( clicked( MenuId ) ), this, SLOT( showMenu( MenuId ) ) );
+	connect( newMenuButton, SIGNAL(clicked(MenuId)), this, SLOT(showMenu(MenuId)) );
+	connect( newSubMenuButton, SIGNAL(clicked(MenuId)), this, SLOT(showMenu(MenuId)) );
 
 
 	return id;
@@ -303,8 +303,8 @@ KreMenuButton::KreMenuButton( KreMenu *parent, KrePanel _panel, MenuId id ):
 	subMenuId = MenuId(); // By default it's not a submenu button
 
 	resize( parent->size().width(), 55 );
-	connect ( parent, SIGNAL( resized( int, int ) ), this, SLOT( rescale() ) );
-	connect( this, SIGNAL( clicked() ), this, SLOT( forwardClicks() ) );
+	connect ( parent, SIGNAL(resized(int,int)), this, SLOT(rescale()) );
+	connect( this, SIGNAL(clicked()), this, SLOT(forwardClicks()) );
 	setCursor( QCursor( Qt::PointingHandCursor ) );
 }
 

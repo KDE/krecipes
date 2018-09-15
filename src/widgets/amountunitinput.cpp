@@ -25,7 +25,7 @@ AmountUnitInput::AmountUnitInput( QWidget *parent, RecipeDB *database, Unit::Typ
 	unitBox = new UnitComboBox(this,database,type);
 	unitBox->reload();
 
-	connect( amountInput, SIGNAL(valueChanged(const MixedNumber &)), SLOT(emitValueChanged()) );
+	connect( amountInput, SIGNAL(valueChanged(MixedNumber)), SLOT(emitValueChanged()) );
 	connect( unitBox, SIGNAL(activated(int)), SLOT(emitValueChanged()) );
 	connect( amountInput, SIGNAL(returnPressed()), SIGNAL(doneEditing()) );
 }
@@ -42,7 +42,7 @@ void AmountUnitInput::setAmount( const MixedNumber &amount )
 		amountInput->clear();
 	else
 		amountInput->setValue( amount, 0 );
-	connect( amountInput, SIGNAL(valueChanged(const MixedNumber &)), SLOT(emitValueChanged()) );
+	connect( amountInput, SIGNAL(valueChanged(MixedNumber)), SLOT(emitValueChanged()) );
 }
 
 void AmountUnitInput::setUnit( const Unit &unit )

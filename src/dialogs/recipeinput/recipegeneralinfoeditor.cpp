@@ -32,18 +32,18 @@ RecipeGeneralInfoEditor::RecipeGeneralInfoEditor( QWidget * parent, RecipeDB * d
 	ui->setupUi( this );
 
 	//Connect signals/slots to detect changes
-	connect( ui->m_titleEdit, SIGNAL(textChanged(const QString&)),
-		this, SLOT(titleChangedSlot(const QString&)) );
+	connect( ui->m_titleEdit, SIGNAL(textChanged(QString)),
+		this, SLOT(titleChangedSlot(QString)) );
 
 	connect( ui->m_photoLabel, SIGNAL(changed()),
 		this, SIGNAL(changed()) );
 
-	connect( ui->m_yieldNumInput, SIGNAL( textChanged(const QString &) ),
+	connect( ui->m_yieldNumInput, SIGNAL(textChanged(QString)),
 		this, SIGNAL(changed()) );
-	connect( ui->m_yieldTypeEdit, SIGNAL( textChanged(const QString &) ),
+	connect( ui->m_yieldTypeEdit, SIGNAL(textChanged(QString)),
 		this, SIGNAL(changed()) );
 
-	connect( ui->m_prepTimeEdit, SIGNAL( timeChanged(const QTime &) ),
+	connect( ui->m_prepTimeEdit, SIGNAL(timeChanged(QTime)),
 		this, SIGNAL(changed()) );
 
 	//Connect signals/slots to perform changes

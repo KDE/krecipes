@@ -102,9 +102,9 @@ RefineShoppingListDialog::RefineShoppingListDialog( QWidget* parent, RecipeDB *d
 
 	//clearWState( WState_Polished );
 
-	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
-	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
-	connect( ingListView->listView(), SIGNAL( itemRenamed( Q3ListViewItem*, const QString &, int ) ), SLOT( itemRenamed( Q3ListViewItem*, const QString &, int ) ) );
+	connect( addButton, SIGNAL(clicked()), this, SLOT(addIngredient()) );
+	connect( removeButton, SIGNAL(clicked()), this, SLOT(removeIngredient()) );
+	connect( ingListView->listView(), SIGNAL(itemRenamed(Q3ListViewItem*,QString,int)), SLOT(itemRenamed(Q3ListViewItem*,QString,int)) );
 
 	KApplication::setOverrideCursor( Qt::WaitCursor );
 	calculateShopping( recipeList, &ingredientList, database );

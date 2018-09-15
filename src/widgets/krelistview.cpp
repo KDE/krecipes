@@ -55,7 +55,7 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 		filterLabel->setText( ' ' + i18nc( "@label:textbox Search recipes", "Search:" ) );
 		filterEdit = new KLineEdit( filterBox );
 		filterEdit->setClearButtonShown( true );
-		connect( filterEdit, SIGNAL( clearButtonClicked() ), this, SLOT( clearSearch() ) );
+		connect( filterEdit, SIGNAL(clearButtonClicked()), this, SLOT(clearSearch()) );
 	}
 
 	list = new K3ListView( this );
@@ -70,13 +70,13 @@ KreListView::KreListView( QWidget *parent, const QString &title, bool filter, in
 	}
 	//Connect Signals & Slots
 	if ( filter ) {
-		connect( filterEdit, SIGNAL( textChanged( const QString& ) ), SIGNAL( textChanged(const QString&) ) );
-		connect( filterEdit, SIGNAL( returnPressed( const QString& ) ), SIGNAL( returnPressed(const QString&) ) );
+		connect( filterEdit, SIGNAL(textChanged(QString)), SIGNAL(textChanged(QString)) );
+		connect( filterEdit, SIGNAL(returnPressed(QString)), SIGNAL(returnPressed(QString)) );
 		KConfigGroup config (KGlobal::config(), "Performance" );
 		if ( config.readEntry("SearchAsYouType",true) )
-			connect( this, SIGNAL( textChanged( const QString& ) ), SLOT( filter( const QString& ) ) );
+			connect( this, SIGNAL(textChanged(QString)), SLOT(filter(QString)) );
 		else
-			connect( this, SIGNAL( returnPressed( const QString& ) ), SLOT( filter( const QString& ) ) );
+			connect( this, SIGNAL(returnPressed(QString)), SLOT(filter(QString)) );
 	}
 }
 
@@ -118,11 +118,11 @@ void KreListView::setCustomFilter( QObject *receiver, const char *slot )
 {
 	KConfigGroup config (KGlobal::config(), "Performance" );
 	if ( config.readEntry("SearchAsYouType",true) ) {
-		disconnect( this, SIGNAL( textChanged( const QString& ) ), this, SLOT( filter( const QString& ) ) );
-		connect( this, SIGNAL( textChanged( const QString& ) ), receiver, slot );
+		disconnect( this, SIGNAL(textChanged(QString)), this, SLOT(filter(QString)) );
+		connect( this, SIGNAL(textChanged(QString)), receiver, slot );
 	} else {
-		disconnect( this, SIGNAL( returnPressed( const QString& ) ), this, SLOT( filter( const QString& ) ) );
-		connect( this, SIGNAL( returnPressed( const QString& ) ), receiver, slot );
+		disconnect( this, SIGNAL(returnPressed(QString)), this, SLOT(filter(QString)) );
+		connect( this, SIGNAL(returnPressed(QString)), receiver, slot );
 	}
 }
 
@@ -130,8 +130,8 @@ void KreListView::setListView( DBListViewBase *list_view )
 {
 	delete list;
 
-	connect( list_view, SIGNAL( nextGroupLoaded() ), SLOT( refilter() ) );
-	connect( list_view, SIGNAL( prevGroupLoaded() ), SLOT( refilter() ) );
+	connect( list_view, SIGNAL(nextGroupLoaded()), SLOT(refilter()) );
+	connect( list_view, SIGNAL(prevGroupLoaded()), SLOT(refilter()) );
 	list = list_view;
 	list->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::MinimumExpanding );
 }

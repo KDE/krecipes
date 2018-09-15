@@ -21,10 +21,10 @@ KreConversionTable::KreConversionTable( QWidget* parent, int maxrows, int maxcol
 	m_textChanged = false;
 	m_signalMapper = new QSignalMapper;
 	m_signalMapperDeletion = new QSignalMapper;
-	connect( m_signalMapper, SIGNAL(mapped(const QString&)),
-		this, SLOT(onEditionFinished(const QString&)) );
-	connect( m_signalMapperDeletion, SIGNAL(mapped(const QString&)),
-		this, SLOT(onCellEdited(const QString&)) );
+	connect( m_signalMapper, SIGNAL(mapped(QString)),
+		this, SLOT(onEditionFinished(QString)) );
+	connect( m_signalMapperDeletion, SIGNAL(mapped(QString)),
+		this, SLOT(onCellEdited(QString)) );
 }
 
 KreConversionTable::~KreConversionTable()
@@ -96,7 +96,7 @@ void KreConversionTable::initTable()
 				m_signalMapperDeletion->setMapping( editor,
 					QString::number(r) + " " + QString::number(c) );
 				connect( editor, SIGNAL(editingFinished()), m_signalMapper, SLOT(map()) );
-				connect( editor, SIGNAL(textEdited(const QString&)), m_signalMapperDeletion, SLOT(map()) );
+				connect( editor, SIGNAL(textEdited(QString)), m_signalMapperDeletion, SLOT(map()) );
 			}
 		}
 	}

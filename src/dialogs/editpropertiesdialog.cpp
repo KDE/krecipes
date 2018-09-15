@@ -220,22 +220,22 @@ EditPropertiesDialog::EditPropertiesDialog( int ingID, const QString &ingName, R
 	inputBox->setValidator( doubleValidator );
 	inputBox->hide();
 
-	connect( weightAddButton, SIGNAL( clicked() ), this, SLOT( addWeight() ) );
-	connect( weightRemoveButton, SIGNAL( clicked() ), this, SLOT( removeWeight() ) );
-	connect( propertyAddButton, SIGNAL( clicked() ), this, SLOT( addPropertyToIngredient() ) );
-	connect( propertyRemoveButton, SIGNAL( clicked() ), this, SLOT( removePropertyFromIngredient() ) );
-	connect( propertyListView, SIGNAL( executed( Q3ListViewItem* ) ), this, SLOT( insertPropertyEditBox( Q3ListViewItem* ) ) );
-	connect( propertyListView, SIGNAL( selectionChanged() ), inputBox, SLOT( hide() ) );
+	connect( weightAddButton, SIGNAL(clicked()), this, SLOT(addWeight()) );
+	connect( weightRemoveButton, SIGNAL(clicked()), this, SLOT(removeWeight()) );
+	connect( propertyAddButton, SIGNAL(clicked()), this, SLOT(addPropertyToIngredient()) );
+	connect( propertyRemoveButton, SIGNAL(clicked()), this, SLOT(removePropertyFromIngredient()) );
+	connect( propertyListView, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(insertPropertyEditBox(Q3ListViewItem*)) );
+	connect( propertyListView, SIGNAL(selectionChanged()), inputBox, SLOT(hide()) );
 
 	removeEventFilter( inputBox );
-	connect( inputBox, SIGNAL( returnPressed( const QString & ) ),
-		this, SLOT( setPropertyAmount( const QString &) ) );
-	connect( inputBox, SIGNAL( returnPressed( const QString & ) ),
-		inputBox, SLOT( hide() ) );
+	connect( inputBox, SIGNAL(returnPressed(QString)),
+		this, SLOT(setPropertyAmount(QString)) );
+	connect( inputBox, SIGNAL(returnPressed(QString)),
+		inputBox, SLOT(hide()) );
 
-	connect( weightListView, SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( Q3ListViewItem*, const QPoint &, int ) ) );
+	connect( weightListView, SIGNAL(doubleClicked(Q3ListViewItem*,QPoint,int)), SLOT(itemRenamed(Q3ListViewItem*,QPoint,int)) );
 
-	connect( loadButton, SIGNAL( clicked() ), this, SLOT( loadUSDAData() ) );
+	connect( loadButton, SIGNAL(clicked()), this, SLOT(loadUSDAData()) );
 
 	updateLists();
 }

@@ -83,8 +83,8 @@ ConversionDialog::ConversionDialog( QWidget* parent, RecipeDB *db, const char* n
 	setInitialSize( QSize(300, 200).expandedTo(minimumSizeHint()) );
 
 	// signals and slots connections
-	connect ( this, SIGNAL( closeClicked() ), this, SLOT( accept() ) );
-	connect( this, SIGNAL( user1Clicked() ), this, SLOT( convert() ) );
+	connect ( this, SIGNAL(closeClicked()), this, SLOT(accept()) );
+	connect( this, SIGNAL(user1Clicked()), this, SLOT(convert()) );
 }
 
 ConversionDialog::~ConversionDialog()

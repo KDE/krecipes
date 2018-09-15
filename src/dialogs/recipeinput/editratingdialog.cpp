@@ -130,13 +130,13 @@ void EditRatingDialog::init( const ElementList &criteriaList )
 	resize( QSize(358, 331).expandedTo(minimumSizeHint()) );
 	//clearWState( WState_Polished );
 
-	connect( criteriaListView, SIGNAL(itemRenamed(Q3ListViewItem*,const QString &,int)), this, SLOT(itemRenamed(Q3ListViewItem*,const QString &,int)) );
+	connect( criteriaListView, SIGNAL(itemRenamed(Q3ListViewItem*,QString,int)), this, SLOT(itemRenamed(Q3ListViewItem*,QString,int)) );
 	connect( addButton, SIGNAL(clicked()), this, SLOT(slotAddRatingCriteria()) );
 	connect( removeButton, SIGNAL(clicked()), this, SLOT(slotRemoveRatingCriteria()) );
 
 	KIconLoader *il = KIconLoader::global();
 	KMenu *kpop = new KMenu( criteriaListView );
-	kpop->addAction( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18nc( "@action:button", "&Delete" ), this, SLOT( slotRemoveRatingCriteria() ), Qt::Key_Delete );
+	kpop->addAction( il->loadIcon( "edit-delete-shred", KIconLoader::NoGroup, 16 ), i18nc( "@action:button", "&Delete" ), this, SLOT(slotRemoveRatingCriteria()), Qt::Key_Delete );
 
 	for ( ElementList::const_iterator criteria_it = criteriaList.begin(); criteria_it != criteriaList.end(); ++criteria_it ) {
 		criteriaComboBox->insertItem( criteriaComboBox->count(), ( *criteria_it ).name );

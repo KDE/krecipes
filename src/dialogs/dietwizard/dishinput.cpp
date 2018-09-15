@@ -80,11 +80,11 @@ DishInput::DishInput( QWidget* parent, RecipeDB *db, const QString &title ) : QW
 
 
 	// Connect Signals & Slots
-	connect( constraintsView, SIGNAL( executed( Q3ListViewItem* ) ), this, SLOT( insertConstraintsEditBoxes( Q3ListViewItem* ) ) );
-	connect( constraintsView, SIGNAL( selectionChanged() ), this, SLOT( hideConstraintInputs() ) );
-	connect( constraintsEditBox1, SIGNAL( valueChanged( double ) ), this, SLOT( setMinValue( double ) ) );
-	connect( constraintsEditBox2, SIGNAL( valueChanged( double ) ), this, SLOT( setMaxValue( double ) ) );
-	connect( categoriesEnabledBox, SIGNAL( toggled( bool ) ), this, SLOT( enableCategories( bool ) ) );
+	connect( constraintsView, SIGNAL(executed(Q3ListViewItem*)), this, SLOT(insertConstraintsEditBoxes(Q3ListViewItem*)) );
+	connect( constraintsView, SIGNAL(selectionChanged()), this, SLOT(hideConstraintInputs()) );
+	connect( constraintsEditBox1, SIGNAL(valueChanged(double)), this, SLOT(setMinValue(double)) );
+	connect( constraintsEditBox2, SIGNAL(valueChanged(double)), this, SLOT(setMaxValue(double)) );
+	connect( categoriesEnabledBox, SIGNAL(toggled(bool)), this, SLOT(enableCategories(bool)) );
 }
 
 DishInput::~DishInput()

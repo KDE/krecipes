@@ -51,9 +51,9 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	setCaption( i18n("Page Setup") );
 
 	toolbar->addAction( KStandardAction::open( this, SLOT(loadFile()), actionCollection ) );
-	toolbar->addAction( KStandardAction::save( this, SLOT( saveLayout() ), actionCollection ) );
-	toolbar->addAction( KStandardAction::saveAs( this, SLOT( saveAsLayout() ), actionCollection ) );
-	toolbar->addAction( KStandardAction::revert( this, SLOT( selectNoLayout() ), actionCollection ) );
+	toolbar->addAction( KStandardAction::save( this, SLOT(saveLayout()), actionCollection ) );
+	toolbar->addAction( KStandardAction::saveAs( this, SLOT(saveAsLayout()), actionCollection ) );
+	toolbar->addAction( KStandardAction::revert( this, SLOT(selectNoLayout()), actionCollection ) );
 
 
 	//KDE4 port do the last arguments of the KToolBarPopupAction and line 67 duplicate information ?
@@ -71,7 +71,7 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 
 	KHBox *viewBox = new KHBox( this );
 	ThumbBarView *thumbBar = new ThumbBarView(viewBox,Qt::Horizontal);
-	connect(thumbBar,SIGNAL(signalURLSelected(const QString&)), this, SLOT(loadTemplate(const QString&)));
+	connect(thumbBar,SIGNAL(signalURLSelected(QString)), this, SLOT(loadTemplate(QString)));
 	QDir included_templates( getIncludedLayoutDir(), "*.xsl", QDir::Name | QDir::IgnoreCase, QDir::Files );
 	for ( uint i = 0; i < included_templates.count(); i++ ) {
 		new ThumbBarItem(thumbBar,included_templates.path() + '/' +included_templates[ i ]);
@@ -91,8 +91,8 @@ PageSetupDialog::PageSetupDialog( QWidget *parent, const Recipe &sample, const Q
 	layout->addWidget( buttonsBox );
 
 	connect( m_htmlPart, SIGNAL(itemVisibilityChanged(KreDisplayItem*,bool)), this, SLOT(updateItemVisibility(KreDisplayItem*,bool)) );
-	connect( okButton, SIGNAL( clicked() ), SLOT( accept() ) );
-	connect( cancelButton, SIGNAL( clicked() ), SLOT( reject() ) );
+	connect( okButton, SIGNAL(clicked()), SLOT(accept()) );
+	connect( cancelButton, SIGNAL(clicked()), SLOT(reject()) );
 
 	KConfigGroup config = KGlobal::config()->group( "Page Setup" );
 	QSize defaultSize(722,502);
@@ -174,7 +174,7 @@ void PageSetupDialog::initShownItems()
 		if ( properties[item] & SetupDisplay::Visibility ) {
 			int new_id = shown_items_popup->insertItem ( *it );
 			shown_items_popup->setItemChecked( new_id, item->show );
-			shown_items_popup->connectItem( new_id, this, SLOT( setItemShown( int ) ) );
+			shown_items_popup->connectItem( new_id, this, SLOT(setItemShown(int)) );
 
 			popup_widget_map.insert( new_id, item );
 			widget_popup_map.insert( item, new_id );

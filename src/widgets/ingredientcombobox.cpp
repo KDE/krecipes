@@ -55,8 +55,8 @@ void IngredientComboBox::reload()
 		setEditText( remember_text );
 
 	database->disconnect( this );
-	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( createIngredient( const Element & ) ) );
-	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
+	connect( database, SIGNAL(ingredientCreated(Element)), SLOT(createIngredient(Element)) );
+	connect( database, SIGNAL(ingredientRemoved(int)), SLOT(removeIngredient(int)) );
 }
 
 void IngredientComboBox::loadMore()
@@ -100,8 +100,8 @@ void IngredientComboBox::endLoad()
 	load_timer->stop();
 
 	//now we're ready to receive ingredient created/removed events from the database
-	connect( database, SIGNAL( ingredientCreated( const Element & ) ), SLOT( createIngredient( const Element & ) ) );
-	connect( database, SIGNAL( ingredientRemoved( int ) ), SLOT( removeIngredient( int ) ) );
+	connect( database, SIGNAL(ingredientCreated(Element)), SLOT(createIngredient(Element)) );
+	connect( database, SIGNAL(ingredientRemoved(int)), SLOT(removeIngredient(int)) );
 }
 
 int IngredientComboBox::id( int row )

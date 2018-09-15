@@ -61,7 +61,7 @@ SetupDisplay::SetupDisplay( const Recipe &sample, QWidget *parent ) : KHTMLPart(
 		has_changes( false ),
 		popup(0)
 {
-	connect( this, SIGNAL( popupMenu(const QString &,const QPoint &) ), SLOT( nodeClicked(const QString &,const QPoint &) ) );
+	connect( this, SIGNAL(popupMenu(QString,QPoint)), SLOT(nodeClicked(QString,QPoint)) );
 
 	if ( sample.recipeID != -1 )
 		m_sample = sample;
@@ -434,16 +434,16 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	if ( properties & BackgroundColor )
-		popup->addAction( i18n( "Background Color..." ), this, SLOT( setBackgroundColor() ) );
+		popup->addAction( i18n( "Background Color..." ), this, SLOT(setBackgroundColor()) );
 
 	if ( properties & TextColor )
-		popup->addAction( i18n( "Text Color..." ), this, SLOT( setTextColor() ) );
+		popup->addAction( i18n( "Text Color..." ), this, SLOT(setTextColor()) );
 
 	if ( properties & Font )
-		popup->addAction( KIcon( "list-add-font" ), i18n( "Font..." ), this, SLOT( setFont() ) );
+		popup->addAction( KIcon( "list-add-font" ), i18n( "Font..." ), this, SLOT(setFont()) );
 
 	if ( properties & Visibility ) {
-		int id = popup->insertItem( i18n( "Show" ), this, SLOT( setShown( int ) ) );
+		int id = popup->insertItem( i18n( "Show" ), this, SLOT(setShown(int)) );
 		popup->setItemChecked( id, item->show );
 	}
 
@@ -467,7 +467,7 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 		if ( align & Qt::AlignRight )
 			r_action->setChecked(true);
 
-		connect( alignment_actions, SIGNAL( selected( QAction* ) ), SLOT( setAlignment( QAction* ) ) );
+		connect( alignment_actions, SIGNAL(selected(QAction*)), SLOT(setAlignment(QAction*)) );
 
 		popup->insertItem( i18n( "Alignment" ), sub_popup );
 
@@ -475,10 +475,10 @@ void SetupDisplay::nodeClicked(const QString &/*url*/,const QPoint &point)
 	}
 
 	if ( properties & Border )
-		popup->addAction( i18n( "Border..." ), this, SLOT( setBorder() ) );
+		popup->addAction( i18n( "Border..." ), this, SLOT(setBorder()) );
 
 	if ( properties & Columns )
-		popup->addAction( i18n( "Columns..." ), this, SLOT( setColumns() ) );
+		popup->addAction( i18n( "Columns..." ), this, SLOT(setColumns()) );
 
 	popup->popup( point );
 }

@@ -85,8 +85,8 @@ void PrepMethodComboBox::reload()
 		lineEdit()->setText( remember_text );
 
 	database->disconnect( this );
-	connect( database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( createPrepMethod( const Element & ) ) );
-	connect( database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
+	connect( database, SIGNAL(prepMethodCreated(Element)), SLOT(createPrepMethod(Element)) );
+	connect( database, SIGNAL(prepMethodRemoved(int)), SLOT(removePrepMethod(int)) );
 }
 
 int PrepMethodComboBox::id( int row )

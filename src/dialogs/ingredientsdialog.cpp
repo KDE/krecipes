@@ -84,9 +84,9 @@ IngredientsDialog::IngredientsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 	page_layout->addWidget( tabWidget );
 
 	// Signals & Slots
-	connect( addIngredientButton, SIGNAL( clicked() ), ingredientActionsHandler, SLOT( createNew() ) );
-	connect( removeIngredientButton, SIGNAL( clicked() ), ingredientActionsHandler, SLOT( remove() ) );
-	connect( propertyButton, SIGNAL( clicked() ), this, SLOT( showPropertyEdit() ) );
+	connect( addIngredientButton, SIGNAL(clicked()), ingredientActionsHandler, SLOT(createNew()) );
+	connect( removeIngredientButton, SIGNAL(clicked()), ingredientActionsHandler, SLOT(remove()) );
+	connect( propertyButton, SIGNAL(clicked()), this, SLOT(showPropertyEdit()) );
 
 }
 

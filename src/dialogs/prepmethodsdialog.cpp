@@ -55,10 +55,10 @@ PrepMethodsDialog::PrepMethodsDialog( QWidget* parent, RecipeDB *db ) : QWidget(
 
 	//Connect Signals & Slots
 
-	connect ( newPrepMethodButton, SIGNAL( clicked() ),
-		prepMethodActionsHandler, SLOT( createNew() ) );
-	connect ( removePrepMethodButton, SIGNAL( clicked() ),
-		prepMethodActionsHandler, SLOT( remove() ) );
+	connect ( newPrepMethodButton, SIGNAL(clicked()),
+		prepMethodActionsHandler, SLOT(createNew()) );
+	connect ( removePrepMethodButton, SIGNAL(clicked()),
+		prepMethodActionsHandler, SLOT(remove()) );
 }
 
 PrepMethodsDialog::~PrepMethodsDialog()

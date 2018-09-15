@@ -143,7 +143,7 @@ DBImportDialog::DBImportDialog( QWidget *parent, const char *name )
 	languageChange();
 
 	// signals and slots connections
-	connect( dbButtonGroup, SIGNAL( clicked( int ) ), this, SLOT( switchDBPage( int ) ) );
+	connect( dbButtonGroup, SIGNAL(clicked(int)), this, SLOT(switchDBPage(int)) );
 }
 
 void DBImportDialog::languageChange()

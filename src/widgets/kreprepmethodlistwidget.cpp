@@ -29,8 +29,8 @@ KrePrepMethodListWidget::KrePrepMethodListWidget( QWidget *parent, RecipeDB *db 
 	KConfigGroup config = KGlobal::config()->group( "Performance" );
 	setCurrentLimit( config.readEntry( "Limit", -1 ) );
 
-	connect( m_database, SIGNAL( prepMethodCreated( const Element & ) ), SLOT( createPrepMethod( const Element & ) ) );
-	connect( m_database, SIGNAL( prepMethodRemoved( int ) ), SLOT( removePrepMethod( int ) ) );
+	connect( m_database, SIGNAL(prepMethodCreated(Element)), SLOT(createPrepMethod(Element)) );
+	connect( m_database, SIGNAL(prepMethodRemoved(int)), SLOT(removePrepMethod(int)) );
 
 }
 

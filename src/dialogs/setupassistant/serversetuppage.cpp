@@ -149,7 +149,7 @@ ServerSetupPage::ServerSetupPage( QWidget *parent ) : QWidget( parent )
 	//layout->addItem( spacerRight, 7, 4 );
 
 	// Signals & Slots
-	connect( remoteServerCheckBox, SIGNAL( toggled( bool ) ), serverSettingsGBox, SLOT( setEnabled( bool ) ) );
+	connect( remoteServerCheckBox, SIGNAL(toggled(bool)), serverSettingsGBox, SLOT(setEnabled(bool)) );
 
 }
 

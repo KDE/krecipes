@@ -80,7 +80,7 @@ SQLiteSetupPage::SQLiteSetupPage( QWidget *parent ) : QWidget( parent )
 	QSpacerItem* bottomSpacer = new QSpacerItem( 10, 10, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding );
 	layout->addItem( bottomSpacer, 4, 1 );
 
-	connect( file_select, SIGNAL( clicked() ), SLOT( selectFile() ) );
+	connect( file_select, SIGNAL(clicked()), SLOT(selectFile()) );
 }
 
 QString SQLiteSetupPage::dbFile( void ) const

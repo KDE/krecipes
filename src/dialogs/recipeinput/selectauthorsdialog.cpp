@@ -50,8 +50,8 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	authorsCombo->completionObject() ->setCompletionMode( KGlobalSettings::CompletionPopupAuto );
 	authorsCombo->lineEdit() ->disconnect( authorsCombo ); //so hitting enter doesn't enter the item into the box
 
-	connect( authorsCombo->lineEdit(), SIGNAL( returnPressed() ),
-					 this, SLOT( addAuthor() ) );
+	connect( authorsCombo->lineEdit(), SIGNAL(returnPressed()),
+					 this, SLOT(addAuthor()) );
 
 	// Add/Remove buttons
 
@@ -92,8 +92,8 @@ SelectAuthorsDialog::SelectAuthorsDialog( QWidget *parent, const ElementList &cu
 	resize(450, height());
 
 	// Connect signals & Slots
-	connect ( addAuthorButton, SIGNAL( clicked() ), this, SLOT( addAuthor() ) );
-	connect ( removeAuthorButton, SIGNAL( clicked() ), this, SLOT( removeAuthor() ) );
+	connect ( addAuthorButton, SIGNAL(clicked()), this, SLOT(addAuthor()) );
+	connect ( removeAuthorButton, SIGNAL(clicked()), this, SLOT(removeAuthor()) );
 
 	authorsCombo->setEditText(QString());
 	authorsCombo->lineEdit()->setFocus();

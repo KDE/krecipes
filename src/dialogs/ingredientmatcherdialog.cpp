@@ -138,14 +138,14 @@ IngredientMatcherDialog::IngredientMatcherDialog( QWidget *parent, RecipeDB *db 
 	addWidget( lowerBox );
 
 	// Connect signals & slots
-	connect ( okButton, SIGNAL( clicked() ), this, SLOT( findRecipes() ) );
-	connect ( clearButton, SIGNAL( clicked() ), recipeListView->listView(), SLOT( clear() ) );
-	connect ( clearButton, SIGNAL( clicked() ), this, SLOT( unselectIngredients() ) );
-	connect( recipeListView->listView(), SIGNAL( selectionChanged() ), this, SLOT( haveSelectedItems() ) );
-	connect ( actionHandler, SIGNAL( recipeSelected( int, int ) ), SIGNAL( recipeSelected( int, int ) ) );
-	connect( addButton, SIGNAL( clicked() ), this, SLOT( addIngredient() ) );
-	connect( removeButton, SIGNAL( clicked() ), this, SLOT( removeIngredient() ) );
-	connect( ingListView->listView(), SIGNAL( doubleClicked( Q3ListViewItem*, const QPoint &, int ) ), SLOT( itemRenamed( Q3ListViewItem*, const QPoint &, int ) ) );
+	connect ( okButton, SIGNAL(clicked()), this, SLOT(findRecipes()) );
+	connect ( clearButton, SIGNAL(clicked()), recipeListView->listView(), SLOT(clear()) );
+	connect ( clearButton, SIGNAL(clicked()), this, SLOT(unselectIngredients()) );
+	connect( recipeListView->listView(), SIGNAL(selectionChanged()), this, SLOT(haveSelectedItems()) );
+	connect ( actionHandler, SIGNAL(recipeSelected(int,int)), SIGNAL(recipeSelected(int,int)) );
+	connect( addButton, SIGNAL(clicked()), this, SLOT(addIngredient()) );
+	connect( removeButton, SIGNAL(clicked()), this, SLOT(removeIngredient()) );
+	connect( ingListView->listView(), SIGNAL(doubleClicked(Q3ListViewItem*,QPoint,int)), SLOT(itemRenamed(Q3ListViewItem*,QPoint,int)) );
 }
 
 IngredientMatcherDialog::~IngredientMatcherDialog()

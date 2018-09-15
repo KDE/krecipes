@@ -34,10 +34,10 @@ KreUnitListWidget::KreUnitListWidget( QWidget *parent, RecipeDB *db ) : KreGener
         m_sourceModel->setHorizontalHeaderLabels( horizontalLabels );
 
 	//Connect signals and slots.
-	connect( m_database, SIGNAL( unitCreated( const Unit & ) ),
-		this, SLOT( createUnit( const Unit & ) ) );
-	connect( m_database, SIGNAL( unitRemoved( int ) ),
-		this, SLOT( removeUnit( int ) ) );
+	connect( m_database, SIGNAL(unitCreated(Unit)),
+		this, SLOT(createUnit(Unit)) );
+	connect( m_database, SIGNAL(unitRemoved(int)),
+		this, SLOT(removeUnit(int)) );
 }
 
 void KreUnitListWidget::load( int limit, int offset )

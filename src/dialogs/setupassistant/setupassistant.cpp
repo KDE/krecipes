@@ -72,7 +72,7 @@ SetupAssistant::SetupAssistant( QWidget *parent, Qt::WFlags f ) : KAssistantDial
 
 	showPages( SQLite );
 
-	connect( dbTypeSetupPage, SIGNAL( showPages( DBType ) ), this, SLOT( showPages( DBType ) ) );
+	connect( dbTypeSetupPage, SIGNAL(showPages(DBType)), this, SLOT(showPages(DBType)) );
 }
 
 

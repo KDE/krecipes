@@ -123,10 +123,10 @@ DietWizardDialog::DietWizardDialog( QWidget *parent, RecipeDB *db ) : KVBox( par
 	mealTabs->setCurrentIndex( mealTabs->indexOf( mealTab ) );
 
 	// Signals & Slots
-	connect( mealNumberSelector, SIGNAL( valueChanged( int ) ), this, SLOT( changeMealNumber( int ) ) );
-	connect( dayNumberSelector, SIGNAL( valueChanged( int ) ), this, SLOT( changeDayNumber( int ) ) );
-	connect( okButton, SIGNAL( clicked() ), this, SLOT( createDiet() ) );
-	connect( clearButton, SIGNAL( clicked() ), this, SLOT( clear() ) );
+	connect( mealNumberSelector, SIGNAL(valueChanged(int)), this, SLOT(changeMealNumber(int)) );
+	connect( dayNumberSelector, SIGNAL(valueChanged(int)), this, SLOT(changeDayNumber(int)) );
+	connect( okButton, SIGNAL(clicked()), this, SLOT(createDiet()) );
+	connect( clearButton, SIGNAL(clicked()), this, SLOT(clear()) );
 }
 
 
@@ -267,7 +267,7 @@ void DietWizardDialog::createDiet( void )
 
 		// display the list
 		QPointer<DietViewDialog> dietDisplay = new DietViewDialog( this, *dietRList, dayNumber, mealNumber, dishNumbers );
-		connect( dietDisplay, SIGNAL( signalOk() ), this, SLOT( createShoppingList() ) );
+		connect( dietDisplay, SIGNAL(signalOk()), this, SLOT(createShoppingList()) );
 		dietDisplay->exec();
 		delete dietDisplay;
 	}

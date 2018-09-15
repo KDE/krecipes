@@ -139,21 +139,21 @@ void CategoryListItem::setText( int column, const QString &text )
 CategoryListView::CategoryListView( QWidget *parent, RecipeDB *db ) : DBListViewBase( parent, db, db->categoryTopLevelCount() ),
 	m_item_to_delete(0)
 {
-	//connect( this, SIGNAL( spacePressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
-	//connect( this, SIGNAL( returnPressed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
-	//connect( this, SIGNAL( executed(QListViewItem*) ), SLOT( open(QListViewItem*) ) );
+	//connect( this, SIGNAL(spacePressed(QListViewItem*)), SLOT(open(QListViewItem*)) );
+	//connect( this, SIGNAL(returnPressed(QListViewItem*)), SLOT(open(QListViewItem*)) );
+	//connect( this, SIGNAL(executed(QListViewItem*)), SLOT(open(QListViewItem*)) );
 
-	connect( this, SIGNAL( expanded(Q3ListViewItem*) ), SLOT( open(Q3ListViewItem*) ) );
+	connect( this, SIGNAL(expanded(Q3ListViewItem*)), SLOT(open(Q3ListViewItem*)) );
 
 	setRootIsDecorated( true );
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( Q3ListView::Reject );
 
-	connect( database, SIGNAL( categoryCreated( const Element &, int ) ), SLOT( checkCreateCategory( const Element &, int ) ) );
-	connect( database, SIGNAL( categoryRemoved( int ) ), SLOT( removeCategory( int ) ) );
-	connect( database, SIGNAL( categoryModified( const Element & ) ), SLOT( modifyCategory( const Element & ) ) );
-	connect( database, SIGNAL( categoryModified( int, int ) ), SLOT( modifyCategory( int, int ) ) );
-	connect( database, SIGNAL( categoriesMerged( int, int ) ), SLOT( mergeCategories( int, int ) ) );
+	connect( database, SIGNAL(categoryCreated(Element,int)), SLOT(checkCreateCategory(Element,int)) );
+	connect( database, SIGNAL(categoryRemoved(int)), SLOT(removeCategory(int)) );
+	connect( database, SIGNAL(categoryModified(Element)), SLOT(modifyCategory(Element)) );
+	connect( database, SIGNAL(categoryModified(int,int)), SLOT(modifyCategory(int,int)) );
+	connect( database, SIGNAL(categoriesMerged(int,int)), SLOT(mergeCategories(int,int)) );
 }
 
 // (Re)loads the data from the database

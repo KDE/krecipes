@@ -98,8 +98,8 @@ PropertyListView::PropertyListView( QWidget *parent, RecipeDB *db ) :
 	setAllColumnsShowFocus( true );
 	setDefaultRenameAction( Q3ListView::Reject );
 
-	connect( db, SIGNAL( propertyCreated( const IngredientProperty & ) ), SLOT( createProperty( const IngredientProperty & ) ) );
-	connect( db, SIGNAL( propertyRemoved( int ) ), SLOT( removeProperty( int ) ) );
+	connect( db, SIGNAL(propertyCreated(IngredientProperty)), SLOT(createProperty(IngredientProperty)) );
+	connect( db, SIGNAL(propertyRemoved(int)), SLOT(removeProperty(int)) );
 }
 
 void PropertyListView::reload()

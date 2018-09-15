@@ -56,8 +56,8 @@ PropertiesDialog::PropertiesDialog( QWidget *parent, RecipeDB *db ) : QWidget( p
 	layout->addLayout( vboxl );
 
 	// Connect signals & slots
-	connect( addPropertyButton, SIGNAL( clicked() ), propertyActionsHandler, SLOT( createNew() ) );
-	connect( removePropertyButton, SIGNAL( clicked() ), propertyActionsHandler, SLOT( remove() ) );
+	connect( addPropertyButton, SIGNAL(clicked()), propertyActionsHandler, SLOT(createNew()) );
+	connect( removePropertyButton, SIGNAL(clicked()), propertyActionsHandler, SLOT(remove()) );
 
 }
 

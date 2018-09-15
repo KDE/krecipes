@@ -52,8 +52,8 @@ KreGenericListWidget::KreGenericListWidget( QWidget *parent, RecipeDB *db ):
 	ui->m_treeView->setRootIsDecorated( false );
 	ui->m_treeView->setUniformRowHeights( true );
 	ui->m_treeView->setContextMenuPolicy( Qt::CustomContextMenu );
-	connect( ui->m_treeView, SIGNAL(customContextMenuRequested(const QPoint &)),
-		this, SLOT(contextMenuSlot(const QPoint &)) );
+	connect( ui->m_treeView, SIGNAL(customContextMenuRequested(QPoint)),
+		this, SLOT(contextMenuSlot(QPoint)) );
 	m_anim = new KPixmapSequenceWidget;
 	m_anim->setVisible( false );
 	QGridLayout * layout = new QGridLayout;
@@ -98,8 +98,8 @@ void KreGenericListWidget::setSearchAsYouType( bool value )
 {
 	disconnect( ui->m_searchBox );
 	if (value) {
-		connect( ui->m_searchBox, SIGNAL(textChanged(const QString &)),
-			this, SLOT(setFilter(const QString &)) );
+		connect( ui->m_searchBox, SIGNAL(textChanged(QString)),
+			this, SLOT(setFilter(QString)) );
 	} else {
 		connect( ui->m_searchBox, SIGNAL(returnPressed()),
 			this, SLOT(setFilter()) );	
@@ -152,8 +152,8 @@ void KreGenericListWidget::reload( ReloadFlags flags )
 	//Disconnect this signal, because calling load(...) may alter the model
 	//data triggering this signal, we must restore this signal/slot connection
 	//as soon as the load is finished.
-	disconnect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
+	disconnect( m_proxyModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+		this, SIGNAL(itemsChanged(QModelIndex,QModelIndex)) );
 
 	//Reload the current page.
 	load( m_currentLimit, m_currentOffset );
@@ -170,8 +170,8 @@ void KreGenericListWidget::startAnimation()
 
 void KreGenericListWidget::loadFinishedPrivateSlot()
 {
-	connect( m_proxyModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-		this, SIGNAL(itemsChanged(const QModelIndex &, const QModelIndex &)) );
+	connect( m_proxyModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+		this, SIGNAL(itemsChanged(QModelIndex,QModelIndex)) );
 	m_loadFinished = true;
 	m_anim->setVisible( false );
 	this->setEnabled( true );

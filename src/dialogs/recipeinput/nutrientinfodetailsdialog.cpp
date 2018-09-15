@@ -33,8 +33,8 @@ NutrientInfoDetailsDialog::NutrientInfoDetailsDialog( QWidget *parent )
 	setLayout( mainLayout );
 	mainLayout->addWidget( mainWidget );
 
-	connect( ui->m_textBrowser, SIGNAL(anchorClicked(const QUrl &)),
-		this, SLOT(linkClickedSlot(const QUrl &)) );
+	connect( ui->m_textBrowser, SIGNAL(anchorClicked(QUrl)),
+		this, SLOT(linkClickedSlot(QUrl)) );
 
 	connect( ui->m_updateButton, SIGNAL(clicked()),
 		this, SIGNAL(updateRequested()) );

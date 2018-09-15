@@ -33,10 +33,10 @@ void IngredientNameDelegate::loadAllIngredientsList( RecipeDB * database )
 	//FIXME: This doesn't respect the limits configured in the program
 	database->loadIngredientMaps( &m_idToIngredientMap, &m_ingredientNameToIdMap );
 
-	connect( database, SIGNAL(ingredientCreated(const Element&)),
-		this, SLOT(ingredientCreatedSlot(const Element&)) );
-	connect( database, SIGNAL(ingredientModified(const Ingredient&)),
-		this, SLOT(ingredientModifiedSlot(const Ingredient&)) );
+	connect( database, SIGNAL(ingredientCreated(Element)),
+		this, SLOT(ingredientCreatedSlot(Element)) );
+	connect( database, SIGNAL(ingredientModified(Ingredient)),
+		this, SLOT(ingredientModifiedSlot(Ingredient)) );
 	connect( database, SIGNAL(ingredientRemoved(int)),
 		this, SLOT(ingredientRemovedSlot(int)) );
 }
@@ -46,10 +46,10 @@ void IngredientNameDelegate::loadAllHeadersList( RecipeDB * database )
 	//FIXME: This doesn't respect the limits configured in the program
 	database->loadIngredientGroupMaps( &m_idToHeaderMap, &m_headerNameToIdMap );
 
-	connect( database, SIGNAL(ingGroupCreated(const Element&)),
-		this, SLOT(headerCreatedSlot(const Element&)) );
-	connect( database, SIGNAL(ingGroupModified(const Element&)),
-		this, SLOT(headerModifiedSlot(const Element &)) );
+	connect( database, SIGNAL(ingGroupCreated(Element)),
+		this, SLOT(headerCreatedSlot(Element)) );
+	connect( database, SIGNAL(ingGroupModified(Element)),
+		this, SLOT(headerModifiedSlot(Element)) );
 	connect( database, SIGNAL(ingGroupRemoved(int)),
 		this, SLOT(headerRemovedSlot(int)) );
 }

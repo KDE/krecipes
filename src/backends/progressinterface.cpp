@@ -66,7 +66,7 @@ void ProgressInterface::listenOn( RecipeDB *db )
 		database->disconnect(slot_obj);
 
 	if ( db ) {
-		slot_obj->connect( db, SIGNAL(progressBegin(int,const QString&,const QString&,int)), slot_obj, SLOT(progressBegin(int,const QString&,const QString&,int)) );
+		slot_obj->connect( db, SIGNAL(progressBegin(int,QString,QString,int)), slot_obj, SLOT(progressBegin(int,QString,QString,int)) );
 		slot_obj->connect( db, SIGNAL(progressDone()), slot_obj, SLOT(progressDone()) );
 		slot_obj->connect( db, SIGNAL(progress()), slot_obj, SLOT(progress()) );
 	}

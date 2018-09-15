@@ -47,8 +47,8 @@ IngredientGroupsDialog::IngredientGroupsDialog( RecipeDB *db, QWidget *parent, c
 	layout->addLayout(buttonLayout);
 	setLayout( layout );
 
-	connect( addHeaderButton, SIGNAL( clicked() ), headerActionsHandler, SLOT( createNew() ) );
-	connect( removeHeaderButton, SIGNAL( clicked() ), headerActionsHandler, SLOT( remove() ) );
+	connect( addHeaderButton, SIGNAL(clicked()), headerActionsHandler, SLOT(createNew()) );
+	connect( removeHeaderButton, SIGNAL(clicked()), headerActionsHandler, SLOT(remove()) );
 }
 
 void IngredientGroupsDialog::reload( ReloadFlags flag )

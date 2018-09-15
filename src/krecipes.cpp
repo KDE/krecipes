@@ -97,19 +97,19 @@ Krecipes::Krecipes(): KXmlGuiWindow( 0 )
 
 
 	// allow the view to change the statusbar and caption
-	connect( m_view, SIGNAL( signalChangeStatusbar( const QString& ) ),
-		this, SLOT( changeStatusbar( const QString& ) ) );
-	connect( m_view, SIGNAL( signalChangeCaption( const QString& ) ),
-		this, SLOT( changeCaption( const QString& ) ) );
+	connect( m_view, SIGNAL(signalChangeStatusbar(QString)),
+		this, SLOT(changeStatusbar(QString)) );
+	connect( m_view, SIGNAL(signalChangeCaption(QString)),
+		this, SLOT(changeCaption(QString)) );
 
-	connect( m_view, SIGNAL( panelShown( KrePanel, bool ) ), SLOT( updateActions( KrePanel, bool ) ) );
+	connect( m_view, SIGNAL(panelShown(KrePanel,bool)), SLOT(updateActions(KrePanel,bool)) );
 
-	connect( m_view, SIGNAL( recipeSelected(bool) ), SLOT( recipeSelected(bool) ) );
+	connect( m_view, SIGNAL(recipeSelected(bool)), SLOT(recipeSelected(bool)) );
 
 
 	// Enable/Disable the Save Button (Initialize disabled, and connect signal)
 
-	connect( m_view, SIGNAL( enableSaveOption( bool ) ), this, SLOT( enableSaveOption( bool ) ) );
+	connect( m_view, SIGNAL(enableSaveOption(bool)), this, SLOT(enableSaveOption(bool)) );
 
 	enableSaveOption( false ); // Disables saving initially
 	recipeSelected( false ); //nothing is selected initially
@@ -188,27 +188,27 @@ void Krecipes::recipeSelected( bool selected )
 void Krecipes::setupActions()
 {
 
-	printAction =  KStandardAction::print( this, SLOT( filePrint() ), actionCollection() );
+	printAction =  KStandardAction::print( this, SLOT(filePrint()), actionCollection() );
 
 	reloadAction = new KAction( this );
 	reloadAction->setText( i18nc("@action:inmenu Reload Recipe", "Reloa&d" ) );
 	reloadAction->setIcon( KIcon( "view-refresh" ) );
 	reloadAction->setShortcut( Qt::Key_F5 );
 	actionCollection()->addAction( "reload_action" , reloadAction );
-	connect( reloadAction, SIGNAL(triggered(bool)), m_view, SLOT( reloadDisplay() ) );
+	connect( reloadAction, SIGNAL(triggered(bool)), m_view, SLOT(reloadDisplay()) );
 
 	editAction = new KAction( this );
 	editAction->setText( i18n( "&Edit Recipe" ) );
 	editAction->setIcon( KIcon( "document-edit" ) );
 	editAction->setShortcut( Qt::CTRL + Qt::Key_E );
 	actionCollection()->addAction( "edit_action" , editAction );
-	connect( editAction, SIGNAL(triggered(bool)), m_view, SLOT( editRecipe() ) );
+	connect( editAction, SIGNAL(triggered(bool)), m_view, SLOT(editRecipe()) );
 
 	converterAction = new KAction( this );
 	converterAction->setText( i18n( "&Measurement Converter" ) );
 	converterAction->setShortcut( Qt::CTRL + Qt::Key_M );
 	actionCollection()->addAction( "converter_action" , converterAction );
-	connect( converterAction, SIGNAL(triggered(bool)), this , SLOT( conversionToolSlot() ) );
+	connect( converterAction, SIGNAL(triggered(bool)), this , SLOT(conversionToolSlot()) );
 
 	KConfigGroup grp(KGlobal::config(),"Advanced");
 
@@ -219,129 +219,129 @@ void Krecipes::setupActions()
 		mergeCategoriesAction->setText( i18n( "&Merge Similar Categories..." ) );
 		//mergeCategoriesAction->setShortcut( Qt::CTRL + Qt::Key_M );
 		actionCollection()->addAction( "merge_categories_action", mergeCategoriesAction );
-		connect( mergeCategoriesAction, SIGNAL(triggered(bool)), this, SLOT( mergeSimilarCategories() ) );
+		connect( mergeCategoriesAction, SIGNAL(triggered(bool)), this, SLOT(mergeSimilarCategories()) );
 
 		mergeIngredientsAction = new KAction( this );
 		mergeIngredientsAction->setIcon( KIcon( "ingredients" ) );
 		mergeIngredientsAction->setText( i18n( "&Merge Similar Ingredients..." ) );
 		//ºmergeIngredientsAction->setShortcut( Qt::CTRL + Qt::Key_M );
 		actionCollection()->addAction( "merge_ingredients_action", mergeIngredientsAction );
-		connect( mergeIngredientsAction, SIGNAL(triggered(bool)), this, SLOT( mergeSimilarIngredients() ) );
+		connect( mergeIngredientsAction, SIGNAL(triggered(bool)), this, SLOT(mergeSimilarIngredients()) );
 
 	}
 
-	KAction *action = KStandardAction::openNew( this, SLOT( fileNew() ), actionCollection() );
+	KAction *action = KStandardAction::openNew( this, SLOT(fileNew()), actionCollection() );
 	action->setText( i18n( "&New Recipe" ) );
 	action->setToolTip( i18n( "&New Recipe" ) );
 
-	saveAction = KStandardAction::save( this, SLOT( fileSave() ), actionCollection() );
+	saveAction = KStandardAction::save( this, SLOT(fileSave()), actionCollection() );
 
-	KStandardAction::quit( kapp, SLOT( quit() ), actionCollection() );
+	KStandardAction::quit( kapp, SLOT(quit()), actionCollection() );
 
-	m_statusbarAction = KStandardAction::showStatusbar( this, SLOT( optionsShowStatusbar() ), actionCollection() );
+	m_statusbarAction = KStandardAction::showStatusbar( this, SLOT(optionsShowStatusbar()), actionCollection() );
 
-	KStandardAction::keyBindings( this, SLOT( optionsConfigureKeys() ), actionCollection() );
-	KStandardAction::configureToolbars( this, SLOT( optionsConfigureToolbars() ), actionCollection() );
-	KStandardAction::preferences( this, SLOT( optionsPreferences() ), actionCollection() );
+	KStandardAction::keyBindings( this, SLOT(optionsConfigureKeys()), actionCollection() );
+	KStandardAction::configureToolbars( this, SLOT(optionsConfigureToolbars()), actionCollection() );
+	KStandardAction::preferences( this, SLOT(optionsPreferences()), actionCollection() );
 
 	importAction = new KAction( this );
 	importAction->setText( i18n( "Import from File..." ) );
 	importAction->setIcon( KIcon( "document-import" ) );
 	importAction->setShortcut( Qt::CTRL + Qt::Key_I );
 	actionCollection()->addAction( "import_action" , importAction );
-	connect( importAction, SIGNAL(triggered(bool)), this, SLOT( import() ) );
+	connect( importAction, SIGNAL(triggered(bool)), this, SLOT(import()) );
 
 	importDBAction= new KAction( this );
 	importDBAction->setText( i18n( "Import from Database..." ) );
 	importDBAction->setIcon( KIcon( "document-import" ) );
 	actionCollection()->addAction( "import_db_action" , importDBAction );
-	connect( importDBAction, SIGNAL(triggered(bool)), this, SLOT( kreDBImport() ) );
+	connect( importDBAction, SIGNAL(triggered(bool)), this, SLOT(kreDBImport()) );
 
 	exportAction = new KAction( this );
 	exportAction->setText( i18n( "Export..." ) );
 	exportAction->setShortcut( Qt::CTRL + Qt::Key_O );
 	exportAction->setIcon( KIcon( "document-export" ) );
 	actionCollection()->addAction( "export_action" , exportAction );
-	connect( exportAction, SIGNAL(triggered(bool)), this, SLOT( fileExport() ) );
+	connect( exportAction, SIGNAL(triggered(bool)), this, SLOT(fileExport()) );
 
 	copyToClipboardAction = new KAction( this );
 	copyToClipboardAction->setText( i18n( "&Copy to Clipboard" ) );
 	copyToClipboardAction->setIcon( KIcon( "edit-copy" ) );
 	copyToClipboardAction->setShortcut( Qt::CTRL + Qt::Key_C );
 	actionCollection()->addAction( "copy_to_clipboard_action" , copyToClipboardAction );
-	connect( copyToClipboardAction, SIGNAL(triggered(bool)), this, SLOT( fileToClipboard()  ) );
+	connect( copyToClipboardAction, SIGNAL(triggered(bool)), this, SLOT(fileToClipboard()) );
 
 
         pageSetupAction = new KAction( this );
         pageSetupAction->setText( i18n( "Page Setup..." ) );
 	pageSetupAction->setIcon( KIcon( "configure" ) );
         actionCollection()->addAction( "page_setup_action" , pageSetupAction );
-        connect( pageSetupAction, SIGNAL(triggered(bool)), this, SLOT( pageSetupSlot() ) );
+        connect( pageSetupAction, SIGNAL(triggered(bool)), this, SLOT(pageSetupSlot()) );
 
         printSetupAction = new KAction( this );
         printSetupAction->setText( i18n( "Print Setup..." ) );
 	printSetupAction->setIcon( KIcon( "configure" ) );
         actionCollection()->addAction( "print_setup_action" , printSetupAction );
-        connect( printSetupAction, SIGNAL(triggered(bool)), this, SLOT( printSetupSlot() ) );
+        connect( printSetupAction, SIGNAL(triggered(bool)), this, SLOT(printSetupSlot()) );
 
         backupAction = new KAction( this );
         backupAction->setText( i18n( "Backup..." ) );
 	backupAction->setIcon( KIcon( "document-save-all" ) );
         actionCollection()->addAction( "backup_action" , backupAction );
-        connect( backupAction, SIGNAL(triggered(bool)), this, SLOT( backupSlot() ) );
+        connect( backupAction, SIGNAL(triggered(bool)), this, SLOT(backupSlot()) );
 
         restoreAction = new KAction( this );
         restoreAction->setText( i18n( "Restore..." ) );
 	restoreAction->setIcon( KIcon( "document-revert" ) );
         actionCollection()->addAction( "restore_action" , restoreAction );
-        connect( restoreAction, SIGNAL(triggered(bool)), this, SLOT( restoreSlot() ) );
+        connect( restoreAction, SIGNAL(triggered(bool)), this, SLOT(restoreSlot()) );
 
 	addToShoppingListAction = new KAction( this );
 	addToShoppingListAction->setText( i18n( "Add to Shopping List" ) ); 
 	addToShoppingListAction->setIcon( KIcon( "view-pim-tasks" ) );
 	addToShoppingListAction->setShortcut( Qt::CTRL + Qt::Key_S );
 	actionCollection()->addAction( "add_to_shopping_list_action", addToShoppingListAction );
-	connect( addToShoppingListAction, SIGNAL(triggered(bool)), m_view, SLOT( addToShoppingList() ) );
+	connect( addToShoppingListAction, SIGNAL(triggered(bool)), m_view, SLOT(addToShoppingList()) );
 
 	removeFromCategoryAction = new KAction( this );
 	removeFromCategoryAction->setText( i18n( "Remove From Category" ) );
 	removeFromCategoryAction->setIcon( KIcon( "edit-delete-shred" ) );
 	removeFromCategoryAction->setShortcut( Qt::ALT + Qt::Key_Delete );
 	actionCollection()->addAction( "remove_from_category_action", removeFromCategoryAction );
-	connect( removeFromCategoryAction, SIGNAL(triggered(bool)), m_view, SLOT( removeFromCategory() ) );
+	connect( removeFromCategoryAction, SIGNAL(triggered(bool)), m_view, SLOT(removeFromCategory()) );
 
 	deleteAction = new KAction( this );
 	deleteAction->setText( i18n( "Delete" ) );
 	deleteAction->setIcon( KIcon( "edit-delete" ) );
 	deleteAction->setShortcut( Qt::Key_Delete );
 	actionCollection()->addAction( "delete_action", deleteAction );
-	connect( deleteAction, SIGNAL(triggered(bool)), m_view, SLOT( deleteCurrentElements() ) );
+	connect( deleteAction, SIGNAL(triggered(bool)), m_view, SLOT(deleteCurrentElements()) );
 
 	showRecipeAction = new KAction( this );
 	showRecipeAction->setText( i18n( "Show Recipe(s)" ) );
 	showRecipeAction->setIcon( KIcon( "system-search" ) );
 	showRecipeAction->setShortcut( Qt::CTRL + Qt::Key_L );
 	actionCollection()->addAction( "show_recipe_action", showRecipeAction );
-	connect( showRecipeAction, SIGNAL(triggered(bool)), m_view, SLOT( showCurrentRecipes() ) );
+	connect( showRecipeAction, SIGNAL(triggered(bool)), m_view, SLOT(showCurrentRecipes()) );
 
 	categorizeAction = new KAction( this );
 	categorizeAction->setText( i18n( "Categorize" ) );
 	categorizeAction->setIcon( KIcon( "folder-yellow" ) );
 	categorizeAction->setShortcut( Qt::CTRL + Qt::Key_T );
 	actionCollection()->addAction( "categorize_action", categorizeAction );
-	connect( categorizeAction, SIGNAL(triggered(bool)), m_view, SLOT( categorizeCurrentRecipe() ) );
+	connect( categorizeAction, SIGNAL(triggered(bool)), m_view, SLOT(categorizeCurrentRecipe()) );
 
 	expandAllAction = new KAction( this );
 	expandAllAction->setText( i18n( "Expand All" ) );
 	expandAllAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
 	actionCollection()->addAction( "expand_all_action", expandAllAction );
-	connect( expandAllAction, SIGNAL(triggered(bool)), m_view, SLOT( expandAll() ) );
+	connect( expandAllAction, SIGNAL(triggered(bool)), m_view, SLOT(expandAll()) );
 
 	collapseAllAction = new KAction( this );
 	collapseAllAction->setText( i18n ( "Collapse All") );
 	collapseAllAction->setShortcut( Qt::CTRL + Qt::Key_Minus );
 	actionCollection()->addAction( "collapse_all_action", collapseAllAction );
-	connect( collapseAllAction, SIGNAL(triggered(bool)), m_view, SLOT( collapseAll() ) );
+	connect( collapseAllAction, SIGNAL(triggered(bool)), m_view, SLOT(collapseAll()) );
 	
 	//Note that createAction is intended to create anything except a new recipe.
 	createAction = new KAction( this );
@@ -349,14 +349,14 @@ void Krecipes::setupActions()
 	createAction->setIcon( KIcon( "document-new" ) );
 	createAction->setShortcut( Qt::CTRL + Qt::ALT + Qt::Key_N );
 	actionCollection()->addAction( "create_new_action", createAction );
-	connect( createAction, SIGNAL(triggered(bool)), m_view, SLOT( createNewElement() ) );
+	connect( createAction, SIGNAL(triggered(bool)), m_view, SLOT(createNewElement()) );
 
 	renameAction = new KAction( this );
 	renameAction->setText( i18n( "Rename" ) );
 	renameAction->setIcon( KIcon( "edit-rename" ) );
 	renameAction->setShortcut( Qt::CTRL + Qt::Key_R );
 	actionCollection()->addAction( "rename_action", renameAction );
-	connect( renameAction, SIGNAL(triggered(bool)), m_view, SLOT( renameCurrentElement() ) );
+	connect( renameAction, SIGNAL(triggered(bool)), m_view, SLOT(renameCurrentElement()) );
 
 	//Not using an standard action because I don't want it in toolbar nor in menus.
 	cutAction = new KAction( this );
@@ -364,7 +364,7 @@ void Krecipes::setupActions()
 	cutAction->setIcon( KIcon( "edit-cut" ) );
 	cutAction->setShortcut( Qt::CTRL + Qt::Key_X );
 	actionCollection()->addAction( "cut_action", cutAction );
-	connect( cutAction, SIGNAL(triggered(bool)), m_view, SLOT( cut() ) );
+	connect( cutAction, SIGNAL(triggered(bool)), m_view, SLOT(cut()) );
 
 	//Not using an standard action because I don't want it in toolbar nor in menus.
 	pasteAction = new KAction( this );
@@ -372,14 +372,14 @@ void Krecipes::setupActions()
 	pasteAction->setIcon( KIcon( "edit-paste" ) );
 	pasteAction->setShortcut( Qt::CTRL + Qt::Key_V );
 	actionCollection()->addAction( "paste_action", pasteAction );
-	connect( pasteAction, SIGNAL(triggered(bool)), m_view, SLOT( paste() ) );
+	connect( pasteAction, SIGNAL(triggered(bool)), m_view, SLOT(paste()) );
 
 	pasteAsSubcategoryAction = new KAction( this );
 	pasteAsSubcategoryAction->setText( i18n( "Paste as Subcategory" ) );
 	pasteAsSubcategoryAction->setIcon( KIcon( "edit-paste" ) );
 	pasteAsSubcategoryAction->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_V );
 	actionCollection()->addAction( "paste_as_subcategory_action", pasteAsSubcategoryAction );
-	connect( pasteAsSubcategoryAction, SIGNAL(triggered(bool)), m_view, SLOT( pasteAsSubcategory() ) );
+	connect( pasteAsSubcategoryAction, SIGNAL(triggered(bool)), m_view, SLOT(pasteAsSubcategory()) );
 	
 	// Add actions to the context menus in the "select recipe" dialog
 	m_view->addSelectRecipeAction( showRecipeAction );
@@ -821,7 +821,7 @@ void Krecipes::optionsConfigureToolbars()
 	saveMainWindowSettings( KConfigGroup(KGlobal::config(), autoSaveGroup() ));
 
 	QPointer<KEditToolBar> dlg = new KEditToolBar( actionCollection() );
-	connect( dlg, SIGNAL( newToolbarConfig() ), this, SLOT( newToolbarConfig() ) );
+	connect( dlg, SIGNAL(newToolbarConfig()), this, SLOT(newToolbarConfig()) );
 	dlg->exec();
 	delete dlg;
 }
